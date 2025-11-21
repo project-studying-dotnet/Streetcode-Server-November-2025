@@ -3,7 +3,6 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
-    using Org.BouncyCastle.Asn1.Ocsp;
     using Streetcode.BLL.DTO.Media.Audio;
     using Streetcode.BLL.Interfaces.BlobStorage;
     using Streetcode.BLL.Interfaces.Logging;
