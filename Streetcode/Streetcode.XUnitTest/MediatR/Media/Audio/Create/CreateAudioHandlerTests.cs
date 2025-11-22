@@ -13,15 +13,20 @@
 
     public class CreateAudioHandlerTests
     {
-        private readonly Mock<IBlobService> mockBlob = new ();
-        private readonly Mock<ILoggerService> mockLogger = new ();
-        private readonly Mock<IRepositoryWrapper> mockRepo = new ();
-        private readonly Mock<IMapper> mockMapper = new ();
+        private readonly Mock<IBlobService> mockBlob;
+        private readonly Mock<ILoggerService> mockLogger;
+        private readonly Mock<IRepositoryWrapper> mockRepo;
+        private readonly Mock<IMapper> mockMapper;
 
         private readonly CreateAudioHandler handler;
 
         public CreateAudioHandlerTests()
         {
+            this.mockBlob = new Mock<IBlobService>();
+            this.mockLogger = new Mock<ILoggerService>();
+            this.mockRepo = new Mock<IRepositoryWrapper>();
+            this.mockMapper = new Mock<IMapper>();
+
             this.handler = new CreateAudioHandler(
                 this.mockBlob.Object,
                 this.mockRepo.Object,
@@ -30,7 +35,7 @@
         }
 
         [Fact]
-        public async Task Handle_Should_RetursSuccessResult_WhenAudioCreated()
+        public async Task Handle_ShouldRetursSuccessResult_WhenAudioCreated()
         {
             // Arrange.
             var audioFileBaseCreateDTO = new AudioFileBaseCreateDTO
