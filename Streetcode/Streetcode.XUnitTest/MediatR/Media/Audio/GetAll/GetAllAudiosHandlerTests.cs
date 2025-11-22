@@ -58,7 +58,7 @@
             // Arrange.
             var (audioEntities, audioDtos) = CreateNullAudioEntitiesAndDTOs();
             const string errorMsg = "Cannot find any audios";
-            this.SetupMock(audioEntities, audioDtos);
+            this.SetupMock(audioEntities!, audioDtos!);
 
             // Act.
             var result = await this.handler.Handle(new GetAllAudiosQuery(), default);
@@ -83,7 +83,7 @@
             return (audioEntities, audioDtos);
         }
 
-        private static (IEnumerable<Audio> AudioEntities, IEnumerable<AudioDTO> AudioDtos) CreateNullAudioEntitiesAndDTOs()
+        private static (IEnumerable<Audio>? AudioEntities, IEnumerable<AudioDTO>? AudioDtos) CreateNullAudioEntitiesAndDTOs()
         {
             List<Audio>? audioEntities = null;
             List<AudioDTO>? audioDtos = null;

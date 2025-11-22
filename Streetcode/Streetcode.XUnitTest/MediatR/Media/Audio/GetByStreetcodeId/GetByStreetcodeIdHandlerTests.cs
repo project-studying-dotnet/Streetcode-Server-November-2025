@@ -122,9 +122,6 @@
         private static (StreetcodeContent? StreetcodeContent, AudioDTO? AudioDTO, int TargetStreetcodeId) CreateNullStreetcodeAndDTO()
         {
             const int targetStreetcodeId = 1;
-            const int targetAudioId = 1;
-
-            Audio? entity = null;
             AudioDTO? audioDTO = null;
 
             StreetcodeContent? streetcode = null;

@@ -100,7 +100,7 @@
             {
                 this.mockBlob
                     .Setup(b => b.FindFileInStorageAsMemoryStream(entity.BlobName!))
-                    .Returns(stream);
+                    .Returns(stream!);
             }
         }
 
