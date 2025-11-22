@@ -35,12 +35,12 @@
         public async Task Handle_ShouldReturnSuccess_WhenAudioExists()
         {
             // Arrange.
-            var (entity, expectedStream, id) = CreateValidAudioEntityAndStream();
+            var (entity, expectedStream, targetAudioId) = CreateValidAudioEntityAndStream();
 
             this.SetupMocks(entity, expectedStream);
 
             // Act.
-            var result = await this.handler.Handle(new GetBaseAudioQuery(1), default);
+            var result = await this.handler.Handle(new GetBaseAudioQuery(targetAudioId), default);
 
             // Assert.
             result.IsSuccess.Should().BeTrue();
@@ -53,21 +53,21 @@
         public async Task Handle_ShouldReturnFailedResult_WhenAudioDoesNotExist()
         {
             // Arrange.
-            var (entity, expectedStream, id) = CreateNullAudioEntity();
+            var (entity, expectedStream, targetAudioId) = CreateNullAudioEntity();
 
             this.SetupMocks(entity, expectedStream);
 
             // Act.
-            var result = await this.handler.Handle(new GetBaseAudioQuery(1), default);
+            var result = await this.handler.Handle(new GetBaseAudioQuery(targetAudioId), default);
 
             // Assert.
             result.IsFailed.Should().BeTrue();
-            result.Errors.Should().Contain(e => e.Message == $"Cannot find an audio with corresponding id: {id}");
+            result.Errors.Should().Contain(e => e.Message == $"Cannot find an audio with corresponding id: {targetAudioId}");
 
-            this.VerifyLoggerCalledOnce(id);
+            this.VerifyLoggerCalledOnce(targetAudioId);
         }
 
-        private static (Audio, MemoryStream, int) CreateValidAudioEntityAndStream()
+        private static (Audio Audio, MemoryStream MemoryStream, int TargetAudioId) CreateValidAudioEntityAndStream()
         {
             const int targetAudioId = 1;
             string blobName = "validBlobName";
@@ -78,7 +78,7 @@
             return (entity, stream, targetAudioId);
         }
 
-        private static (Audio?, MemoryStream?, int) CreateNullAudioEntity()
+        private static (Audio? Audio, MemoryStream? MemoryStream, int TargetAudioId) CreateNullAudioEntity()
         {
             const int targetAudioId = 1;
 
@@ -96,10 +96,10 @@
                     It.IsAny<Func<IQueryable<Audio>, IIncludableQueryable<Audio, object>>>()))
                 .ReturnsAsync(entity);
 
-            if (stream != null && entity != null)
+            if (entity != null)
             {
                 this.mockBlob
-                    .Setup(b => b.FindFileInStorageAsMemoryStream(entity.BlobName))
+                    .Setup(b => b.FindFileInStorageAsMemoryStream(entity.BlobName!))
                     .Returns(stream);
             }
         }
@@ -113,7 +113,7 @@
             Times.Once);
 
             this.mockBlob.Verify(
-                b => b.FindFileInStorageAsMemoryStream(blobName),
+                b => b.FindFileInStorageAsMemoryStream(blobName!),
                 Times.Once);
         }
 

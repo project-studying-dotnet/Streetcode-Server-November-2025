@@ -1,5 +1,6 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.GetByStreetcodeId
 {
+    using System.Linq.Expressions;
     using AutoMapper;
     using FluentAssertions;
     using Microsoft.EntityFrameworkCore.Query;
@@ -12,7 +13,6 @@
     using Streetcode.DAL.Entities.Media;
     using Streetcode.DAL.Entities.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Base;
-    using System.Linq.Expressions;
     using Xunit;
 
     public class GetByStreetcodeIdHandlerTests
@@ -140,6 +140,7 @@
                 .Callback((Expression<Func<StreetcodeContent, bool>> p, Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>> include) =>
                 {
                     var dummyQuery = new List<StreetcodeContent>().AsQueryable();
+
                     include?.Invoke(dummyQuery);
                 })
                 .ReturnsAsync(content);

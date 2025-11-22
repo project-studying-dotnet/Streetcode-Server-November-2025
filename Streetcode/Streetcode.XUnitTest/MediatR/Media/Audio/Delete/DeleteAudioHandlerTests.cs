@@ -13,13 +13,17 @@
 
     public class DeleteAudioHandlerTests
     {
-        private readonly Mock<IBlobService> mockBlob = new ();
-        private readonly Mock<ILoggerService> mockLogger = new ();
-        private readonly Mock<IRepositoryWrapper> mockRepo = new ();
+        private readonly Mock<IBlobService> mockBlob;
+        private readonly Mock<ILoggerService> mockLogger;
+        private readonly Mock<IRepositoryWrapper> mockRepo;
         private readonly DeleteAudioHandler mockHandler;
 
         public DeleteAudioHandlerTests()
         {
+            this.mockBlob = new Mock<IBlobService>();
+            this.mockLogger = new Mock<ILoggerService>();
+            this.mockRepo = new Mock<IRepositoryWrapper>();
+
             this.mockHandler = new DeleteAudioHandler(
                 this.mockRepo.Object,
                 this.mockBlob.Object,
