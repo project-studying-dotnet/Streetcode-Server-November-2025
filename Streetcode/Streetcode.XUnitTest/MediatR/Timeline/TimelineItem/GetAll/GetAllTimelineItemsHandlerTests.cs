@@ -11,6 +11,7 @@
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Timeline;
     using Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Fixtures;
+    using Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Helpers;
     using Xunit;
 
     /// <summary>
@@ -88,25 +89,9 @@
             Assert.Equal("Cannot find any timelineItem", result.Errors.FirstOrDefault()?.Message);
 
             // Verify
-            timelineRepositoryMock.Verify(
-                tr => tr.GetAllAsync(
-                    It.IsAny<Expression<Func<DAL.Entities.Timeline.TimelineItem, bool>>>(),
-                    It.IsAny<Func<IQueryable<DAL.Entities.Timeline.TimelineItem>, IIncludableQueryable<DAL.Entities.Timeline.TimelineItem, object>>>()),
-                Times.Once(),
-                "GetAllAsync method should be called exactly once");
-
-            this.loggerMock.Verify(
-                l => l.LogError(
-                    It.IsAny<object>(),
-                    It.IsAny<string>()),
-                Times.AtLeastOnce(),
-                "LogError method should be called exactly once when timelineItems is null");
-
-            this.mapperMock.Verify(
-                m => m.Map<IEnumerable<TimelineItemDTO>>(
-                    It.IsAny<object>()),
-                Times.Never,
-                "Map method should not be called at all");
+            timelineRepositoryMock.VerifyGetAllAsyncCalledOnce();
+            this.loggerMock.VerifyLogErrorCalledOnce();
+            this.mapperMock.VerifyMapCalledNever();
         }
 
         /// <summary>
@@ -162,24 +147,11 @@
             Assert.Equal(timelineItems.Count, result.Value.Count());
 
             // Verify
-            timelineRepositoryMock.Verify(
-                tr => tr.GetAllAsync(
-                    It.IsAny<Expression<Func<TimelineItem, bool>>>(),
-                    It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<TimelineItem, object>>>()),
-                Times.Once,
-                "GetAllAsync method should be called exactly once");
+            timelineRepositoryMock.VerifyGetAllAsyncCalledOnce();
 
-            this.mapperMock.Verify(
-                m => m.Map<IEnumerable<TimelineItemDTO>>(timelineItems),
-                Times.Once,
-                "Map method should be called exactly once with the retrieved timeline items");
+            this.mapperMock.VerifyMapCalledOnce(timelineItems);
 
-            this.loggerMock.Verify(
-                l => l.LogError(
-                    It.IsAny<object>(),
-                    It.IsAny<string>()),
-                Times.Never,
-                "LogError method should not be called when timelineItems exists");
+            this.loggerMock.VerifyLogErrorCalledNever();
         }
     }
 }
