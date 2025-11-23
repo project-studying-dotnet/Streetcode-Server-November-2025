@@ -47,7 +47,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="MediatR\Timeline\TimelineItem\GetById\" />
 	  <Folder Include="MediatR\Timeline\TimelineItem\GetByStreetcodeId\" />
 	</ItemGroup>
 
