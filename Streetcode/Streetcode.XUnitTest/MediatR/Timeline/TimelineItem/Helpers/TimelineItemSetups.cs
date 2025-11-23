@@ -51,5 +51,12 @@
                 .Setup(m => m.Map<IEnumerable<TimelineItemDTO>>(entities))
                 .Returns(dtos);
         }
+
+        public static void SetupMapper(this Mock<IMapper> mapperMock, TimelineItem entity, TimelineItemDTO dto)
+        {
+            mapperMock
+                .Setup(m => m.Map<TimelineItemDTO>(entity))
+                .Returns(dto);
+        }
     }
 }
