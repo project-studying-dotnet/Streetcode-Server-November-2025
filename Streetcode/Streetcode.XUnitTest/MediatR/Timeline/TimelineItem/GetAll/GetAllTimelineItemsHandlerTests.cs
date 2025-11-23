@@ -63,7 +63,7 @@
             var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
-            timelineRepositoryMock.SetupTimelineRepository(timelineItems: null);
+            timelineRepositoryMock.SetupTimelineRepository(entities: null);
             this.loggerMock.SetupLogger();
 
             var query = new GetAllTimelineItemsQuery();
@@ -105,17 +105,14 @@
         public async Task Handle_WhenTimelineItemsExist_ShouldReturnMappedTimelineItems()
         {
             // Arrange
-            var timelineItems = TimelineItemTestData.CreateTimelineItems(count: 10);
-            var expectedTimelineItemsDTOs = TimelineItemTestData.CreateTimelineItemDTOs(count: 10);
+            var entities = TimelineItemTestData.CreateTimelineItems(count: 10);
+            var dtos = TimelineItemTestData.CreateTimelineItemDTOs(count: 10);
 
             var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
-            timelineRepositoryMock.SetupTimelineRepository(timelineItems);
-
-            this.mapperMock
-                .Setup(m => m.Map<IEnumerable<TimelineItemDTO>>(timelineItems))
-                .Returns(expectedTimelineItemsDTOs);
+            timelineRepositoryMock.SetupTimelineRepository(entities);
+            this.mapperMock.SetupMapper(entities, dtos);
 
             var query = new GetAllTimelineItemsQuery();
 
@@ -126,11 +123,11 @@
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
             Assert.NotEmpty(result.Value);
-            Assert.Equal(timelineItems.Count, result.Value.Count());
+            Assert.Equal(entities.Count, result.Value.Count());
 
             // Verify
             timelineRepositoryMock.VerifyGetAllAsyncCalledOnce();
-            this.mapperMock.VerifyMapCalledOnce(timelineItems);
+            this.mapperMock.VerifyMapCalledOnce(entities);
             this.loggerMock.VerifyLogErrorCalledNever();
         }
     }
