@@ -63,12 +63,7 @@
             var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
-
-            timelineRepositoryMock
-                .Setup(r => r.GetAllAsync(
-                    It.IsAny<Expression<Func<DAL.Entities.Timeline.TimelineItem, bool>>>(),
-                    It.IsAny<Func<IQueryable<DAL.Entities.Timeline.TimelineItem>, IIncludableQueryable<DAL.Entities.Timeline.TimelineItem, object>>>()))
-                .ReturnsAsync((IEnumerable<DAL.Entities.Timeline.TimelineItem>)null!);
+            timelineRepositoryMock.SetupTimelineRepository(timelineItems: null);
 
             this.loggerMock
                 .Setup(l => l.LogError(
@@ -119,15 +114,8 @@
 
             var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
-            this.repositoryWrapperMock
-                .Setup(rw => rw.TimelineRepository)
-                .Returns(timelineRepositoryMock.Object);
-
-            timelineRepositoryMock
-                .Setup(r => r.GetAllAsync(
-                    It.IsAny<Expression<Func<TimelineItem, bool>>>(),
-                    It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<TimelineItem, object>>>()))
-                .ReturnsAsync(timelineItems);
+            this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
+            timelineRepositoryMock.SetupTimelineRepository(timelineItems);
 
             this.mapperMock
                 .Setup(m => m.Map<IEnumerable<TimelineItemDTO>>(timelineItems))
