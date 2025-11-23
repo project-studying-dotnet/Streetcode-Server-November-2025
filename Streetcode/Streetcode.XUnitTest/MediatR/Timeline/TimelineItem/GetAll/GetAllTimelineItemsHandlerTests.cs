@@ -29,6 +29,21 @@
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        /// Tests the <see cref="GetAllTimelineItemsHandler"/> behavior when the repository
+        /// returns <c>null</c> instead of a collection of timeline items.
+        /// </summary>
+        /// <remarks>
+        /// This test verifies that:
+        /// <list type="bullet">
+        /// <item><description>The handler returns a failure <see cref="FluentResults.Result"/>.</description></item>
+        /// <item><description>An appropriate error message is included in the result.</description></item>
+        /// <item><description><c>GetAllAsync</c> is called exactly once.</description></item>
+        /// <item><description><c>LogError</c> is invoked when <c>null</c> is returned from the repository.</description></item>
+        /// <item><description>The mapper is not invoked at all.</description></item>
+        /// </list>
+        /// </remarks>
+        /// <returns>A task representing the asynchronous test execution.</returns>
         [Fact]
         public async Task Handle_WhenTimelineItemsIsNull_ShouldReturnFailureResult()
         {
