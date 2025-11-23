@@ -60,7 +60,7 @@
             var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
-            timelineRepositoryMock.SetupTimelineRepository(entities: null);
+            timelineRepositoryMock.SetupGetAllAsync(entities: null);
             this.loggerMock.SetupLogger();
 
             var query = new GetAllTimelineItemsQuery();
@@ -108,7 +108,7 @@
             var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
-            timelineRepositoryMock.SetupTimelineRepository(entities);
+            timelineRepositoryMock.SetupGetAllAsync(entities);
             this.mapperMock.SetupMapper(entities, dtos);
 
             var query = new GetAllTimelineItemsQuery();
