@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentAssertions;
+using FluentAssertions.Execution;
 using Moq;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.DTO.Team;
@@ -59,9 +61,11 @@ namespace Streetcode.XUnitTest.MediatRTests.Team.TeamMembersLinks
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.Multiple(
-                () => Assert.True(result.IsSuccess),
-                () => Assert.Equal(result.Value, teamLinkDTO));
+            using (new AssertionScope())
+            {
+                result.IsSuccess.Should().BeTrue();
+                result.Value.Should().BeEquivalentTo(teamLinkDTO);
+            }
         }
 
         [Fact]
@@ -78,7 +82,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team.TeamMembersLinks
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
+            result.IsFailed.Should().BeTrue();
         }
 
         [Fact]
@@ -118,7 +122,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team.TeamMembersLinks
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
+            result.IsFailed.Should().BeTrue();
         }
 
         [Fact]
@@ -161,7 +165,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team.TeamMembersLinks
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
+            result.IsFailed.Should().BeTrue();
         }
 
         [Fact]

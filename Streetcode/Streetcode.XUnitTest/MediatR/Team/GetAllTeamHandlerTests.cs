@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL.DTO.Team;
@@ -54,9 +56,11 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.Multiple(
-                () => Assert.True(result.IsSuccess),
-                () => Assert.Equal(result.Value, teamMemberDTOs));
+            using (new AssertionScope())
+            {
+                result.IsSuccess.Should().BeTrue();
+                result.Value.Should().BeEquivalentTo(teamMemberDTOs);
+            }
         }
 
         [Fact]
@@ -90,7 +94,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
+            result.IsFailed.Should().BeTrue();
         }
 
         private void SetupRepositoryGetAllAsync(IEnumerable<TeamMember> teamMembers)

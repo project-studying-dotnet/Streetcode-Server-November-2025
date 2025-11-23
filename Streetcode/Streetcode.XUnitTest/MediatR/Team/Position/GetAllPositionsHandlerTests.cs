@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL.DTO.Team;
@@ -64,9 +66,11 @@ namespace Streetcode.XUnitTest.MediatRTests.Team.Position
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.Multiple(
-                () => Assert.True(result.IsSuccess),
-                () => Assert.Equal(result.Value, positionDTOs));
+            using (new AssertionScope())
+            {
+                result.IsSuccess.Should().BeTrue();
+                result.Value.Should().BeEquivalentTo(positionDTOs);
+            }
         }
 
         [Fact]

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL.DTO.Partners;
@@ -56,9 +58,11 @@ namespace Streetcode.XUnitTest.MediatRTests.Team.TeamMembersLinks
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.Multiple(
-                () => Assert.True(result.IsSuccess),
-                () => Assert.Equal(result.Value, teamLinkDTOs));
+            using (new AssertionScope())
+            {
+                result.IsSuccess.Should().BeTrue();
+                result.Value.Should().BeEquivalentTo(teamLinkDTOs);
+            }
         }
 
         [Fact]
@@ -73,7 +77,7 @@ namespace Streetcode.XUnitTest.MediatRTests.Team.TeamMembersLinks
             var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
+            result.IsFailed.Should().BeTrue();
         }
 
         [Fact]
