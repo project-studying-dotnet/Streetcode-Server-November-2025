@@ -99,7 +99,7 @@
         ///     A task representing the asynchronous test execution.
         /// </returns>
         [Fact]
-        public async Task Handle_WhenTimelineItemsExist_ShouldReturnMappedTimelineItems()
+        public async Task Handle_WhenTimelineItemsExists_ShouldReturnMappedTimelineItems()
         {
             // Arrange
             var entities = TimelineItemTestData.CreateTimelineItems(count: 10);
@@ -119,6 +119,7 @@
             // Assert
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
+            Assert.Empty(result.Errors);
             Assert.NotEmpty(result.Value);
             Assert.Equal(entities.Count, result.Value.Count());
 
