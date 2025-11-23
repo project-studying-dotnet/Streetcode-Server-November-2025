@@ -1,0 +1,84 @@
+﻿namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetAll
+{
+    using System.Linq.Expressions;
+    using AutoMapper;
+    using Microsoft.EntityFrameworkCore.Query;
+    using Moq;
+    using Streetcode.BLL.DTO.Timeline;
+    using Streetcode.BLL.Interfaces.Logging;
+    using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetAll;
+    using Streetcode.DAL.Repositories.Interfaces.Base;
+    using Streetcode.DAL.Repositories.Interfaces.Timeline;
+    using Xunit;
+
+    public class GetAllTimelineItemsHandlerTests
+    {
+        private readonly Mock<IMapper> mapperMock;
+        private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
+        private readonly Mock<ILoggerService> loggerMock;
+        private readonly GetAllTimelineItemsHandler handler;
+
+        public GetAllTimelineItemsHandlerTests()
+        {
+            this.mapperMock = new Mock<IMapper>();
+            this.repositoryWrapperMock = new Mock<IRepositoryWrapper>();
+            this.loggerMock = new Mock<ILoggerService>();
+            this.handler = new GetAllTimelineItemsHandler(
+                this.repositoryWrapperMock.Object,
+                this.mapperMock.Object,
+                this.loggerMock.Object);
+        }
+
+        [Fact]
+        public async Task Handle_WhenTimelineItemsIsNull_ShouldReturnFailureResult()
+        {
+            // Arrange
+            var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
+
+            this.repositoryWrapperMock
+                .Setup(rw => rw.TimelineRepository)
+                .Returns(timelineRepositoryMock.Object);
+
+            timelineRepositoryMock.Setup(r => r.GetAllAsync(
+                    It.IsAny<Expression<Func<DAL.Entities.Timeline.TimelineItem, bool>>>(),
+                    It.IsAny<Func<IQueryable<DAL.Entities.Timeline.TimelineItem>, IIncludableQueryable<DAL.Entities.Timeline.TimelineItem, object>>>()))
+                .ReturnsAsync((IEnumerable<DAL.Entities.Timeline.TimelineItem>)null!);
+
+            this.loggerMock.Setup(l => l.LogError(
+                    It.IsAny<object>(),
+                    It.IsAny<string>()));
+
+            var query = new GetAllTimelineItemsQuery();
+
+            // Act
+            var result = await this.handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(result.IsFailed);
+            Assert.NotEmpty(result.Errors);
+            Assert.Equal("Cannot find any timelineItem", result.Errors.FirstOrDefault()?.Message);
+
+            // Verify
+            timelineRepositoryMock.Verify(
+                tr => tr.GetAllAsync(
+                    It.IsAny<Expression<Func<DAL.Entities.Timeline.TimelineItem, bool>>>(),
+                    It.IsAny<Func<IQueryable<DAL.Entities.Timeline.TimelineItem>, IIncludableQueryable<DAL.Entities.Timeline.TimelineItem, object>>>()),
+                Times.Once(),
+                "GetAllAsync method should be called exactly once");
+
+            this.loggerMock.Verify(
+                l => l.LogError(
+                    It.IsAny<object>(),
+                    It.IsAny<string>()),
+                Times.AtLeastOnce(),
+                "LogError method should be called exactly once when timelineItems is null");
+
+            this.mapperMock.Verify(
+                m => m.Map<IEnumerable<TimelineItemDTO>>(
+                    It.IsAny<object>()),
+                Times.Never,
+                "Map method should not have been called at all");
+        }
+    }
+}
