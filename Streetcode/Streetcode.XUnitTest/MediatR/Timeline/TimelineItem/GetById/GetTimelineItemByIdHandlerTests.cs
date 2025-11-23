@@ -35,7 +35,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
         {
             // Arrange
             const int id = 1;
-            var timelineRepositoryMock = new Mock<ITimelineRepository>();
+            var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
             timelineRepositoryMock.SetupGetFirstOrDefaultAsync(entity: null);
@@ -65,7 +65,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
             const int id = 1;
             var entity = TimelineItemTestData.CreateTimelineItem(id);
             var dto = TimelineItemTestData.CreateTimelineItemDTO(id);
-            var timelineRepositoryMock = new Mock<ITimelineRepository>();
+            var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
             timelineRepositoryMock.SetupGetFirstOrDefaultAsync(entity);
