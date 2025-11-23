@@ -8,9 +8,9 @@
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetAll;
     using Streetcode.DAL.Entities.Timeline;
-    using Streetcode.DAL.Enums;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Timeline;
+    using Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Fixtures;
     using Xunit;
 
     /// <summary>
@@ -106,7 +106,7 @@
                 m => m.Map<IEnumerable<TimelineItemDTO>>(
                     It.IsAny<object>()),
                 Times.Never,
-                "Map method should not have been called at all");
+                "Map method should not be called at all");
         }
 
         /// <summary>
@@ -131,92 +131,8 @@
         public async Task Handle_WhenTimelineItemsExist_ShouldReturnMappedTimelineItems()
         {
             // Arrange
-            var timelineItems = new List<TimelineItem>
-            {
-                new ()
-                {
-                    Id = 1,
-                    Date = new DateTime(1920, 1, 15),
-                    DateViewPattern = DateViewPattern.DateMonthYear,
-                    Title = "Founding of the Organization",
-                    Description = "The organization was officially founded and began its operations.",
-                    StreetcodeId = 101,
-                    Streetcode = null,
-                    HistoricalContextTimelines = new List<HistoricalContextTimeline>(),
-                },
-                new ()
-                {
-                    Id = 2,
-                    Date = new DateTime(1945, 5, 9),
-                    DateViewPattern = DateViewPattern.DateMonthYear,
-                    Title = "Important Historical Event",
-                    Description = "A significant event that influenced further developments.",
-                    StreetcodeId = 102,
-                    Streetcode = null,
-                    HistoricalContextTimelines = new List<HistoricalContextTimeline>(),
-                },
-                new ()
-                {
-                    Id = 3,
-                    Date = new DateTime(2001, 9, 1),
-                    DateViewPattern = DateViewPattern.DateMonthYear,
-                    Title = "New Millennium Milestone",
-                    Description = "A milestone that marked major technological advancements.",
-                    StreetcodeId = 103,
-                    Streetcode = null,
-                    HistoricalContextTimelines = new List<HistoricalContextTimeline>(),
-                },
-                new ()
-                {
-                    Id = 4,
-                    Date = new DateTime(2020, 3, 12),
-                    DateViewPattern = DateViewPattern.DateMonthYear,
-                    Title = "Modern Era Breakthrough",
-                    Description = "A breakthrough in modern history that reshaped the industry.",
-                    StreetcodeId = 104,
-                    Streetcode = null,
-                    HistoricalContextTimelines = new List<HistoricalContextTimeline>(),
-                },
-            };
-            var expectedTimelineItemsDTOs = new List<TimelineItemDTO>
-            {
-                new ()
-                {
-                    Id = 1,
-                    Date = new DateTime(1920, 1, 15),
-                    DateViewPattern = DateViewPattern.DateMonthYear,
-                    Title = "Founding of the Organization",
-                    Description = "The organization was officially founded and began its operations.",
-                    HistoricalContexts = new List<HistoricalContextDTO>(),
-                },
-                new ()
-                {
-                    Id = 2,
-                    Date = new DateTime(1945, 5, 9),
-                    DateViewPattern = DateViewPattern.DateMonthYear,
-                    Title = "Important Historical Event",
-                    Description = "A significant event that influenced further developments.",
-                    HistoricalContexts = new List<HistoricalContextDTO>(),
-                },
-                new ()
-                {
-                    Id = 3,
-                    Date = new DateTime(2001, 9, 1),
-                    DateViewPattern = DateViewPattern.DateMonthYear,
-                    Title = "New Millennium Milestone",
-                    Description = "A milestone that marked major technological advancements.",
-                    HistoricalContexts = new List<HistoricalContextDTO>(),
-                },
-                new ()
-                {
-                    Id = 4,
-                    Date = new DateTime(2020, 3, 12),
-                    DateViewPattern = DateViewPattern.DateMonthYear,
-                    Title = "Modern Era Breakthrough",
-                    Description = "A breakthrough in modern history that reshaped the industry.",
-                    HistoricalContexts = new List<HistoricalContextDTO>(),
-                },
-            };
+            var timelineItems = TimelineItemTestData.CreateTimelineItems(count: 10);
+            var expectedTimelineItemsDTOs = TimelineItemTestData.CreateTimelineItemDTOs(count: 10);
 
             var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
