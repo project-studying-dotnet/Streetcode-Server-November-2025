@@ -16,10 +16,20 @@
         {
             timelineRepositoryMock.Verify(
                 tr => tr.GetAllAsync(
-                    It.IsAny<Expression<Func<DAL.Entities.Timeline.TimelineItem, bool>>>(),
-                    It.IsAny<Func<IQueryable<DAL.Entities.Timeline.TimelineItem>, IIncludableQueryable<DAL.Entities.Timeline.TimelineItem, object>>>()),
+                    It.IsAny<Expression<Func<TimelineItem, bool>>>(),
+                    It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<TimelineItem, object>>>()),
                 Times.Once(),
                 "GetAllAsync method should be called exactly once");
+        }
+
+        public static void VerifyGetFirstOrDefaultCalledOnce(this Mock<ITimelineRepository> timelineRepositoryMock)
+        {
+            timelineRepositoryMock.Verify(
+                tr => tr.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<TimelineItem, bool>>>(),
+                    It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<TimelineItem, object>>>()),
+                Times.Once(),
+                "GetFirstOrDefaultAsync method should be called exactly once");
         }
 
         // -------------------------- Verify Logger -------------------------------
@@ -50,6 +60,14 @@
                 m => m.Map<IEnumerable<TimelineItemDTO>>(entites),
                 Times.Once,
                 "Map method should be called exactly once with the retrieved timeline items");
+        }
+        
+        public static void VerifyMapCalledOnce(this Mock<IMapper> mapperMock, TimelineItem entity)
+        {
+            mapperMock.Verify(
+                m => m.Map<TimelineItemDTO>(entity),
+                Times.Once,
+                "Map method should be called exactly once with the retrieved timeline item");
         }
 
         public static void VerifyMapCalledNever(this Mock<IMapper> mapperMock)
