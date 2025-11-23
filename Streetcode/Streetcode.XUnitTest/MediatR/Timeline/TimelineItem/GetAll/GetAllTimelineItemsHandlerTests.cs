@@ -1,13 +1,10 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetAll
 {
-    using System.Linq.Expressions;
     using AutoMapper;
-    using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Streetcode.BLL.DTO.Timeline;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetAll;
-    using Streetcode.DAL.Entities.Timeline;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Timeline;
     using Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Fixtures;
