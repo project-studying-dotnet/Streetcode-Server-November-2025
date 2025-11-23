@@ -10,7 +10,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 using Streetcode.DAL.Repositories.Interfaces.Team;
 using Xunit;
 
-namespace Streetcode.XUnitTest.MediatRTests.Team.Position
+namespace Streetcode.XUnitTest.MediatR.Team.Position
 {
     public class CreatePositionHandlerTests
     {

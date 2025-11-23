@@ -12,7 +12,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 using Streetcode.DAL.Repositories.Interfaces.Team;
 using Xunit;
 
-namespace Streetcode.XUnitTest.MediatRTests.Team.TeamMembersLinks
+namespace Streetcode.XUnitTest.MediatR.Team.TeamMembersLinks
 {
     public class CreateTeamLinkHandlerTests
     {

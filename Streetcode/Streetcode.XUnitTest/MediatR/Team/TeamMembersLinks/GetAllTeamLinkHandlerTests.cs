@@ -14,7 +14,7 @@ using Streetcode.DAL.Repositories.Interfaces.Team;
 using System.Linq.Expressions;
 using Xunit;
 
-namespace Streetcode.XUnitTest.MediatRTests.Team.TeamMembersLinks
+namespace Streetcode.XUnitTest.MediatR.Team.TeamMembersLinks
 {
     public class GetAllTeamLinkHandlerTests
     {

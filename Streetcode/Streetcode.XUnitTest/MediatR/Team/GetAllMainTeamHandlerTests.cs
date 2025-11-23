@@ -12,7 +12,7 @@ using Streetcode.DAL.Repositories.Interfaces.Team;
 using System.Linq.Expressions;
 using Xunit;
 
-namespace Streetcode.XUnitTest.MediatRTests.Team
+namespace Streetcode.XUnitTest.MediatR.Team
 {
     public class GetAllMainTeamHandlerTests
     {
