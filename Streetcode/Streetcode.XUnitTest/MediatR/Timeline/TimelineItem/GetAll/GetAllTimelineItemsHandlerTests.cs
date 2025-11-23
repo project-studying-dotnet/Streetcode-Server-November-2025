@@ -64,11 +64,7 @@
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
             timelineRepositoryMock.SetupTimelineRepository(timelineItems: null);
-
-            this.loggerMock
-                .Setup(l => l.LogError(
-                    It.IsAny<object>(),
-                    It.IsAny<string>()));
+            this.loggerMock.SetupLogger();
 
             var query = new GetAllTimelineItemsQuery();
 
