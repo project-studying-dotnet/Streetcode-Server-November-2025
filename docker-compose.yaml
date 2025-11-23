@@ -1,0 +1,41 @@
+
+services:
+  backend:
+    build:
+      context: .
+    container_name: Streetcode-Server
+    ports:
+        - "5001:80"
+    depends_on:
+        - mssql
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ../Streetcode-Client-November-2025
+    container_name: Streetcode-Client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: Streetcode-Database
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Admin@1234
+      - MSSQL_PID=Developer
+    ports:
+      - "5434:1433"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

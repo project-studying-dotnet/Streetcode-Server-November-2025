@@ -16,6 +16,7 @@ ARG Configuration=debug
 #restoring dependencies
 COPY ./Streetcode/*.sln ./
 COPY ./Streetcode/Streetcode.WebApi/*.csproj ./Streetcode.WebApi/
+COPY appsettings*.json ./Streetcode/Streetcode.WebApi
 COPY ./Streetcode/Streetcode.BLL/*.csproj ./Streetcode.BLL/
 COPY ./Streetcode/Streetcode.DAL/*.csproj ./Streetcode.DAL/
 COPY ./Streetcode/Streetcode.XUnitTest/*.csproj ./Streetcode.XUnitTest/
@@ -37,4 +38,4 @@ WORKDIR /app
 COPY --from=publish /app/publish ./
 
 LABEL atom="Streetcode"
-ENTRYPOINT ["dotnet", "Streetcode.WebApi.dll", "--environment=Production"]
+ENTRYPOINT ["dotnet", "Streetcode.WebApi.dll", "--environment=Local"]
