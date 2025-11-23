@@ -1,8 +1,10 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Helpers
 {
     using System.Linq.Expressions;
+    using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL.DTO.Timeline;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.DAL.Entities.Timeline;
     using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -17,13 +19,13 @@
                 .Returns(timelineRepositoryMock.Object);
         }
 
-        public static void SetupTimelineRepository(this Mock<ITimelineRepository> timelineRepositoryMock, List<TimelineItem>? timelineItems)
+        public static void SetupTimelineRepository(this Mock<ITimelineRepository> timelineRepositoryMock, IEnumerable<TimelineItem>? entities)
         {
             timelineRepositoryMock
                 .Setup(r => r.GetAllAsync(
                     It.IsAny<Expression<Func<TimelineItem, bool>>>(),
-                    It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<DAL.Entities.Timeline.TimelineItem, object>>>()))
-                .ReturnsAsync(timelineItems!);
+                    It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<TimelineItem, object>>>()))
+                .ReturnsAsync(entities!);
         }
 
         public static void SetupLogger(this Mock<ILoggerService> loggerMock)
@@ -32,6 +34,13 @@
                 .Setup(l => l.LogError(
                     It.IsAny<object>(),
                     It.IsAny<string>()));
+        }
+
+        public static void SetupMapper(this Mock<IMapper> mapperMock, IEnumerable<TimelineItem> entities, IEnumerable<TimelineItemDTO> dtos)
+        {
+            mapperMock
+                .Setup(m => m.Map<IEnumerable<TimelineItemDTO>>(entities))
+                .Returns(dtos);
         }
     }
 }
