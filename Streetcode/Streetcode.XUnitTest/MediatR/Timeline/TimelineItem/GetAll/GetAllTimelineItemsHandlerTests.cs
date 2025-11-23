@@ -11,6 +11,9 @@
     using Streetcode.DAL.Repositories.Interfaces.Timeline;
     using Xunit;
 
+    /// <summary>
+    /// Contains unit tests for the <see cref="GetAllTimelineItemsHandler"/>.
+    /// </summary>
     public class GetAllTimelineItemsHandlerTests
     {
         private readonly Mock<IMapper> mapperMock;
@@ -18,6 +21,10 @@
         private readonly Mock<ILoggerService> loggerMock;
         private readonly GetAllTimelineItemsHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetAllTimelineItemsHandlerTests"/> class.
+        /// Sets up the required mocked dependencies and creates an instance of the handler to test.
+        /// </summary>
         public GetAllTimelineItemsHandlerTests()
         {
             this.mapperMock = new Mock<IMapper>();
