@@ -44,5 +44,29 @@
             Assert.True(result.IsSuccess);
             Assert.Equal(result.Value, Unit.Value);
         }
+
+        [Fact]
+        public async Task Handle_Should_ReturnFail_WhenEmailNotSent()
+        {
+            // Arrange
+            this._emailServiceMock
+                .Setup(s => s.SendEmailAsync(It.IsAny<Message>()))
+                .ReturnsAsync(false);
+
+            SendEmailCommand command = new SendEmailCommand(new EmailDTO()
+            {
+                From = "fail@email.com",
+                Content = "fail attempt",
+            });
+
+            // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsFailed);
+            Assert.NotEmpty(result.Errors);
+            Assert.Equal(EmailSentErrorMessage, result.Errors[0].Message);
+            this._loggerServiceMock.Verify(l => l.LogError(command, EmailSentErrorMessage));
+        }
     }
 }
