@@ -62,9 +62,7 @@
             // Arrange
             var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
-            this.repositoryWrapperMock
-                .Setup(rw => rw.TimelineRepository)
-                .Returns(timelineRepositoryMock.Object);
+            this.repositoryWrapperMock.SetupRepositoryWrapper(timelineRepositoryMock);
 
             timelineRepositoryMock
                 .Setup(r => r.GetAllAsync(
@@ -148,9 +146,7 @@
 
             // Verify
             timelineRepositoryMock.VerifyGetAllAsyncCalledOnce();
-
             this.mapperMock.VerifyMapCalledOnce(timelineItems);
-
             this.loggerMock.VerifyLogErrorCalledNever();
         }
     }
