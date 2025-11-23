@@ -19,13 +19,22 @@
                 .Returns(timelineRepositoryMock.Object);
         }
 
-        public static void SetupTimelineRepository(this Mock<ITimelineRepository> timelineRepositoryMock, IEnumerable<TimelineItem>? entities)
+        public static void SetupGetAllAsync(this Mock<ITimelineRepository> timelineRepositoryMock, IEnumerable<TimelineItem>? entities)
         {
             timelineRepositoryMock
                 .Setup(r => r.GetAllAsync(
                     It.IsAny<Expression<Func<TimelineItem, bool>>>(),
                     It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<TimelineItem, object>>>()))
                 .ReturnsAsync(entities!);
+        }
+
+        public static void SetupGetFirstOrDefaultAsync(this Mock<ITimelineRepository> timelineRepositoryMock, TimelineItem? entity)
+        {
+            timelineRepositoryMock
+                .Setup(r => r.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<TimelineItem, bool>>>(),
+                    It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<TimelineItem, object>>>()))
+                .ReturnsAsync(entity!);
         }
 
         public static void SetupLogger(this Mock<ILoggerService> loggerMock)
