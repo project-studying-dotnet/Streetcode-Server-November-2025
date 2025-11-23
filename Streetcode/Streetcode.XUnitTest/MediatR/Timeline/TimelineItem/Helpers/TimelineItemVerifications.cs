@@ -44,10 +44,10 @@
         }
 
         // -------------------------- Verify Mapper -------------------------------
-        public static void VerifyMapCalledOnce(this Mock<IMapper> mapperMock, List<TimelineItem> timelineItems)
+        public static void VerifyMapCalledOnce(this Mock<IMapper> mapperMock, IEnumerable<TimelineItem> entites)
         {
             mapperMock.Verify(
-                m => m.Map<IEnumerable<TimelineItemDTO>>(timelineItems),
+                m => m.Map<IEnumerable<TimelineItemDTO>>(entites),
                 Times.Once,
                 "Map method should be called exactly once with the retrieved timeline items");
         }
