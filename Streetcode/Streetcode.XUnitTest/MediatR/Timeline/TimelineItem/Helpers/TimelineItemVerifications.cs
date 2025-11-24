@@ -1,5 +1,6 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Helpers
 {
+    using System.Linq.Expressions;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
@@ -7,7 +8,6 @@
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.DAL.Entities.Timeline;
     using Streetcode.DAL.Repositories.Interfaces.Timeline;
-    using System.Linq.Expressions;
 
     public static class TimelineItemVerifications
     {
