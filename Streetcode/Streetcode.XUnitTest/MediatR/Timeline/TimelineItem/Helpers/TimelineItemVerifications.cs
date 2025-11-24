@@ -86,11 +86,11 @@
         /// with the provided collection of <see cref="TimelineItem"/> entities.
         /// </summary>
         /// <param name="mapperMock">The mocked mapper.</param>
-        /// <param name="entites">The collection of entities expected to be mapped.</param>
-        public static void VerifyMapCalledOnce(this Mock<IMapper> mapperMock, IEnumerable<TimelineItem> entites)
+        /// <param name="entities">The collection of entities expected to be mapped.</param>
+        public static void VerifyMapCalledOnce(this Mock<IMapper> mapperMock, IEnumerable<TimelineItem> entities)
         {
             mapperMock.Verify(
-                m => m.Map<IEnumerable<TimelineItemDTO>>(entites),
+                m => m.Map<IEnumerable<TimelineItemDTO>>(entities),
                 Times.Once,
                 "Map method should be called exactly once with the retrieved timeline items");
         }
