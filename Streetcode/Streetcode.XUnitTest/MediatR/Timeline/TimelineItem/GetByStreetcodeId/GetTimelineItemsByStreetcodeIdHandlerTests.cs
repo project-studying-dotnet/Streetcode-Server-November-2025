@@ -102,9 +102,10 @@
         public async Task Handle_WhenTimelineItemsExists_ShouldReturnMappedTimelineItems()
         {
             // Arrange
+            const int entitiesCount = 10;
             const int streetcodeId = 101;
-            var entities = TimelineItemTestData.CreateTimelineItems(count: 10, streetcodeId);
-            var dtos = TimelineItemTestData.CreateTimelineItemDTOs(count: 10);
+            var entities = TimelineItemTestData.CreateTimelineItems(entitiesCount, streetcodeId);
+            var dtos = TimelineItemTestData.CreateTimelineItemDTOs(entitiesCount);
 
             var timelineRepositoryMock = new Mock<ITimelineRepository>(MockBehavior.Strict);
 
@@ -121,6 +122,7 @@
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
             Assert.Empty(result.Errors);
+            Assert.NotNull(result.Value);
             Assert.NotEmpty(result.Value);
             Assert.Equal(entities.Count, result.Value.Count());
 
