@@ -93,7 +93,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
         ///         <item><description>The handler returns a successful <see cref="FluentResults.Result{T}"/>.</description></item>
         ///         <item><description>The returned DTO contains the same <c>Id</c> value as the entity retrieved from the repository.</description></item>
         ///         <item><description><c>GetFirstOrDefaultAsync</c> is called exactly once on the repository.</description></item>
-        ///         <item><description>The mapper's <c>Map</c> method is called exactly once with the retrieved timeline items.</description></item>
+        ///         <item><description>The mapper's <c>Map</c> method is called exactly once with the retrieved timeline item.</description></item>
         ///         <item><description>No errors are logged.</description></item>
         ///     </list>
         /// </remarks>
