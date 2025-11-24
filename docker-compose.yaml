@@ -29,7 +29,7 @@ services:
     container_name: Streetcode-Database
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=Admin@1234
+      - MSSQL_SA_PASSWORD=#AddPasswdHereOrLinkToEnvLater
       - MSSQL_PID=Developer
     ports:
       - "5434:1433"
