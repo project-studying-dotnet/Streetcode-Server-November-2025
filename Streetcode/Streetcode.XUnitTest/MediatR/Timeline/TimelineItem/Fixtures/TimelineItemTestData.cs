@@ -6,7 +6,7 @@
 
     public static class TimelineItemTestData
     {
-        public static TimelineItem CreateTimelineItem(int id = 1)
+        public static TimelineItem CreateTimelineItem(int id = 1, int streetcodeId = 101)
         {
             return new TimelineItem
             {
@@ -21,7 +21,7 @@
             };
         }
 
-        public static List<TimelineItem> CreateTimelineItems(int count = 5)
+        public static List<TimelineItem> CreateTimelineItems(int count = 5, int streetcodeId = 101)
         {
             var items = new List<TimelineItem>(count);
 
@@ -34,7 +34,7 @@
                     DateViewPattern = DateViewPattern.DateMonthYear,
                     Title = $"Event {i + 1}",
                     Description = $"Description for event {i + 1}.",
-                    StreetcodeId = 100 + i,
+                    StreetcodeId = streetcodeId,
                     Streetcode = null,
                     HistoricalContextTimelines = new List<HistoricalContextTimeline>(),
                 });
