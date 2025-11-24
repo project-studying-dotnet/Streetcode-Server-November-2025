@@ -2,9 +2,7 @@
 {
     using AutoMapper;
     using Moq;
-    using Org.BouncyCastle.Asn1.Ocsp;
     using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetAll;
     using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetByStreetcodeId;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Timeline;
@@ -12,6 +10,9 @@
     using Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Helpers;
     using Xunit;
 
+    /// <summary>
+    /// Contains unit tests for the <see cref="GetTimelineItemsByStreetcodeIdHandler"/>.
+    /// </summary>
     public class GetTimelineItemsByStreetcodeIdHandlerTests
     {
         private readonly Mock<IMapper> mapperMock;
@@ -19,6 +20,10 @@
         private readonly Mock<ILoggerService> loggerMock;
         private readonly GetTimelineItemsByStreetcodeIdHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetTimelineItemsByStreetcodeIdHandlerTests"/> class.
+        /// Sets up the required mocked dependencies and creates an instance of the handler to test.
+        /// </summary>
         public GetTimelineItemsByStreetcodeIdHandlerTests()
         {
             this.mapperMock = new Mock<IMapper>();
@@ -30,6 +35,23 @@
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        ///     Tests the <see cref="GetTimelineItemsByStreetcodeIdHandler"/> behavior when the repository
+        ///     returns <c>null</c> instead of a timeline items.
+        /// </summary>
+        /// <remarks>
+        ///     This test verifies that:
+        ///     <list type="bullet">
+        ///         <item><description>The handler returns a failure <see cref="FluentResults.Result"/>.</description></item>
+        ///         <item><description>An appropriate error message is included in the result.</description></item>
+        ///         <item><description><c>GetAllAsync</c> is called exactly once.</description></item>
+        ///         <item><description><c>LogError</c> is invoked when <c>null</c> is returned from the repository.</description></item>
+        ///         <item><description>The mapper is not invoked at all.</description></item>
+        ///     </list>
+        /// </remarks>
+        /// <returns>
+        ///     A task representing the asynchronous test execution.
+        /// </returns>
         [Fact]
         public async Task Handle_WhenTimelineItemsIsNull_ShouldReturnFailureResult()
         {
@@ -58,6 +80,24 @@
             this.mapperMock.VerifyMapCalledNever();
         }
 
+        /// <summary>
+        ///     Tests that the <see cref="GetTimelineItemsByStreetcodeIdHandler"/> correctly returns
+        ///     a successful <see cref="Result{T}"/> containing mapped
+        ///     <see cref="TimelineItemDTO"/> objects when timeline items by specified streetcodeId exist in the repository.
+        /// </summary>
+        /// <remarks>
+        ///     This test verifies that:
+        ///     <list type="bullet">
+        ///         <item><description>The handler returns a successful <see cref="FluentResults.Result{T}"/>.</description></item>
+        ///         <item><description>The returned result contains the correct number of mapped <see cref="TimelineItemDTO"/> objects.</description></item>
+        ///         <item><description><c>GetAllAsync</c> is called exactly once on the repository.</description></item>
+        ///         <item><description>The mapper's <c>Map</c> method is called exactly once with the retrieved timeline items.</description></item>
+        ///         <item><description>No errors are logged.</description></item>
+        ///     </list>
+        /// </remarks>
+        /// <returns>
+        ///     A task representing the asynchronous test execution.
+        /// </returns>
         [Fact]
         public async Task Handle_WhenTimelineItemsExists_ShouldReturnMappedTimelineItems()
         {
