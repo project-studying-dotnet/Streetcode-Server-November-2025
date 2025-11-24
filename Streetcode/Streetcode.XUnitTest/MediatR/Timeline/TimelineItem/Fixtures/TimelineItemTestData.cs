@@ -25,7 +25,7 @@
                 DateViewPattern = DateViewPattern.DateMonthYear,
                 Title = "Founding of the Organization",
                 Description = "The organization was officially founded and began its operations.",
-                StreetcodeId = 101,
+                StreetcodeId = streetcodeId,
                 Streetcode = null,
                 HistoricalContextTimelines = new List<HistoricalContextTimeline>(),
             };
