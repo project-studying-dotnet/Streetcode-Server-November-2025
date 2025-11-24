@@ -1,7 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetByStreetcodeId
 {
     using AutoMapper;
+    using FluentResults;
     using Moq;
+    using Streetcode.BLL.DTO.Timeline;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetByStreetcodeId;
     using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -37,7 +39,7 @@
 
         /// <summary>
         ///     Tests the <see cref="GetTimelineItemsByStreetcodeIdHandler"/> behavior when the repository
-        ///     returns <c>null</c> instead of a timeline items.
+        ///     returns <c>null</c> instead of timeline items.
         /// </summary>
         /// <remarks>
         ///     This test verifies that:
@@ -77,12 +79,12 @@
             // Verify
             timelineRepositoryMock.VerifyGetAllAsyncCalledOnce();
             this.loggerMock.VerifyLogErrorCalledOnce();
-            this.mapperMock.VerifyMapCalledNever();
+            this.mapperMock.VerifyMapCalledNever<TimelineItemDTO>();
         }
 
         /// <summary>
         ///     Tests that the <see cref="GetTimelineItemsByStreetcodeIdHandler"/> correctly returns
-        ///     a successful <see cref="Result{T}"/> containing mapped
+        ///     a successful <see cref="Result"/> containing mapped
         ///     <see cref="TimelineItemDTO"/> objects when timeline items by specified streetcodeId exist in the repository.
         /// </summary>
         /// <remarks>

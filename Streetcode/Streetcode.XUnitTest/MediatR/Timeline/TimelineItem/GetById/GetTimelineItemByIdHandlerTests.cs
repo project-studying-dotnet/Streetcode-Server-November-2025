@@ -1,7 +1,9 @@
 namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
 {
     using AutoMapper;
+    using FluentResults;
     using Moq;
+    using Streetcode.BLL.DTO.Timeline;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetById;
     using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -77,12 +79,12 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
             // Verify
             timelineRepositoryMock.VerifyGetFirstOrDefaultCalledOnce();
             this.loggerMock.VerifyLogErrorCalledOnce();
-            this.mapperMock.VerifyMapCalledNever();
+            this.mapperMock.VerifyMapCalledNever<TimelineItemDTO>();
         }
 
         /// <summary>
         ///     Tests that the <see cref="GetTimelineItemByIdHandler"/> correctly returns
-        ///     a successful <see cref="Result{T}"/> containing mapped
+        ///     a successful <see cref="Result"/> containing mapped
         ///     <see cref="TimelineItemDTO"/> object when timeline item exist in the repository.
         /// </summary>
         /// <remarks>

@@ -77,7 +77,7 @@
             // Verify
             timelineRepositoryMock.VerifyGetAllAsyncCalledOnce();
             this.loggerMock.VerifyLogErrorCalledOnce();
-            this.mapperMock.VerifyMapCalledNever();
+            this.mapperMock.VerifyMapCalledNever<IEnumerable<TimelineItemDTO>>();
         }
 
         /// <summary>

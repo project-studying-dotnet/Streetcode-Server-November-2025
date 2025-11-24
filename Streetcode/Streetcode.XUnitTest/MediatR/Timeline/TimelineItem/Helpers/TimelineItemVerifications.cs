@@ -112,14 +112,13 @@
         /// <summary>
         /// Verifies that no mapping operation was performed on the mocked mapper.
         /// </summary>
-        /// <param name="mapperMock">The mocked mapper.</param>
-        public static void VerifyMapCalledNever(this Mock<IMapper> mapperMock)
+        /// <typeparam name="TDestination">The destination type to verify.</typeparam>
+        public static void VerifyMapCalledNever<TDestination>(this Mock<IMapper> mapperMock)
         {
             mapperMock.Verify(
-                m => m.Map<IEnumerable<TimelineItemDTO>>(
-                    It.IsAny<object>()),
+                m => m.Map<TDestination>(It.IsAny<object>()),
                 Times.Never,
-                "Map method should not be called at all");
+                $"Map method to {typeof(TDestination).Name} should not be called at all");
         }
     }
 }
