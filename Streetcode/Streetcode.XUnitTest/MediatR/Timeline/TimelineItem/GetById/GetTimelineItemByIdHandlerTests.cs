@@ -2,16 +2,17 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
 {
     using AutoMapper;
     using Moq;
-    using Streetcode.BLL.DTO.Timeline;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetById;
-    using Streetcode.DAL.Entities.Timeline;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Timeline;
     using Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Fixtures;
     using Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Helpers;
     using Xunit;
 
+    /// <summary>
+    /// Contains unit tests for the <see cref="GetTimelineItemByIdHandler"/>.
+    /// </summary>
     public class GetTimelineItemByIdHandlerTests
     {
         private readonly Mock<IMapper> mapperMock;
@@ -19,6 +20,10 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
         private readonly Mock<ILoggerService> loggerMock;
         private readonly GetTimelineItemByIdHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetTimelineItemByIdHandlerTests"/> class.
+        /// Sets up the required mocked dependencies and creates an instance of the handler to test.
+        /// </summary>
         public GetTimelineItemByIdHandlerTests()
         {
             this.mapperMock = new Mock<IMapper>();
@@ -30,6 +35,23 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        ///     Tests the <see cref="GetTimelineItemByIdHandler"/> behavior when the repository
+        ///     returns <c>null</c> instead of a timeline item.
+        /// </summary>
+        /// <remarks>
+        ///     This test verifies that:
+        ///     <list type="bullet">
+        ///         <item><description>The handler returns a failure <see cref="FluentResults.Result"/>.</description></item>
+        ///         <item><description>An appropriate error message is included in the result.</description></item>
+        ///         <item><description><c>GetFirstOrDefaultAsync</c> is called exactly once.</description></item>
+        ///         <item><description><c>LogError</c> is invoked when <c>null</c> is returned from the repository.</description></item>
+        ///         <item><description>The mapper is not invoked at all.</description></item>
+        ///     </list>
+        /// </remarks>
+        /// <returns>
+        ///     A task representing the asynchronous test execution.
+        /// </returns>
         [Fact]
         public async Task Handle_WhenTimelineItemIsNull_ShouldReturnFailureResult()
         {
@@ -58,6 +80,24 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
             this.mapperMock.VerifyMapCalledNever();
         }
 
+        /// <summary>
+        ///     Tests that the <see cref="GetTimelineItemByIdHandler"/> correctly returns
+        ///     a successful <see cref="Result{T}"/> containing mapped
+        ///     <see cref="TimelineItemDTO"/> object when timeline item exist in the repository.
+        /// </summary>
+        /// <remarks>
+        ///     This test verifies that:
+        ///     <list type="bullet">
+        ///         <item><description>The handler returns a successful <see cref="FluentResults.Result{T}"/>.</description></item>
+        ///         <item><description>The returned DTO contains the same <c>Id</c> value as the entity retrieved from the repository.</description></item>
+        ///         <item><description><c>GetFirstOrDefaultAsync</c> is called exactly once on the repository.</description></item>
+        ///         <item><description>The mapper's <c>Map</c> method is called exactly once with the retrieved timeline items.</description></item>
+        ///         <item><description>No errors are logged.</description></item>
+        ///     </list>
+        /// </remarks>
+        /// <returns>
+        ///     A task representing the asynchronous test execution.
+        /// </returns>
         [Fact]
         public async Task Handle_WhenTimelineItemExists_ShouldReturnMappedTimelineItem()
         {
