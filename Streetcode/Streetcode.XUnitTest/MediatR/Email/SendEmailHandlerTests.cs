@@ -13,21 +13,21 @@
     {
         private const string EmailSentErrorMessage = "Failed to send email message";
 
-        private readonly Mock<IEmailService> _emailServiceMock;
-        private readonly Mock<ILoggerService> _loggerServiceMock;
+        private readonly Mock<IEmailService> emailServiceMock;
+        private readonly Mock<ILoggerService> loggerServiceMock;
         private readonly SendEmailHandler handler;
         public SendEmailHandlerTests()
         {
-            this._emailServiceMock = new Mock<IEmailService>();
-            this._loggerServiceMock = new Mock<ILoggerService>();
-            this.handler = new SendEmailHandler(this._emailServiceMock.Object, this._loggerServiceMock.Object);
+            this.emailServiceMock = new Mock<IEmailService>();
+            this.loggerServiceMock = new Mock<ILoggerService>();
+            this.handler = new SendEmailHandler(this.emailServiceMock.Object, this.loggerServiceMock.Object);
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnSuccess_WhenEmailSentSuccessfully()
+        public async Task Handle_EmailSentSuccessfully_ReturnsSuccess()
         {
             // Arrange
-            this._emailServiceMock
+            this.emailServiceMock
                 .Setup(s => s.SendEmailAsync(It.IsAny<Message>()))
                 .ReturnsAsync(true);
 
@@ -46,10 +46,10 @@
         }
 
         [Fact]
-        public async Task Handle_Should_ReturnFail_WhenEmailNotSent()
+        public async Task Handle_EmailSendFails_ReturnsFail()
         {
             // Arrange
-            this._emailServiceMock
+            this.emailServiceMock
                 .Setup(s => s.SendEmailAsync(It.IsAny<Message>()))
                 .ReturnsAsync(false);
 
@@ -63,10 +63,13 @@
             var result = await this.handler.Handle(command, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
+            Assert.False(result.IsSuccess);
             Assert.NotEmpty(result.Errors);
             Assert.Equal(EmailSentErrorMessage, result.Errors[0].Message);
-            this._loggerServiceMock.Verify(l => l.LogError(command, EmailSentErrorMessage));
+            this.loggerServiceMock.Verify(
+                l => l.LogError(command, EmailSentErrorMessage),
+                Times.Once,
+                "LogError method should be called exactly once when email sending fails");
         }
     }
 }
