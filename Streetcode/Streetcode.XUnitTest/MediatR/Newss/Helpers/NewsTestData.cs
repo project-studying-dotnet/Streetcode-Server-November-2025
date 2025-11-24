@@ -54,5 +54,25 @@
                 MimeType = "image/jpeg",
             };
         }
+
+        public static List<News> CreateNewsList(int count = 3, bool withImages = true)
+        {
+            return Enumerable.Range(1, count)
+                .Select(i => CreateNews(
+                    i,
+                    $"News {i}",
+                    withImages ? i : (int?)null))
+                .ToList();
+        }
+
+        public static List<NewsDTO> CreateNewsDTOList(int count = 3, bool withImages = true)
+        {
+            return Enumerable.Range(1, count)
+                .Select(i => CreateNewsDTO(
+                    i,
+                    $"News {i}",
+                    withImages ? i : (int?)null))
+                .ToList();
+        }
     }
 }

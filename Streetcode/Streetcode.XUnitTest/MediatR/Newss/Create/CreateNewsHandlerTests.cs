@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using FluentAssertions;
-    using Microsoft.Extensions.Logging;
     using Moq;
     using Streetcode.BLL.DTO.News;
     using Streetcode.BLL.Interfaces.Logging;
@@ -12,6 +11,10 @@
     using Streetcode.XUnitTest.MediatR.Newss.Helpers;
     using Xunit;
 
+    /// <summary>
+    /// Unit tests for <see cref="CreateNewsHandler"/>.
+    /// Covers different scenarios for creating news: successful creation, mapper failure, save failure, and ImageId handling.
+    /// </summary>
     public class CreateNewsHandlerTests
     {
         private readonly Mock<IMapper> mapperMock;
@@ -19,6 +22,10 @@
         private readonly Mock<ILoggerService> loggerMock;
         private readonly CreateNewsHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreateNewsHandlerTests"/> class,
+        /// setting up mocks and the handler instance.
+        /// </summary>
         public CreateNewsHandlerTests()
         {
             this.mapperMock = new Mock<IMapper>();
@@ -30,6 +37,10 @@
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        /// Tests that the handler returns success when valid data is provided.
+        /// </summary>
+        /// <returns>A successful <see cref="Result{NewsDTO}"/>.</returns>
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenDataValid()
         {
@@ -53,8 +64,11 @@
             MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
         }
 
+        /// <summary>
+        /// Tests that ImageId is set to null when the incoming DTO has ImageId = 0.
+        /// </summary>
+        /// <returns>A successful <see cref="Result{NewsDTO}"/> with ImageId set to null.</returns>
         [Fact]
-
         public async Task Handle_ShouldSetImageIdToNull_WhenImageIdIsZero()
         {
             var dto = NewsTestData.CreateNewsDTO(imageId: 0);
@@ -77,6 +91,10 @@
             MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
         }
 
+        /// <summary>
+        /// Tests that the handler returns failure when the mapper returns null.
+        /// </summary>
+        /// <returns>A failed <see cref="Result{NewsDTO}"/> with an appropriate error message.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenMapperReturnsNull()
         {
@@ -96,6 +114,11 @@
             MockRepoHelper.VerifyNewsCreateNever(this.repoMock);
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, errorMsg);
         }
+
+        /// <summary>
+        /// Tests that the handler returns failure when saving changes to the repository fails.
+        /// </summary>
+        /// <returns>A failed <see cref="Result{NewsDTO}"/> with an appropriate error message.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenSaveFails()
         {
