@@ -39,7 +39,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnSuccess_WhenAudioExists()
+        public async Task Handle_ShouldReturnSuccessResult_WhenAudioExists()
         {
             // Arrange.
             var (streetcodeContent, audioDto, targetStreetcodeId) = CreateValidStreetcodeAndDTO();
@@ -54,7 +54,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailed_WhenAudioDoesNotExists()
+        public async Task Handle_ShouldReturnFailedResult_WhenAudioDoesNotExists()
         {
             // Arrange.
             var (streetcodeContent, audioDto, targetStreetcodeId) = CreateNullStreetcodeAndDTO();
@@ -69,7 +69,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailed_WhenStreetcodeDoesNotExists()
+        public async Task Handle_ShouldReturnFailedResult_WhenStreetcodeDoesNotExists()
         {
             // Arrange.
             var (streetcodeContent, audioDto, targetStreetcodeId) = CreateValidStreetcodeAndDTO();
@@ -85,7 +85,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailed_WhenAudioPropertyInStreetCodeDoesNotExists()
+        public async Task Handle_ShouldReturnFailedResult_WhenAudioPropertyInStreetCodeDoesNotExists()
         {
             // Arrange.
             var (streetcodeContent, audioDto, targetStreetcodeId) = CreateValidStreetcodeAndDTO();
