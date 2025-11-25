@@ -1,5 +1,6 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Newss.Helpers
 {
+    using Ical.Net.DataTypes;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.News;
     using Streetcode.DAL.Entities.Media.Images;
@@ -75,5 +76,44 @@
                     withImages ? i : (int?)null))
                 .ToList();
         }
+
+        public static News CreateNewsWithDate(int id, DateTime creationDate, bool withImage = false)
+        {
+            return new News
+            {
+                Id = id,
+                Title = $"News {id}",
+                Text = "Test text",
+                URL = $"test-url-{id}",
+                CreationDate = creationDate,
+                ImageId = withImage ? id : null,
+                Image = withImage ? new Image
+                {
+                    Id = id,
+                    BlobName = $"blob-{id}",
+                    MimeType = "image/jpeg",
+                } : null,
+            };
+        }
+
+        public static NewsDTO CreateNewsDTOWithDate(int id, DateTime creationDate, bool withImage = false)
+        {
+            return new NewsDTO
+            {
+                Id = id,
+                Title = $"News {id}",
+                Text = "Test text",
+                URL = $"test-url-{id}",
+                CreationDate = creationDate,
+                ImageId = withImage ? id : null,
+                Image = withImage ? new ImageDTO
+                {
+                    Id = id,
+                    BlobName = $"blob-{id}",
+                    MimeType = "image/jpeg",
+                } : null,
+            };
+        }
     }
+
 }

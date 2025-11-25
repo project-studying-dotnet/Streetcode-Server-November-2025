@@ -31,5 +31,15 @@
         {
             mapper.Verify(m => m.Map<TDestination>(It.IsAny<TSource>()), Times.Never);
         }
+
+        public static void VerifyMapNeverCollection<TSource, TDestination>(this Mock<IMapper> mapper)
+        {
+            mapper.Verify(m => m.Map<IEnumerable<TDestination>>(It.IsAny<IEnumerable<TSource>>()), Times.Never);
+        }
+
+        public static void VerifyMapOnceCollection<TSource, TDestination>(this Mock<IMapper> mapper)
+        {
+            mapper.Verify(m => m.Map<IEnumerable<TDestination>>(It.IsAny<IEnumerable<TSource>>()), Times.Once);
+        }
     }
 }
