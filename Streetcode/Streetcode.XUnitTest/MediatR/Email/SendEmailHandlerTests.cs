@@ -16,6 +16,7 @@
         private readonly Mock<IEmailService> emailServiceMock;
         private readonly Mock<ILoggerService> loggerServiceMock;
         private readonly SendEmailHandler handler;
+
         public SendEmailHandlerTests()
         {
             this.emailServiceMock = new Mock<IEmailService>();
@@ -31,10 +32,13 @@
                 .Setup(s => s.SendEmailAsync(It.IsAny<Message>()))
                 .ReturnsAsync(true);
 
+            var email = "test@test.com";
+            var content = "test content";
+
             SendEmailCommand command = new SendEmailCommand(new EmailDTO()
             {
-                From = "test@test.com",
-                Content = "test content",
+                From = email,
+                Content = content,
             });
 
             // Act
@@ -42,7 +46,19 @@
 
             // Assert
             Assert.True(result.IsSuccess);
-            Assert.Equal(result.Value, Unit.Value);
+            Assert.Equal(Unit.Value, result.Value);
+
+            this.loggerServiceMock.Verify(
+                l => l.LogError(It.IsAny<object>(), It.IsAny<string>()),
+                Times.Never,
+                "LogError should not be called when email sent successfully");
+
+            this.emailServiceMock.Verify(
+                s => s.SendEmailAsync(It.Is<Message>(m =>
+                    m.From == email &&
+                    m.Content == content)),
+                Times.Once,
+                "SendEmailAsync should be called once");
         }
 
         [Fact]
@@ -53,10 +69,13 @@
                 .Setup(s => s.SendEmailAsync(It.IsAny<Message>()))
                 .ReturnsAsync(false);
 
+            var email = "fail@email.com";
+            var content = "fail attempt";
+
             SendEmailCommand command = new SendEmailCommand(new EmailDTO()
             {
-                From = "fail@email.com",
-                Content = "fail attempt",
+                From = email,
+                Content = content,
             });
 
             // Act
@@ -66,10 +85,18 @@
             Assert.False(result.IsSuccess);
             Assert.NotEmpty(result.Errors);
             Assert.Equal(EmailSentErrorMessage, result.Errors[0].Message);
+
             this.loggerServiceMock.Verify(
                 l => l.LogError(command, EmailSentErrorMessage),
                 Times.Once,
                 "LogError method should be called exactly once when email sending fails");
+
+            this.emailServiceMock.Verify(
+                s => s.SendEmailAsync(It.Is<Message>(m =>
+                    m.From == email &&
+                    m.Content == content)),
+                Times.Once,
+                "SendEmailAsync should be called once");
         }
     }
 }
