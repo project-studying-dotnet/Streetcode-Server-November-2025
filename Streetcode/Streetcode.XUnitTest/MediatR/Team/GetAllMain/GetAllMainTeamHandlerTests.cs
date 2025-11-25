@@ -85,7 +85,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailResult_WhenTeamIsNull()
+        public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenTeamIsNull()
         {
             // Arrange
             this.SetupRepositoryGetAllMainAsync(null);
@@ -96,26 +96,18 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.IsFailed.Should().BeTrue();
-        }
+            using (new AssertionScope())
+            {
+                result.IsFailed.Should().BeTrue();
+                result.Errors.Should().ContainSingle();
+                result.Errors.First().Message.Should().Be(ErrorMsg);
 
-        [Fact]
-        public async Task Handle_ShouldLogError_WhenTeamIsNull()
-        {
-            // Arrange
-            this.SetupRepositoryGetAllMainAsync(null);
-
-            var query = new GetAllMainTeamQuery();
-
-            // Act
-            await this.handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            this.mockLogger.Verify(
-                logger => logger.LogError(
-                    It.Is<GetAllMainTeamQuery>(q => q == query),
-                    It.Is<string>(msg => msg.Contains(ErrorMsg))),
-                Times.Once);
+                this.mockLogger.Verify(
+                    logger => logger.LogError(
+                        It.Is<GetAllMainTeamQuery>(q => q == query),
+                        It.Is<string>(msg => msg.Contains(ErrorMsg))),
+                    Times.Once);
+            }
         }
 
         private void SetupRepositoryGetAllMainAsync(IEnumerable<TeamMember>? teamMembers)

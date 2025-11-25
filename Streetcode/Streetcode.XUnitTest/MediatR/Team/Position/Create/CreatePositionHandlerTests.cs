@@ -64,7 +64,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailResult_WhenSaveChangesThrowsException()
+        public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenSaveChangesThrowsException()
         {
             // Arrange
             var position = GetTestPosition();
