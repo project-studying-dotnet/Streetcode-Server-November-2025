@@ -1,41 +1,32 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore.Query;
+using Moq;
+using Streetcode.BLL.DTO.Partners;
+using Streetcode.BLL.DTO.Partners.Create;
+using Streetcode.BLL.DTO.Streetcode;
+using Streetcode.BLL.MediatR.Partners.Update;
+using Streetcode.DAL.Entities.Partners;
+using Streetcode.DAL.Entities.Streetcode;
+using Xunit;
+
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using FluentAssertions;
-    using Microsoft.EntityFrameworkCore.Query;
-    using Moq;
-    using Streetcode.BLL.DTO.Partners;
-    using Streetcode.BLL.DTO.Partners.Create;
-    using Streetcode.BLL.DTO.Streetcode;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Partners.Update;
-    using Streetcode.DAL.Entities.Partners;
-    using Streetcode.DAL.Entities.Streetcode;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Xunit;
-
-    public class UpdatePartnerHandlerTests
+    public class UpdatePartnerHandlerTests : PartnerHandlerTestsBase
     {
-        private readonly Mock<IRepositoryWrapper> _mockRepository;
-        private readonly Mock<IMapper> _mockMapper;
-        private readonly Mock<ILoggerService> _mockLogger;
         private readonly UpdatePartnerHandler _handler;
 
         public UpdatePartnerHandlerTests()
         {
-            this._mockRepository = new Mock<IRepositoryWrapper>();
-            this._mockMapper = new Mock<IMapper>();
-            this._mockLogger = new Mock<ILoggerService>();
             this._handler = new UpdatePartnerHandler(
-                this._mockRepository.Object,
-                this._mockMapper.Object,
-                this._mockLogger.Object);
+                this.MockRepository.Object,
+                this.MockMapper.Object,
+                this.MockLogger.Object);
         }
 
         [Fact]
@@ -62,29 +53,29 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var oldStreetcodes = new List<StreetcodePartner>();
             var resultPartnerDTO = PartnerTestHelpers.CreatePartnerDTO(1);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
                 .Returns(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnersRepository.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerSourceLinkRepository.GetAllAsync(
                     It.IsAny<Expression<Func<PartnerSourceLink, bool>>>(),
                     It.IsAny<Func<IQueryable<PartnerSourceLink>, IIncludableQueryable<PartnerSourceLink, object>>>()))
                 .ReturnsAsync(existingLinks);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerStreetcodeRepository.GetAllAsync(
                     It.IsAny<Expression<Func<StreetcodePartner, bool>>>(),
                     It.IsAny<Func<IQueryable<StreetcodePartner>, IIncludableQueryable<StreetcodePartner, object>>>()))
                 .ReturnsAsync(oldStreetcodes);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<PartnerDTO>(It.IsAny<Partner>()))
                 .Returns(resultPartnerDTO);
 
@@ -97,11 +88,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.IsSuccess.Should().BeTrue();
             result.Value.Should().NotBeNull();
 
-            this._mockRepository.Verify(
+            this.MockRepository.Verify(
                 repo => repo.PartnersRepository.Update(It.IsAny<Partner>()),
                 Times.Once);
 
-            this._mockRepository.Verify(
+            this.MockRepository.Verify(
                 repo => repo.SaveChanges(),
                 Times.Exactly(2));
         }
@@ -130,29 +121,29 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var oldStreetcodes = new List<StreetcodePartner>();
             var resultPartnerDTO = PartnerTestHelpers.CreatePartnerDTO(1);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
                 .Returns(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnersRepository.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerSourceLinkRepository.GetAllAsync(
                     It.IsAny<Expression<Func<PartnerSourceLink, bool>>>(),
                     It.IsAny<Func<IQueryable<PartnerSourceLink>, IIncludableQueryable<PartnerSourceLink, object>>>()))
                 .ReturnsAsync(existingLinks);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerStreetcodeRepository.GetAllAsync(
                     It.IsAny<Expression<Func<StreetcodePartner, bool>>>(),
                     It.IsAny<Func<IQueryable<StreetcodePartner>, IIncludableQueryable<StreetcodePartner, object>>>()))
                 .ReturnsAsync(oldStreetcodes);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<PartnerDTO>(It.IsAny<Partner>()))
                 .Returns(resultPartnerDTO);
 
@@ -163,7 +154,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            this._mockRepository.Verify(
+            this.MockRepository.Verify(
                 repo => repo.PartnerSourceLinkRepository.Delete(It.IsAny<PartnerSourceLink>()),
                 Times.Exactly(2));
         }
@@ -192,29 +183,29 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var oldStreetcodes = new List<StreetcodePartner>();
             var resultPartnerDTO = PartnerTestHelpers.CreatePartnerDTO(1);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
                 .Returns(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnersRepository.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerSourceLinkRepository.GetAllAsync(
                     It.IsAny<Expression<Func<PartnerSourceLink, bool>>>(),
                     It.IsAny<Func<IQueryable<PartnerSourceLink>, IIncludableQueryable<PartnerSourceLink, object>>>()))
                 .ReturnsAsync(existingLinks);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerStreetcodeRepository.GetAllAsync(
                     It.IsAny<Expression<Func<StreetcodePartner, bool>>>(),
                     It.IsAny<Func<IQueryable<StreetcodePartner>, IIncludableQueryable<StreetcodePartner, object>>>()))
                 .ReturnsAsync(oldStreetcodes);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<PartnerDTO>(It.IsAny<Partner>()))
                 .Returns(resultPartnerDTO);
 
@@ -225,7 +216,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            this._mockRepository.Verify(
+            this.MockRepository.Verify(
                 repo => repo.PartnerStreetcodeRepository.Create(It.IsAny<StreetcodePartner>()),
                 Times.Exactly(2));
         }
@@ -254,29 +245,29 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             };
             var resultPartnerDTO = PartnerTestHelpers.CreatePartnerDTO(1);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
                 .Returns(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnersRepository.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerSourceLinkRepository.GetAllAsync(
                     It.IsAny<Expression<Func<PartnerSourceLink, bool>>>(),
                     It.IsAny<Func<IQueryable<PartnerSourceLink>, IIncludableQueryable<PartnerSourceLink, object>>>()))
                 .ReturnsAsync(existingLinks);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerStreetcodeRepository.GetAllAsync(
                     It.IsAny<Expression<Func<StreetcodePartner, bool>>>(),
                     It.IsAny<Func<IQueryable<StreetcodePartner>, IIncludableQueryable<StreetcodePartner, object>>>()))
                 .ReturnsAsync(oldStreetcodes);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<PartnerDTO>(It.IsAny<Partner>()))
                 .Returns(resultPartnerDTO);
 
@@ -287,7 +278,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            this._mockRepository.Verify(
+            this.MockRepository.Verify(
                 repo => repo.PartnerStreetcodeRepository.Delete(It.IsAny<StreetcodePartner>()),
                 Times.Exactly(2));
         }
@@ -312,29 +303,29 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var oldStreetcodes = new List<StreetcodePartner>();
             var resultPartnerDTO = PartnerTestHelpers.CreatePartnerDTO(1);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
                 .Returns(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnersRepository.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerSourceLinkRepository.GetAllAsync(
                     It.IsAny<Expression<Func<PartnerSourceLink, bool>>>(),
                     It.IsAny<Func<IQueryable<PartnerSourceLink>, IIncludableQueryable<PartnerSourceLink, object>>>()))
                 .ReturnsAsync(existingLinks);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerStreetcodeRepository.GetAllAsync(
                     It.IsAny<Expression<Func<StreetcodePartner, bool>>>(),
                     It.IsAny<Func<IQueryable<StreetcodePartner>, IIncludableQueryable<StreetcodePartner, object>>>()))
                 .ReturnsAsync(oldStreetcodes);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<PartnerDTO>(It.IsAny<Partner>()))
                 .Returns(resultPartnerDTO);
 
@@ -345,7 +336,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            this._mockRepository.Verify(
+            this.MockRepository.Verify(
                 repo => repo.SaveChanges(),
                 Times.Exactly(2),
                 "because SaveChanges should be called after updating partner and after modifying streetcode links");
@@ -368,11 +359,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
             var exceptionMessage = "Database error";
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
                 .Returns(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerSourceLinkRepository.GetAllAsync(
                     It.IsAny<Expression<Func<PartnerSourceLink, bool>>>(),
                     It.IsAny<Func<IQueryable<PartnerSourceLink>, IIncludableQueryable<PartnerSourceLink, object>>>()))
@@ -388,7 +379,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.Errors.Should().ContainSingle();
             result.Errors.First().Message.Should().Be(exceptionMessage);
 
-            this._mockLogger.Verify(
+            this.MockLogger.Verify(
                 logger => logger.LogError(
                     It.IsAny<object>(),
                     exceptionMessage),
@@ -415,29 +406,29 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var oldStreetcodes = new List<StreetcodePartner>();
             var exceptionMessage = "Save changes failed";
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
                 .Returns(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnersRepository.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerSourceLinkRepository.GetAllAsync(
                     It.IsAny<Expression<Func<PartnerSourceLink, bool>>>(),
                     It.IsAny<Func<IQueryable<PartnerSourceLink>, IIncludableQueryable<PartnerSourceLink, object>>>()))
                 .ReturnsAsync(existingLinks);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerStreetcodeRepository.GetAllAsync(
                     It.IsAny<Expression<Func<StreetcodePartner, bool>>>(),
                     It.IsAny<Func<IQueryable<StreetcodePartner>, IIncludableQueryable<StreetcodePartner, object>>>()))
                 .ReturnsAsync(oldStreetcodes);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.SaveChanges())
                 .Throws(new Exception(exceptionMessage));
 
@@ -451,7 +442,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.Errors.Should().ContainSingle();
             result.Errors.First().Message.Should().Be(exceptionMessage);
 
-            this._mockLogger.Verify(
+            this.MockLogger.Verify(
                 logger => logger.LogError(
                     It.IsAny<object>(),
                     exceptionMessage),
@@ -478,29 +469,29 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var oldStreetcodes = new List<StreetcodePartner>();
             var resultPartnerDTO = PartnerTestHelpers.CreatePartnerDTO(1);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
                 .Returns(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnersRepository.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync(partnerEntity);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerSourceLinkRepository.GetAllAsync(
                     It.IsAny<Expression<Func<PartnerSourceLink, bool>>>(),
                     It.IsAny<Func<IQueryable<PartnerSourceLink>, IIncludableQueryable<PartnerSourceLink, object>>>()))
                 .ReturnsAsync(existingLinks);
 
-            this._mockRepository
+            this.MockRepository
                 .Setup(repo => repo.PartnerStreetcodeRepository.GetAllAsync(
                     It.IsAny<Expression<Func<StreetcodePartner, bool>>>(),
                     It.IsAny<Func<IQueryable<StreetcodePartner>, IIncludableQueryable<StreetcodePartner, object>>>()))
                 .ReturnsAsync(oldStreetcodes);
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<PartnerDTO>(partnerEntity))
                 .Returns(resultPartnerDTO);
 
@@ -511,10 +502,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            this._mockMapper.Verify(
+            this.MockMapper.Verify(
                 mapper => mapper.Map<Partner>(updatePartnerDTO),
                 Times.Once);
-            this._mockMapper.Verify(
+            this.MockMapper.Verify(
                 mapper => mapper.Map<PartnerDTO>(partnerEntity),
                 Times.Once);
         }
@@ -533,7 +524,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Streetcodes = new List<StreetcodeShortDTO>(),
             };
 
-            this._mockMapper
+            this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
                 .Returns((Partner)null);
 
@@ -546,13 +537,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
 
-            this._mockRepository.Verify(
+            this.MockRepository.Verify(
                 repo => repo.PartnersRepository.Update(It.IsAny<Partner>()),
                 Times.Never);
 
-            this._mockRepository.Verify(
+            this.MockRepository.Verify(
                 repo => repo.SaveChanges(),
                 Times.Never);
         }
     }
 }
+
