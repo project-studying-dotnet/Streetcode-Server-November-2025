@@ -51,5 +51,13 @@
                 It.IsAny<Func<IQueryable<News>, IIncludableQueryable<News, object>>>()))
                 .ReturnsAsync(news);
         }
+
+        public static void SetupGetNewsByUrl(Mock<IRepositoryWrapper> repo, News news)
+        {
+            repo.Setup(r => r.NewsRepository.GetFirstOrDefaultAsync(
+                It.IsAny<Expression<Func<News, bool>>>(),
+                It.IsAny<Func<IQueryable<News>, IIncludableQueryable<News, object>>>()))
+                .ReturnsAsync(news);
+        }
     }
 }
