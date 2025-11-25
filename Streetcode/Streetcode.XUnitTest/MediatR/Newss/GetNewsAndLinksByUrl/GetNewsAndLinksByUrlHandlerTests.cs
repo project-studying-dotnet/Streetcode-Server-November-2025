@@ -51,18 +51,22 @@
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenNewsNotFound()
         {
-            const string url = "non-existing-url";
-            const string expectedError = $"No news by entered Url - {url}";
+            // Arrange
+            const string URL = "non-existing-url";
+            const string EXPECTED_ERROR = $"No news by entered Url - {URL}";
 
             MockRepoHelper.SetupGetNewsByUrl(this.repoMock, null);
 
-            var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(url), default);
+            // Act
+            var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(URL), default);
 
+            // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.Message == expectedError);
+            result.Errors.Should().ContainSingle(e => e.Message == EXPECTED_ERROR);
 
+            // Verify
             MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, expectedError);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, EXPECTED_ERROR);
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
@@ -74,20 +78,23 @@
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithoutImage()
         {
-            const string url = "news-no-image";
-            const int newsId = 1;
+            // Arrange
+            const string URL = "news-no-image";
+            const int NEWS_ID = 1;
 
-            var news = NewsTestData.CreateNews(newsId, imageId: null);
-            news.URL = url;
-            var newsDto = NewsTestData.CreateNewsDTO(newsId, imageId: null);
-            newsDto.URL = url;
+            var news = NewsTestData.CreateNews(NEWS_ID, imageId: null);
+            news.URL = URL;
+            var newsDto = NewsTestData.CreateNewsDTO(NEWS_ID, imageId: null);
+            newsDto.URL = URL;
 
             MockRepoHelper.SetupGetNewsByUrl(this.repoMock, news);
             MockMapperHelper.SetupMapper(this.mapperMock, news, newsDto);
             MockRepoHelper.SetupGetAllNews(this.repoMock, new List<News> { news });
 
+            // Act
             var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(url), default);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.News.Should().BeEquivalentTo(newsDto);
             result.Value.News.Image.Should().BeNull();
@@ -95,6 +102,7 @@
             result.Value.NextNewsUrl.Should().BeNull();
             result.Value.RandomNews.Should().NotBeNull();
 
+            // Verify
             MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
@@ -107,28 +115,32 @@
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithImage()
         {
-            const string Base64Content = "BASE64_STRING";
-            const string url = "news-with-image";
-            const int newsId = 1;
+            // Arrange
+            const string BASE_64_CONTENT = "BASE64_STRING";
+            const string URL = "news-with-image";
+            const int NEWS_ID = 1;
 
-            var news = NewsTestData.CreateNews(newsId);
-            news.URL = url;
+            var news = NewsTestData.CreateNews(NEWS_ID);
+            news.URL = URL;
             news.Image = new Image { BlobName = "news.jpg" };
 
-            var newsDto = NewsTestData.CreateNewsDTO(newsId);
-            newsDto.URL = url;
+            var newsDto = NewsTestData.CreateNewsDTO(NEWS_ID);
+            newsDto.URL = URL;
 
             MockRepoHelper.SetupGetNewsByUrl(this.repoMock, news);
             MockMapperHelper.SetupMapper(this.mapperMock, news, newsDto);
             MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Content);
             MockRepoHelper.SetupGetAllNews(this.repoMock, new List<News> { news });
 
+            // Act
             var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(url), default);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.News.Should().BeEquivalentTo(newsDto);
-            result.Value.News.Image?.Base64.Should().Be(Base64Content);
+            result.Value.News.Image?.Base64.Should().Be(BASE_64_CONTENT);
 
+            // Verify
             MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 1);
         }
@@ -141,6 +153,7 @@
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenFirstNews_HasOnlyNextLink()
         {
+            // Arrange
             var allNews = NewsTestData.CreateNewsList(5);
             var newsEntity = allNews[0];
             var newsDTO = NewsTestData.CreateNewsDTO(newsEntity.Id);
@@ -150,8 +163,10 @@
             MockMapperHelper.SetupMapper(this.mapperMock, newsEntity, newsDTO);
             MockRepoHelper.SetupGetAllNews(this.repoMock, allNews);
 
+            // Act
             var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(newsEntity.URL), default);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.PrevNewsUrl.Should().BeNull();
             result.Value.NextNewsUrl.Should().Be(allNews[1].URL);
@@ -165,6 +180,7 @@
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenLastNews_HasOnlyPrevLink()
         {
+            // Arrange
             var allNews = NewsTestData.CreateNewsList(5);
             var newsEntity = allNews[4];
             var newsDTO = NewsTestData.CreateNewsDTO(newsEntity.Id);
@@ -174,8 +190,10 @@
             MockMapperHelper.SetupMapper(this.mapperMock, newsEntity, newsDTO);
             MockRepoHelper.SetupGetAllNews(this.repoMock, allNews);
 
+            // Act
             var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(newsEntity.URL), default);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.PrevNewsUrl.Should().Be(allNews[3].URL);
             result.Value.NextNewsUrl.Should().BeNull();
@@ -189,6 +207,7 @@
         [Fact]
         public async Task Handle_ShouldReturnCorrectRandomNews_WhenMoreThanThreeNews()
         {
+            // Arrange
             var allNews = NewsTestData.CreateNewsList(5);
             var newsEntity = allNews[1];
             var newsDTO = NewsTestData.CreateNewsDTO(newsEntity.Id);
@@ -198,8 +217,10 @@
             MockMapperHelper.SetupMapper(this.mapperMock, newsEntity, newsDTO);
             MockRepoHelper.SetupGetAllNews(this.repoMock, allNews);
 
+            // Act
             var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(newsEntity.URL), default);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.RandomNews?.RandomNewsUrl.Should().Be(allNews[4].URL);
             result.Value.RandomNews?.Title.Should().Be(allNews[4].Title);

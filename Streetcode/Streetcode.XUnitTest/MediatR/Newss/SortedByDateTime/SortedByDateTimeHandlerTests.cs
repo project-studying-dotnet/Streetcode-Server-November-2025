@@ -75,7 +75,6 @@
         /// does not call the blob service for image Base64, and calls the mapper exactly once.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
-
         [Fact]
         public async Task Handle_ShouldReturnNewsSortedByDateDescending_WhenNewsExistWithoutImages()
         {

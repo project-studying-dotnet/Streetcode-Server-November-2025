@@ -50,12 +50,12 @@
         public async Task Handle_ShouldReturnFailure_WhenNewsNotFound()
         {
             // Arrange
-            const string url = "test-url";
+            const string URL = "test-url";
             const string expectedErrorMessage = $"No news by entered Url - {url}";
 
             MockRepoHelper.SetupGetNewsByUrl(this.repoMock, null!);
 
-            var query = new GetNewsByUrlQuery(url);
+            var query = new GetNewsByUrlQuery(URL);
 
             // Act
             var result = await this.handler.Handle(query, default);
@@ -79,17 +79,17 @@
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithoutImage()
         {
             // Arrange
-            const string url = "test-url";
+            const string URL = "test-url";
 
             var news = NewsTestData.CreateNews(1, imageId: null);
-            news.URL = url;
+            news.URL = URL;
             var newsDto = NewsTestData.CreateNewsDTO(1, imageId: null);
-            newsDto.URL = url;
+            newsDto.URL = URL;
 
             MockRepoHelper.SetupGetNewsByUrl(this.repoMock, news);
             MockMapperHelper.SetupMapper(this.mapperMock, news, newsDto);
 
-            var query = new GetNewsByUrlQuery(url);
+            var query = new GetNewsByUrlQuery(URL);
 
             // Act
             var result = await this.handler.Handle(query, default);
@@ -115,23 +115,23 @@
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithImage()
         {
             // Arrange
-            const int newsId = 1;
-            const string Url = "test-url";
-            const string BlobName = "news-image.jpg";
-            const string Base64Content = "BASE64_STRING";
+            const int NEWS_ID = 1;
+            const string URL = "test-url";
+            const string BLOB_NAME = "news-image.jpg";
+            const string BASE_64_CONTENT = "BASE64_STRING";
 
-            var news = NewsTestData.CreateNews(newsId);
-            news.URL = Url;
-            news.Image = new Image { BlobName = BlobName };
+            var news = NewsTestData.CreateNews(NEWS_ID);
+            news.URL = URL;
+            news.Image = new Image { BlobName = BLOB_NAME };
 
-            var newsDto = NewsTestData.CreateNewsDTO(newsId);
-            newsDto.URL = Url;
+            var newsDto = NewsTestData.CreateNewsDTO(NEWS_ID);
+            newsDto.URL = URL;
 
             MockRepoHelper.SetupGetNewsByUrl(this.repoMock, news);
             MockMapperHelper.SetupMapper(this.mapperMock, news, newsDto);
             MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Content);
 
-            var query = new GetNewsByUrlQuery(Url);
+            var query = new GetNewsByUrlQuery(URL);
 
             // Act
             var result = await this.handler.Handle(query, default);
@@ -139,12 +139,11 @@
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.Should().BeEquivalentTo(newsDto);
-            result.Value.Image?.Base64.Should().Be(Base64Content);
+            result.Value.Image?.Base64.Should().Be(BASE_64_CONTENT);
 
             // Verify
             MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 1);
         }
     }
-
 }
