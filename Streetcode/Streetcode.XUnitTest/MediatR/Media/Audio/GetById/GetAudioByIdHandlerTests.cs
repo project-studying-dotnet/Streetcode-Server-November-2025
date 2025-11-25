@@ -37,7 +37,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnSuccess_WhenAudioExists()
+        public async Task Handle_ShouldReturnSuccessResult_WhenAudioExists()
         {
             // Arrange.
             var (entity, dto, targetAudioId) = CreateValidAudioEntityAndDTO();
