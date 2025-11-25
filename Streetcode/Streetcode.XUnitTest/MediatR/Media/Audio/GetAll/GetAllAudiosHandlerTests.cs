@@ -48,7 +48,7 @@
 
             // Assert.
             result.IsSuccess.Should().BeTrue();
-            Assert.Equal(audioDtos, result.Value);
+            result.Value.Should().BeEquivalentTo(audioDtos);
             this.VerifyMocksCalledOnce();
         }
 
