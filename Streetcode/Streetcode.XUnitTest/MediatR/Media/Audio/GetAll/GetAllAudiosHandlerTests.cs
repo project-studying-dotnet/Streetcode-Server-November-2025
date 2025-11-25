@@ -53,7 +53,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailesResult_WhenAudiosNotFound()
+        public async Task Handle_ShouldReturnFailedResult_WhenAudiosNotFound()
         {
             // Arrange.
             var (audioEntities, audioDtos) = CreateNullAudioEntitiesAndDTOs();
@@ -103,7 +103,8 @@
                 .Returns(audioDtos);
 
             this.mockBlob
-                .Setup(b => b.FindFileInStorageAsBase64(It.IsAny<string>()));
+                .Setup(b => b.FindFileInStorageAsBase64(It.IsAny<string>()))
+                .Returns((string blobName) => blobName);
         }
 
         private void VerifyMocksCalledOnce()
