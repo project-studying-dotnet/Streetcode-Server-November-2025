@@ -8,17 +8,17 @@
 
     public static class NewsTestData
     {
-        public static News CreateNews(int id = 1, string title = "Test News", int? imageId = 1)
+        public static News CreateNews(int id = 1, string? title = null, int? imageId = 1, bool withImage = true)
         {
             return new News
             {
                 Id = id,
-                Title = title,
+                Title = title ?? $"News {id}",
                 Text = "Test text content",
                 URL = $"test-url-{id}",
-                ImageId = imageId,
+                ImageId = withImage ? imageId : null,
                 CreationDate = DateTime.Now,
-                Image = imageId.HasValue ? CreateImage(imageId.Value) : null,
+                Image = withImage && imageId.HasValue ? CreateImage(imageId.Value) : null,
             };
         }
 

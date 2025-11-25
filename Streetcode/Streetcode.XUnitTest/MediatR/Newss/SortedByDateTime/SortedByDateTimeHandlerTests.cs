@@ -24,6 +24,10 @@
         private readonly Mock<IBlobService> blobServiceMock;
         private readonly SortedByDateTimeHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SortedByDateTimeHandlerTests"/> class.
+        /// Creates an instance of <see cref="SortedByDateTimeHandler"/> using the mocked dependencies.
+        /// </summary>
         public SortedByDateTimeHandlerTests()
         {
             this.mapperMock = new Mock<IMapper>();
@@ -37,6 +41,12 @@
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        /// Tests the scenario when the repository returns null news collection.
+        /// Ensures that the handler returns a failed <see cref="Result{T}"/> with the correct error message,
+        /// does not call the mapper, and logs the error.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenNewsCollectionIsNull()
         {
@@ -58,6 +68,13 @@
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ERROR_MSG);
             MockMapperHelper.VerifyMapNeverCollection<News, NewsDTO>(this.mapperMock);
         }
+
+        /// <summary>
+        /// Tests the scenario when the repository returns a non-empty news collection without images.
+        /// Ensures that the handler returns a successful <see cref="Result{T}"/> with news sorted by <see cref="NewsDTO.CreationDate"/> descending,
+        /// does not call the blob service for image Base64, and calls the mapper exactly once.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
 
         [Fact]
         public async Task Handle_ShouldReturnNewsSortedByDateDescending_WhenNewsExistWithoutImages()
@@ -96,6 +113,13 @@
             MockMapperHelper.VerifyMapOnceCollection<News, NewsDTO>(this.mapperMock);
         }
 
+        /// <summary>
+        /// Tests the scenario when the repository returns a non-empty news collection with images.
+        /// Ensures that the handler returns a successful <see cref="Result{T}"/> with news sorted by <see cref="NewsDTO.CreationDate"/> descending,
+        /// populates the <see cref="ImageDTO.Base64"/> field for each news, and calls the mapper and blob service the correct number of times.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
+
         [Fact]
         public async Task Handle_ShouldReturnNewsSortedByDateDescendingWithBase64Images_WhenNewsExistWithImages()
         {
@@ -133,7 +157,6 @@
             // Verify
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 2);
             MockMapperHelper.VerifyMapOnceCollection<News, NewsDTO>(this.mapperMock);
-
         }
     }
 }
