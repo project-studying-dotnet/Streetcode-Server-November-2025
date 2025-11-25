@@ -40,8 +40,8 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsSuccess_WhenPartnersExist()
         {
             // Arrange
-            var partners = new List<Partner> { CreatePartnerEntity(1), CreatePartnerEntity(2), CreatePartnerEntity(3) };
-            var partnerDTOs = new List<PartnerDTO> { CreatePartnerDTO(1), CreatePartnerDTO(2), CreatePartnerDTO(3) };
+            var partners = new List<Partner> { PartnerTestHelpers.CreatePartnerEntity(1), PartnerTestHelpers.CreatePartnerEntity(2), PartnerTestHelpers.CreatePartnerEntity(3) };
+            var partnerDTOs = new List<PartnerDTO> { PartnerTestHelpers.CreatePartnerDTO(1), PartnerTestHelpers.CreatePartnerDTO(2), PartnerTestHelpers.CreatePartnerDTO(3) };
 
             this._mockRepository
                 .Setup(repo => repo.PartnersRepository.GetAllAsync(
@@ -130,8 +130,8 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_CallsMapper_WhenPartnersExist()
         {
             // Arrange
-            var partners = new List<Partner> { CreatePartnerEntity(1), CreatePartnerEntity(2) };
-            var partnerDTOs = new List<PartnerDTO> { CreatePartnerDTO(1), CreatePartnerDTO(2) };
+            var partners = new List<Partner> { PartnerTestHelpers.CreatePartnerEntity(1), PartnerTestHelpers.CreatePartnerEntity(2) };
+            var partnerDTOs = new List<PartnerDTO> { PartnerTestHelpers.CreatePartnerDTO(1), PartnerTestHelpers.CreatePartnerDTO(2) };
 
             this._mockRepository
                 .Setup(repo => repo.PartnersRepository.GetAllAsync(
@@ -181,8 +181,8 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_CallsRepositoryWithInclude_WhenCalled()
         {
             // Arrange
-            var partners = new List<Partner> { CreatePartnerEntity(1) };
-            var partnerDTOs = new List<PartnerDTO> { CreatePartnerDTO(1) };
+            var partners = new List<Partner> { PartnerTestHelpers.CreatePartnerEntity(1) };
+            var partnerDTOs = new List<PartnerDTO> { PartnerTestHelpers.CreatePartnerDTO(1) };
             Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> capturedInclude = null;
 
             this._mockRepository
@@ -212,31 +212,5 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()),
                 Times.Once);
         }
-
-        // --- Helpers ---
-        private static Partner CreatePartnerEntity(int id = 1)
-            => new()
-            {
-                Id = id,
-                Title = $"Test Partner {id}",
-                IsKeyPartner = id % 2 != 0,
-                IsVisibleEverywhere = id % 2 != 0,
-                LogoId = id,
-                TargetUrl = $"https://partner{id}.com",
-                Description = $"Description {id}",
-                PartnerSourceLinks = new List<PartnerSourceLink>(),
-                Streetcodes = new List<StreetcodeContent>(),
-            };
-
-        private static PartnerDTO CreatePartnerDTO(int id = 1)
-            => new()
-            {
-                Id = id,
-                Title = $"Test Partner {id}",
-                IsKeyPartner = id % 2 != 0,
-                IsVisibleEverywhere = id % 2 != 0,
-                LogoId = id,
-                Description = $"Description {id}",
-            };
     }
 }
