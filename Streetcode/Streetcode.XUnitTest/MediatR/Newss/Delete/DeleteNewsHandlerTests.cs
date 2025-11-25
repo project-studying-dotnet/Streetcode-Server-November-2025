@@ -14,12 +14,21 @@
     using Streetcode.XUnitTest.MediatR.Newss.Helpers;
     using Xunit;
 
+    /// <summary>
+    /// Unit tests for <see cref="DeleteNewsHandler"/>.
+    /// Covers success and failure scenarios of deleting news,
+    /// including handling of images, SaveChangesAsync behavior, and logging.
+    /// </summary>
     public class DeleteNewsHandlerTests
     {
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<ILoggerService> loggerMock;
         private readonly DeleteNewsHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeleteNewsHandlerTests"/> class.
+        /// Initializes mocks and the <see cref="DeleteNewsHandler"/> instance.
+        /// </summary>
         public DeleteNewsHandlerTests()
         {
             this.repoMock = new Mock<IRepositoryWrapper>();
@@ -27,6 +36,11 @@
             this.handler = new DeleteNewsHandler(this.repoMock.Object, this.loggerMock.Object);
         }
 
+        /// <summary>
+        /// Tests that the handler returns a failed result when the news item is not found in the repository.
+        /// Ensures proper error logging and that Delete is never called.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenNewsNotFound()
         {
@@ -50,6 +64,12 @@
             this.repoMock.Verify(r => r.NewsRepository.Delete(It.IsAny<News>()), Times.Never);
         }
 
+        /// <summary>
+        /// Tests that a news item without an image is successfully deleted.
+        /// Ensures that the news repository Delete method is called once,
+        /// no image deletion occurs, and SaveChangesAsync is called.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
         [Fact]
         public async Task Handle_ShouldReturnOk_WhenNewsExistsWithoutImageAndDeletedSuccessfully()
         {
@@ -74,6 +94,12 @@
             this.repoMock.Verify(r => r.ImageRepository.Delete(It.IsAny<Image>()), Times.Never);
         }
 
+        /// <summary>
+        /// Tests that a news item with an image is successfully deleted.
+        /// Ensures that both the news and associated image are deleted from the repository,
+        /// and that SaveChangesAsync is called once.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
         [Fact]
         public async Task Handle_ShouldReturnOk_WhenNewsExistsWithImageAndDeletedSuccessfully()
         {
@@ -90,7 +116,7 @@
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, news);
             MockRepoHelper.SetupSaveSuccess(this.repoMock);
-            repoMock.Setup(r => r.ImageRepository).Returns(imageRepoMock.Object);
+            this.repoMock.Setup(r => r.ImageRepository).Returns(imageRepoMock.Object);
 
             var command = new DeleteNewsCommand(NEWS_ID);
 
@@ -106,6 +132,11 @@
             this.repoMock.Verify(r => r.NewsRepository.Delete(news), Times.Once);
         }
 
+        /// <summary>
+        /// Tests that the handler returns a failed result when SaveChangesAsync fails after attempting deletion.
+        /// Ensures that proper error logging occurs.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenSaveChangesFails()
         {
