@@ -345,3 +345,10 @@ healthchecksdb
 # BlobStorage
 BlobStorageFolder/
 BlobStorageTestFolder/
+# --- Sensitive files ---
+.env
+Streetcode/Streetcode.WebApi/appsettings.json
+Streetcode/Streetcode.WebApi/appsettings.Local.json
+Streetcode/Streetcode.WebApi/appsettings.Development.json
+Streetcode/Streetcode.WebApi/appsettings.IntegrationTests.json
+Streetcode/Streetcode.WebApi/appsettings.Production.json
