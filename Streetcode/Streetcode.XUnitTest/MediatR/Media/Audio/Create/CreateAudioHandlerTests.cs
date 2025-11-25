@@ -35,13 +35,13 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldRetursSuccessResult_WhenAudioCreated()
+        public async Task Handle_ShouldReturnSuccessResult_WhenAudioCreated()
         {
             // Arrange.
             var audioFileBaseCreateDTO = new AudioFileBaseCreateDTO
             {
                 Title = "Test audio title",
-                Description = "Test desciption",
+                Description = "Test description",
                 MimeType = "audio/mpeg",
                 BaseFormat = "base64string",
                 Extension = "mp3",
@@ -55,7 +55,7 @@
                 BlobName = "sha256.mp3",
             };
 
-            var hashBlobStorageName = "sha256";
+            const string hashBlobStorageName = "sha256";
 
             var expectedBlobName = $"{hashBlobStorageName}.{audioFileBaseCreateDTO.Extension}";
 
@@ -103,13 +103,13 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFail_WhenSaveChangesFailed()
+        public async Task Handle_ShouldReturnFailedResult_WhenSaveChangesFailed()
         {
             // Arrange.
             var audioFileBaseCreateDTO = new AudioFileBaseCreateDTO
             {
                 Title = "Test audio title",
-                Description = "Test desciption",
+                Description = "Test description",
                 MimeType = "audio/mpeg",
                 BaseFormat = "base64string",
                 Extension = "mp3",
@@ -123,11 +123,11 @@
                 BlobName = "sha256.mp3",
             };
 
-            var hashBlobStorageName = "sha256";
+            const string hashBlobStorageName = "sha256";
 
             var expectedBlobName = $"{hashBlobStorageName}.{audioFileBaseCreateDTO.Extension}";
 
-            var expectedErrorMsg = $"Failed to create an audio";
+            const string expectedErrorMsg = "Failed to create an audio";
 
             var createAudioCommand = new CreateAudioCommand(audioFileBaseCreateDTO);
 
