@@ -44,6 +44,7 @@
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenDataValid()
         {
+            // Arrange
             var dto = NewsTestData.CreateNewsDTO();
             var entity = NewsTestData.CreateNews();
 
@@ -54,11 +55,14 @@
 
             var command = new CreateNewsCommand(dto);
 
+            // Act
             var result = await this.handler.Handle(command, default);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.Should().BeEquivalentTo(dto);
 
+            // Verify
             MockMapperHelper.VerifyMapOnce<NewsDTO, News>(this.mapperMock);
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
             MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
@@ -71,6 +75,7 @@
         [Fact]
         public async Task Handle_ShouldSetImageIdToNull_WhenImageIdIsZero()
         {
+            // Arrange
             var dto = NewsTestData.CreateNewsDTO(imageId: 0);
             var entity = NewsTestData.CreateNews(imageId: 0);
 
@@ -81,11 +86,14 @@
 
             var command = new CreateNewsCommand(dto);
 
+            // Act
             var result = await this.handler.Handle(command, default);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             entity.ImageId.Should().BeNull();
 
+            // Verify
             MockMapperHelper.VerifyMapOnce<NewsDTO, News>(this.mapperMock);
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
             MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
@@ -98,21 +106,26 @@
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenMapperReturnsNull()
         {
-            const string errorMsg = "Cannot convert null to news";
+            // Arrange
+            const string ERROR_MSG = "Cannot convert null to news";
 
             var dto = NewsTestData.CreateNewsDTO();
 
             this.mapperMock.Setup(m => m.Map<News>(It.IsAny<NewsDTO>())).Returns((News)null);
 
             var command = new CreateNewsCommand(dto);
+
+            // Act
             var result = await this.handler.Handle(command, default);
 
+            // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.Message == errorMsg);
+            result.Errors.Should().ContainSingle(e => e.Message == ERROR_MSG);
 
+            // Verify
             MockMapperHelper.VerifyMapOnce<NewsDTO, News>(this.mapperMock);
             MockRepoHelper.VerifyNewsCreateNever(this.repoMock);
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, errorMsg);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ERROR_MSG);
         }
 
         /// <summary>
@@ -122,7 +135,8 @@
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenSaveFails()
         {
-            const string errorMsg = "Failed to create a news";
+            // Arrange
+            const string ERROR_MSG = "Failed to create a news";
 
             var dto = NewsTestData.CreateNewsDTO();
             var entity = NewsTestData.CreateNews();
@@ -132,14 +146,18 @@
             MockRepoHelper.SetupSaveFail(this.repoMock);
 
             var command = new CreateNewsCommand(dto);
+
+            // Act
             var result = await this.handler.Handle(command, default);
 
+            // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.Message == errorMsg);
+            result.Errors.Should().ContainSingle(e => e.Message == ERROR_MSG);
 
+            // Verify
             MockMapperHelper.VerifyMapOnce<NewsDTO, News>(this.mapperMock);
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, errorMsg);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ERROR_MSG);
         }
     }
 }

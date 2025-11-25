@@ -1,8 +1,8 @@
-﻿using Moq;
-using Streetcode.BLL.Interfaces.Logging;
-
-namespace Streetcode.XUnitTest.MediatR.Newss.Helpers
+﻿namespace Streetcode.XUnitTest.MediatR.Newss.Helpers
 {
+    using Moq;
+    using Streetcode.BLL.Interfaces.Logging;
+
     public static class MockLoggerHelper
     {
         public static void VerifyLogErrorOnce(Mock<ILoggerService> logger)

@@ -51,7 +51,7 @@
         {
             // Arrange
             const string URL = "test-url";
-            const string expectedErrorMessage = $"No news by entered Url - {url}";
+            const string expectedErrorMessage = $"No news by entered Url - {URL}";
 
             MockRepoHelper.SetupGetNewsByUrl(this.repoMock, null!);
 
@@ -129,7 +129,7 @@
 
             MockRepoHelper.SetupGetNewsByUrl(this.repoMock, news);
             MockMapperHelper.SetupMapper(this.mapperMock, news, newsDto);
-            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Content);
+            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, BASE_64_CONTENT);
 
             var query = new GetNewsByUrlQuery(URL);
 

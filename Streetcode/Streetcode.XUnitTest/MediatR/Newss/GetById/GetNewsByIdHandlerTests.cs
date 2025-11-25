@@ -7,7 +7,6 @@
     using Streetcode.BLL.Interfaces.BlobStorage;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Newss.GetById;
-    using Streetcode.DAL.Entities.Media.Images;
     using Streetcode.DAL.Entities.News;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.XUnitTest.MediatR.Newss.Helpers;

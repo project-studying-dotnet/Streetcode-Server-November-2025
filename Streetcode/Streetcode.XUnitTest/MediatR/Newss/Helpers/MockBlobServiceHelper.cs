@@ -22,8 +22,7 @@
         {
             blobService.Verify(
                 b => b.FindFileInStorageAsBase64(It.IsAny<string>()),
-                Times.Exactly(times)
-            );
+                Times.Exactly(times));
         }
     }
 }

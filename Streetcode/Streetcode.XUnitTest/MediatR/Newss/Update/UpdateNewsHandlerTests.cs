@@ -2,7 +2,6 @@
 {
     using AutoMapper;
     using FluentAssertions;
-    using FluentResults;
     using Moq;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.News;

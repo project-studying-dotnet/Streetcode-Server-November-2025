@@ -4,7 +4,6 @@
     using global::MediatR;
     using Moq;
     using Repositories.Interfaces;
-    using Streetcode.BLL.DTO.News;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Newss.Delete;
     using Streetcode.DAL.Entities.Media.Images;

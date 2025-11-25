@@ -12,6 +12,11 @@
     using Streetcode.XUnitTest.MediatR.Newss.Helpers;
     using Xunit;
 
+    /// <summary>
+    /// Unit tests for <see cref="GetAllNewsHandler"/>.
+    /// Verifies correct behavior when retrieving all news items from the repository,
+    /// including scenarios with and without images.
+    /// </summary>
     public class GetAllNewsHandlerTests
     {
         private readonly Mock<IMapper> mapperMock;
@@ -20,6 +25,10 @@
         private readonly Mock<IBlobService> blobServiceMock;
         private readonly GetAllNewsHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetAllNewsHandlerTests"/> class.
+        /// Initializes mocks and the <see cref="GetAllNewsHandler"/> instance.
+        /// </summary>
         public GetAllNewsHandlerTests()
         {
             this.mapperMock = new Mock<IMapper>();
@@ -33,28 +42,41 @@
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        /// Tests that handler returns failure when no news exist in the repository.
+        /// </summary>
+        /// <returns>A task representing the asynchronous test execution.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenNoNewsFound()
         {
-            const string errorMsg = "There are no news in the database";
+            // Arrange
+            const string ERROR_MSG = "There are no news in the database";
 
             MockRepoHelper.SetupGetAllNews(this.repoMock, null);
 
             var query = new GetAllNewsQuery();
 
+            // Act
             var result = await this.handler.Handle(query, default);
 
+            // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.Message == errorMsg);
+            result.Errors.Should().ContainSingle(e => e.Message == ERROR_MSG);
 
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, errorMsg);
+            // Verify
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ERROR_MSG);
             MockMapperHelper.VerifyMapNever<News, NewsDTO>(this.mapperMock);
             this.blobServiceMock.Verify(b => b.FindFileInStorageAsBase64(It.IsAny<string>()), Times.Never);
         }
 
+        /// <summary>
+        /// Tests that handler returns all news with images when news exist.
+        /// </summary>
+        /// <returns>A task representing the asynchronous test execution.</returns>
         [Fact]
         public async Task Handle_ShouldReturnAllNewsWithImages_WhenNewsExist()
         {
+            // Arrange
             var newList = NewsTestData.CreateNewsList(3);
             var newsDTOList = NewsTestData.CreateNewsDTOList(3);
 
@@ -64,19 +86,27 @@
 
             var query = new GetAllNewsQuery();
 
+            // Act
             var result = await this.handler.Handle(query, default);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.Should().HaveCount(3);
             result.Value.All(n => n.Image?.Base64 == "base64content").Should().BeTrue();
 
+            // Verify
             this.mapperMock.Verify(m => m.Map<IEnumerable<NewsDTO>>(It.IsAny<IEnumerable<News>>()), Times.Once);
             this.blobServiceMock.Verify(b => b.FindFileInStorageAsBase64(It.IsAny<string>()), Times.Exactly(3));
         }
 
+        /// <summary>
+        /// Tests that handler returns all news without images when news exist but images are not present.
+        /// </summary>
+        /// <returns>A task representing the asynchronous test execution.</returns>
         [Fact]
         public async Task Handle_ShouldReturnAllNewsWithoutImages_WhenNewsExist()
         {
+            // Arrange
             var newList = NewsTestData.CreateNewsList(3, false);
             var newsDTOList = NewsTestData.CreateNewsDTOList(3, false);
 
@@ -85,10 +115,14 @@
 
             var query = new GetAllNewsQuery();
 
+            // Act
             var result = await this.handler.Handle(query, default);
 
+            // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.All(n => n.Image == null).Should().BeTrue();
+
+            // Verify
             this.mapperMock.Verify(m => m.Map<IEnumerable<NewsDTO>>(It.IsAny<IEnumerable<News>>()), Times.Once);
             this.blobServiceMock.Verify(b => b.FindFileInStorageAsBase64(It.IsAny<string>()), Times.Never);
         }

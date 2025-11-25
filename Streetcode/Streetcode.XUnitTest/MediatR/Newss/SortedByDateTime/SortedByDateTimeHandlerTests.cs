@@ -118,7 +118,6 @@
         /// populates the <see cref="ImageDTO.Base64"/> field for each news, and calls the mapper and blob service the correct number of times.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
-
         [Fact]
         public async Task Handle_ShouldReturnNewsSortedByDateDescendingWithBase64Images_WhenNewsExistWithImages()
         {

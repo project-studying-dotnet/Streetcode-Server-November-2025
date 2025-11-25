@@ -1,6 +1,5 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Newss.Helpers
 {
-    using Ical.Net.DataTypes;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.News;
     using Streetcode.DAL.Entities.Media.Images;
@@ -92,7 +91,8 @@
                     Id = id,
                     BlobName = $"blob-{id}",
                     MimeType = "image/jpeg",
-                } : null,
+                }
+                : null,
             };
         }
 
@@ -111,9 +111,9 @@
                     Id = id,
                     BlobName = $"blob-{id}",
                     MimeType = "image/jpeg",
-                } : null,
+                }
+                : null,
             };
         }
     }
-
 }

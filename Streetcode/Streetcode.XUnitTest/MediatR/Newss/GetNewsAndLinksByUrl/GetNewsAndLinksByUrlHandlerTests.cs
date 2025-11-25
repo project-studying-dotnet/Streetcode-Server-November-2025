@@ -92,7 +92,7 @@
             MockRepoHelper.SetupGetAllNews(this.repoMock, new List<News> { news });
 
             // Act
-            var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(url), default);
+            var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(URL), default);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
@@ -129,11 +129,11 @@
 
             MockRepoHelper.SetupGetNewsByUrl(this.repoMock, news);
             MockMapperHelper.SetupMapper(this.mapperMock, news, newsDto);
-            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Content);
+            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, BASE_64_CONTENT);
             MockRepoHelper.SetupGetAllNews(this.repoMock, new List<News> { news });
 
             // Act
-            var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(url), default);
+            var result = await this.handler.Handle(new GetNewsAndLinksByUrlQuery(URL), default);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
