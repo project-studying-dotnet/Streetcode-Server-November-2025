@@ -13,6 +13,9 @@
     using Streetcode.XUnitTest.MediatR.Newss.Helpers;
     using Xunit;
 
+    /// <summary>
+    /// Unit tests for <see cref="GetNewsByIdHandler"/>.
+    /// </summary>
     public class GetNewsByIdHandlerTests
     {
         private readonly Mock<IMapper> mapperMock;
@@ -21,6 +24,9 @@
         private readonly Mock<IBlobService> blobServiceMock;
         private readonly GetNewsByIdHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetNewsByIdHandlerTests"/> class.
+        /// </summary>
         public GetNewsByIdHandlerTests()
         {
             this.mapperMock = new Mock<IMapper>();
@@ -34,6 +40,11 @@
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/>
+        /// returns a failure result when no news is found for the specified Id.
+        /// </summary>
+        /// <returns>A failed <see cref="Result{NewsDTO}"/> with an error message.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenNewsNotFound()
         {
@@ -58,6 +69,11 @@
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
+        /// <summary>
+        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/> 
+        /// returns a success result when news is found but has no associated image.
+        /// </summary>
+        /// <returns>A successful <see cref="Result{NewsDTO}"/> with <c>null</c> image.</returns>
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithoutImage()
         {
@@ -85,6 +101,12 @@
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
+        /// <summary>
+        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/> 
+        /// returns a success result when news is found and has an associated image.
+        /// Ensures that the Base64 content is populated via <see cref="IBlobService"/>.
+        /// </summary>
+        /// <returns>A successful <see cref="Result{NewsDTO}"/> with populated <see cref="ImageDTO.Base64"/>.</returns>
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithImage()
         {
