@@ -48,13 +48,14 @@
                 this.loggerMock.Object);
         }
 
-        [Fact]
-        public async Task Handle_ReturnsSuccess_WhenArtsExist()
+        [Theory]
+        [InlineData(1)]
+        public async Task Handle_ReturnsSuccess_WhenArtsExist(int requestedId)
         {
             List<Art> arts = this.GetArts();
             this.SetupRepositoryMapper(arts);
 
-            GetArtsByStreetcodeIdQuery query = new GetArtsByStreetcodeIdQuery(1);
+            GetArtsByStreetcodeIdQuery query = new GetArtsByStreetcodeIdQuery(requestedId);
 
             var result = await this.handler.Handle(query, CancellationToken.None);
 
@@ -62,7 +63,7 @@
         }
 
         [Fact]
-        public async Task Handle_ReturnsProperAmountOfObjects_WhenArtsExist()
+        public async Task Handle_ReturnsCorrectAmount_WhenArtsExist()
         {
             List<Art> arts = this.GetArts();
             this.SetupRepositoryMapper(arts);
@@ -80,7 +81,7 @@
         [InlineData(-1)]
         [InlineData(int.MaxValue)]
         [InlineData(int.MinValue)]
-        public async Task Handle_ReturnsEmpty_WhenNoArtsForStreetcode(int requestedId)
+        public async Task Handle_ReturnsEmpty_WhenNoArtsFound(int requestedId)
         {
             List<Art> arts = this.GetArts();
             this.SetupRepositoryMapper(arts);
@@ -108,8 +109,9 @@
             Assert.True(result.IsFailed);
         }
 
-        [Fact]
-        public async Task Handle_ReturnsProperErrorMessage_WhenArtsAreNull()
+        [Theory]
+        [InlineData(1)]
+        public async Task Handle_ReturnsErrorMessage_WhenArtsNull(int requestedId)
         {
             this.artRepositoryMock.Setup(r =>
             r.GetAllAsync(
@@ -117,11 +119,11 @@
                 It.IsAny<Func<IQueryable<Art>, IIncludableQueryable<Art, object>>>()))
                 .ReturnsAsync((List<Art>)null);
 
-            GetArtsByStreetcodeIdQuery query = new GetArtsByStreetcodeIdQuery(1);
+            GetArtsByStreetcodeIdQuery query = new GetArtsByStreetcodeIdQuery(requestedId);
 
             var result = await this.handler.Handle(query, CancellationToken.None);
 
-            Assert.Equal(string.Format(ERRORMESSAGE, 1), result.Errors[0].Message);
+            Assert.Equal(string.Format(ERRORMESSAGE, requestedId), result.Errors[0].Message);
         }
 
         private void SetupRepositoryMapper(List<Art> arts)
@@ -181,5 +183,4 @@
         };
         }
     }
-
 }

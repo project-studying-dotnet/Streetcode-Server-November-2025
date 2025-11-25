@@ -50,7 +50,7 @@
         [InlineData(-1)]
         [InlineData(int.MaxValue)]
         [InlineData(int.MinValue)]
-        public async Task Handle_ReturnsFail_WhenArtsAreEmpty(int requestedId)
+        public async Task Handle_ReturnsFail_WhenArtsAreNull(int requestedId)
         {
             var result = await this.handler
                 .Handle(new GetArtByIdQuery(requestedId), CancellationToken.None);
@@ -72,8 +72,9 @@
             Assert.Equal(string.Format(ERRORMESSAGE, $"{requestedId}"), result.Errors[0].Message);
         }
 
-        [Fact]
-        public async Task Handle_ReturnsSucces()
+        [Theory]
+        [InlineData(1)]
+        public async Task Handle_ReturnsSucces(int requestedId)
         {
             Art art = this.GetArt();
             ArtDTO artDTO = this.GetArtDTO();
@@ -81,13 +82,14 @@
             this.SetupRepositoryMapper(art, artDTO);
 
             var result = await this.handler
-                .Handle(new GetArtByIdQuery(1), CancellationToken.None);
+                .Handle(new GetArtByIdQuery(requestedId), CancellationToken.None);
 
             Assert.True(result.IsSuccess);
         }
 
-        [Fact]
-        public async Task Handle_ReturnsProperArt()
+        [Theory]
+        [InlineData(1)]
+        public async Task Handle_ReturnsProperArt(int requestedId)
         {
             Art art = this.GetArt();
             ArtDTO artDTO = this.GetArtDTO();
@@ -97,7 +99,7 @@
             var result = await this.handler
                 .Handle(new GetArtByIdQuery(1), CancellationToken.None);
 
-            Assert.Equal(1, result.Value.Id);
+            Assert.Equal(requestedId, result.Value.Id);
         }
 
         private void SetupRepositoryMapper(Art art, ArtDTO artDTO)
@@ -116,8 +118,6 @@
             return new Art()
             {
                 Id = 1,
-                Title = "Art 1",
-                Description = "Description 1",
             };
         }
 
@@ -126,8 +126,6 @@
             return new ArtDTO()
             {
                 Id = 1,
-                Title = "Art 1",
-                Description = "Description 1",
             };
         }
     }
