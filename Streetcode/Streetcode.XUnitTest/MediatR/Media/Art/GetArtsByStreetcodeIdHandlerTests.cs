@@ -4,7 +4,6 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
-    using System.Text;
     using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
@@ -52,7 +51,7 @@
         [InlineData(1)]
         public async Task Handle_ReturnsSuccess_WhenArtsExist(int requestedId)
         {
-            List<Art> arts = this.GetArts();
+            List<Art> arts = GetArts();
             this.SetupRepositoryMapper(arts);
 
             GetArtsByStreetcodeIdQuery query = new GetArtsByStreetcodeIdQuery(requestedId);
@@ -60,12 +59,13 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             Assert.True(result.IsSuccess);
+            this.VerifyMockersPositiveFlow();
         }
 
         [Fact]
         public async Task Handle_ReturnsCorrectAmount_WhenArtsExist()
         {
-            List<Art> arts = this.GetArts();
+            List<Art> arts = GetArts();
             this.SetupRepositoryMapper(arts);
 
             GetArtsByStreetcodeIdQuery query = new GetArtsByStreetcodeIdQuery(1);
@@ -73,6 +73,7 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             Assert.Equal(2, result.Value.Count());
+            this.VerifyMockersPositiveFlow();
         }
 
         [Theory]
@@ -83,7 +84,7 @@
         [InlineData(int.MinValue)]
         public async Task Handle_ReturnsEmpty_WhenNoArtsFound(int requestedId)
         {
-            List<Art> arts = this.GetArts();
+            List<Art> arts = GetArts();
             this.SetupRepositoryMapper(arts);
 
             GetArtsByStreetcodeIdQuery query = new GetArtsByStreetcodeIdQuery(requestedId);
@@ -91,10 +92,11 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             Assert.Empty(result.Value);
+            this.VerifyMockersPositiveFlow();
         }
 
         [Fact]
-        public async Task Handle_ReturnsError_WhenArtsAreNull()
+        public async Task Handle_ReturnsError_WhenArtsNull()
         {
             this.artRepositoryMock.Setup(r =>
             r.GetAllAsync(
@@ -107,6 +109,7 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             Assert.True(result.IsFailed);
+            this.VerifyMockersNegativeFlow();
         }
 
         [Theory]
@@ -124,6 +127,7 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             Assert.Equal(string.Format(ERRORMESSAGE, requestedId), result.Errors[0].Message);
+            this.VerifyMockersNegativeFlow();
         }
 
         private void SetupRepositoryMapper(List<Art> arts)
@@ -160,27 +164,59 @@
                 });
         }
 
-        private List<Art> GetArts()
+        private static List<Art> GetArts()
         {
             return new List<Art>
+            {
+                new Art
+                {
+                    Id = 1,
+                    StreetcodeArts = new List<StreetcodeArt>
+                    {
+                        new StreetcodeArt { StreetcodeId = 1 },
+                    },
+                },
+                new Art
+                {
+                    Id = 2,
+                    StreetcodeArts = new List<StreetcodeArt>
+                    {
+                        new StreetcodeArt { StreetcodeId = 1 },
+                    },
+                },
+            };
+        }
+
+        private void VerifyMockersPositiveFlow()
         {
-            new Art
-            {
-                Id = 1,
-                StreetcodeArts = new List<StreetcodeArt>
-                {
-                    new StreetcodeArt { StreetcodeId = 1 },
-                },
-            },
-            new Art
-            {
-                Id = 2,
-                StreetcodeArts = new List<StreetcodeArt>
-                {
-                    new StreetcodeArt { StreetcodeId = 1 },
-                },
-            },
-        };
+            this.mapperMock.Verify(
+                m => m.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()),
+                Times.Once);
+
+            this.artRepositoryMock.Verify(
+                r => r.GetAllAsync(
+                    It.IsAny<Expression<Func<Art, bool>>>(),
+                    It.IsAny<Func<IQueryable<Art>, IIncludableQueryable<Art, object>>>()),
+                Times.Once);
+
+            this.repositoryWrapperMock
+                .Verify(rw => rw.ArtRepository, Times.Once);
+        }
+
+        private void VerifyMockersNegativeFlow()
+        {
+            this.mapperMock.Verify(
+                m => m.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()),
+                Times.Never);
+
+            this.loggerMock.Verify(
+                l => l.LogError(
+                    It.IsAny<object>(),
+                    It.IsAny<string>()),
+                Times.Once);
+
+            this.repositoryWrapperMock
+                .Verify(rw => rw.ArtRepository, Times.Once);
         }
     }
 }
