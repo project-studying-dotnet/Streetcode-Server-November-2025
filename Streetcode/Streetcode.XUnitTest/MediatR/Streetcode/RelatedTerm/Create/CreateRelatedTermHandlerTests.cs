@@ -1,6 +1,5 @@
 using System.Linq.Expressions;
 using AutoMapper;
-using FluentResults;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
@@ -18,11 +17,9 @@ public class CreateRelatedTermHandlerTests
     private readonly Mock<IMapper> mockMapper;
     private readonly Mock<ILoggerService> mockLogger;
     private readonly CreateRelatedTermHandler handler;
-
-    private readonly RelatedTermDTO validRelatedTermDto = new() { Id = 1, TermId = 1, Word = "Тест" };
-    private readonly Entity validRelatedTermEntity = new() { Id = 1, TermId = 1, Word = "Тест" };
-
-    private readonly RelatedTermDTO createdRelatedTermDto = new() { Id = 1, TermId = 1, Word = "Тест" };
+    private readonly RelatedTermDTO validRelatedTermDto = new () { Id = 1, TermId = 1, Word = "Тест" };
+    private readonly Entity validRelatedTermEntity = new () { Id = 1, TermId = 1, Word = "Тест" };
+    private readonly RelatedTermDTO createdRelatedTermDto = new () { Id = 1, TermId = 1, Word = "Тест" };
 
     public CreateRelatedTermHandlerTests()
     {
@@ -46,7 +43,7 @@ public class CreateRelatedTermHandlerTests
     public async Task Handle_ValidData_ShouldReturnSuccess()
     {
         var command = new CreateRelatedTermCommand(this.validRelatedTermDto);
-        
+
         this.mockMapper.Setup(m => m.Map<Entity>(this.validRelatedTermDto)).Returns(this.validRelatedTermEntity);
         this.mockMapper.Setup(m => m.Map<RelatedTermDTO>(this.validRelatedTermEntity))
             .Returns(this.createdRelatedTermDto);
@@ -55,9 +52,8 @@ public class CreateRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsSuccess);
-
         Assert.Equal(this.createdRelatedTermDto.Word, result.Value.Word);
-        
+
         this.mockRepository.Verify(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()), Times.Once);
         this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
     }
@@ -109,7 +105,6 @@ public class CreateRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-
         Assert.Equal("Cannot create new related word for a term!", result.Errors.First().Message);
 
         this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
