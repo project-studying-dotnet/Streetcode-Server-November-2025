@@ -16,7 +16,8 @@
         private readonly Mock<IBlobService> mockBlob;
         private readonly Mock<ILoggerService> mockLogger;
         private readonly Mock<IRepositoryWrapper> mockRepo;
-        private readonly DeleteAudioHandler mockHandler;
+
+        private readonly DeleteAudioHandler handler;
 
         public DeleteAudioHandlerTests()
         {
@@ -24,7 +25,7 @@
             this.mockLogger = new Mock<ILoggerService>();
             this.mockRepo = new Mock<IRepositoryWrapper>();
 
-            this.mockHandler = new DeleteAudioHandler(
+            this.handler = new DeleteAudioHandler(
                 this.mockRepo.Object,
                 this.mockBlob.Object,
                 this.mockLogger.Object);
@@ -41,7 +42,7 @@
             this.SetupMocks(audio, saveChangesResult);
 
             // Act.
-            var result = await this.mockHandler.Handle(new DeleteAudioCommand(targetAudioId), default);
+            var result = await this.handler.Handle(new DeleteAudioCommand(targetAudioId), default);
 
             // Assert.
             result.IsSuccess.Should().BeTrue();
@@ -58,7 +59,7 @@
             this.SetupMocks(audio, saveChangesResult);
 
             // Act.
-            var result = await this.mockHandler.Handle(new DeleteAudioCommand(targetAudioId), default);
+            var result = await this.handler.Handle(new DeleteAudioCommand(targetAudioId), default);
 
             // Assert.
             result.IsFailed.Should().BeTrue();
@@ -76,7 +77,7 @@
             this.SetupMocks(audio, saveChangesResult);
 
             // Act.
-            var result = await this.mockHandler.Handle(new DeleteAudioCommand(targetAudioId), default);
+            var result = await this.handler.Handle(new DeleteAudioCommand(targetAudioId), default);
 
             // Assert.
             result.IsFailed.Should().BeTrue();
@@ -138,7 +139,7 @@
             this.mockLogger.Verify(
                 logger => logger.LogError(
                     It.IsAny<object>(),
-                    $"Cannot find an audio with corresponding categoryId: {targetAudioId}"),
+                    $"Cannot find an audio with corresponding audioId: {targetAudioId}"),
                 Times.Once);
         }
 
