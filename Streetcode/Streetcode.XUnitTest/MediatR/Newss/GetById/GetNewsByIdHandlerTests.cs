@@ -49,12 +49,12 @@
         public async Task Handle_ShouldReturnFailure_WhenNewsNotFound()
         {
             // Arrange
-            const int id = 1;
+            const int NEWS_ID = 1;
             const string expectedErrorMessage = "No news by entered Id - 1";
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, null);
 
-            var query = new GetNewsByIdQuery(id);
+            var query = new GetNewsByIdQuery(NEWS_ID);
 
             // Act
             var result = await this.handler.Handle(query, default);
@@ -78,15 +78,15 @@
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithoutImage()
         {
             // Arrange
-            const int id = 2;
+            const int NEWS_ID = 2;
 
-            var news = NewsTestData.CreateNews(id);
-            var newsDto = NewsTestData.CreateNewsDTO(id, imageId: null);
+            var news = NewsTestData.CreateNews(NEWS_ID);
+            var newsDto = NewsTestData.CreateNewsDTO(NEWS_ID, imageId: null);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, news);
             MockMapperHelper.SetupMapper<News, NewsDTO>(this.mapperMock, news, newsDto);
 
-            var query = new GetNewsByIdQuery(id);
+            var query = new GetNewsByIdQuery(NEWS_ID);
 
             // Act
             var result = await this.handler.Handle(query, default);
@@ -110,17 +110,17 @@
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithImage()
         {
-            const int newsId = 3;
+            const int NEWS_ID = 3;
             const string Base64Content = "BASE64_STRING";
 
-            var news = NewsTestData.CreateNews(newsId);
-            var newsDto = NewsTestData.CreateNewsDTO(newsId);
+            var news = NewsTestData.CreateNews(NEWS_ID);
+            var newsDto = NewsTestData.CreateNewsDTO(NEWS_ID);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, news);
             MockMapperHelper.SetupMapper(this.mapperMock, news, newsDto);
             MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Content);
 
-            var query = new GetNewsByIdQuery(newsId);
+            var query = new GetNewsByIdQuery(NEWS_ID);
 
             // Act
             var result = await this.handler.Handle(query, default);
