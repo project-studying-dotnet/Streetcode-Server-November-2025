@@ -1,10 +1,10 @@
+using System.Collections.Generic;
+using Streetcode.BLL.DTO.Partners;
+using Streetcode.DAL.Entities.Partners;
+using Streetcode.DAL.Entities.Streetcode;
+
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
-    using System.Collections.Generic;
-    using Streetcode.BLL.DTO.Partners;
-    using Streetcode.DAL.Entities.Partners;
-    using Streetcode.DAL.Entities.Streetcode;
-
     public static class PartnerTestHelpers
     {
         public static Partner CreatePartnerEntity(int id = 1)
@@ -30,6 +30,13 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 IsVisibleEverywhere = id % 2 != 0,
                 LogoId = id,
                 Description = $"Description {id}",
+            };
+
+        public static PartnerShortDTO CreatePartnerShortDTO(int id = 1)
+            => new ()
+            {
+                Id = id,
+                Title = $"Test Partner {id}",
             };
     }
 }

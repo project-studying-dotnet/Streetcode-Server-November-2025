@@ -1,23 +1,23 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
+using FluentAssertions;
+using Microsoft.EntityFrameworkCore.Query;
+using Moq;
+using Streetcode.BLL.DTO.Partners;
+using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.MediatR.Partners.GetById;
+using Streetcode.DAL.Entities.Partners;
+using Streetcode.DAL.Entities.Streetcode;
+using Streetcode.DAL.Repositories.Interfaces.Base;
+using Xunit;
+
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using AutoMapper;
-    using FluentAssertions;
-    using Microsoft.EntityFrameworkCore.Query;
-    using Moq;
-    using Streetcode.BLL.DTO.Partners;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Partners.GetById;
-    using Streetcode.DAL.Entities.Partners;
-    using Streetcode.DAL.Entities.Streetcode;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Xunit;
-
     public class GetByIdPartnerHandlerTests
     {
         private readonly Mock<IRepositoryWrapper> _mockRepository;

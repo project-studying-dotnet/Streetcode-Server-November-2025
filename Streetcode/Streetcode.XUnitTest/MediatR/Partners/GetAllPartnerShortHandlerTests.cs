@@ -10,27 +10,26 @@ using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Partners.GetAll;
+using Streetcode.BLL.MediatR.Partners.GetAllPartnerShort;
 using Streetcode.DAL.Entities.Partners;
-using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
-    public class GetAllPartnersHandlerTests
+    public class GetAllPartnerShortHandlerTests
     {
         private readonly Mock<IRepositoryWrapper> _mockRepository;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Mock<ILoggerService> _mockLogger;
-        private readonly GetAllPartnersHandler _handler;
+        private readonly GetAllPartnerShortHandler _handler;
 
-        public GetAllPartnersHandlerTests()
+        public GetAllPartnerShortHandlerTests()
         {
             this._mockRepository = new Mock<IRepositoryWrapper>();
             this._mockMapper = new Mock<IMapper>();
             this._mockLogger = new Mock<ILoggerService>();
-            this._handler = new GetAllPartnersHandler(
+            this._handler = new GetAllPartnerShortHandler(
                 this._mockRepository.Object,
                 this._mockMapper.Object,
                 this._mockLogger.Object);
@@ -40,8 +39,18 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsSuccess_WhenPartnersExist()
         {
             // Arrange
-            var partners = new List<Partner> { PartnerTestHelpers.CreatePartnerEntity(1), PartnerTestHelpers.CreatePartnerEntity(2), PartnerTestHelpers.CreatePartnerEntity(3) };
-            var partnerDTOs = new List<PartnerDTO> { PartnerTestHelpers.CreatePartnerDTO(1), PartnerTestHelpers.CreatePartnerDTO(2), PartnerTestHelpers.CreatePartnerDTO(3) };
+            var partners = new List<Partner>
+            {
+                PartnerTestHelpers.CreatePartnerEntity(1),
+                PartnerTestHelpers.CreatePartnerEntity(2),
+                PartnerTestHelpers.CreatePartnerEntity(3),
+            };
+            var partnerShortDTOs = new List<PartnerShortDTO>
+            {
+                new PartnerShortDTO { Id = 1, Title = "Test Partner 1" },
+                new PartnerShortDTO { Id = 2, Title = "Test Partner 2" },
+                new PartnerShortDTO { Id = 3, Title = "Test Partner 3" },
+            };
 
             this._mockRepository
                 .Setup(repo => repo.PartnersRepository.GetAllAsync(
@@ -50,10 +59,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(partners);
 
             this._mockMapper
-                .Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<Partner>>()))
-                .Returns(partnerDTOs);
+                .Setup(mapper => mapper.Map<IEnumerable<PartnerShortDTO>>(It.IsAny<IEnumerable<Partner>>()))
+                .Returns(partnerShortDTOs);
 
-            var query = new GetAllPartnersQuery();
+            var query = new GetAllPartnersShortQuery();
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -62,7 +71,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.IsSuccess.Should().BeTrue();
             result.Value.Should().NotBeNull();
             result.Value.Should().HaveCount(partners.Count);
-            result.Value.Should().BeEquivalentTo(partnerDTOs);
+            result.Value.Should().BeEquivalentTo(partnerShortDTOs);
 
             this._mockRepository.Verify(
                 repo => repo.PartnersRepository.GetAllAsync(
@@ -81,7 +90,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync((IEnumerable<Partner>)null);
 
-            var query = new GetAllPartnersQuery();
+            var query = new GetAllPartnersShortQuery();
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -103,7 +112,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         {
             // Arrange
             var emptyPartners = new List<Partner>();
-            var emptyPartnerDTOs = new List<PartnerDTO>();
+            var emptyPartnerShortDTOs = new List<PartnerShortDTO>();
 
             this._mockRepository
                 .Setup(repo => repo.PartnersRepository.GetAllAsync(
@@ -112,10 +121,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(emptyPartners);
 
             this._mockMapper
-                .Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<Partner>>()))
-                .Returns(emptyPartnerDTOs);
+                .Setup(mapper => mapper.Map<IEnumerable<PartnerShortDTO>>(It.IsAny<IEnumerable<Partner>>()))
+                .Returns(emptyPartnerShortDTOs);
 
-            var query = new GetAllPartnersQuery();
+            var query = new GetAllPartnersShortQuery();
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -130,8 +139,16 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_CallsMapper_WhenPartnersExist()
         {
             // Arrange
-            var partners = new List<Partner> { PartnerTestHelpers.CreatePartnerEntity(1), PartnerTestHelpers.CreatePartnerEntity(2) };
-            var partnerDTOs = new List<PartnerDTO> { PartnerTestHelpers.CreatePartnerDTO(1), PartnerTestHelpers.CreatePartnerDTO(2) };
+            var partners = new List<Partner>
+            {
+                PartnerTestHelpers.CreatePartnerEntity(1),
+                PartnerTestHelpers.CreatePartnerEntity(2),
+            };
+            var partnerShortDTOs = new List<PartnerShortDTO>
+            {
+                new PartnerShortDTO { Id = 1, Title = "Test Partner 1" },
+                new PartnerShortDTO { Id = 2, Title = "Test Partner 2" },
+            };
 
             this._mockRepository
                 .Setup(repo => repo.PartnersRepository.GetAllAsync(
@@ -140,10 +157,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(partners);
 
             this._mockMapper
-                .Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(partners))
-                .Returns(partnerDTOs);
+                .Setup(mapper => mapper.Map<IEnumerable<PartnerShortDTO>>(partners))
+                .Returns(partnerShortDTOs);
 
-            var query = new GetAllPartnersQuery();
+            var query = new GetAllPartnersShortQuery();
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -151,7 +168,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsSuccess.Should().BeTrue();
             this._mockMapper.Verify(
-                mapper => mapper.Map<IEnumerable<PartnerDTO>>(partners),
+                mapper => mapper.Map<IEnumerable<PartnerShortDTO>>(partners),
                 Times.Once);
         }
 
@@ -167,7 +184,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ThrowsAsync(expectedException);
 
-            var query = new GetAllPartnersQuery();
+            var query = new GetAllPartnersShortQuery();
 
             // Act
             Func<Task> act = async () => await this._handler.Handle(query, CancellationToken.None);
@@ -175,42 +192,6 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage("Database connection failed");
-        }
-
-        [Fact]
-        public async Task Handle_CallsRepositoryWithInclude_WhenCalled()
-        {
-            // Arrange
-            var partners = new List<Partner> { PartnerTestHelpers.CreatePartnerEntity(1) };
-            var partnerDTOs = new List<PartnerDTO> { PartnerTestHelpers.CreatePartnerDTO(1) };
-            Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> capturedInclude = null;
-
-            this._mockRepository
-                .Setup(repo => repo.PartnersRepository.GetAllAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
-                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
-                    (predicate, include) => capturedInclude = include)
-                .ReturnsAsync(partners);
-
-            this._mockMapper
-                .Setup(mapper => mapper.Map<IEnumerable<PartnerDTO>>(It.IsAny<IEnumerable<Partner>>()))
-                .Returns(partnerDTOs);
-
-            var query = new GetAllPartnersQuery();
-
-            // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            result.IsSuccess.Should().BeTrue();
-            capturedInclude.Should().NotBeNull("because include expression should be provided");
-            
-            this._mockRepository.Verify(
-                repo => repo.PartnersRepository.GetAllAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()),
-                Times.Once);
         }
     }
 }
