@@ -3,19 +3,132 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Text;
     using System.Threading.Tasks;
+    using AutoMapper;
+    using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Repositories.Interfaces;
+    using Streetcode.BLL.DTO.Media.Art;
     using Streetcode.BLL.Interfaces.BlobStorage;
     using Streetcode.BLL.Interfaces.Logging;
+    using Streetcode.BLL.MediatR.Media.Art.GetAll;
+    using Streetcode.BLL.MediatR.Media.Art.GetById;
+    using Streetcode.DAL.Entities.Media.Images;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using Xunit;
 
-    class GetArtByIdHandlerTests
+    public class GetArtByIdHandlerTests
     {
-        private readonly Mock<IBlobService> _blobServiceMock;
-        private readonly Mock<IRepositoryWrapper> _repositoryWrapperMock;
-        private readonly Mock<ILoggerService> _loggerMock;
+        private const string ERRORMESSAGE = "Cannot find an art with corresponding id: {0}";
+        private readonly Mock<IMapper> mapperMock;
+        private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
+        private readonly Mock<ILoggerService> loggerMock;
+        private readonly Mock<IArtRepository> artRepositoryMock;
+        private readonly GetArtByIdHandler handler;
 
+        public GetArtByIdHandlerTests()
+        {
+            this.repositoryWrapperMock = new Mock<IRepositoryWrapper>();
+            this.mapperMock = new Mock<IMapper>();
+            this.loggerMock = new Mock<ILoggerService>();
+            this.artRepositoryMock = new Mock<IArtRepository>();
 
+            this.repositoryWrapperMock.Setup(rw => rw.ArtRepository)
+                .Returns(this.artRepositoryMock.Object);
+
+            this.handler = new GetArtByIdHandler(
+                this.repositoryWrapperMock.Object,
+                this.mapperMock.Object,
+                this.loggerMock.Object);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(-1)]
+        [InlineData(int.MaxValue)]
+        [InlineData(int.MinValue)]
+        public async Task Handle_ReturnsFail_WhenArtsAreEmpty(int requestedId)
+        {
+            var result = await this.handler
+                .Handle(new GetArtByIdQuery(requestedId), CancellationToken.None);
+
+            Assert.True(result.IsFailed);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(-1)]
+        [InlineData(int.MaxValue)]
+        [InlineData(int.MinValue)]
+        public async Task Handle_ReturnsProperErrorMessage(int requestedId)
+        {
+            var result = await this.handler
+                .Handle(new GetArtByIdQuery(requestedId), CancellationToken.None);
+
+            Assert.Equal(string.Format(ERRORMESSAGE, $"{requestedId}"), result.Errors[0].Message);
+        }
+
+        [Fact]
+        public async Task Handle_ReturnsSucces()
+        {
+            Art art = this.GetArt();
+            ArtDTO artDTO = this.GetArtDTO();
+
+            this.SetupRepositoryMapper(art, artDTO);
+
+            var result = await this.handler
+                .Handle(new GetArtByIdQuery(1), CancellationToken.None);
+
+            Assert.True(result.IsSuccess);
+        }
+
+        [Fact]
+        public async Task Handle_ReturnsProperArt()
+        {
+            Art art = this.GetArt();
+            ArtDTO artDTO = this.GetArtDTO();
+
+            this.SetupRepositoryMapper(art, artDTO);
+
+            var result = await this.handler
+                .Handle(new GetArtByIdQuery(1), CancellationToken.None);
+
+            Assert.Equal(1, result.Value.Id);
+        }
+
+        private void SetupRepositoryMapper(Art art, ArtDTO artDTO)
+        {
+            this.artRepositoryMock.Setup(repo => repo.GetFirstOrDefaultAsync(
+                It.IsAny<Expression<Func<Art, bool>>>(),
+                It.IsAny<Func<IQueryable<Art>, IIncludableQueryable<Art, object>>>()))
+                .ReturnsAsync(art);
+
+            this.mapperMock.Setup(map => map.Map<ArtDTO>(It.IsAny<Art>()))
+                .Returns(artDTO);
+        }
+
+        private Art GetArt()
+        {
+            return new Art()
+            {
+                Id = 1,
+                Title = "Art 1",
+                Description = "Description 1",
+            };
+        }
+
+        private ArtDTO GetArtDTO()
+        {
+            return new ArtDTO()
+            {
+                Id = 1,
+                Title = "Art 1",
+                Description = "Description 1",
+            };
+        }
     }
 }

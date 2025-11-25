@@ -22,35 +22,34 @@
 
     public class GetAllArtsHandlerTests
     {
-        private readonly Mock<IMapper> _mapperMock;
-        private readonly Mock<IRepositoryWrapper> _repositoryWrapperMock;
-        private readonly Mock<ILoggerService> _loggerMock;
-        private readonly Mock<IArtRepository> _artRepositoryMock;
-        private readonly GetAllArtsHandler _handler;
-        private const string ERROR_MESSAGE = "Cannot find any arts";
+        private const string ERRORMESSAGE = "Cannot find any arts";
+        private readonly Mock<IMapper> mapperMock;
+        private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
+        private readonly Mock<ILoggerService> loggerMock;
+        private readonly Mock<IArtRepository> artRepositoryMock;
+        private readonly GetAllArtsHandler handler;
+
 
         public GetAllArtsHandlerTests()
         {
-            this._repositoryWrapperMock = new Mock<IRepositoryWrapper>();
-            this._mapperMock = new Mock<IMapper>();
-            this._loggerMock = new Mock<ILoggerService>();
-            this._artRepositoryMock = new Mock<IArtRepository>();
+            this.repositoryWrapperMock = new Mock<IRepositoryWrapper>();
+            this.mapperMock = new Mock<IMapper>();
+            this.loggerMock = new Mock<ILoggerService>();
+            this.artRepositoryMock = new Mock<IArtRepository>();
 
-            _repositoryWrapperMock.Setup(rw => rw.ArtRepository)
-                .Returns(this._artRepositoryMock.Object);
+            this.repositoryWrapperMock.Setup(rw => rw.ArtRepository)
+                .Returns(this.artRepositoryMock.Object);
 
-            this._handler = new GetAllArtsHandler
-                (
-                _repositoryWrapperMock.Object,
-                _mapperMock.Object,
-                _loggerMock.Object
-                );
+            this.handler = new GetAllArtsHandler(
+                this.repositoryWrapperMock.Object,
+                this.mapperMock.Object,
+                this.loggerMock.Object);
         }
 
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenArtsAreEmpty()
         {
-            var result = await _handler
+            var result = await this.handler
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.True(result.IsSuccess);
@@ -64,7 +63,7 @@
 
             this.SetupRepositoryMapper(arts, artDTOs);
 
-            var result = await this._handler
+            var result = await this.handler
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.True(result.IsSuccess);
@@ -78,50 +77,64 @@
 
             this.SetupRepositoryMapper(arts, artDTOs);
 
-            var result = await this._handler
+            var result = await this.handler
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.Equal(arts.Count, result.Value.Count());
         }
 
         [Fact]
-        public async Task Handle_LogsErrorAndReturnsFail_WhenArtsAreNull()
+        public async Task Handle_ReturnsCorrectType()
+        {
+            List<Art> arts = this.GetArts();
+            List<ArtDTO> artDTOs = this.GetArtsDTO();
+
+            this.SetupRepositoryMapper(arts, artDTOs);
+
+            var result = await this.handler
+                .Handle(new GetAllArtsQuery(), CancellationToken.None);
+
+            Assert.IsType<List<ArtDTO>>(result.Value);
+        }
+
+        [Fact]
+        public async Task Handle_ReturnsFail_WhenArtsAreNull()
         {
             List<Art> arts = null;
             List<ArtDTO> artDTOs = this.GetArtsDTO();
 
             this.SetupRepositoryMapper(arts, artDTOs);
 
-            var result = await this._handler
+            var result = await this.handler
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.True(result.IsFailed);
         }
 
         [Fact]
-        public async Task Handle_LogsErrorAndReturnsErrorMessage_WhenArtsAreNull()
+        public async Task Handle_ReturnsErrorMessage_WhenArtsAreNull()
         {
             List<Art> arts = null;
             List<ArtDTO> artDTOs = this.GetArtsDTO();
 
             this.SetupRepositoryMapper(arts, artDTOs);
 
-            var result = await this._handler
+            var result = await this.handler
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
-            Assert.Equal(ERROR_MESSAGE, result.Errors[0].Message);
+            Assert.Equal(ERRORMESSAGE, result.Errors[0].Message);
         }
 
 
 
         private void SetupRepositoryMapper(List<Art> arts, List<ArtDTO> artDTOs)
         {
-            this._artRepositoryMock.Setup(repo => repo.GetAllAsync(
+            this.artRepositoryMock.Setup(repo => repo.GetAllAsync(
                 It.IsAny<Expression<Func<Art, bool>>>(),
                 It.IsAny<Func<IQueryable<Art>, IIncludableQueryable<Art, object>>>()))
                 .ReturnsAsync(arts);
 
-            this._mapperMock.Setup(map => map.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()))
+            this.mapperMock.Setup(map => map.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()))
                 .Returns(artDTOs);
         }
 
@@ -132,14 +145,10 @@
                 new Art()
                 {
                     Id = 1,
-                    Title = "Art 1",
-                    Description = "Description 1",
                 },
                 new Art()
                 {
                     Id = 2,
-                    Title = "Art 2",
-                    Description = "Description 2",
                 },
             };
         }
@@ -151,14 +160,10 @@
                 new ArtDTO()
                 {
                     Id = 1,
-                    Title = "Art 1",
-                    Description = "Description 1",
                 },
                 new ArtDTO()
                 {
                     Id = 2,
-                    Title = "Art 2",
-                    Description = "Description 2",
                 },
             };
         }
