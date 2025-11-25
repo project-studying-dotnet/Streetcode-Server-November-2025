@@ -1,10 +1,10 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Newss.Helpers
 {
+    using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Streetcode.DAL.Entities.News;
     using Streetcode.DAL.Repositories.Interfaces.Base;
-    using System.Linq.Expressions;
 
     public static class MockRepoHelper
     {
@@ -42,6 +42,14 @@
                 It.IsAny<Expression<Func<News, bool>>>(),
                 It.IsAny<Func<IQueryable<News>, IIncludableQueryable<News, object>>>()))
                 .ReturnsAsync(newsList);
+        }
+
+        public static void SetupGetNewsById(Mock<IRepositoryWrapper> repo, News news)
+        {
+            repo.Setup(r => r.NewsRepository.GetFirstOrDefaultAsync(
+                It.IsAny<Expression<Func<News, bool>>>(),
+                It.IsAny<Func<IQueryable<News>, IIncludableQueryable<News, object>>>()))
+                .ReturnsAsync(news);
         }
     }
 }

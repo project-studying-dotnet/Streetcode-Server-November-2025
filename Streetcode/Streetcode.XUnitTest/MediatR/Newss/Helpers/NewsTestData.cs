@@ -17,6 +17,7 @@
                 URL = $"test-url-{id}",
                 ImageId = imageId,
                 CreationDate = DateTime.Now,
+                Image = imageId.HasValue ? CreateImage(imageId.Value) : null,
             };
         }
 
