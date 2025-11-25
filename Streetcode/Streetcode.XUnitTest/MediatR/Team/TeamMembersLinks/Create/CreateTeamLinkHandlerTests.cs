@@ -69,7 +69,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailResult_WhenMapperReturnsNull()
+        public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenMapperReturnsNull()
         {
             // Arrange
             var teamLinkDTO = GetTestTeamLinkDTO();
@@ -82,32 +82,22 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.IsFailed.Should().BeTrue();
+            using (new AssertionScope())
+            {
+                result.IsFailed.Should().BeTrue();
+                result.Errors.Should().ContainSingle();
+                result.Errors.Should().Contain(e => e.Message.Contains(ErrorMsgCannotConvertNull));
+
+                this.mockLogger.Verify(
+                    logger => logger.LogError(
+                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<string>(msg => msg == ErrorMsgCannotConvertNull)),
+                    Times.Once);
+            }
         }
 
         [Fact]
-        public async Task Handle_ShouldLogError_WhenMapperReturnsNull()
-        {
-            // Arrange
-            var teamLinkDTO = GetTestTeamLinkDTO();
-
-            this.SetupMapperToTeamLink(null!);
-
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
-
-            // Act
-            await this.handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            this.mockLogger.Verify(
-                logger => logger.LogError(
-                    It.Is<CreateTeamLinkQuery>(q => q == query),
-                    It.Is<string>(msg => msg == ErrorMsgCannotConvertNull)),
-                Times.Once);
-        }
-
-        [Fact]
-        public async Task Handle_ShouldReturnFailResult_WhenRepositoryCreateReturnsNull()
+        public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenRepositoryCreateReturnsNull()
         {
             // Arrange
             var teamLink = GetTestTeamLink();
@@ -122,34 +112,22 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.IsFailed.Should().BeTrue();
+            using (new AssertionScope())
+            {
+                result.IsFailed.Should().BeTrue();
+                result.Errors.Should().ContainSingle();
+                result.Errors.Should().Contain(e => e.Message.Contains(ErrorMsgCannotCreateTeamLink));
+
+                this.mockLogger.Verify(
+                    logger => logger.LogError(
+                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<string>(msg => msg == ErrorMsgCannotCreateTeamLink)),
+                    Times.Once);
+            }
         }
 
         [Fact]
-        public async Task Handle_ShouldLogError_WhenRepositoryCreateReturnsNull()
-        {
-            // Arrange
-            var teamLink = GetTestTeamLink();
-            var teamLinkDTO = GetTestTeamLinkDTO();
-
-            this.SetupMapperToTeamLink(teamLink);
-            this.SetupRepositoryCreate(null!);
-
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
-
-            // Act
-            await this.handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            this.mockLogger.Verify(
-                logger => logger.LogError(
-                    It.Is<CreateTeamLinkQuery>(q => q == query),
-                    It.Is<string>(msg => msg == ErrorMsgCannotCreateTeamLink)),
-                Times.Once);
-        }
-
-        [Fact]
-        public async Task Handle_ShouldReturnFailResult_WhenSaveChangesFails()
+        public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenSaveChangesFails()
         {
             // Arrange
             var teamLink = GetTestTeamLink();
@@ -165,35 +143,22 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.IsFailed.Should().BeTrue();
+            using (new AssertionScope())
+            {
+                result.IsFailed.Should().BeTrue();
+                result.Errors.Should().ContainSingle();
+                result.Errors.Should().Contain(e => e.Message.Contains(ErrorMsgFailedToCreate));
+
+                this.mockLogger.Verify(
+                    logger => logger.LogError(
+                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<string>(msg => msg == ErrorMsgFailedToCreate)),
+                    Times.Once);
+            }
         }
 
         [Fact]
-        public async Task Handle_ShouldLogError_WhenSaveChangesFails()
-        {
-            // Arrange
-            var teamLink = GetTestTeamLink();
-            var teamLinkDTO = GetTestTeamLinkDTO();
-
-            this.SetupMapperToTeamLink(teamLink);
-            this.SetupRepositoryCreate(teamLink);
-            this.SetupRepositorySaveChangesFailure();
-
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
-
-            // Act
-            await this.handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            this.mockLogger.Verify(
-                logger => logger.LogError(
-                    It.Is<CreateTeamLinkQuery>(q => q == query),
-                    It.Is<string>(msg => msg == ErrorMsgFailedToCreate)),
-                Times.Once);
-        }
-
-        [Fact]
-        public async Task Handle_ShouldLogError_WhenTeamLinkDTOReturnsNull()
+        public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenTeamLinkDTOReturnsNull()
         {
             // Arrange
             var teamLink = GetTestTeamLink();
@@ -207,14 +172,21 @@
             var query = new CreateTeamLinkQuery(teamLinkDTO);
 
             // Act
-            await this.handler.Handle(query, CancellationToken.None);
+            var result = await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
-            this.mockLogger.Verify(
-                logger => logger.LogError(
-                    It.Is<CreateTeamLinkQuery>(q => q == query),
-                    It.Is<string>(msg => msg == ErrorMsgFailedToMap)),
-                Times.Once);
+            using (new AssertionScope())
+            {
+                result.IsFailed.Should().BeTrue();
+                result.Errors.Should().ContainSingle();
+                result.Errors.Should().Contain(e => e.Message.Contains(ErrorMsgFailedToMap));
+
+                this.mockLogger.Verify(
+                    logger => logger.LogError(
+                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<string>(msg => msg == ErrorMsgFailedToMap)),
+                    Times.Once);
+            }
         }
 
         private void SetupMapperToTeamLink(TeamMemberLink teamLink)

@@ -65,22 +65,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailResult_WhenMemberIsNull()
-        {
-            // Arrange
-            this.SetupRepositoryGetByIdAsync(null!);
-
-            var query = new GetByIdTeamQuery(TestMemberId);
-
-            // Act
-            var result = await this.handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            result.IsFailed.Should().BeTrue();
-        }
-
-        [Fact]
-        public async Task Handle_ShouldLogError_WhenMemberIsNull()
+        public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenMemberIsNull()
         {
             // Arrange
             this.SetupRepositoryGetByIdAsync(null!);
@@ -89,14 +74,21 @@
             var expectedErrorMessage = string.Format(ErrorMsgTemplate, TestMemberId);
 
             // Act
-            await this.handler.Handle(query, CancellationToken.None);
+            var result = await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
-            this.mockLogger.Verify(
-                logger => logger.LogError(
-                    It.Is<GetByIdTeamQuery>(q => q == query),
-                    It.Is<string>(msg => msg.Contains(expectedErrorMessage))),
-                Times.Once);
+            using (new AssertionScope())
+            {
+                result.IsFailed.Should().BeTrue();
+                result.Errors.Should().ContainSingle();
+                result.Errors.First().Message.Should().Be(expectedErrorMessage);
+
+                this.mockLogger.Verify(
+                    logger => logger.LogError(
+                        It.Is<GetByIdTeamQuery>(q => q == query),
+                        It.Is<string>(msg => msg.Contains(expectedErrorMessage))),
+                    Times.Once);
+            }
         }
 
         private void SetupRepositoryGetByIdAsync(TeamMember teamMember)

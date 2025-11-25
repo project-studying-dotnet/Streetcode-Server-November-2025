@@ -68,7 +68,6 @@
         {
             // Arrange
             var mixedTeamMembers = GetTestMixedTeamMembers();
-            var mainTeamMembers = mixedTeamMembers.Where(m => m.IsMain);
 
             var mixedTeamMemberDTOs = GetTestMixedTeamMemberDTOs();
             var mainTeamMemberDTOs = mixedTeamMemberDTOs.Where(dto => dto.IsMain);
@@ -109,7 +108,7 @@
             var query = new GetAllMainTeamQuery();
 
             // Act
-            var result = await this.handler.Handle(query, CancellationToken.None);
+            await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
             this.mockLogger.Verify(

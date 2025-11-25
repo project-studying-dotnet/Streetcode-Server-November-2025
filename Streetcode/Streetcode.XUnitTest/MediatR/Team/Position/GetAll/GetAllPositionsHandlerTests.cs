@@ -1,6 +1,5 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Team.Position.GetAll
 {
-    using System.Linq.Expressions;
     using AutoMapper;
     using FluentAssertions;
     using FluentAssertions.Execution;
@@ -8,11 +7,11 @@
     using Moq;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Team.GetById;
     using Streetcode.BLL.MediatR.Team.Position.GetAll;
     using Streetcode.DAL.Entities.Team;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Team;
+    using System.Linq.Expressions;
     using Xunit;
 
     public class GetAllPositionsHandlerTests
@@ -74,7 +73,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailResult_WhenPositionsIsNull()
+        public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenMemberIsNull()
         {
             // Arrange
             this.SetupRepositoryGetAllAsync(null!);
@@ -85,26 +84,18 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
-            Assert.True(result.IsFailed);
-        }
+            using (new AssertionScope())
+            {
+                result.IsFailed.Should().BeTrue();
+                result.Errors.Should().ContainSingle();
+                result.Errors.First().Message.Should().Be(ErrorMsg);
 
-        [Fact]
-        public async Task Handle_ShouldLogError_WhenPositionsIsNull()
-        {
-            // Arrange
-            this.SetupRepositoryGetAllAsync(null!);
-
-            var query = new GetAllPositionsQuery();
-
-            // Act
-            var result = await this.handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            this.mockLogger.Verify(
-                logger => logger.LogError(
-                    It.Is<GetAllPositionsQuery>(q => q == query),
-                    It.Is<string>(msg => msg.Contains(ErrorMsg))),
-                Times.Once);
+                this.mockLogger.Verify(
+                    logger => logger.LogError(
+                        It.Is<GetAllPositionsQuery>(q => q == query),
+                        It.Is<string>(msg => msg.Contains(ErrorMsg))),
+                    Times.Once);
+            }
         }
 
         private void SetupRepositoryGetAllAsync(IEnumerable<Positions> positions)

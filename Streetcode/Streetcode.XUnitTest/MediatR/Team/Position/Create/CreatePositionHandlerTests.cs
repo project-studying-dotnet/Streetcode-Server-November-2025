@@ -79,30 +79,19 @@
             var result = await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.IsFailed.Should().BeTrue();
-        }
+            using (new AssertionScope())
+            {
 
-        [Fact]
-        public async Task Handle_ShouldLogError_WhenSaveChangesThrowsException()
-        {
-            // Arrange
-            var position = GetTestPosition();
-            var positionDTO = GetTestPositionDTO();
+                result.IsFailed.Should().BeTrue();
+                result.Errors.Should().ContainSingle();
+                result.Errors.First().Message.Should().Be(TestExceptionMessage);
 
-            this.SetupRepositoryCreateAsync(position);
-            this.SetupRepositorySaveChangesAsyncFails();
-
-            var query = new CreatePositionQuery(positionDTO);
-
-            // Act
-            await this.handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            this.mockLogger.Verify(
-                logger => logger.LogError(
-                    It.Is<CreatePositionQuery>(q => q == query),
-                    It.Is<string>(msg => msg == TestExceptionMessage)),
-                Times.Once);
+                this.mockLogger.Verify(
+                    logger => logger.LogError(
+                        It.Is<CreatePositionQuery>(q => q == query),
+                        It.Is<string>(msg => msg == TestExceptionMessage)),
+                    Times.Once);
+            }
         }
 
         private void SetupRepositoryCreateAsync(Positions position)
