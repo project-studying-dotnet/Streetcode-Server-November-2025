@@ -29,7 +29,6 @@
         private readonly Mock<IArtRepository> artRepositoryMock;
         private readonly GetAllArtsHandler handler;
 
-
         public GetAllArtsHandlerTests()
         {
             this.repositoryWrapperMock = new Mock<IRepositoryWrapper>();
@@ -100,7 +99,7 @@
         [Fact]
         public async Task Handle_ReturnsFail_WhenArtsAreNull()
         {
-            List<Art> arts = null;
+            List<Art>? arts = null;
             List<ArtDTO> artDTOs = this.GetArtsDTO();
 
             this.SetupRepositoryMapper(arts, artDTOs);
@@ -114,7 +113,7 @@
         [Fact]
         public async Task Handle_ReturnsErrorMessage_WhenArtsAreNull()
         {
-            List<Art> arts = null;
+            List<Art>? arts = null;
             List<ArtDTO> artDTOs = this.GetArtsDTO();
 
             this.SetupRepositoryMapper(arts, artDTOs);
@@ -124,8 +123,6 @@
 
             Assert.Equal(ERRORMESSAGE, result.Errors[0].Message);
         }
-
-
 
         private void SetupRepositoryMapper(List<Art> arts, List<ArtDTO> artDTOs)
         {
