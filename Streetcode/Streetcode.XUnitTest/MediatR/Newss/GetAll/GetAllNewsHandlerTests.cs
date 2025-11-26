@@ -19,6 +19,10 @@
     /// </summary>
     public class GetAllNewsHandlerTests
     {
+        private const string Base64Content = "base64content";
+        private const string NoNewsInDatabaseErrorMessage = "There are no news in the database";
+        private const int NewsCount = 3;
+
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<ILoggerService> loggerMock;
@@ -50,8 +54,6 @@
         public async Task Handle_ShouldReturnFailure_WhenNoNewsFound()
         {
             // Arrange
-            const string ERROR_MSG = "There are no news in the database";
-
             MockRepoHelper.SetupGetAllNews(this.repoMock, null);
 
             var query = new GetAllNewsQuery();
@@ -61,12 +63,12 @@
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.Message == ERROR_MSG);
+            result.Errors.Should().ContainSingle(e => e.Message == NoNewsInDatabaseErrorMessage);
 
             // Verify
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ERROR_MSG);
-            MockMapperHelper.VerifyMapNever<News, NewsDTO>(this.mapperMock);
-            this.blobServiceMock.Verify(b => b.FindFileInStorageAsBase64(It.IsAny<string>()), Times.Never);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NoNewsInDatabaseErrorMessage);
+            MockMapperHelper.VerifyMapCollection<News, NewsDTO>(this.mapperMock, Times.Never());
+            MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
         /// <summary>
@@ -77,12 +79,12 @@
         public async Task Handle_ShouldReturnAllNewsWithImages_WhenNewsExist()
         {
             // Arrange
-            var newList = NewsTestData.CreateNewsList(3);
-            var newsDTOList = NewsTestData.CreateNewsDTOList(3);
+            var newList = NewsTestData.CreateNewsList(NewsCount, withImages: true);
+            var newsDTOList = NewsTestData.CreateNewsDTOList(NewsCount, withImages: true);
 
             MockRepoHelper.SetupGetAllNews(this.repoMock, newList);
-            MockMapperHelper.SetupMapNewsList(this.mapperMock, newList, newsDTOList);
-            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, "base64content");
+            MockMapperHelper.SetupMapCollection(this.mapperMock, newList, newsDTOList);
+            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Content);
 
             var query = new GetAllNewsQuery();
 
@@ -91,12 +93,12 @@
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            result.Value.Should().HaveCount(3);
-            result.Value.All(n => n.Image?.Base64 == "base64content").Should().BeTrue();
+            result.Value.Should().HaveCount(NewsCount);
+            result.Value.All(n => n.Image?.Base64 == Base64Content).Should().BeTrue();
 
             // Verify
-            this.mapperMock.Verify(m => m.Map<IEnumerable<NewsDTO>>(It.IsAny<IEnumerable<News>>()), Times.Once);
-            this.blobServiceMock.Verify(b => b.FindFileInStorageAsBase64(It.IsAny<string>()), Times.Exactly(3));
+            MockMapperHelper.VerifyMapCollection<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, NewsCount);
         }
 
         /// <summary>
@@ -107,11 +109,11 @@
         public async Task Handle_ShouldReturnAllNewsWithoutImages_WhenNewsExist()
         {
             // Arrange
-            var newList = NewsTestData.CreateNewsList(3, false);
-            var newsDTOList = NewsTestData.CreateNewsDTOList(3, false);
+            var newList = NewsTestData.CreateNewsList(NewsCount, false);
+            var newsDTOList = NewsTestData.CreateNewsDTOList(NewsCount, false);
 
             MockRepoHelper.SetupGetAllNews(this.repoMock, newList);
-            MockMapperHelper.SetupMapNewsList(this.mapperMock, newList, newsDTOList);
+            MockMapperHelper.SetupMapCollection(this.mapperMock, newList, newsDTOList);
 
             var query = new GetAllNewsQuery();
 
@@ -123,8 +125,8 @@
             result.Value.All(n => n.Image == null).Should().BeTrue();
 
             // Verify
-            this.mapperMock.Verify(m => m.Map<IEnumerable<NewsDTO>>(It.IsAny<IEnumerable<News>>()), Times.Once);
-            this.blobServiceMock.Verify(b => b.FindFileInStorageAsBase64(It.IsAny<string>()), Times.Never);
+            MockMapperHelper.VerifyMapCollection<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
     }
 }

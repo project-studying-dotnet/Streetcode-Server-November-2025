@@ -20,6 +20,10 @@
     /// </summary>
     public class DeleteNewsHandlerTests
     {
+        private const int NewsId = 1;
+        private const string NewsNotFoundErrorMessage = "No news found by entered Id - 1";
+        private const string SaveErrorMessage = "Failed to delete news";
+
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<ILoggerService> loggerMock;
         private readonly DeleteNewsHandler handler;
@@ -44,23 +48,20 @@
         public async Task Handle_ShouldReturnFailure_WhenNewsNotFound()
         {
             // Arrange
-            const int NEWS_ID = 1;
-            const string ERROR_MSG = $"No news found by entered Id - 1";
-
             MockRepoHelper.SetupGetNewsById(this.repoMock, null);
 
-            var command = new DeleteNewsCommand(NEWS_ID);
+            var command = new DeleteNewsCommand(NewsId);
 
             // Act
             var result = await this.handler.Handle(command, default);
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors[0].Message.Should().Contain(ERROR_MSG);
+            result.Errors[0].Message.Should().Contain(NewsNotFoundErrorMessage);
 
             // Verify
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ERROR_MSG);
-            this.repoMock.Verify(r => r.NewsRepository.Delete(It.IsAny<News>()), Times.Never);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NewsNotFoundErrorMessage);
+            MockRepoHelper.VerifyDelete<News>(this.repoMock, Times.Never());
         }
 
         /// <summary>
@@ -73,13 +74,12 @@
         public async Task Handle_ShouldReturnOk_WhenNewsExistsWithoutImageAndDeletedSuccessfully()
         {
             // Arrange
-            const int NEWS_ID = 1;
-            var news = NewsTestData.CreateNews(NEWS_ID, withImage: false);
+            var news = NewsTestData.CreateNews(NewsId, withImage: false);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, news);
             MockRepoHelper.SetupSaveSuccess(this.repoMock);
 
-            var command = new DeleteNewsCommand(NEWS_ID);
+            var command = new DeleteNewsCommand(NewsId);
 
             // Act
             var result = await this.handler.Handle(command, default);
@@ -89,8 +89,8 @@
             result.Value.Should().Be(Unit.Value);
 
             // Verify
-            this.repoMock.Verify(r => r.NewsRepository.Delete(news), Times.Once);
-            this.repoMock.Verify(r => r.ImageRepository.Delete(It.IsAny<Image>()), Times.Never);
+            MockRepoHelper.VerifyDelete<News>(this.repoMock, Times.Once());
+            MockRepoHelper.VerifyDelete<Image>(this.repoMock, Times.Never());
         }
 
         /// <summary>
@@ -103,9 +103,7 @@
         public async Task Handle_ShouldReturnOk_WhenNewsExistsWithImageAndDeletedSuccessfully()
         {
             // Arrange
-            const int NEWS_ID = 1;
-
-            var news = NewsTestData.CreateNews(NEWS_ID, withImage: true);
+            var news = NewsTestData.CreateNews(NewsId, withImage: true);
 
             var newsRepoMock = new Mock<INewsRepository>();
             var imageRepoMock = new Mock<IImageRepository>();
@@ -117,7 +115,7 @@
             MockRepoHelper.SetupSaveSuccess(this.repoMock);
             this.repoMock.Setup(r => r.ImageRepository).Returns(imageRepoMock.Object);
 
-            var command = new DeleteNewsCommand(NEWS_ID);
+            var command = new DeleteNewsCommand(NewsId);
 
             // Act
             var result = await this.handler.Handle(command, default);
@@ -127,8 +125,8 @@
             result.Value.Should().Be(Unit.Value);
 
             // Verify
-            this.repoMock.Verify(r => r.ImageRepository.Delete(news.Image), Times.Once);
-            this.repoMock.Verify(r => r.NewsRepository.Delete(news), Times.Once);
+            MockRepoHelper.VerifyDelete<Image>(this.repoMock, Times.Once());
+            MockRepoHelper.VerifyDelete<News>(this.repoMock, Times.Once());
         }
 
         /// <summary>
@@ -140,24 +138,22 @@
         public async Task Handle_ShouldReturnFailure_WhenSaveChangesFails()
         {
             // Arrange
-            const string ERROR_MSG = "Failed to delete news";
-            const int NEWS_ID = 1;
-            var news = NewsTestData.CreateNews(NEWS_ID, imageId: null);
+            var news = NewsTestData.CreateNews(NewsId, imageId: null);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, news);
             MockRepoHelper.SetupSaveFail(this.repoMock);
 
-            var command = new DeleteNewsCommand(NEWS_ID);
+            var command = new DeleteNewsCommand(NewsId);
 
             // Act
             var result = await this.handler.Handle(command, default);
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors[0].Message.Should().Be(ERROR_MSG);
+            result.Errors[0].Message.Should().Be(SaveErrorMessage);
 
             // Verify
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ERROR_MSG);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, SaveErrorMessage);
         }
     }
 }

@@ -16,30 +16,23 @@
                   .Returns(destination);
         }
 
-        public static void SetupMapNewsList(Mock<IMapper> mapper, IEnumerable<News> source, IEnumerable<NewsDTO> destination)
+        public static void SetupMapCollection<TSource, TDestination>(
+                Mock<IMapper> mapper,
+                IEnumerable<TSource> source,
+                IEnumerable<TDestination> destination)
         {
-            mapper.Setup(m => m.Map<IEnumerable<NewsDTO>>(It.IsAny<IEnumerable<News>>()))
+            mapper.Setup(m => m.Map<IEnumerable<TDestination>>(It.IsAny<IEnumerable<TSource>>()))
                   .Returns(destination);
         }
 
-        public static void VerifyMapOnce<TSource, TDestination>(Mock<IMapper> mapper)
+        public static void VerifyMap<TSource, TDestination>(Mock<IMapper> mapper, Times times)
         {
-            mapper.Verify(m => m.Map<TDestination>(It.IsAny<TSource>()), Times.Once);
+            mapper.Verify(m => m.Map<TDestination>(It.IsAny<TSource>()), times);
         }
 
-        public static void VerifyMapNever<TSource, TDestination>(Mock<IMapper> mapper)
+        public static void VerifyMapCollection<TSource, TDestination>(Mock<IMapper> mapper, Times times)
         {
-            mapper.Verify(m => m.Map<TDestination>(It.IsAny<TSource>()), Times.Never);
-        }
-
-        public static void VerifyMapNeverCollection<TSource, TDestination>(this Mock<IMapper> mapper)
-        {
-            mapper.Verify(m => m.Map<IEnumerable<TDestination>>(It.IsAny<IEnumerable<TSource>>()), Times.Never);
-        }
-
-        public static void VerifyMapOnceCollection<TSource, TDestination>(this Mock<IMapper> mapper)
-        {
-            mapper.Verify(m => m.Map<IEnumerable<TDestination>>(It.IsAny<IEnumerable<TSource>>()), Times.Once);
+            mapper.Verify(m => m.Map<IEnumerable<TDestination>>(It.IsAny<IEnumerable<TSource>>()), times);
         }
     }
 }

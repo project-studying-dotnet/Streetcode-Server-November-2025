@@ -79,16 +79,6 @@
                 .ReturnsAsync(image);
         }
 
-        public static void VerifyImageDeleteOnce(Mock<IRepositoryWrapper> repo)
-        {
-            repo.Verify(r => r.ImageRepository.Delete(It.IsAny<Image>()), Times.Once);
-        }
-
-        public static void VerifyImageDeleteNever(Mock<IRepositoryWrapper> repo)
-        {
-            repo.Verify(r => r.ImageRepository.Delete(It.IsAny<Image>()), Times.Never);
-        }
-
         public static void VerifyNewsUpdateOnce(Mock<IRepositoryWrapper> repo, int newsId)
         {
             repo.Verify(r => r.NewsRepository.Update(It.Is<News>(n => n.Id == newsId)), Times.Once);
@@ -97,6 +87,23 @@
         public static void VerifyNewsUpdateOnce(Mock<IRepositoryWrapper> repo)
         {
             repo.Verify(r => r.NewsRepository.Update(It.IsAny<News>()), Times.Once);
+        }
+
+        public static void VerifyDelete<T>(Mock<IRepositoryWrapper> repo, Times times)
+            where T : class
+        {
+            if (typeof(T) == typeof(News))
+            {
+                repo.Verify(r => r.NewsRepository.Delete(It.IsAny<News>()), times);
+            }
+            else if (typeof(T) == typeof(Image))
+            {
+                repo.Verify(r => r.ImageRepository.Delete(It.IsAny<Image>()), times);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Delete verification not implemented for type {typeof(T).Name}");
+            }
         }
     }
 }

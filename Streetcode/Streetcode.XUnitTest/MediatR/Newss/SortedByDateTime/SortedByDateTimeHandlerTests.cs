@@ -18,6 +18,9 @@
     /// </summary>
     public class SortedByDateTimeHandlerTests
     {
+        private const string NoNewsInDatabaseErrorMessage = "There are no news in the database";
+        private const string Base64ImageContent = "base64ImageData";
+
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<ILoggerService> loggerMock;
@@ -51,8 +54,6 @@
         public async Task Handle_ShouldReturnFailure_WhenNewsCollectionIsNull()
         {
             // Arange
-            const string ERROR_MSG = "There are no news in the database";
-
             MockRepoHelper.SetupGetAllNews(this.repoMock, null);
 
             var query = new SortedByDateTimeQuery();
@@ -62,11 +63,11 @@
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle(e => e.Message.Contains(ERROR_MSG));
+            result.Errors.Should().ContainSingle(e => e.Message.Contains(NoNewsInDatabaseErrorMessage));
 
             // Verify
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ERROR_MSG);
-            MockMapperHelper.VerifyMapNeverCollection<News, NewsDTO>(this.mapperMock);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NoNewsInDatabaseErrorMessage);
+            MockMapperHelper.VerifyMapCollection<News, NewsDTO>(this.mapperMock, Times.Never());
         }
 
         /// <summary>
@@ -94,7 +95,7 @@
             };
 
             MockRepoHelper.SetupGetAllNews(this.repoMock, newsList);
-            MockMapperHelper.SetupMapNewsList(this.mapperMock, newsList, newsDTOList);
+            MockMapperHelper.SetupMapCollection(this.mapperMock, newsList, newsDTOList);
 
             var query = new SortedByDateTimeQuery();
 
@@ -109,7 +110,7 @@
 
             // Verify
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
-            MockMapperHelper.VerifyMapOnceCollection<News, NewsDTO>(this.mapperMock);
+            MockMapperHelper.VerifyMapCollection<News, NewsDTO>(this.mapperMock, Times.Once());
         }
 
         /// <summary>
@@ -122,8 +123,6 @@
         public async Task Handle_ShouldReturnNewsSortedByDateDescendingWithBase64Images_WhenNewsExistWithImages()
         {
             // Arrange
-            const string BASE64_IMAGE = "base64ImageData";
-
             var newsList = new List<News>
             {
                 NewsTestData.CreateNewsWithDate(1, new DateTime(2024, 2, 10), withImage: true),
@@ -137,8 +136,8 @@
             };
 
             MockRepoHelper.SetupGetAllNews(this.repoMock, newsList);
-            MockMapperHelper.SetupMapNewsList(this.mapperMock, newsList, newsDTOList);
-            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, BASE64_IMAGE);
+            MockMapperHelper.SetupMapCollection(this.mapperMock, newsList, newsDTOList);
+            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64ImageContent);
 
             var query = new SortedByDateTimeQuery();
 
@@ -150,11 +149,11 @@
             result.Value.Should().HaveCount(2);
             result.Value.Should().BeInDescendingOrder(n => n.CreationDate);
             result.Value.Select(n => n.Id).Should().Equal(2, 1);
-            result.Value.Should().OnlyContain(n => n.Image != null && n.Image.Base64 == BASE64_IMAGE);
+            result.Value.Should().OnlyContain(n => n.Image != null && n.Image.Base64 == Base64ImageContent);
 
             // Verify
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 2);
-            MockMapperHelper.VerifyMapOnceCollection<News, NewsDTO>(this.mapperMock);
+            MockMapperHelper.VerifyMapCollection<News, NewsDTO>(this.mapperMock, Times.Once());
         }
     }
 }

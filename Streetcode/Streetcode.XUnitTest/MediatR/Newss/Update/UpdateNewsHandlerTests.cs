@@ -21,6 +21,13 @@
     /// </summary>
     public class UpdateNewsHandlerTests
     {
+        private const string MappingNullErrorMessage = "Cannot convert null to news";
+        private const string SaveFailErrorMessage = "Failed to update news";
+        private const int NewsId = 1;
+        private const string Base64Data = "BASE64_DATA";
+        private const string BlobNameFile = "file.jpg";
+        private const string OldBlobName = "old.jpg";
+
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<ILoggerService> loggerMock;
@@ -53,10 +60,7 @@
         public async Task Handle_ShouldReturnFailure_WhenMappingReturnsNull()
         {
             // Arrange
-            const string ERROR_MSG = "Cannot convert null to news";
-            const int NEWS_ID = 1;
-
-            var newsDto = NewsTestData.CreateNewsDTO(NEWS_ID);
+            var newsDto = NewsTestData.CreateNewsDTO(NewsId);
 
             MockMapperHelper.SetupMapper<NewsDTO, News>(this.mapperMock, newsDto, null);
 
@@ -67,10 +71,10 @@
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle(e => e.Message.Contains(ERROR_MSG));
+            result.Errors.Should().ContainSingle(e => e.Message.Contains(MappingNullErrorMessage));
 
             // Verify
-            MockMapperHelper.VerifyMapOnce<NewsDTO, News>(this.mapperMock);
+            MockMapperHelper.VerifyMap<NewsDTO, News>(this.mapperMock, Times.Once());
             MockLoggerHelper.VerifyLogErrorOnce(this.loggerMock);
         }
 
@@ -83,11 +87,8 @@
         public async Task Handle_ShouldReturnFailure_WhenSaveChangesFails()
         {
             // Arrange
-            const string ERROR_MSG = "Failed to update news";
-            const int NEWS_ID = 1;
-
-            var dto = NewsTestData.CreateNewsDTO(NEWS_ID);
-            var entity = NewsTestData.CreateNews(NEWS_ID);
+            var dto = NewsTestData.CreateNewsDTO(NewsId);
+            var entity = NewsTestData.CreateNews(NewsId);
 
             MockMapperHelper.SetupMapper<NewsDTO, News>(this.mapperMock, dto, entity);
             MockMapperHelper.SetupMapper<News, NewsDTO>(this.mapperMock, entity, dto);
@@ -103,7 +104,7 @@
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle(e => e.Message.Contains(ERROR_MSG));
+            result.Errors.Should().ContainSingle(e => e.Message.Contains(SaveFailErrorMessage));
 
             // Verify
             MockRepoHelper.VerifyNewsUpdateOnce(this.repoMock);
@@ -121,19 +122,16 @@
         public async Task Handle_ShouldReturnSuccess_WhenNewsHasImageAndLoadsBase64()
         {
             // Arrange
-            const string BASE64 = "BASE64_DATA";
-            const string BLOB_NAME = "file.jpg";
-            const int NEWS_ID = 1;
-            var dto = NewsTestData.CreateNewsDTO(NEWS_ID);
-            var entity = NewsTestData.CreateNews(NEWS_ID);
+            var dto = NewsTestData.CreateNewsDTO(NewsId);
+            var entity = NewsTestData.CreateNews(NewsId);
 
-            entity.Image = new Image { BlobName = BLOB_NAME };
-            dto.Image = new ImageDTO { BlobName = BLOB_NAME };
+            entity.Image = new Image { BlobName = BlobNameFile };
+            dto.Image = new ImageDTO { BlobName = BlobNameFile };
 
             MockMapperHelper.SetupMapper<NewsDTO, News>(this.mapperMock, dto, entity);
             MockMapperHelper.SetupMapper<News, NewsDTO>(this.mapperMock, entity, dto);
 
-            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, BASE64);
+            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Data);
 
             MockRepoHelper.SetupUpdate(this.repoMock);
             MockRepoHelper.SetupSaveSuccess(this.repoMock);
@@ -148,13 +146,12 @@
             result.Value.Should().BeEquivalentTo(dto);
 
             result.Value.Image.Should().NotBeNull();
-            result.Value.Image!.Base64.Should().Be(BASE64);
+            result.Value.Image!.Base64.Should().Be(Base64Data);
 
             // Verify
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 1);
             MockRepoHelper.VerifySaveChangesOnce(this.repoMock);
             MockRepoHelper.VerifyNewsUpdateOnce(this.repoMock, entity.Id);
-
         }
 
         /// <summary>
@@ -166,14 +163,12 @@
         public async Task Handle_ShouldDeleteOldImage_WhenNewsHasNoImageButOldImageExists()
         {
             // Arrange
-            const int NEWS_ID = 1;
-            const string BLOB_NAME = "old.jpg";
-            var dto = NewsTestData.CreateNewsDTO(NEWS_ID);
-            var entity = NewsTestData.CreateNews(NEWS_ID);
+            var dto = NewsTestData.CreateNewsDTO(NewsId);
+            var entity = NewsTestData.CreateNews(NewsId);
             entity.Image = null;
             dto.ImageId = 1;
 
-            var oldImage = new Image { Id = dto.ImageId.Value, BlobName = BLOB_NAME };
+            var oldImage = new Image { Id = dto.ImageId.Value, BlobName = OldBlobName };
 
             MockMapperHelper.SetupMapper<NewsDTO, News>(this.mapperMock, dto, entity);
             MockMapperHelper.SetupMapper<News, NewsDTO>(this.mapperMock, entity, dto);
@@ -194,7 +189,7 @@
 
             // Verify
             MockRepoHelper.VerifyNewsUpdateOnce(this.repoMock, entity.Id);
-            MockRepoHelper.VerifyImageDeleteOnce(this.repoMock);
+            MockRepoHelper.VerifyDelete<Image>(this.repoMock, Times.Once());
             MockRepoHelper.VerifySaveChangesOnce(this.repoMock);
         }
 
@@ -207,9 +202,8 @@
         public async Task Handle_ShouldReturnSuccess_WhenNewsHasNoImageAndNoOldImageExists()
         {
             // Arrange
-            const int NEWS_ID = 1;
-            var dto = NewsTestData.CreateNewsDTO(NEWS_ID);
-            var entity = NewsTestData.CreateNews(NEWS_ID);
+            var dto = NewsTestData.CreateNewsDTO(NewsId);
+            var entity = NewsTestData.CreateNews(NewsId);
 
             entity.Image = null;
             dto.ImageId = null;
@@ -230,7 +224,7 @@
             result.Value.Should().BeEquivalentTo(dto);
 
             // Verify
-            MockRepoHelper.VerifyImageDeleteNever(this.repoMock);
+            MockRepoHelper.VerifyDelete<Image>(this.repoMock, Times.Never());
             MockRepoHelper.VerifyNewsUpdateOnce(this.repoMock, entity.Id);
             MockRepoHelper.VerifySaveChangesOnce(this.repoMock);
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);

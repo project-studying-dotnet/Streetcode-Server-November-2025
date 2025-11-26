@@ -17,6 +17,9 @@
     /// </summary>
     public class GetNewsByIdHandlerTests
     {
+        private const int NewsId = 1;
+        private const string Base64Content = "BASE64_STRING";
+
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<ILoggerService> loggerMock;
@@ -48,12 +51,11 @@
         public async Task Handle_ShouldReturnFailure_WhenNewsNotFound()
         {
             // Arrange
-            const int NEWS_ID = 1;
             const string expectedErrorMessage = "No news by entered Id - 1";
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, null);
 
-            var query = new GetNewsByIdQuery(NEWS_ID);
+            var query = new GetNewsByIdQuery(NewsId);
 
             // Act
             var result = await this.handler.Handle(query, default);
@@ -63,13 +65,13 @@
             result.Errors.Should().ContainSingle(e => e.Message == expectedErrorMessage);
 
             // Verify
-            MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
+            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, expectedErrorMessage);
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
         /// <summary>
-        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/> 
+        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/>
         /// returns a success result when news is found but has no associated image.
         /// </summary>
         /// <returns>A successful <see cref="Result{NewsDTO}"/> with <c>null</c> image.</returns>
@@ -77,15 +79,13 @@
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithoutImage()
         {
             // Arrange
-            const int NEWS_ID = 2;
-
-            var news = NewsTestData.CreateNews(NEWS_ID);
-            var newsDto = NewsTestData.CreateNewsDTO(NEWS_ID, imageId: null);
+            var news = NewsTestData.CreateNews(NewsId);
+            var newsDto = NewsTestData.CreateNewsDTO(NewsId, imageId: null);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, news);
             MockMapperHelper.SetupMapper<News, NewsDTO>(this.mapperMock, news, newsDto);
 
-            var query = new GetNewsByIdQuery(NEWS_ID);
+            var query = new GetNewsByIdQuery(NewsId);
 
             // Act
             var result = await this.handler.Handle(query, default);
@@ -96,12 +96,12 @@
             result.Value.Image.Should().BeNull();
 
             // Verify
-            MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
+            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
         /// <summary>
-        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/> 
+        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/>
         /// returns a success result when news is found and has an associated image.
         /// Ensures that the Base64 content is populated via <see cref="IBlobService"/>.
         /// </summary>
@@ -109,17 +109,15 @@
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithImage()
         {
-            const int NEWS_ID = 3;
-            const string Base64Content = "BASE64_STRING";
-
-            var news = NewsTestData.CreateNews(NEWS_ID);
-            var newsDto = NewsTestData.CreateNewsDTO(NEWS_ID);
+            // Arrange
+            var news = NewsTestData.CreateNews(NewsId);
+            var newsDto = NewsTestData.CreateNewsDTO(NewsId);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, news);
             MockMapperHelper.SetupMapper(this.mapperMock, news, newsDto);
             MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Content);
 
-            var query = new GetNewsByIdQuery(NEWS_ID);
+            var query = new GetNewsByIdQuery(NewsId);
 
             // Act
             var result = await this.handler.Handle(query, default);
@@ -130,7 +128,7 @@
             result.Value.Image?.Base64.Should().Be(Base64Content);
 
             // Verify
-            MockMapperHelper.VerifyMapOnce<News, NewsDTO>(this.mapperMock);
+            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 1);
         }
     }
