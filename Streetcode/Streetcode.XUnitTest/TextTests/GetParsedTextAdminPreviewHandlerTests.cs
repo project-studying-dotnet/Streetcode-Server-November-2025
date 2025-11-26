@@ -1,59 +1,67 @@
-﻿
-using Xunit;
-using Moq;
-using FluentAssertions;
-using FluentResults;
-using Streetcode.BLL.Interfaces.Text;
-using Streetcode.BLL.MediatR.Streetcode.Text.GetParsed;
+﻿// <copyright file="GetParsedTextAdminPreviewHandlerTests.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
 
 namespace Streetcode.XUnitTest.TextTests
 {
+    using System.Threading;
+    using System.Threading.Tasks;
+    using FluentAssertions;
+    using Moq;
+    using Streetcode.BLL.Interfaces.Text;
+    using Streetcode.BLL.MediatR.Streetcode.Text.GetParsed;
+    using Xunit;
+
     public class GetParsedTextAdminPreviewHandlerTests
     {
-        private readonly Mock<ITextService> _mockTextService;
-        private readonly GetParsedTextAdminPreviewHandler _handler;
+        private readonly Mock<ITextService> mockTextService;
+        private readonly GetParsedTextAdminPreviewHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetParsedTextAdminPreviewHandlerTests"/> class.
+        /// </summary>
         public GetParsedTextAdminPreviewHandlerTests()
         {
-            _mockTextService = new Mock<ITextService>();
-            _handler = new GetParsedTextAdminPreviewHandler(_mockTextService.Object);
+            this.mockTextService = new Mock<ITextService>();
+            this.handler = new GetParsedTextAdminPreviewHandler(this.mockTextService.Object);
         }
 
         [Fact]
         public async Task Handle_ShouldReturnOk_WhenTextIsParsedSuccessfully()
         {
             // Arrange
-            string inputRawText = "some text";
-            string parsedText = "<p>some text</p>";
-            var command = new GetParsedTextForAdminPreviewCommand(inputRawText);
+            const string InputRawText = "some text";
+            const string ParsedText = "<p>some text</p>";
+            var command = new GetParsedTextForAdminPreviewCommand(InputRawText);
 
-            _mockTextService.Setup(s => s.AddTermsTag(inputRawText))
-                .ReturnsAsync(parsedText);
+            this.mockTextService.Setup(s => s.AddTermsTag(InputRawText))
+                .ReturnsAsync(ParsedText);
 
             // Act
-            var result = await _handler.Handle(command, CancellationToken.None);
+            var result = await this.handler.Handle(command, CancellationToken.None);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            result.Value.Should().Be(parsedText);
+            result.Value.Should().Be(ParsedText);
         }
 
         [Fact]
         public async Task Handle_ShouldReturnFail_WhenParsingReturnsNull()
         {
             // Arrange
-            string inputRawText = "bad text";
-            var command = new GetParsedTextForAdminPreviewCommand(inputRawText);
+            const string InputRawText = "bad text";
+            const string ErrorMsg = "text was not parsed successfully";
+            var command = new GetParsedTextForAdminPreviewCommand(InputRawText);
 
-            _mockTextService.Setup(s => s.AddTermsTag(inputRawText))
-                .ReturnsAsync((string?)null);
+            this.mockTextService.Setup(s => s.AddTermsTag(InputRawText))
+                .Returns(Task.FromResult<string?>(null));
 
             // Act
-            var result = await _handler.Handle(command, CancellationToken.None);
+            var result = await this.handler.Handle(command, CancellationToken.None);
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle(e => e.Message == "text was not parsed successfully");
+            result.Errors.Should().ContainSingle(e => e.Message == ErrorMsg);
         }
     }
 }
