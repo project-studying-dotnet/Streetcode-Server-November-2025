@@ -23,6 +23,7 @@
         private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
         private readonly Mock<ILoggerService> loggerMock;
         private readonly Mock<IArtRepository> artRepositoryMock;
+        private readonly VerifyMockersHandler verifyMockersHandler;
         private readonly GetAllArtsHandler handler;
 
         public GetAllArtsHandlerTests()
@@ -34,6 +35,12 @@
 
             this.repositoryWrapperMock.Setup(rw => rw.ArtRepository)
                 .Returns(this.artRepositoryMock.Object);
+
+            this.verifyMockersHandler = new VerifyMockersHandler(
+                this.mapperMock,
+                this.artRepositoryMock,
+                this.repositoryWrapperMock,
+                this.loggerMock);
 
             this.handler = new GetAllArtsHandler(
                 this.repositoryWrapperMock.Object,
@@ -48,7 +55,8 @@
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.True(result.IsSuccess);
-            this.VerifyMockersPositiveFlow();
+            this.verifyMockersHandler.VerifyMockersPositiveFlowGetAll();
+            this.verifyMockersHandler.VerifyWrapperMock();
         }
 
         [Fact]
@@ -63,7 +71,8 @@
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.True(result.IsSuccess);
-            this.VerifyMockersPositiveFlow();
+            this.verifyMockersHandler.VerifyMockersPositiveFlowGetAll();
+            this.verifyMockersHandler.VerifyWrapperMock();
         }
 
         [Fact]
@@ -78,7 +87,8 @@
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.Equal(arts.Count, result.Value.Count());
-            this.VerifyMockersPositiveFlow();
+            this.verifyMockersHandler.VerifyMockersPositiveFlowGetAll();
+            this.verifyMockersHandler.VerifyWrapperMock();
         }
 
         [Fact]
@@ -93,7 +103,8 @@
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.IsType<List<ArtDTO>>(result.Value);
-            this.VerifyMockersPositiveFlow();
+            this.verifyMockersHandler.VerifyMockersPositiveFlowGetAll();
+            this.verifyMockersHandler.VerifyWrapperMock();
         }
 
         [Fact]
@@ -108,7 +119,9 @@
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.True(result.IsFailed);
-            this.VerifyMockersNegativeFlow();
+            this.verifyMockersHandler.VerifyMockersNegativeFlowGetAll();
+            this.verifyMockersHandler.VerifyWrapperMock();
+            this.verifyMockersHandler.VerifyLoggerMock();
         }
 
         [Fact]
@@ -123,7 +136,9 @@
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
             Assert.Equal(ERRORMESSAGE, result.Errors[0].Message);
-            this.VerifyMockersNegativeFlow();
+            this.verifyMockersHandler.VerifyMockersNegativeFlowGetAll();
+            this.verifyMockersHandler.VerifyWrapperMock();
+            this.verifyMockersHandler.VerifyLoggerMock();
         }
 
         private void SetupRepositoryMapper(List<Art> arts, List<ArtDTO> artDTOs)
@@ -165,38 +180,6 @@
                     Id = 2,
                 },
             };
-        }
-
-        private void VerifyMockersPositiveFlow()
-        {
-            this.mapperMock.Verify(
-                m => m.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()),
-                Times.Once);
-
-            this.artRepositoryMock.Verify(
-                r => r.GetAllAsync(
-                    It.IsAny<Expression<Func<Art, bool>>>(),
-                    It.IsAny<Func<IQueryable<Art>, IIncludableQueryable<Art, object>>>()),
-                Times.Once);
-
-            this.repositoryWrapperMock
-                .Verify(rw => rw.ArtRepository, Times.Once);
-        }
-
-        private void VerifyMockersNegativeFlow()
-        {
-            this.mapperMock.Verify(
-                m => m.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()),
-                Times.Never);
-
-            this.loggerMock.Verify(
-                l => l.LogError(
-                    It.IsAny<object>(),
-                    It.IsAny<string>()),
-                Times.Once);
-
-            this.repositoryWrapperMock
-                .Verify(rw => rw.ArtRepository, Times.Once);
         }
     }
 }
