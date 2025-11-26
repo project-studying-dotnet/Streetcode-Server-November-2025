@@ -165,7 +165,6 @@
                     var query = arts.AsQueryable();
                     if (predicate != null)
                     {
-                        var func = predicate.Compile();
                         query = query.Where(predicate);
                     }
 
