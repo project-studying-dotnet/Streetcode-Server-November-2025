@@ -47,15 +47,18 @@
         /// returns a failure result when no news is found for the specified Id.
         /// </summary>
         /// <returns>A failed <see cref="Result{NewsDTO}"/> with an error message.</returns>
-        [Fact]
-        public async Task Handle_ShouldReturnFailure_WhenNewsNotFound()
+        [Theory]
+        [InlineData(1)]
+        [InlineData(5)]
+        [InlineData(99)]
+        public async Task Handle_ShouldReturnFailure_WhenNewsNotFound(int newsId)
         {
             // Arrange
-            const string expectedErrorMessage = "No news by entered Id - 1";
+            string expectedErrorMessage = $"No news by entered Id - {newsId}";
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, null);
 
-            var query = new GetNewsByIdQuery(NewsId);
+            var query = new GetNewsByIdQuery(newsId);
 
             // Act
             var result = await this.handler.Handle(query, default);
