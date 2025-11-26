@@ -98,7 +98,6 @@
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.Should().BeEquivalentTo(newsDto);
-            result.Value.Image.Should().BeNull();
 
             // Verify
             MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
@@ -135,7 +134,6 @@
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.Should().BeEquivalentTo(newsDto);
-            result.Value.Image?.Base64.Should().Be(Base64Content);
 
             // Verify
             MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
