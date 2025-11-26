@@ -1,8 +1,4 @@
-using System;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
@@ -13,10 +9,16 @@ using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
+    /// <summary>
+    /// Unit tests for <see cref="GetPartnerByIdHandler"/>.
+    /// </summary>
     public class GetByIdPartnerHandlerTests : PartnerHandlerTestsBase
     {
         private readonly GetPartnerByIdHandler _handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetByIdPartnerHandlerTests"/> class.
+        /// </summary>
         public GetByIdPartnerHandlerTests()
         {
             this._handler = new GetPartnerByIdHandler(
@@ -25,6 +27,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 this.MockLogger.Object);
         }
 
+        /// <summary>
+        /// Sets up the repository mock to return the specified partner.
+        /// </summary>
+        /// <param name="partner">The partner to return from the repository.</param>
         private void SetupGetSingleOrDefaultAsync(Partner partner)
         {
             this.MockRepository
@@ -34,6 +40,9 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(partner);
         }
 
+        /// <summary>
+        /// Sets up the repository mock to return null.
+        /// </summary>
         private void SetupGetSingleOrDefaultAsyncToReturnNull()
         {
             this.MockRepository
@@ -43,6 +52,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync((Partner)null);
         }
 
+        /// <summary>
+        /// Sets up the repository mock to throw the specified exception.
+        /// </summary>
+        /// <param name="exception">The exception to throw.</param>
         private void SetupRepositoryToThrowException(Exception exception)
         {
             this.MockRepository
@@ -52,32 +65,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ThrowsAsync(exception);
         }
 
-        private Expression<Func<Partner, bool>> CapturePredicateFromRepository()
-        {
-            Expression<Func<Partner, bool>> capturedPredicate = null;
-            this.MockRepository
-                .Setup(repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
-                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
-                    (predicate, include) => capturedPredicate = predicate)
-                .ReturnsAsync(PartnerTestHelpers.CreatePartnerEntity(1));
-            return capturedPredicate;
-        }
-
-        private Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> CaptureIncludeFromRepository()
-        {
-            Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> capturedInclude = null;
-            this.MockRepository
-                .Setup(repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
-                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
-                    (predicate, include) => capturedInclude = include)
-                .ReturnsAsync(PartnerTestHelpers.CreatePartnerEntity(1));
-            return capturedInclude;
-        }
-
+        /// <summary>
+        /// Verifies that the handler returns success when a partner with the given ID exists.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenPartnerExists()
         {
@@ -107,6 +98,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when a partner with the given ID does not exist.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenPartnerDoesNotExist()
         {
@@ -132,6 +127,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler calls the mapper when a partner exists.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsMapper_WhenPartnerExists()
         {
@@ -155,6 +154,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler propagates InvalidOperationException when the repository throws an exception.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ThrowsInvalidOperationException_WhenRepositoryThrowsException()
         {
@@ -174,6 +177,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .WithMessage("Database error");
         }
 
+        /// <summary>
+        /// Verifies that the handler calls the repository with the correct partner ID.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsRepositoryWithCorrectId_WhenCalled()
         {
@@ -182,7 +189,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var partner = PartnerTestHelpers.CreatePartnerEntity(partnerId);
             var partnerDTO = PartnerTestHelpers.CreatePartnerDTO(partnerId);
 
-            var capturedPredicate = this.CapturePredicateFromRepository();
+            Expression<Func<Partner, bool>> capturedPredicate = null;
+            this.MockRepository
+                .Setup(repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
+                    It.IsAny<Expression<Func<Partner, bool>>>(),
+                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
+                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
+                    (pred, include) => capturedPredicate = pred)
+                .ReturnsAsync(partner);
             this.SetupMapperForPartnerDTO(partnerDTO);
 
             var query = new GetPartnerByIdQuery(partnerId);
@@ -201,6 +215,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler calls the repository with include expressions for related entities.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsRepositoryWithInclude_WhenCalled()
         {
@@ -209,7 +227,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var partner = PartnerTestHelpers.CreatePartnerEntity(partnerId);
             var partnerDTO = PartnerTestHelpers.CreatePartnerDTO(partnerId);
 
-            var capturedInclude = this.CaptureIncludeFromRepository();
+            Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> capturedInclude = null;
+            this.MockRepository
+                .Setup(repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
+                    It.IsAny<Expression<Func<Partner, bool>>>(),
+                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
+                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
+                    (pred, include) => capturedInclude = include)
+                .ReturnsAsync(partner);
             this.SetupMapperForPartnerDTO(partnerDTO);
 
             var query = new GetPartnerByIdQuery(partnerId);
@@ -229,4 +254,3 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
     }
 }
-

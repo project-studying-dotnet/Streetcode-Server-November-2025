@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Query;
@@ -13,19 +8,49 @@ using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
+    /// <summary>
+    /// Base class for testing GetAll partner handlers with shared test logic.
+    /// </summary>
+    /// <typeparam name="TQuery">The query type for retrieving partners.</typeparam>
+    /// <typeparam name="TDto">The DTO type for partner data.</typeparam>
     public abstract class GetAllPartnersTestsBase<TQuery, TDto> : PartnerHandlerTestsBase
         where TQuery : IRequest<FluentResults.Result<IEnumerable<TDto>>>, new()
     {
+        /// <summary>
+        /// Gets the handler being tested.
+        /// </summary>
         protected abstract IRequestHandler<TQuery, FluentResults.Result<IEnumerable<TDto>>> Handler { get; }
 
+        /// <summary>
+        /// Creates a collection of DTOs for testing.
+        /// </summary>
+        /// <param name="count">The number of DTOs to create.</param>
+        /// <returns>A collection of DTOs.</returns>
         protected abstract IEnumerable<TDto> CreateDtos(int count);
 
+        /// <summary>
+        /// Creates an empty collection of DTOs for testing.
+        /// </summary>
+        /// <returns>An empty collection of DTOs.</returns>
         protected abstract IEnumerable<TDto> CreateEmptyDtos();
 
+        /// <summary>
+        /// Sets up the mapper to map specific partners to specific DTOs.
+        /// </summary>
+        /// <param name="partners">The partners to map from.</param>
+        /// <param name="dtos">The DTOs to return.</param>
         protected abstract void SetupMapperForDtos(IEnumerable<Partner> partners, IEnumerable<TDto> dtos);
 
+        /// <summary>
+        /// Sets up the mapper to map any partners to specific DTOs.
+        /// </summary>
+        /// <param name="dtos">The DTOs to return.</param>
         protected abstract void SetupMapperForAnyPartners(IEnumerable<TDto> dtos);
 
+        /// <summary>
+        /// Verifies that the handler returns success when partners exist.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenPartnersExist()
         {
@@ -59,6 +84,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when the repository returns null.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenRepositoryReturnsNull()
         {
@@ -86,6 +115,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns success with an empty list when no partners exist.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenPartnersListIsEmpty()
         {
@@ -112,6 +145,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.Value.Should().BeEmpty();
         }
 
+        /// <summary>
+        /// Verifies that the handler calls the mapper when partners exist.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsMapper_WhenPartnersExist()
         {
@@ -137,6 +174,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.VerifyMapperWasCalled(partners);
         }
 
+        /// <summary>
+        /// Verifies that the handler propagates InvalidOperationException when the repository throws an exception.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ThrowsInvalidOperationException_WhenRepositoryThrowsException()
         {
@@ -159,6 +200,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .WithMessage("Database connection failed");
         }
 
+        /// <summary>
+        /// Verifies that the mapper was called with the expected partners.
+        /// </summary>
+        /// <param name="partners">The partners that should have been passed to the mapper.</param>
         protected abstract void VerifyMapperWasCalled(IEnumerable<Partner> partners);
     }
 }

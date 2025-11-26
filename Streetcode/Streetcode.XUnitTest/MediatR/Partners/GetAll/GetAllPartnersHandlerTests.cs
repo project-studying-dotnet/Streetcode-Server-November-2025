@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Query;
@@ -15,10 +10,16 @@ using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
+    /// <summary>
+    /// Unit tests for <see cref="GetAllPartnersHandler"/>.
+    /// </summary>
     public class GetAllPartnersHandlerTests : GetAllPartnersTestsBase<GetAllPartnersQuery, PartnerDTO>
     {
         private readonly GetAllPartnersHandler _handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetAllPartnersHandlerTests"/> class.
+        /// </summary>
         public GetAllPartnersHandlerTests()
         {
             this._handler = new GetAllPartnersHandler(
@@ -27,18 +28,22 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 this.MockLogger.Object);
         }
 
+        /// <inheritdoc/>
         protected override IRequestHandler<GetAllPartnersQuery, FluentResults.Result<IEnumerable<PartnerDTO>>> Handler => this._handler;
 
+        /// <inheritdoc/>
         protected override IEnumerable<PartnerDTO> CreateDtos(int count)
         {
             return PartnerTestHelpers.CreatePartnerDTOs(count);
         }
 
+        /// <inheritdoc/>
         protected override IEnumerable<PartnerDTO> CreateEmptyDtos()
         {
             return new List<PartnerDTO>();
         }
 
+        /// <inheritdoc/>
         protected override void SetupMapperForDtos(IEnumerable<Partner> partners, IEnumerable<PartnerDTO> dtos)
         {
             this.MockMapper
@@ -46,6 +51,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Returns(dtos);
         }
 
+        /// <inheritdoc/>
         protected override void SetupMapperForAnyPartners(IEnumerable<PartnerDTO> dtos)
         {
             this.MockMapper
@@ -53,6 +59,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Returns(dtos);
         }
 
+        /// <inheritdoc/>
         protected override void VerifyMapperWasCalled(IEnumerable<Partner> partners)
         {
             this.MockMapper.Verify(
@@ -60,6 +67,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler calls the repository with include expressions for related entities.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsRepositoryWithInclude_WhenCalled()
         {

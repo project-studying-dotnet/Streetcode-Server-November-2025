@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
@@ -16,10 +11,16 @@ using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
+    /// <summary>
+    /// Unit tests for <see cref="CreatePartnerHandler"/>.
+    /// </summary>
     public class CreatePartnerHandlerTests : PartnerHandlerTestsBase
     {
         private readonly CreatePartnerHandler _handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CreatePartnerHandlerTests"/> class.
+        /// </summary>
         public CreatePartnerHandlerTests()
         {
             this._handler = new CreatePartnerHandler(
@@ -28,6 +29,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 this.MockLogger.Object);
         }
 
+        /// <summary>
+        /// Sets up the mapper to map CreatePartnerDTO to Partner entity.
+        /// </summary>
+        /// <param name="createPartnerDTO">The DTO to map from.</param>
+        /// <param name="partnerEntity">The entity to map to.</param>
         private void SetupMapperForCreatePartner(CreatePartnerDTO createPartnerDTO, Partner partnerEntity)
         {
             this.MockMapper
@@ -35,6 +41,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Returns(partnerEntity);
         }
 
+        /// <summary>
+        /// Sets up the repository to return a partner when CreateAsync is called.
+        /// </summary>
+        /// <param name="partnerEntity">The partner entity to return.</param>
         private void SetupCreateAsync(Partner partnerEntity)
         {
             this.MockRepository
@@ -42,6 +52,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(partnerEntity);
         }
 
+        /// <summary>
+        /// Sets up the streetcode repository to return specific streetcodes.
+        /// </summary>
+        /// <param name="streetcodes">The streetcodes to return.</param>
         private void SetupStreetcodeRepository(List<StreetcodeContent> streetcodes)
         {
             this.MockRepository
@@ -51,19 +65,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(streetcodes);
         }
 
-        private Expression<Func<StreetcodeContent, bool>> CaptureStreetcodePredicate()
-        {
-            Expression<Func<StreetcodeContent, bool>> capturedPredicate = null;
-            this.MockRepository
-                .Setup(repo => repo.StreetcodeRepository.GetAllAsync(
-                    It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
-                    It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()))
-                .Callback<Expression<Func<StreetcodeContent, bool>>, Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>(
-                    (predicate, include) => capturedPredicate = predicate)
-                .ReturnsAsync(new List<StreetcodeContent>());
-            return capturedPredicate;
-        }
-
+        /// <summary>
+        /// Sets up CreateAsync to throw an exception.
+        /// </summary>
+        /// <param name="exception">The exception to throw.</param>
         private void SetupCreateAsyncToThrowException(Exception exception)
         {
             this.MockRepository
@@ -71,6 +76,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ThrowsAsync(exception);
         }
 
+        /// <summary>
+        /// Sets up the mapper to return null when mapping CreatePartnerDTO to Partner.
+        /// </summary>
+        /// <param name="createPartnerDTO">The DTO being mapped.</param>
         private void SetupMapperToReturnNullPartner(CreatePartnerDTO createPartnerDTO)
         {
             this.MockMapper
@@ -78,6 +87,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Returns((Partner)null);
         }
 
+        /// <summary>
+        /// Sets up the streetcode repository to throw an exception.
+        /// </summary>
+        /// <param name="exception">The exception to throw.</param>
         private void SetupStreetcodeRepositoryToThrowException(Exception exception)
         {
             this.MockRepository
@@ -87,6 +100,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ThrowsAsync(exception);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns success when a partner is created successfully with streetcodes.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenPartnerCreatedSuccessfully()
         {
@@ -138,6 +155,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Exactly(2));
         }
 
+        /// <summary>
+        /// Verifies that the handler returns success when a partner is created without streetcodes.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenPartnerCreatedWithoutStreetcodes()
         {
@@ -172,6 +193,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.Value.Should().BeEquivalentTo(resultPartnerDTO);
         }
 
+        /// <summary>
+        /// Verifies that the handler calls the mapper when creating a partner.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsMapper_WhenCreatingPartner()
         {
@@ -209,6 +234,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when an exception occurs during creation.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenExceptionOccurs()
         {
@@ -246,6 +275,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when SaveChanges throws an exception.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenSaveChangesThrowsException()
         {
@@ -284,6 +317,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler calls SaveChanges twice when a partner has streetcodes.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsSaveChangesTwice_WhenPartnerHasStreetcodes()
         {
@@ -323,6 +360,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 "because SaveChanges should be called after creating partner and after adding streetcodes");
         }
 
+        /// <summary>
+        /// Verifies that the handler retrieves streetcodes by their IDs when creating a partner.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_RetrievesStreetcodesByIds_WhenPartnerHasStreetcodes()
         {
@@ -351,7 +392,16 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             this.SetupMapperForCreatePartner(createPartnerDTO, partnerEntity);
             this.SetupCreateAsync(partnerEntity);
-            var capturedPredicate = this.CaptureStreetcodePredicate();
+
+            Expression<Func<StreetcodeContent, bool>> capturedPredicate = null;
+            this.MockRepository
+                .Setup(repo => repo.StreetcodeRepository.GetAllAsync(
+                    It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
+                    It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()))
+                .Callback<Expression<Func<StreetcodeContent, bool>>, Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>(
+                    (pred, include) => capturedPredicate = pred)
+                .ReturnsAsync(streetcodes);
+
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
             var query = new CreatePartnerQuery(createPartnerDTO);
@@ -370,6 +420,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when the mapper returns null for the partner entity.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity()
         {
@@ -402,6 +456,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when the streetcode repository throws an exception.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenStreetcodeRepositoryThrowsException()
         {
@@ -444,4 +502,3 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
     }
 }
-

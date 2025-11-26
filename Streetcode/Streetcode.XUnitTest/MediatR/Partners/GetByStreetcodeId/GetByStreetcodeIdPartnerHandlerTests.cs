@@ -1,14 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.MediatR.Partners.GetByStreetcodeId;
 using Streetcode.DAL.Entities.Partners;
 using Streetcode.DAL.Entities.Streetcode;
@@ -16,10 +10,16 @@ using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
+    /// <summary>
+    /// Unit tests for <see cref="GetPartnersByStreetcodeIdHandler"/>.
+    /// </summary>
     public class GetByStreetcodeIdPartnerHandlerTests : PartnerHandlerTestsBase
     {
         private readonly GetPartnersByStreetcodeIdHandler _handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetByStreetcodeIdPartnerHandlerTests"/> class.
+        /// </summary>
         public GetByStreetcodeIdPartnerHandlerTests()
         {
             this._handler = new GetPartnersByStreetcodeIdHandler(
@@ -28,6 +28,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 this.MockLogger.Object);
         }
 
+        /// <summary>
+        /// Sets up the streetcode repository to return a specific streetcode.
+        /// </summary>
+        /// <param name="streetcode">The streetcode to return.</param>
         private void SetupStreetcodeRepository(StreetcodeContent streetcode)
         {
             this.MockRepository
@@ -37,6 +41,9 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(streetcode);
         }
 
+        /// <summary>
+        /// Sets up the streetcode repository to return null.
+        /// </summary>
         private void SetupStreetcodeRepositoryToReturnNull()
         {
             this.MockRepository
@@ -46,6 +53,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync((StreetcodeContent)null);
         }
 
+        /// <summary>
+        /// Sets up the partners repository to return a list of partners.
+        /// </summary>
+        /// <param name="partners">The partners to return.</param>
         private void SetupPartnersRepository(List<Partner> partners)
         {
             this.MockRepository
@@ -55,6 +66,9 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(partners);
         }
 
+        /// <summary>
+        /// Sets up the partners repository to return null.
+        /// </summary>
         private void SetupPartnersRepositoryToReturnNull()
         {
             this.MockRepository
@@ -64,6 +78,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync((IEnumerable<Partner>)null);
         }
 
+        /// <summary>
+        /// Sets up the mapper to map partners to PartnerDTOs.
+        /// </summary>
+        /// <param name="partnerDTOs">The DTOs to return from mapping.</param>
         private void SetupMapperForPartnerDTOs(List<PartnerDTO> partnerDTOs)
         {
             this.MockMapper
@@ -71,6 +89,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Returns(partnerDTOs);
         }
 
+        /// <summary>
+        /// Sets up the mapper to map specific partners to specific PartnerDTOs.
+        /// </summary>
+        /// <param name="partners">The partners to map from.</param>
+        /// <param name="partnerDTOs">The DTOs to return.</param>
         private void SetupMapperForSpecificPartners(List<Partner> partners, List<PartnerDTO> partnerDTOs)
         {
             this.MockMapper
@@ -78,6 +101,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Returns(partnerDTOs);
         }
 
+        /// <summary>
+        /// Sets up the streetcode repository to throw an exception.
+        /// </summary>
+        /// <param name="exception">The exception to throw.</param>
         private void SetupStreetcodeRepositoryToThrowException(Exception exception)
         {
             this.MockRepository
@@ -87,6 +114,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ThrowsAsync(exception);
         }
 
+        /// <summary>
+        /// Sets up the partners repository to throw an exception.
+        /// </summary>
+        /// <param name="exception">The exception to throw.</param>
         private void SetupPartnersRepositoryToThrowException(Exception exception)
         {
             this.MockRepository
@@ -96,19 +127,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ThrowsAsync(exception);
         }
 
-        private Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> CaptureIncludeFromRepository()
-        {
-            Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> capturedInclude = null;
-            this.MockRepository
-                .Setup(repo => repo.PartnersRepository.GetAllAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
-                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
-                    (predicate, include) => capturedInclude = include)
-                .ReturnsAsync(new List<Partner> { PartnerTestHelpers.CreatePartnerEntity(1) });
-            return capturedInclude;
-        }
-
+        /// <summary>
+        /// Verifies that the handler returns success when partners exist for the given streetcode ID.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenPartnersExist()
         {
@@ -154,6 +176,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when the streetcode does not exist.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenStreetcodeDoesNotExist()
         {
@@ -185,6 +211,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Never);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when the partners repository returns null.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenPartnersRepositoryReturnsNull()
         {
@@ -212,6 +242,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns success with an empty list when no partners are associated with the streetcode.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenPartnersListIsEmpty()
         {
@@ -236,6 +270,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.Value.Should().BeEmpty();
         }
 
+        /// <summary>
+        /// Verifies that the handler calls the mapper when partners exist.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsMapper_WhenPartnersExist()
         {
@@ -269,6 +307,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler propagates InvalidOperationException when the streetcode repository throws an exception.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ThrowsInvalidOperationException_WhenStreetcodeRepositoryThrowsException()
         {
@@ -288,6 +330,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .WithMessage("Database error");
         }
 
+        /// <summary>
+        /// Verifies that the handler propagates InvalidOperationException when the partners repository throws an exception.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ThrowsInvalidOperationException_WhenPartnersRepositoryThrowsException()
         {
@@ -309,6 +355,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .WithMessage("Database error");
         }
 
+        /// <summary>
+        /// Verifies that the handler calls the repository with include expressions for related entities.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsRepositoryWithInclude_WhenCalled()
         {
@@ -319,7 +369,16 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var partnerDTOs = new List<PartnerDTO> { PartnerTestHelpers.CreatePartnerDTO(1) };
 
             this.SetupStreetcodeRepository(streetcode);
-            var capturedInclude = this.CaptureIncludeFromRepository();
+
+            Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> capturedInclude = null;
+            this.MockRepository
+                .Setup(repo => repo.PartnersRepository.GetAllAsync(
+                    It.IsAny<Expression<Func<Partner, bool>>>(),
+                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
+                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
+                    (pred, include) => capturedInclude = include)
+                .ReturnsAsync(partners);
+
             this.SetupMapperForPartnerDTOs(partnerDTOs);
 
             var query = new GetPartnersByStreetcodeIdQuery(streetcodeId);
@@ -339,4 +398,3 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
     }
 }
-

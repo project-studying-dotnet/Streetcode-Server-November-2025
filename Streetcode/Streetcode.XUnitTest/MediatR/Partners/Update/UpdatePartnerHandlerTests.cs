@@ -1,26 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.DTO.Partners.Create;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.MediatR.Partners.Update;
 using Streetcode.DAL.Entities.Partners;
-using Streetcode.DAL.Entities.Streetcode;
 using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {
+    /// <summary>
+    /// Unit tests for <see cref="UpdatePartnerHandler"/>.
+    /// </summary>
     public class UpdatePartnerHandlerTests : PartnerHandlerTestsBase
     {
         private readonly UpdatePartnerHandler _handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdatePartnerHandlerTests"/> class.
+        /// </summary>
         public UpdatePartnerHandlerTests()
         {
             this._handler = new UpdatePartnerHandler(
@@ -29,6 +28,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 this.MockLogger.Object);
         }
 
+        /// <summary>
+        /// Sets up the mapper to map CreatePartnerDTO to Partner entity for updates.
+        /// </summary>
+        /// <param name="updatePartnerDTO">The DTO containing update data.</param>
+        /// <param name="partnerEntity">The entity to map to.</param>
         private void SetupMapperForUpdatePartner(CreatePartnerDTO updatePartnerDTO, Partner partnerEntity)
         {
             this.MockMapper
@@ -36,6 +40,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Returns(partnerEntity);
         }
 
+        /// <summary>
+        /// Sets up the repository to return a partner when GetFirstOrDefaultAsync is called.
+        /// </summary>
+        /// <param name="partnerEntity">The partner to return.</param>
         private void SetupGetFirstOrDefaultAsync(Partner partnerEntity)
         {
             this.MockRepository
@@ -45,6 +53,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(partnerEntity);
         }
 
+        /// <summary>
+        /// Sets up the partner source link repository to return existing links.
+        /// </summary>
+        /// <param name="existingLinks">The existing partner source links.</param>
         private void SetupPartnerSourceLinkRepository(List<PartnerSourceLink> existingLinks)
         {
             this.MockRepository
@@ -54,6 +66,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(existingLinks);
         }
 
+        /// <summary>
+        /// Sets up the partner streetcode repository to return existing streetcode relationships.
+        /// </summary>
+        /// <param name="oldStreetcodes">The existing streetcode-partner relationships.</param>
         private void SetupPartnerStreetcodeRepository(List<StreetcodePartner> oldStreetcodes)
         {
             this.MockRepository
@@ -63,6 +79,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(oldStreetcodes);
         }
 
+        /// <summary>
+        /// Sets up the partner source link repository to throw an exception.
+        /// </summary>
+        /// <param name="exception">The exception to throw.</param>
         private void SetupPartnerSourceLinkRepositoryToThrowException(Exception exception)
         {
             this.MockRepository
@@ -72,6 +92,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ThrowsAsync(exception);
         }
 
+        /// <summary>
+        /// Sets up the mapper to return null when mapping CreatePartnerDTO to Partner.
+        /// </summary>
+        /// <param name="updatePartnerDTO">The DTO being mapped.</param>
         private void SetupMapperToReturnNullPartner(CreatePartnerDTO updatePartnerDTO)
         {
             this.MockMapper
@@ -79,6 +103,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Returns((Partner)null);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns success when a partner is updated successfully.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsSuccess_WhenPartnerUpdatedSuccessfully()
         {
@@ -127,6 +155,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Exactly(2));
         }
 
+        /// <summary>
+        /// Verifies that the handler deletes old partner source links when they are removed during an update.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_DeletesOldLinks_WhenLinksAreRemoved()
         {
@@ -169,6 +201,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Exactly(2));
         }
 
+        /// <summary>
+        /// Verifies that the handler creates new streetcode-partner links when streetcodes are added during an update.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CreatesNewStreetcodeLinks_WhenStreetcodesAreAdded()
         {
@@ -211,6 +247,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Exactly(2));
         }
 
+        /// <summary>
+        /// Verifies that the handler deletes old streetcode-partner links when streetcodes are removed during an update.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_DeletesOldStreetcodeLinks_WhenStreetcodesAreRemoved()
         {
@@ -253,6 +293,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Exactly(2));
         }
 
+        /// <summary>
+        /// Verifies that the handler calls SaveChanges twice when an update is successful.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsSaveChangesTwice_WhenUpdateIsSuccessful()
         {
@@ -292,6 +336,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 "because SaveChanges should be called after updating partner and after modifying streetcode links");
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when an exception occurs during update.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenExceptionOccurs()
         {
@@ -329,6 +377,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when SaveChanges throws an exception.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenSaveChangesThrowsException()
         {
@@ -372,6 +424,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler calls the mapper when an update is successful.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_CallsMapper_WhenUpdateIsSuccessful()
         {
@@ -413,6 +469,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
+        /// <summary>
+        /// Verifies that the handler returns failure when the mapper returns null for the partner entity.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
         public async Task Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity()
         {
@@ -448,4 +508,3 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
     }
 }
-
