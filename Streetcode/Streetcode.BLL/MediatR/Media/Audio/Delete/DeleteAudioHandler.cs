@@ -25,7 +25,7 @@ public class DeleteAudioHandler : IRequestHandler<DeleteAudioCommand, Result<Uni
 
         if (audio is null)
         {
-            string errorMsg = $"Cannot find an audio with corresponding categoryId: {request.Id}";
+            string errorMsg = $"Cannot find an audio with corresponding audioId: {request.Id}";
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
