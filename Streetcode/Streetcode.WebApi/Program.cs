@@ -42,9 +42,13 @@ if (app.Environment.EnvironmentName != "Local")
     BackgroundJob.Schedule<WebParsingUtils>(
     wp => wp.ParseZipFileFromWebAsync(), TimeSpan.FromMinutes(1));
     RecurringJob.AddOrUpdate<WebParsingUtils>(
-        wp => wp.ParseZipFileFromWebAsync(), Cron.Monthly);
+        "parse-zip-file-monthly",
+        wp => wp.ParseZipFileFromWebAsync(),
+        Cron.Monthly);
     RecurringJob.AddOrUpdate<BlobService>(
-        b => b.CleanBlobStorage(), Cron.Monthly);
+        "clean-blob-storage-monthly",
+        b => b.CleanBlobStorage(),
+        Cron.Monthly);
 }
 
 app.MapControllers();
