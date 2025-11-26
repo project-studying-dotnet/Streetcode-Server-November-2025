@@ -1,0 +1,138 @@
+﻿namespace Streetcode.XUnitTest.MediatR.Newss.GetById
+{
+    using AutoMapper;
+    using FluentAssertions;
+    using Moq;
+    using Streetcode.BLL.DTO.News;
+    using Streetcode.BLL.Interfaces.BlobStorage;
+    using Streetcode.BLL.Interfaces.Logging;
+    using Streetcode.BLL.MediatR.Newss.GetById;
+    using Streetcode.DAL.Entities.News;
+    using Streetcode.DAL.Repositories.Interfaces.Base;
+    using Streetcode.XUnitTest.MediatR.Newss.Helpers;
+    using Xunit;
+
+    /// <summary>
+    /// Unit tests for <see cref="GetNewsByIdHandler"/>.
+    /// </summary>
+    public class GetNewsByIdHandlerTests
+    {
+        private const int NewsId = 1;
+        private const string Base64Content = "BASE64_STRING";
+
+        private readonly Mock<IMapper> mapperMock;
+        private readonly Mock<IRepositoryWrapper> repoMock;
+        private readonly Mock<ILoggerService> loggerMock;
+        private readonly Mock<IBlobService> blobServiceMock;
+        private readonly GetNewsByIdHandler handler;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetNewsByIdHandlerTests"/> class.
+        /// </summary>
+        public GetNewsByIdHandlerTests()
+        {
+            this.mapperMock = new Mock<IMapper>();
+            this.repoMock = new Mock<IRepositoryWrapper>();
+            this.loggerMock = new Mock<ILoggerService>();
+            this.blobServiceMock = new Mock<IBlobService>();
+            this.handler = new GetNewsByIdHandler(
+                this.mapperMock.Object,
+                this.repoMock.Object,
+                this.blobServiceMock.Object,
+                this.loggerMock.Object);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/>
+        /// returns a failure result when no news is found for the specified Id.
+        /// </summary>
+        /// <returns>A failed <see cref="Result{NewsDTO}"/> with an error message.</returns>
+        [Theory]
+        [InlineData(1)]
+        [InlineData(5)]
+        [InlineData(99)]
+        public async Task Handle_ShouldReturnFailure_WhenNewsNotFound(int newsId)
+        {
+            // Arrange
+            string expectedErrorMessage = $"No news by entered Id - {newsId}";
+
+            MockRepoHelper.SetupGetNewsById(this.repoMock, null);
+
+            var query = new GetNewsByIdQuery(newsId);
+
+            // Act
+            var result = await this.handler.Handle(query, default);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.Errors.Should().ContainSingle(e => e.Message == expectedErrorMessage);
+
+            // Verify
+            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, expectedErrorMessage);
+            MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/>
+        /// returns a success result when news is found but has no associated image.
+        /// </summary>
+        /// <returns>A successful <see cref="Result{NewsDTO}"/> with <c>null</c> image.</returns>
+        [Fact]
+        public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithoutImage()
+        {
+            // Arrange
+            var news = NewsTestData.CreateNews(NewsId);
+            var newsDto = NewsTestData.CreateNewsDTO(NewsId, imageId: null);
+
+            MockRepoHelper.SetupGetNewsById(this.repoMock, news);
+            MockMapperHelper.SetupMapper<News, NewsDTO>(this.mapperMock, news, newsDto);
+
+            var query = new GetNewsByIdQuery(NewsId);
+
+            // Act
+            var result = await this.handler.Handle(query, default);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Should().BeEquivalentTo(newsDto);
+            result.Value.Image.Should().BeNull();
+
+            // Verify
+            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/>
+        /// returns a success result when news is found and has an associated image.
+        /// Ensures that the Base64 content is populated via <see cref="IBlobService"/>.
+        /// </summary>
+        /// <returns>A successful <see cref="Result{NewsDTO}"/> with populated <see cref="ImageDTO.Base64"/>.</returns>
+        [Fact]
+        public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithImage()
+        {
+            // Arrange
+            var news = NewsTestData.CreateNews(NewsId);
+            var newsDto = NewsTestData.CreateNewsDTO(NewsId);
+
+            MockRepoHelper.SetupGetNewsById(this.repoMock, news);
+            MockMapperHelper.SetupMapper(this.mapperMock, news, newsDto);
+            MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Content);
+
+            var query = new GetNewsByIdQuery(NewsId);
+
+            // Act
+            var result = await this.handler.Handle(query, default);
+
+            // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Should().BeEquivalentTo(newsDto);
+            result.Value.Image?.Base64.Should().Be(Base64Content);
+
+            // Verify
+            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 1);
+        }
+    }
+}
