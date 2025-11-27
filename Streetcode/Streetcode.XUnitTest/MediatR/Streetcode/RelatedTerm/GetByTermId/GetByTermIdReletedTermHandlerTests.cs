@@ -6,6 +6,7 @@ using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.Fixtures;
 using Xunit;
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
@@ -57,14 +58,17 @@ public class GetByTermIdRelatedTermsHandlerTests
                 It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
             .ReturnsAsync(this.relatedTermsEntities);
         
-        this.mockMapper.Setup(m => m.Map<IEnumerable<RelatedTermDTO>>(It.Is<IEnumerable<Entity>>(
-                e => e.Count() == this.relatedTermsEntities.Count)))
+        this.mockMapper.Setup(m => m.Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<Entity>>())) 
             .Returns(this.relatedTermsDtos);
         
         var result = await this.handler.Handle(query, CancellationToken.None);
         
         Assert.True(result.IsSuccess);
         Assert.Equal(this.relatedTermsDtos.Count, result.Value.Count());
+        
+        this.mockRepository.VerifyGetAllAsyncCalledOnce();
+        this.mockMapper.VerifyMapEntityListToDtoListCalledOnce();
+        this.mockLogger.VerifyLogErrorCalledNever();
     }
 
     [Fact]
@@ -82,7 +86,11 @@ public class GetByTermIdRelatedTermsHandlerTests
         Assert.True(result.IsFailed);
         Assert.Equal("Cannot get words by term id", result.Errors.First().Message);
         
-        this.mockLogger.Verify(l => l.LogError(It.IsAny<object>(), It.IsAny<string>()), Times.Once);
+        this.mockRepository.VerifyGetAllAsyncCalledOnce();
+        
+        this.mockMapper.Verify(m => m.Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<Entity>>()), Times.Never);
+        
+        this.mockLogger.VerifyLogErrorCalledOnce();
     }
     
     [Fact]
@@ -102,6 +110,10 @@ public class GetByTermIdRelatedTermsHandlerTests
         
         Assert.True(result.IsSuccess);
         Assert.Empty(result.Value);
+        
+        this.mockRepository.VerifyGetAllAsyncCalledOnce();
+        this.mockMapper.VerifyMapEntityListToDtoListCalledOnce(); 
+        this.mockLogger.VerifyLogErrorCalledNever();
     }
 
     [Fact]
@@ -122,6 +134,8 @@ public class GetByTermIdRelatedTermsHandlerTests
         Assert.True(result.IsFailed);
         Assert.Equal("Cannot create DTOs for related words!", result.Errors.First().Message);
         
-        this.mockLogger.Verify(l => l.LogError(It.IsAny<object>(), It.IsAny<string>()), Times.Once);
+        this.mockRepository.VerifyGetAllAsyncCalledOnce();
+        this.mockMapper.VerifyMapEntityListToDtoListCalledOnce(); 
+        this.mockLogger.VerifyLogErrorCalledOnce();
     }
 }

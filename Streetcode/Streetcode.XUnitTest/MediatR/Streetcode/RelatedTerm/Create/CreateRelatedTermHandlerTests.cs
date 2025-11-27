@@ -6,6 +6,7 @@ using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.Fixtures;
 using Xunit;
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
@@ -53,9 +54,15 @@ public class CreateRelatedTermHandlerTests
 
         Assert.True(result.IsSuccess);
         Assert.Equal(this.createdRelatedTermDto.Word, result.Value.Word);
+        
+        this.mockRepository.VerifyGetAllAsyncCalledOnce();
+        this.mockRepository.VerifyCreateCalledOnce(this.validRelatedTermEntity);
+        this.mockRepository.VerifySaveChangesCalledOnce();
+        
+        this.mockMapper.VerifyMapDtoToEntityCalledOnce();
+        this.mockMapper.VerifyMapEntityToDtoCalledOnce();
 
-        this.mockRepository.Verify(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()), Times.Once);
-        this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+        this.mockLogger.VerifyLogErrorCalledNever();
     }
 
     [Fact]
@@ -74,8 +81,15 @@ public class CreateRelatedTermHandlerTests
 
         Assert.True(result.IsFailed);
         Assert.Equal("Слово з цим визначенням уже існує", result.Errors.First().Message);
-
-        this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
+        
+        this.mockRepository.VerifyGetAllAsyncCalledOnce();
+        this.mockRepository.VerifyCreateCalledNever();
+        this.mockRepository.VerifySaveChangesCalledNever();
+        
+        this.mockMapper.VerifyMapDtoToEntityCalledOnce();
+        this.mockMapper.VerifyMapEntityToDtoCalledNever();
+        
+        this.mockLogger.VerifyLogErrorCalledOnce();
     }
 
     [Fact]
@@ -90,9 +104,14 @@ public class CreateRelatedTermHandlerTests
 
         Assert.True(result.IsFailed);
         Assert.Equal("Cannot save changes in the database after related word creation!", result.Errors.First().Message);
-
-        this.mockRepository.Verify(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()), Times.Once);
-        this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+        
+        this.mockRepository.VerifyGetAllAsyncCalledOnce();
+        this.mockRepository.VerifyCreateCalledOnce(this.validRelatedTermEntity);
+        this.mockRepository.VerifySaveChangesCalledOnce();
+        
+        this.mockMapper.VerifyMapEntityToDtoCalledNever();
+        
+        this.mockLogger.VerifyLogErrorCalledOnce();
     }
 
     [Fact]
@@ -106,7 +125,11 @@ public class CreateRelatedTermHandlerTests
 
         Assert.True(result.IsFailed);
         Assert.Equal("Cannot create new related word for a term!", result.Errors.First().Message);
-
-        this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
+        
+        this.mockRepository.VerifyGetAllAsyncCalledNever();
+        this.mockRepository.VerifyCreateCalledNever();
+        this.mockRepository.VerifySaveChangesCalledNever();
+        
+        this.mockLogger.VerifyLogErrorCalledOnce();
     }
 }

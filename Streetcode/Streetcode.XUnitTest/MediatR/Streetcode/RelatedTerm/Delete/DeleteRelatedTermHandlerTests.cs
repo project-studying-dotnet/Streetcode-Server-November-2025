@@ -6,6 +6,7 @@ using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.Fixtures;
 using Xunit;
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
@@ -54,12 +55,13 @@ public class DeleteRelatedTermHandlerTests
         Assert.True(result.IsSuccess);
         Assert.Equal(this.expectedRelatedTermDto.Word, result.Value.Word);
 
-        this.mockRepository.Verify(r => r.RelatedTermRepository.GetFirstOrDefaultAsync(
-            It.IsAny<Expression<Func<Entity, bool>>>(),
-            It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()), Times.Once);
+        this.mockRepository.VerifyGetFirstOrDefaultAsyncCalledOnce();
+        this.mockRepository.VerifyDeleteCalledOnce(this.existingRelatedTermEntity);
+        this.mockRepository.VerifySaveChangesCalledOnce();
         
-        this.mockRepository.Verify(r => r.RelatedTermRepository.Delete(this.existingRelatedTermEntity), Times.Once);
-        this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+        this.mockMapper.VerifyMapEntityToDtoCalledOnce();
+            
+        this.mockLogger.VerifyLogErrorCalledNever();
     }
 
     [Fact]
@@ -76,9 +78,15 @@ public class DeleteRelatedTermHandlerTests
         
         Assert.True(result.IsFailed);
         Assert.Equal($"Cannot find a related term: {NonExistentWord}", result.Errors.First().Message);
-
-        this.mockRepository.Verify(r => r.RelatedTermRepository.Delete(It.IsAny<Entity>()), Times.Never);
-        this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Never);
+        
+        this.mockRepository.VerifyGetFirstOrDefaultAsyncCalledOnce();
+        
+        this.mockRepository.VerifyDeleteCalledNever();
+        this.mockRepository.VerifySaveChangesCalledNever();
+        
+        this.mockMapper.VerifyMapEntityToDtoCalledNever();
+        
+        this.mockLogger.VerifyLogErrorCalledOnce();
     }
 
     [Fact]
@@ -99,8 +107,14 @@ public class DeleteRelatedTermHandlerTests
         Assert.True(result.IsFailed);
         Assert.Equal("Failed to delete a related term", result.Errors.First().Message);
         
-        this.mockRepository.Verify(r => r.RelatedTermRepository.Delete(this.existingRelatedTermEntity), Times.Once);
-        this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+        this.mockRepository.VerifyGetFirstOrDefaultAsyncCalledOnce();
+        
+        this.mockRepository.VerifyDeleteCalledOnce(this.existingRelatedTermEntity);
+        this.mockRepository.VerifySaveChangesCalledOnce();
+        
+        this.mockMapper.VerifyMapEntityToDtoCalledOnce();
+
+        this.mockLogger.VerifyLogErrorCalledOnce();
     }
 
     [Fact]
@@ -124,7 +138,13 @@ public class DeleteRelatedTermHandlerTests
         Assert.True(result.IsFailed);
         Assert.Equal("Failed to delete a related term", result.Errors.First().Message);
         
-        this.mockRepository.Verify(r => r.RelatedTermRepository.Delete(this.existingRelatedTermEntity), Times.Once);
-        this.mockRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+        this.mockRepository.VerifyGetFirstOrDefaultAsyncCalledOnce();
+
+        this.mockRepository.VerifyDeleteCalledOnce(this.existingRelatedTermEntity);
+        this.mockRepository.VerifySaveChangesCalledOnce();
+        
+        this.mockMapper.VerifyMapEntityToDtoCalledOnce();
+
+        this.mockLogger.VerifyLogErrorCalledOnce();
     }
 }
