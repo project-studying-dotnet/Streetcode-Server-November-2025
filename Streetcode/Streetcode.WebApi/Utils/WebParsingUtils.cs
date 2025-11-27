@@ -84,8 +84,13 @@ public class WebParsingUtils
                 await streamToReadFrom.CopyToAsync(streamToWriteTo, 81920, cancellationToken);
             }
 
-            using var archive = ZipFile.OpenRead(zipPath);
-            archive.ExtractToDirectory(extractTo, overwriteFiles: true);
+            using (var archive = ZipFile.OpenRead(zipPath))
+            {
+                archive.ExtractToDirectory(extractTo, overwriteFiles: true);
+            }
+
+            await Task.Delay(100);
+
             Console.WriteLine($"Archive received and extracted to {extractTo}");
         }
         catch (OperationCanceledException)
@@ -102,9 +107,11 @@ public class WebParsingUtils
 
     public async Task ParseZipFileFromWebAsync()
     {
-        var projRootDirectory = Directory.GetParent(Environment.CurrentDirectory)?.FullName!;
-        var zipPath = $"houses.zip";
-        var extractTo = $"/root/build/StreetCode/Streetcode/Streetcode.DAL";
+        string projRootDirectory = Directory.GetParent(Environment.CurrentDirectory)?.FullName!;
+        string extractTo = Path.Combine(projRootDirectory, "Streetcode.DAL/HousesData");
+        string zipPath = Path.Combine(extractTo, "houses.zip");
+
+        Directory.CreateDirectory(extractTo);
 
         var cancellationToken = new CancellationTokenSource().Token;
 
@@ -286,8 +293,13 @@ public class WebParsingUtils
             using var client = new HttpClient();
 
             // Add user-agent and referer headers to request
-            client.DefaultRequestHeaders.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+            client.DefaultRequestHeaders.Add("User-Agent", "StreetcodeApp/1.0 (https://github.com/project-studying-dotnet/Streetcode-Server-November-2025)");
+            client.DefaultRequestHeaders.Add("Accept", "application/json");
+            client.DefaultRequestHeaders.Add("Accept-Language", "uk");
             client.DefaultRequestHeaders.Add("Referer", "http://www.microsoft.com");
+
+            // Add delay due to Nominatim usage policy
+            await Task.Delay(1000);
 
             // Send GET request to Nominatim API and retrieve JSON data
             var jsonData = await retryPolicy.WrapAsync(circuitBreakerPolicy).ExecuteAsync(async () =>
