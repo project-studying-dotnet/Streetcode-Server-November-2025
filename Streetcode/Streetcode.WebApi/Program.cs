@@ -39,16 +39,7 @@ app.UseHangfireDashboard("/dash");
 
 if (app.Environment.EnvironmentName != "Local")
 {
-    BackgroundJob.Schedule<WebParsingUtils>(
-    wp => wp.ParseZipFileFromWebAsync(), TimeSpan.FromMinutes(1));
-    RecurringJob.AddOrUpdate<WebParsingUtils>(
-        "parse-zip-file-monthly",
-        wp => wp.ParseZipFileFromWebAsync(),
-        Cron.Monthly);
-    RecurringJob.AddOrUpdate<BlobService>(
-        "clean-blob-storage-monthly",
-        b => b.CleanBlobStorage(),
-        Cron.Monthly);
+    app.ConfigureBackgroundJobs();
 }
 
 app.MapControllers();
