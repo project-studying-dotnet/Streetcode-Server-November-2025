@@ -1,5 +1,4 @@
 name: SonarCloud
-
 on:
   push:
     branches:
@@ -7,22 +6,37 @@ on:
       - dev
   pull_request:
     types: [opened, synchronize, reopened]
-
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 6.0.x
 
+      - name: Install SonarScanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
       - name: Restore
         run: dotnet restore Streetcode/Streetcode.sln
+
+      - name: SonarCloud Scan Begin
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          dotnet-sonarscanner begin \
+            /k:"ita-social-projects_StreetCode" \
+            /o:"ita-social-projects" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
+            /d:sonar.cs.opencover.reportsPaths="**/TestResults/**/coverage.opencover.xml" \
+            /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
 
       - name: Build
         run: dotnet build Streetcode/Streetcode.sln --configuration Release --no-restore
@@ -31,30 +45,17 @@ jobs:
         run: |
           dotnet test Streetcode/Streetcode.XUnitTest/Streetcode.XUnitTest.csproj \
             --configuration Release \
-            /p:CollectCoverage=true \
-            /p:CoverletOutputFormat=opencover \
-            /p:CoverletOutput=./TestResults/coverage.xml
+            --no-build \
+            --collect:"XPlat Code Coverage" \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
 
-      - name: Install SonarScanner
-        run: dotnet tool install --global dotnet-sonarscanner
-
-      - name: SonarCloud Scan
+      - name: SonarCloud Scan End
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          dotnet-sonarscanner begin \
-            /k:"ita-social-projects_StreetCode" \
-            /o:"ita-social-projects" \
-            /d:sonar.host.url="https://sonarcloud.io" \
-            /d:sonar.login="$SONAR_TOKEN" \
-            /d:sonar.cs.opencover.reportPaths="Streetcode/Streetcode.XUnitTest/TestResults/coverage.xml"
-
-          dotnet build Streetcode/Streetcode.sln --configuration Release
-
-          dotnet-sonarscanner end /d:sonar.login="$SONAR_TOKEN"
+        run: dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
         with:
           name: coverage
-          path: Streetcode/Streetcode.XUnitTest/TestResults/coverage.xml
+          path: "**/TestResults/**/coverage.opencover.xml"
