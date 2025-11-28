@@ -6,11 +6,11 @@ using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.Fixtures;
+using Streetcode.XUnitTest.MediatR.RelatedTerm.Fixtures;
 using Xunit;
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
-namespace Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.Delete;
+namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Delete;
 
 public class DeleteRelatedTermHandlerTests
 {

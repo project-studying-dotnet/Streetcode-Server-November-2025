@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
-namespace Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.Fixtures
+namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Fixtures
 {
     public static class RelatedTermMockExtensions
     {
