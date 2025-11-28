@@ -45,9 +45,6 @@ jobs:
       - name: Install SonarScanner
         run: dotnet tool install --global dotnet-sonarscanner
 
-      - name: Set SonarCloud Token
-        run: echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}" >> $GITHUB_ENV
-
       - name: SonarScanner Analysis
         id: sonar
         run: |
