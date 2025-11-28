@@ -6,11 +6,11 @@ using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.Fixtures;
+using Streetcode.XUnitTest.MediatR.RelatedTerm.Fixtures;
 using Xunit;
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
-namespace Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.GetByTermId;
+namespace Streetcode.XUnitTest.MediatR.RelatedTerm.GetByTermId;
 
 public class GetByTermIdRelatedTermsHandlerTests
 {

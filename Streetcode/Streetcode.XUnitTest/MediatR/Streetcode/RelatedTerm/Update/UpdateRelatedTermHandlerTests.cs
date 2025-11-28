@@ -1,4 +1,4 @@
-namespace Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.Update;
+namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Update;
 
 public class UpdateRelatedTermHandlerTests
 {
