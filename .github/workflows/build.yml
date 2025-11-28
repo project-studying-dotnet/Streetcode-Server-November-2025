@@ -6,6 +6,7 @@ on:
       - dev
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   sonarcloud_branch:
     runs-on: windows-latest
@@ -32,9 +33,6 @@ jobs:
       - name: Install xmldocmd
         run: dotnet tool install xmldocmd -g
 
-      - name: Restore Dependencies
-        run: dotnet restore ./Streetcode/Streetcode.sln
-
       - name: SonarScanner Begin
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -42,7 +40,7 @@ jobs:
           dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
 
       - name: Build
-        run: dotnet build ./Streetcode/Streetcode.sln --configuration Release --no-restore
+        run: dotnet build ./Streetcode/Streetcode.sln --configuration Release
 
       - name: Test and Code Coverage
         run: |
@@ -59,4 +57,4 @@ jobs:
         with:
           name: Code Coverage Report
           path: |
-            ./coverage/**/*.opencover.xml
+            **/coverage.opencover.xml
