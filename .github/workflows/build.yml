@@ -14,15 +14,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
 
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17'        
+          java-version: '17'
           distribution: 'temurin'
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
@@ -47,8 +49,11 @@ jobs:
 
       - name: SonarScanner Analysis
         id: sonar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportPaths="./coverage/coverage.xml"
+          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.xml"
           dotnet build ./Streetcode/Streetcode.sln --configuration Release
           dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
@@ -58,4 +63,4 @@ jobs:
         with:
           name: Code Coverage Report
           path: |
-            ./coverage/coverage.xml
+            **/coverage.xml
