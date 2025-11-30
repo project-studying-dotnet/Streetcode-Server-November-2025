@@ -35,11 +35,6 @@ jobs:
           dotnet tool install --global dotnet-coverage
           dotnet tool install --global dotnet-sonarscanner
 
-      - name: Setup Database
-        run: |
-          chmod +x ./Streetcode/build.sh
-          ./Streetcode/build.sh UpdateDatabase
-
       - name: SonarScanner Begin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
