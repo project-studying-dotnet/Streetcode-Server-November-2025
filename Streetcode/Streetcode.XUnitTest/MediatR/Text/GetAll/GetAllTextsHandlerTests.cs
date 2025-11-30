@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace Streetcode.XUnitTest.Text.GetAll
+namespace Streetcode.XUnitTest.MediatR.Text.GetAll
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -79,20 +79,20 @@ namespace Streetcode.XUnitTest.Text.GetAll
             var emptyList = new List<Text>();
             var emptyDtoList = new List<TextDTO>();
 
-            this.mockRepoWrapper.Setup(r => r.TextRepository.GetAllAsync(null, null))
+            mockRepoWrapper.Setup(r => r.TextRepository.GetAllAsync(null, null))
                 .ReturnsAsync(emptyList);
 
-            this.mockMapper.Setup(m => m.Map<IEnumerable<TextDTO>>(emptyList))
+            mockMapper.Setup(m => m.Map<IEnumerable<TextDTO>>(emptyList))
                 .Returns(emptyDtoList);
 
             // Act
-            var result = await this.handler.Handle(new GetAllTextsQuery(), CancellationToken.None);
+            var result = await handler.Handle(new GetAllTextsQuery(), CancellationToken.None);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.Value.Should().BeEmpty();
 
-            this.mockRepoWrapper.Verify(r => r.TextRepository.GetAllAsync(null, null), Times.Once);
+            mockRepoWrapper.Verify(r => r.TextRepository.GetAllAsync(null, null), Times.Once);
         }
 
         /// <summary>
