@@ -1,6 +1,7 @@
 name: SonarCloud
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -9,11 +10,13 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  sonarcloud_branch:
+  sonarcloud_scan:
+    name: Build and Analyze
     runs-on: ubuntu-latest
+    
     steps:
       - uses: actions/checkout@v4
-        with: 
+        with:
           fetch-depth: 0
 
       - name: Set up JDK 17
@@ -27,14 +30,15 @@ jobs:
         with:
           dotnet-version: 6.0.x
 
-      - name: Install tools
+      - name: Install Tools
         run: |
           dotnet tool install --global dotnet-coverage
           dotnet tool install --global dotnet-sonarscanner
-          dotnet tool install --global GitVersion.Tool --version 5.12.0
 
-      - name: Setup Environment For Integration Tests
-        run: ./Streetcode/build.sh SetupIntegrationTestsEnvironment
+      - name: Setup Integration Tests Environment
+        run: |
+          chmod +x ./Streetcode/build.sh
+          ./Streetcode/build.sh SetupIntegrationTestsEnvironment
 
       - name: SonarScanner Begin
         env:
