@@ -151,7 +151,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
 
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Exactly(2));
         }
 
@@ -243,7 +243,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsSuccess.Should().BeTrue();
             this.MockRepository.Verify(
-                repo => repo.PartnerStreetcodeRepository.Create(It.IsAny<StreetcodePartner>()),
+                repo => repo.PartnerStreetcodeRepository.CreateAsync(It.IsAny<StreetcodePartner>()),
                 Times.Exactly(2));
         }
 
@@ -331,7 +331,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsSuccess.Should().BeTrue();
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Exactly(2),
                 "because SaveChanges should be called after updating partner and after modifying streetcode links");
         }
@@ -503,7 +503,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Never);
 
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Never);
         }
     }
