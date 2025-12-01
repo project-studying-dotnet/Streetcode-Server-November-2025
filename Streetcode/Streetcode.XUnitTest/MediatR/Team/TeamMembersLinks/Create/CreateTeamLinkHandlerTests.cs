@@ -206,8 +206,8 @@
         private void SetupRepositoryCreate(TeamMemberLink teamLink)
         {
             this.mockTeamLinkRepository
-                .Setup(r => r.Create(It.IsAny<TeamMemberLink>()))
-                .Returns(teamLink);
+                .Setup(r => r.CreateAsync(It.IsAny<TeamMemberLink>()))
+                .ReturnsAsync(teamLink);
         }
 
         private void SetupRepositorySaveChangesSuccess()
