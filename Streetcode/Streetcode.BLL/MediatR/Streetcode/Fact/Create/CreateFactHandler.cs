@@ -28,7 +28,6 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                 var imageExists =
                     await _repositoryWrapper.ImageRepository.GetFirstOrDefaultAsync(img =>
                         img.Id == request.newFact.ImageId);
-
                 if (imageExists is null)
                 {
                     const string errorMsg = "Image with provided ImageId does not exist";
@@ -39,7 +38,6 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                 var streetcodeExists =
                     await _repositoryWrapper.StreetcodeRepository.GetFirstOrDefaultAsync(s =>
                         s.Id == request.newFact.StreetcodeId);
-
                 if (streetcodeExists is null)
                 {
                     const string errorMsg = "Streetcode with provided StreetcodeId does not exist";
@@ -47,8 +45,10 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                     return Result.Fail(errorMsg);
                 }
 
-                var factExists = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Title == request.newFact.Title && f.StreetcodeId == request.newFact.StreetcodeId);
-
+                var factExists =
+                    await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
+                        f.Title == request.newFact.Title &&
+                        f.StreetcodeId == request.newFact.StreetcodeId);
                 if (factExists is not null)
                 {
                     const string errorMsg = "Fact with the same title already exists for this Streetcode";
@@ -57,7 +57,6 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                 }
 
                 var newFact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.newFact);
-
                 if (newFact is null)
                 {
                     const string errorMsg = "Failed to map CreateFactDTO to Fact entity";

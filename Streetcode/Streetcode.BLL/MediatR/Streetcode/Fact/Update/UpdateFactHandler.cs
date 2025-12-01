@@ -3,10 +3,9 @@ using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Streetcode.Fact.Update;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-namespace Streetcode.BLL.MediatR.Fact.Update
+namespace Streetcode.BLL.MediatR.Streetcode.Fact.Update
 {
     public class UpdateFactHandler : IRequestHandler<UpdateFactCommand, Result<FactDto>>
     {
@@ -25,11 +24,43 @@ namespace Streetcode.BLL.MediatR.Fact.Update
         {
             try
             {
-                var existingFact = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Id == request.updateFact.Id);
+                var existingFact =
+                    await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
+                        f.Id == request.updateFact.Id);
 
                 if (existingFact is null)
                 {
-                    return Result.Fail("Fact not found");
+                    const string errorMsg = "Fact was not found";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
+                }
+
+                if (existingFact.ImageId != request.updateFact.ImageId)
+                {
+                    var imageExists =
+                        await _repositoryWrapper.ImageRepository.GetFirstOrDefaultAsync(img =>
+                            img.Id == request.updateFact.ImageId);
+
+                    if (imageExists is null)
+                    {
+                        const string errorMsg = "Image was not found";
+                        _logger.LogError(request, errorMsg);
+                        return Result.Fail(errorMsg);
+                    }
+                }
+
+                if (existingFact.Title != request.updateFact.Title)
+                {
+                    var duplicateTitle =
+                        await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
+                            f.Title == request.updateFact.Title);
+
+                    if (duplicateTitle is not null)
+                    {
+                        const string errorMsg = "Title already exists";
+                        _logger.LogError(request, errorMsg);
+                        return Result.Fail(errorMsg);
+                    }
                 }
 
                 _mapper.Map(request.updateFact, existingFact);

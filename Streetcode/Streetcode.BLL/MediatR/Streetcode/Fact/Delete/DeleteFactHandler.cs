@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Streetcode.Fact.Create;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Fact.Delete
@@ -25,15 +23,18 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Delete
         {
             try
             {
-                var deletedFact = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Id == request.id);
+                var fact =
+                    await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
+                        f.Id == request.id);
 
-                if (deletedFact is null)
+                if (fact is null)
                 {
-                    return Result.Fail("Fact not found");
+                    const string errorMsg = "Fact was not found";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
                 }
 
-                _repositoryWrapper.FactRepository.Delete(deletedFact);
-
+                _repositoryWrapper.FactRepository.Delete(fact);
                 await _repositoryWrapper.SaveChangesAsync();
                 return Result.Ok(Unit.Value);
             }
