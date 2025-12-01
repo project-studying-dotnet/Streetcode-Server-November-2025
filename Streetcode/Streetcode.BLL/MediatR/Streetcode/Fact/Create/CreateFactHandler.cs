@@ -25,18 +25,44 @@ namespace Streetcode.BLL.MediatR.Fact.Create
         {
             try
             {
-                var newFact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.newFact);
+                var imageExists =
+                    await _repositoryWrapper.ImageRepository.GetFirstOrDefaultAsync(img =>
+                        img.Id == request.newFact.ImageId);
 
-                if (newFact == null)
+                if (imageExists is null)
                 {
-                    return Result.Fail("Mapped Fact entity is null");
+                    const string errorMsg = "Image with provided ImageId does not exist";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
                 }
 
-                var existedFact = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Title == newFact.Title);
+                var streetcodeExists =
+                    await _repositoryWrapper.StreetcodeRepository.GetFirstOrDefaultAsync(s =>
+                        s.Id == request.newFact.StreetcodeId);
 
-                if (existedFact is not null)
+                if (streetcodeExists is null)
                 {
-                    return Result.Fail("Fact with the same title already exists");
+                    const string errorMsg = "Streetcode with provided StreetcodeId does not exist";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
+                }
+
+                var factExists = await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f => f.Title == request.newFact.Title && f.StreetcodeId == request.newFact.StreetcodeId);
+
+                if (factExists is not null)
+                {
+                    const string errorMsg = "Fact with the same title already exists for this Streetcode";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
+                }
+
+                var newFact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.newFact);
+
+                if (newFact is null)
+                {
+                    const string errorMsg = "Failed to map CreateFactDTO to Fact entity";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
                 }
 
                 newFact = await _repositoryWrapper.FactRepository.CreateAsync(newFact);
