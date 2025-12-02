@@ -1,5 +1,6 @@
 using FluentValidation;
 using MediatR;
+using Streetcode.BLL.Exceptions.CustomExceptions;
 
 namespace Streetcode.BLL.MediatR
 {
@@ -40,7 +41,7 @@ namespace Streetcode.BLL.MediatR
             // If there are validation errors, throw ValidationException
             if (failures.Any())
             {
-                throw new ValidationException(failures);
+                throw new Exceptions.CustomExceptions.ValidationException(failures);
             }
 
             // Proceed to the next behavior or handler
