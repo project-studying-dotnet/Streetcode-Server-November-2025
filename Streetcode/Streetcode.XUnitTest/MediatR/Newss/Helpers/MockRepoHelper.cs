@@ -11,8 +11,8 @@
     {
         public static void SetupNewsCreate(Mock<IRepositoryWrapper> repo, News news)
         {
-            repo.Setup(r => r.NewsRepository.Create(It.IsAny<News>()))
-                .Returns(news);
+            repo.Setup(r => r.NewsRepository.CreateAsync(It.IsAny<News>()))
+                .ReturnsAsync(news);
         }
 
         public static void SetupSaveSuccess(Mock<IRepositoryWrapper> repo)
@@ -29,12 +29,12 @@
 
         public static void VerifyNewsCreateOnce(Mock<IRepositoryWrapper> repo)
         {
-            repo.Verify(r => r.NewsRepository.Create(It.IsAny<News>()), Times.Once);
+            repo.Verify(r => r.NewsRepository.CreateAsync(It.IsAny<News>()), Times.Once);
         }
 
         public static void VerifyNewsCreateNever(Mock<IRepositoryWrapper> repo)
         {
-            repo.Verify(r => r.NewsRepository.Create(It.IsAny<News>()), Times.Never);
+            repo.Verify(r => r.NewsRepository.CreateAsync(It.IsAny<News>()), Times.Never);
         }
 
         public static void SetupGetAllNews(Mock<IRepositoryWrapper> repo, IEnumerable<News> newsList)

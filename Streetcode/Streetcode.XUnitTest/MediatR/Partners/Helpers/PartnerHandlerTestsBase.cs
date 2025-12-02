@@ -80,7 +80,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         protected void SetupSaveChangesToThrowException(string exceptionMessage)
         {
             this.MockRepository
-                .Setup(repo => repo.SaveChanges())
+                .Setup(repo => repo.SaveChangesAsync())
                 .Throws(new Exception(exceptionMessage));
         }
     }

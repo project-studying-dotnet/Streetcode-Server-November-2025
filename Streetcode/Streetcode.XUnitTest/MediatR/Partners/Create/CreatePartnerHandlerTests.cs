@@ -151,7 +151,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
 
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Exactly(2));
         }
 
@@ -355,7 +355,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsSuccess.Should().BeTrue();
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Exactly(2),
                 "because SaveChanges should be called after creating partner and after adding streetcodes");
         }
