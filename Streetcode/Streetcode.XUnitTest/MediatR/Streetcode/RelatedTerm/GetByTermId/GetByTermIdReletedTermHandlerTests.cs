@@ -28,10 +28,10 @@ public class GetByTermIdRelatedTermsHandlerTests
         new Entity { Id = 2, TermId = VALID_TERM_ID, Word = "Word2" },
     };
 
-    private readonly List<RelatedTermDTO> relatedTermsDtos = new ()
+    private readonly List<RelatedTermDto> relatedTermsDtos = new ()
     {
-        new RelatedTermDTO { Id = 1, TermId = VALID_TERM_ID, Word = "Word1" },
-        new RelatedTermDTO { Id = 2, TermId = VALID_TERM_ID, Word = "Word2" },
+        new RelatedTermDto { Id = 1, TermId = VALID_TERM_ID, Word = "Word1" },
+        new RelatedTermDto { Id = 2, TermId = VALID_TERM_ID, Word = "Word2" },
     };
 
     public GetByTermIdRelatedTermsHandlerTests()
@@ -58,7 +58,7 @@ public class GetByTermIdRelatedTermsHandlerTests
                 It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
             .ReturnsAsync(this.relatedTermsEntities);
         
-        this.mockMapper.Setup(m => m.Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<Entity>>())) 
+        this.mockMapper.Setup(m => m.Map<IEnumerable<RelatedTermDto>>(It.IsAny<IEnumerable<Entity>>())) 
             .Returns(this.relatedTermsDtos);
         
         var result = await this.handler.Handle(query, CancellationToken.None);
@@ -88,7 +88,7 @@ public class GetByTermIdRelatedTermsHandlerTests
         
         this.mockRepository.VerifyGetAllAsyncCalledOnce();
         
-        this.mockMapper.Verify(m => m.Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<Entity>>()), Times.Never);
+        this.mockMapper.Verify(m => m.Map<IEnumerable<RelatedTermDto>>(It.IsAny<IEnumerable<Entity>>()), Times.Never);
         
         this.mockLogger.VerifyLogErrorCalledOnce();
     }
@@ -103,8 +103,8 @@ public class GetByTermIdRelatedTermsHandlerTests
                 It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
             .ReturnsAsync(Enumerable.Empty<Entity>());
         
-        this.mockMapper.Setup(m => m.Map<IEnumerable<RelatedTermDTO>>(It.Is<IEnumerable<Entity>>(e => !e.Any())))
-            .Returns(Enumerable.Empty<RelatedTermDTO>());
+        this.mockMapper.Setup(m => m.Map<IEnumerable<RelatedTermDto>>(It.Is<IEnumerable<Entity>>(e => !e.Any())))
+            .Returns(Enumerable.Empty<RelatedTermDto>());
         
         var result = await this.handler.Handle(query, CancellationToken.None);
         
@@ -126,8 +126,8 @@ public class GetByTermIdRelatedTermsHandlerTests
                 It.IsAny<Func<IQueryable<Entity>, IIncludableQueryable<Entity, object>>>()))
             .ReturnsAsync(this.relatedTermsEntities);
         
-        this.mockMapper.Setup(m => m.Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<Entity>>()))
-            .Returns((IEnumerable<RelatedTermDTO>)null!);
+        this.mockMapper.Setup(m => m.Map<IEnumerable<RelatedTermDto>>(It.IsAny<IEnumerable<Entity>>()))
+            .Returns((IEnumerable<RelatedTermDto>)null!);
         
         var result = await this.handler.Handle(query, CancellationToken.None);
         

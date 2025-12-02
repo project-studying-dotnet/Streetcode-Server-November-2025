@@ -100,10 +100,10 @@
 
             // Assert.
             result.IsSuccess.Should().BeTrue();
-            result.Should().BeOfType<NullResult<AudioDTO>>();
+            result.Should().BeOfType<NullResult<AudioDto>>();
         }
 
-        private static (StreetcodeContent StreetcodeContent, AudioDTO AudioDTO, int TargetStreetcodeId) CreateValidStreetcodeAndDTO()
+        private static (StreetcodeContent StreetcodeContent, AudioDto AudioDTO, int TargetStreetcodeId) CreateValidStreetcodeAndDTO()
         {
             const int targetStreetcodeId = 1;
             const int targetAudioId = 1;
@@ -112,24 +112,24 @@
             const string base64 = "base64string";
 
             var entity = new Audio { Id = targetAudioId, BlobName = blobName, Base64 = base64 };
-            var audioDTO = new AudioDTO { Id = targetAudioId, BlobName = blobName, Base64 = base64 };
+            var audioDTO = new AudioDto { Id = targetAudioId, BlobName = blobName, Base64 = base64 };
 
             var streetcode = new StreetcodeContent { Id = targetStreetcodeId, Audio = entity };
 
             return (streetcode, audioDTO, targetStreetcodeId);
         }
 
-        private static (StreetcodeContent? StreetcodeContent, AudioDTO? AudioDTO, int TargetStreetcodeId) CreateNullStreetcodeAndDTO()
+        private static (StreetcodeContent? StreetcodeContent, AudioDto? AudioDTO, int TargetStreetcodeId) CreateNullStreetcodeAndDTO()
         {
             const int targetStreetcodeId = 1;
-            AudioDTO? audioDTO = null;
+            AudioDto? audioDTO = null;
 
             StreetcodeContent? streetcode = null;
 
             return (streetcode, audioDTO, targetStreetcodeId);
         }
 
-        private void SetupMocks(StreetcodeContent? content, AudioDTO? audioDTO)
+        private void SetupMocks(StreetcodeContent? content, AudioDto? audioDTO)
         {
             this.mockRepo.Setup(r => r.StreetcodeRepository.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
@@ -144,7 +144,7 @@
 
             if (content?.Audio != null && audioDTO != null)
             {
-                this.mockMapper.Setup(m => m.Map<AudioDTO>(content.Audio))
+                this.mockMapper.Setup(m => m.Map<AudioDto>(content.Audio))
                     .Returns(audioDTO);
 
                 this.mockBlob.Setup(b => b.FindFileInStorageAsBase64(audioDTO.BlobName))
@@ -161,7 +161,7 @@
                 Times.Once);
 
             this.mockMapper.Verify(
-                m => m.Map<AudioDTO>(It.IsAny<Audio>()),
+                m => m.Map<AudioDto>(It.IsAny<Audio>()),
                 Times.Once);
 
             this.mockBlob.Verify(

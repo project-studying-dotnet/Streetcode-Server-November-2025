@@ -68,7 +68,7 @@
             result.Errors.Should().ContainSingle(e => e.Message == NewsNotFoundByUrlErrorMsg);
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NewsNotFoundByUrlErrorMsg);
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
@@ -101,7 +101,7 @@
             result.Value.News.Image?.Base64.Should().Be(Base64Content);
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 1);
         }
 

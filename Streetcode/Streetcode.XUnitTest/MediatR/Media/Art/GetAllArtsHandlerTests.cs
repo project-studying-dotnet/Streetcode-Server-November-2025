@@ -63,7 +63,7 @@
         public async Task Handle_ReturnsSuccess_WhenArtsExist()
         {
             List<Art> arts = GetArts();
-            List<ArtDTO> artDTOs = GetArtsDTO();
+            List<ArtDto> artDTOs = GetArtsDTO();
 
             this.SetupRepositoryMapper(arts, artDTOs);
 
@@ -79,7 +79,7 @@
         public async Task Handle_ReturnsCorrectNumberOfArts_WhenArtsExist()
         {
             List<Art> arts = GetArts();
-            List<ArtDTO> artDTOs = GetArtsDTO();
+            List<ArtDto> artDTOs = GetArtsDTO();
 
             this.SetupRepositoryMapper(arts, artDTOs);
 
@@ -95,14 +95,14 @@
         public async Task Handle_ReturnsCorrectType_WhenArtsExist()
         {
             List<Art> arts = GetArts();
-            List<ArtDTO> artDTOs = GetArtsDTO();
+            List<ArtDto> artDTOs = GetArtsDTO();
 
             this.SetupRepositoryMapper(arts, artDTOs);
 
             var result = await this.handler
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
-            Assert.IsType<List<ArtDTO>>(result.Value);
+            Assert.IsType<List<ArtDto>>(result.Value);
             this.verifyMockersHandler.VerifyMockersPositiveFlowGetAll();
             this.verifyMockersHandler.VerifyWrapperMock();
         }
@@ -111,7 +111,7 @@
         public async Task Handle_ReturnsFail_WhenArtsAreNull()
         {
             List<Art>? arts = null;
-            List<ArtDTO> artDTOs = GetArtsDTO();
+            List<ArtDto> artDTOs = GetArtsDTO();
 
             this.SetupRepositoryMapper(arts, artDTOs);
 
@@ -128,7 +128,7 @@
         public async Task Handle_ReturnsErrorMessage_WhenArtsAreNull()
         {
             List<Art>? arts = null;
-            List<ArtDTO> artDTOs = GetArtsDTO();
+            List<ArtDto> artDTOs = GetArtsDTO();
 
             this.SetupRepositoryMapper(arts, artDTOs);
 
@@ -141,14 +141,14 @@
             this.verifyMockersHandler.VerifyLoggerMock();
         }
 
-        private void SetupRepositoryMapper(List<Art> arts, List<ArtDTO> artDTOs)
+        private void SetupRepositoryMapper(List<Art> arts, List<ArtDto> artDTOs)
         {
             this.artRepositoryMock.Setup(repo => repo.GetAllAsync(
                 It.IsAny<Expression<Func<Art, bool>>>(),
                 It.IsAny<Func<IQueryable<Art>, IIncludableQueryable<Art, object>>>()))
                 .ReturnsAsync(arts);
 
-            this.mapperMock.Setup(map => map.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()))
+            this.mapperMock.Setup(map => map.Map<IEnumerable<ArtDto>>(It.IsAny<IEnumerable<Art>>()))
                 .Returns(artDTOs);
         }
 
@@ -167,15 +167,15 @@
             };
         }
 
-        private static List<ArtDTO> GetArtsDTO()
+        private static List<ArtDto> GetArtsDTO()
         {
-            return new List<ArtDTO>()
+            return new List<ArtDto>()
             {
-                new ArtDTO()
+                new ArtDto()
                 {
                     Id = 1,
                 },
-                new ArtDTO()
+                new ArtDto()
                 {
                     Id = 2,
                 },

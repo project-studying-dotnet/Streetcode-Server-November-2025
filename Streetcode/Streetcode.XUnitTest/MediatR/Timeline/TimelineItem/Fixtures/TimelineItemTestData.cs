@@ -6,7 +6,7 @@
 
     /// <summary>
     /// Provides factory methods for creating test instances of <see cref="TimelineItem"/>
-    /// and <see cref="TimelineItemDTO"/> objects for use in unit tests.
+    /// and <see cref="TimelineItemDto"/> objects for use in unit tests.
     /// </summary>
     public static class TimelineItemTestData
     {
@@ -61,43 +61,43 @@
         }
 
         /// <summary>
-        /// Creates a single <see cref="TimelineItemDTO"/> instance with predefined values.
+        /// Creates a single <see cref="TimelineItemDto"/> instance with predefined values.
         /// </summary>
         /// <param name="id">The ID of the timeline item DTO.</param>
-        /// <returns>A fully initialized <see cref="TimelineItemDTO"/> object for testing.</returns>
-        public static TimelineItemDTO CreateTimelineItemDTO(int id = 1)
+        /// <returns>A fully initialized <see cref="TimelineItemDto"/> object for testing.</returns>
+        public static TimelineItemDto CreateTimelineItemDTO(int id = 1)
         {
-            return new TimelineItemDTO
+            return new TimelineItemDto
             {
                 Id = id,
                 Date = new DateTime(1920, 1, 15),
                 DateViewPattern = DateViewPattern.DateMonthYear,
                 Title = "Founding of the Organization",
                 Description = "The organization was officially founded and began its operations.",
-                HistoricalContexts = new List<HistoricalContextDTO>(),
+                HistoricalContexts = new List<HistoricalContextDto>(),
             };
         }
 
         /// <summary>
-        /// Creates a collection of <see cref="TimelineItemDTO"/> objects with sequential IDs
+        /// Creates a collection of <see cref="TimelineItemDto"/> objects with sequential IDs
         /// and automatically increasing years.
         /// </summary>
         /// <param name="count">The number of DTO items to create.</param>
-        /// <returns>A list of <see cref="TimelineItemDTO"/> instances.</returns>
-        public static List<TimelineItemDTO> CreateTimelineItemDTOs(int count = 5)
+        /// <returns>A list of <see cref="TimelineItemDto"/> instances.</returns>
+        public static List<TimelineItemDto> CreateTimelineItemDTOs(int count = 5)
         {
-            var items = new List<TimelineItemDTO>(count);
+            var items = new List<TimelineItemDto>(count);
 
             for (int i = 0; i < count; ++i)
             {
-                items.Add(new TimelineItemDTO()
+                items.Add(new TimelineItemDto()
                 {
                     Id = i + 1,
                     Date = new DateTime(1920 + (i * 10), 1, 15),
                     DateViewPattern = DateViewPattern.DateMonthYear,
                     Title = $"Event {i + 1}",
                     Description = $"Description for event {i + 1}.",
-                    HistoricalContexts = new List<HistoricalContextDTO>(),
+                    HistoricalContexts = new List<HistoricalContextDto>(),
                 });
             }
 

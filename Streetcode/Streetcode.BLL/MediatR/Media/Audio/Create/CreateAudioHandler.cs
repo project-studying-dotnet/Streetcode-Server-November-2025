@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Media.Audio.Create;
 
-public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<AudioDTO>>
+public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<AudioDto>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -27,7 +27,7 @@ public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<Aud
         _logger = logger;
     }
 
-    public async Task<Result<AudioDTO>> Handle(CreateAudioCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AudioDto>> Handle(CreateAudioCommand request, CancellationToken cancellationToken)
     {
         string hashBlobStorageName = _blobService.SaveFileInStorage(
             request.Audio.BaseFormat,
@@ -42,7 +42,7 @@ public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<Aud
 
         var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
 
-        var createdAudio = _mapper.Map<AudioDTO>(audio);
+        var createdAudio = _mapper.Map<AudioDto>(audio);
 
         if(resultIsSuccess)
         {

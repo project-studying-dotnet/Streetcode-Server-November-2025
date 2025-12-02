@@ -58,9 +58,9 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetAll
             {
                 new SourceLinkCategory { Id = 1, Image = new DAL.Entities.Media.Images.Image { BlobName = "blob1" } },
             };
-            var dtos = new List<SourceLinkCategoryDTO>
+            var dtos = new List<SourceLinkCategoryDto>
             {
-                new SourceLinkCategoryDTO { Id = 1, Image = new ImageDTO { BlobName = "blob1" } },
+                new SourceLinkCategoryDto { Id = 1, Image = new ImageDto { BlobName = "blob1" } },
             };
             const string Base64String = "base64_string";
 
@@ -69,7 +69,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetAll
                 It.IsAny<Func<IQueryable<SourceLinkCategory>, IIncludableQueryable<SourceLinkCategory, object>>>()))
                 .ReturnsAsync(categories);
 
-            this.mockMapper.Setup(m => m.Map<IEnumerable<SourceLinkCategoryDTO>>(categories))
+            this.mockMapper.Setup(m => m.Map<IEnumerable<SourceLinkCategoryDto>>(categories))
                 .Returns(dtos);
 
             this.mockBlobService.Setup(b => b.FindFileInStorageAsBase64(It.IsAny<string>()))

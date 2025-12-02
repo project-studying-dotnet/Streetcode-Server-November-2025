@@ -75,29 +75,29 @@
         /// <summary>
         /// Configures the mocked <see cref="IMapper"/> to map a collection of
         /// <see cref="TimelineItem"/> entities to the corresponding collection of
-        /// <see cref="TimelineItemDTO"/> objects.
+        /// <see cref="TimelineItemDto"/> objects.
         /// </summary>
         /// <param name="mapperMock">The mocked mapper.</param>
         /// <param name="entities">The source TimelineItem entities.</param>
         /// <param name="dtos">The DTO collection to return.</param>
-        public static void SetupMapper(this Mock<IMapper> mapperMock, IEnumerable<TimelineItem> entities, IEnumerable<TimelineItemDTO> dtos)
+        public static void SetupMapper(this Mock<IMapper> mapperMock, IEnumerable<TimelineItem> entities, IEnumerable<TimelineItemDto> dtos)
         {
             mapperMock
-                .Setup(m => m.Map<IEnumerable<TimelineItemDTO>>(entities))
+                .Setup(m => m.Map<IEnumerable<TimelineItemDto>>(entities))
                 .Returns(dtos);
         }
 
         /// <summary>
         /// Configures the mocked <see cref="IMapper"/> to map a single <see cref="TimelineItem"/>
-        /// instance to a <see cref="TimelineItemDTO"/>.
+        /// instance to a <see cref="TimelineItemDto"/>.
         /// </summary>
         /// <param name="mapperMock">The mocked mapper.</param>
         /// <param name="entity">The source TimelineItem entity.</param>
         /// <param name="dto">The DTO to return.</param>
-        public static void SetupMapper(this Mock<IMapper> mapperMock, TimelineItem entity, TimelineItemDTO dto)
+        public static void SetupMapper(this Mock<IMapper> mapperMock, TimelineItem entity, TimelineItemDto dto)
         {
             mapperMock
-                .Setup(m => m.Map<TimelineItemDTO>(entity))
+                .Setup(m => m.Map<TimelineItemDto>(entity))
                 .Returns(dto);
         }
     }

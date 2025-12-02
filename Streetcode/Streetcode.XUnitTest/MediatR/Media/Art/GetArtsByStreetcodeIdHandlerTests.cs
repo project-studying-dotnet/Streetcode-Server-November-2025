@@ -171,14 +171,14 @@
                     return query;
                 });
 
-            this.mapperMock.Setup(m => m.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()))
+            this.mapperMock.Setup(m => m.Map<IEnumerable<ArtDto>>(It.IsAny<IEnumerable<Art>>()))
                 .Returns((IEnumerable<Art> artsList) =>
                 {
-                    return artsList.Select(a => new ArtDTO
+                    return artsList.Select(a => new ArtDto
                     {
                         Id = a.Id,
                         Image = a.Image is null ? null
-                        : new ImageDTO
+                        : new ImageDto
                         {
                              Id = a.Image.Id,
                              BlobName = a.Image.BlobName
