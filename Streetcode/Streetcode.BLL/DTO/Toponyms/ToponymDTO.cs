@@ -3,7 +3,7 @@ using Streetcode.BLL.DTO.Streetcode;
 
 namespace Streetcode.BLL.DTO.Toponyms;
 
-public class ToponymDTO
+public class ToponymDto
 {
     public int Id { get; set; }
     public string Oblast { get; set; }
@@ -14,6 +14,6 @@ public class ToponymDTO
     public string StreetName { get; set; }
     public string StreetType { get; set; }
 
-    public ToponymCoordinateDTO Coordinate { get; set; }
-    public IEnumerable<StreetcodeDTO> Streetcodes { get; set; }
+    public ToponymCoordinateDto Coordinate { get; set; }
+    public IEnumerable<StreetcodeDto> Streetcodes { get; set; }
 }

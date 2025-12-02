@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Streetcode.BLL.DTO.Sources
 {
-    public class StreetcodeCategoryContentDTO
+    public class StreetcodeCategoryContentDto
     {
         [Required]
         [MaxLength(1000)]

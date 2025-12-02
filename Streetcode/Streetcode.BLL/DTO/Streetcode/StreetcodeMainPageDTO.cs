@@ -8,7 +8,7 @@ using Streetcode.DAL.Entities.Streetcode.TextContent;
 
 namespace Streetcode.BLL.DTO.Streetcode
 {
-    public class StreetcodeMainPageDTO
+    public class StreetcodeMainPageDto
     {
         public int Id { get; set; }
         public string Title { get; set; }

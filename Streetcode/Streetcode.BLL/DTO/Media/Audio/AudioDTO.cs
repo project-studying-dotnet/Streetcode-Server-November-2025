@@ -2,7 +2,7 @@ using Streetcode.BLL.DTO.AdditionalContent;
 
 namespace Streetcode.BLL.DTO.Media.Audio;
 
-public class AudioDTO
+public class AudioDto
 {
   public int Id { get; set; }
   public string? Description { get; set; }

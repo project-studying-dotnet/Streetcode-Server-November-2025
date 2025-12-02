@@ -2,7 +2,7 @@ using Streetcode.BLL.DTO.AdditionalContent;
 
 namespace Streetcode.BLL.DTO.Transactions;
 
-public class TransactLinkDTO
+public class TransactLinkDto
 {
     public int Id { get; set; }
     public string? Url { get; set; }

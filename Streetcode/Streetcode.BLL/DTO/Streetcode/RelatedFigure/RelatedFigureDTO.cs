@@ -2,7 +2,7 @@ using Streetcode.BLL.DTO.AdditionalContent;
 
 namespace Streetcode.BLL.DTO.Streetcode.RelatedFigure;
 
-public class RelatedFigureDTO
+public class RelatedFigureDto
 {
   public int Id { get; set; }
   public string Title { get; set; }

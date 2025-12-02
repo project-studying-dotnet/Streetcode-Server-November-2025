@@ -3,7 +3,7 @@ using Streetcode.DAL.Enums;
 
 namespace Streetcode.BLL.DTO.Users
 {
-    public class UserDTO
+    public class UserDto
     {
         public int Id { get; set; }
         [Required]
