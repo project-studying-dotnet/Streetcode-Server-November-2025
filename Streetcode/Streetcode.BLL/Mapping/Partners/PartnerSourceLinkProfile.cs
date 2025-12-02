@@ -9,8 +9,8 @@ public class PartnerSourceLinkProfile : Profile
 {
     public PartnerSourceLinkProfile()
     {
-        CreateMap<PartnerSourceLink, PartnerSourceLinkDto>()
+        CreateMap<PartnerSourceLink, PartnerSourceLinkDtoo>()
             .ForPath(dto => dto.TargetUrl.Href, conf => conf.MapFrom(ol => ol.TargetUrl));
-        CreateMap<PartnerSourceLink, CreatePartnerSourceLinkDto>().ReverseMap();
+        CreateMap<PartnerSourceLink, CreatePartnerSourceLinkDtoo>().ReverseMap();
     }
 }

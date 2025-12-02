@@ -30,7 +30,7 @@ public class ImageController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] ImageFileBaseCreateDto image)
+    public async Task<IActionResult> Create([FromBody] ImageFileBaseCreateDtoo image)
     {
         return HandleResult(await Mediator.Send(new CreateImageCommand(image)));
     }

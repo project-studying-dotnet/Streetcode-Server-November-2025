@@ -4,4 +4,4 @@ using Streetcode.BLL.DTO.Media.Images;
 
 namespace Streetcode.BLL.MediatR.Media.Image.GetById;
 
-public record GetImageByIdQuery(int Id) : IRequest<Result<ImageDto>>;
+public record GetImageByIdQuery(int Id) : IRequest<Result<ImageDtoo>>;

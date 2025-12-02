@@ -10,7 +10,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Text.GetByStreetcodeId;
 
-public class GetTextByStreetcodeIdHandler : IRequestHandler<GetTextByStreetcodeIdQuery, Result<TextDto?>>
+public class GetTextByStreetcodeIdHandler : IRequestHandler<GetTextByStreetcodeIdQuery, Result<TextDtoo?>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -25,7 +25,7 @@ public class GetTextByStreetcodeIdHandler : IRequestHandler<GetTextByStreetcodeI
         _logger = logger;
     }
 
-    public async Task<Result<TextDto?>> Handle(GetTextByStreetcodeIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<TextDtoo?>> Handle(GetTextByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
         var text = await _repositoryWrapper.TextRepository
             .GetFirstOrDefaultAsync(text => text.StreetcodeId == request.StreetcodeId);
@@ -41,11 +41,11 @@ public class GetTextByStreetcodeIdHandler : IRequestHandler<GetTextByStreetcodeI
             }
         }
 
-        NullResult<TextDto?> result = new NullResult<TextDto?>();
+        NullResult<TextDtoo?> result = new NullResult<TextDtoo?>();
         if (text != null)
         {
             text.TextContent = await _textService.AddTermsTag(text?.TextContent ?? "");
-            result.WithValue(_mapper.Map<TextDto?>(text));
+            result.WithValue(_mapper.Map<TextDtoo?>(text));
         }
 
         return result;

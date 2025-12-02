@@ -68,7 +68,7 @@
             result.Errors.Should().ContainSingle(e => e.Message == NewsNotFoundByUrlErrorMessageTemplate);
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDtoo>(this.mapperMock, Times.Once());
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NewsNotFoundByUrlErrorMessageTemplate);
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
@@ -100,7 +100,7 @@
             result.Value.Should().BeEquivalentTo(newsDto);
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDtoo>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
@@ -136,7 +136,7 @@
             result.Value.Should().BeEquivalentTo(newsDto);
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDtoo>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 1);
         }
     }

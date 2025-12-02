@@ -40,7 +40,7 @@ public class GetStreetcodeByIdHandler : IRequestHandler<GetStreetcodeByIdQuery, 
                                             t => t.StreetcodeId == request.Id,
                                             include: q => q.Include(ti => ti.Tag));
         var streetcodeDto = _mapper.Map<StreetcodeDto>(streetcode);
-        streetcodeDto.Tags = _mapper.Map<List<StreetcodeTagDto>>(tagIndexed);
+        streetcodeDto.Tags = _mapper.Map<List<StreetcodeTagDtoo>>(tagIndexed);
 
         return Result.Ok(streetcodeDto);
     }

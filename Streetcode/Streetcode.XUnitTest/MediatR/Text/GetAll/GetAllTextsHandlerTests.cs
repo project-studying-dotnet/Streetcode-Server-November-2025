@@ -52,12 +52,12 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetAll
         {
             // Arrange
             var textsList = new List<Text> { new Text { Id = 1 }, new Text { Id = 2 } };
-            var textsDtoList = new List<TextDto> { new TextDto { Id = 1 }, new TextDto { Id = 2 } };
+            var textsDtoList = new List<TextDtoo> { new TextDtoo { Id = 1 }, new TextDtoo { Id = 2 } };
 
             mockRepoWrapper.Setup(r => r.TextRepository.GetAllAsync(null, null))
                 .ReturnsAsync(textsList);
 
-            mockMapper.Setup(m => m.Map<IEnumerable<TextDto>>(textsList))
+            mockMapper.Setup(m => m.Map<IEnumerable<TextDtoo>>(textsList))
                 .Returns(textsDtoList);
 
             // Act
@@ -77,12 +77,12 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetAll
         {
             // Arrange
             var emptyList = new List<Text>();
-            var emptyDtoList = new List<TextDto>();
+            var emptyDtoList = new List<TextDtoo>();
 
             mockRepoWrapper.Setup(r => r.TextRepository.GetAllAsync(null, null))
                 .ReturnsAsync(emptyList);
 
-            mockMapper.Setup(m => m.Map<IEnumerable<TextDto>>(emptyList))
+            mockMapper.Setup(m => m.Map<IEnumerable<TextDtoo>>(emptyList))
                 .Returns(emptyDtoList);
 
             // Act

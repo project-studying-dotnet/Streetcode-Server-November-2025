@@ -8,10 +8,10 @@ public class AudioProfile : Profile
 {
     public AudioProfile()
     {
-        CreateMap<Audio, AudioDto>()
+        CreateMap<Audio, AudioDtoo>()
             .ForMember(dest => dest.MimeType, opt => opt.MapFrom(src => src.MimeType));
 
-        CreateMap<AudioFileBaseCreateDto, Audio>()
+        CreateMap<AudioFileBaseCreateDtoo, Audio>()
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.MimeType, opt => opt.MapFrom(src => src.MimeType));
 	}

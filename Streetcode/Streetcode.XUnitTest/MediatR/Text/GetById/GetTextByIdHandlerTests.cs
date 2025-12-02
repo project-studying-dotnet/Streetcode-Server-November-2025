@@ -43,14 +43,14 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetById
             // Arrange
             int id = 1;
             var textEntity = new Text { Id = id, TextContent = "content" };
-            var textDto = new TextDto { Id = id, TextContent = "content" };
+            var textDto = new TextDtoo { Id = id, TextContent = "content" };
             var query = new GetTextByIdQuery(id);
 
             mockRepoWrapper.Setup(r => r.TextRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Text, bool>>>(), null))
                 .ReturnsAsync(textEntity);
 
-            mockMapper.Setup(m => m.Map<TextDto>(textEntity)).Returns(textDto);
+            mockMapper.Setup(m => m.Map<TextDtoo>(textEntity)).Returns(textDto);
 
             // Act
             var result = await handler.Handle(query, CancellationToken.None);

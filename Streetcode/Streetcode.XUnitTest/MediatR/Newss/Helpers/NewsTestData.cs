@@ -21,9 +21,9 @@
             };
         }
 
-        public static NewsDto CreateNewsDTO(int id = 1, string title = "Test News", int? imageId = 1)
+        public static NewsDtoo CreateNewsDTO(int id = 1, string title = "Test News", int? imageId = 1)
         {
-            return new NewsDto
+            return new NewsDtoo
             {
                 Id = id,
                 Title = title,
@@ -35,9 +35,9 @@
             };
         }
 
-        public static ImageDto CreateImageDTO(int id = 1)
+        public static ImageDtoo CreateImageDTO(int id = 1)
         {
-            return new ImageDto
+            return new ImageDtoo
             {
                 Id = id,
                 BlobName = $"test-blob-{id}",
@@ -66,7 +66,7 @@
                 .ToList();
         }
 
-        public static List<NewsDto> CreateNewsDTOList(int count = 3, bool withImages = true)
+        public static List<NewsDtoo> CreateNewsDTOList(int count = 3, bool withImages = true)
         {
             return Enumerable.Range(1, count)
                 .Select(i => CreateNewsDTO(
@@ -96,9 +96,9 @@
             };
         }
 
-        public static NewsDto CreateNewsDTOWithDate(int id, DateTime creationDate, bool withImage = false)
+        public static NewsDtoo CreateNewsDTOWithDate(int id, DateTime creationDate, bool withImage = false)
         {
-            return new NewsDto
+            return new NewsDtoo
             {
                 Id = id,
                 Title = $"News {id}",
@@ -106,7 +106,7 @@
                 URL = $"test-url-{id}",
                 CreationDate = creationDate,
                 ImageId = withImage ? id : null,
-                Image = withImage ? new ImageDto
+                Image = withImage ? new ImageDtoo
                 {
                     Id = id,
                     BlobName = $"blob-{id}",

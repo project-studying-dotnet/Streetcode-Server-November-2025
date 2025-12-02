@@ -119,10 +119,10 @@
                 .ReturnsAsync(teamMembers?.Where(m => m.IsMain));
         }
 
-        private void SetupMapper(IEnumerable<TeamMemberDto> teamMemberDTOs)
+        private void SetupMapper(IEnumerable<TeamMemberDtoo> teamMemberDTOs)
         {
             this.mockMapper
-                .Setup(m => m.Map<IEnumerable<TeamMemberDto>>(It.IsAny<IEnumerable<TeamMember>>()))
+                .Setup(m => m.Map<IEnumerable<TeamMemberDtoo>>(It.IsAny<IEnumerable<TeamMember>>()))
                 .Returns(teamMemberDTOs);
         }
 
@@ -132,10 +132,10 @@
             new TeamMember { Id = 2, IsMain = true },
         };
 
-        private static List<TeamMemberDto> GetTestMainTeamMemberDTOsOnly() => new List<TeamMemberDto>
+        private static List<TeamMemberDtoo> GetTestMainTeamMemberDTOsOnly() => new List<TeamMemberDtoo>
         {
-            new TeamMemberDto { Id = 1, IsMain = true },
-            new TeamMemberDto { Id = 2, IsMain = true },
+            new TeamMemberDtoo { Id = 1, IsMain = true },
+            new TeamMemberDtoo { Id = 2, IsMain = true },
         };
 
         private static List<TeamMember> GetTestMixedTeamMembers() => new List<TeamMember>
@@ -145,11 +145,11 @@
             new TeamMember { Id = 5, IsMain = false },
         };
 
-        private static List<TeamMemberDto> GetTestMixedTeamMemberDTOs() => new List<TeamMemberDto>
+        private static List<TeamMemberDtoo> GetTestMixedTeamMemberDTOs() => new List<TeamMemberDtoo>
         {
-            new TeamMemberDto { Id = 1, IsMain = true },
-            new TeamMemberDto { Id = 4, IsMain = false },
-            new TeamMemberDto { Id = 5, IsMain = false },
+            new TeamMemberDtoo { Id = 1, IsMain = true },
+            new TeamMemberDtoo { Id = 4, IsMain = false },
+            new TeamMemberDtoo { Id = 5, IsMain = false },
         };
     }
 }

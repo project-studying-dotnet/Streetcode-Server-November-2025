@@ -67,12 +67,12 @@
 
             // Verify
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NoNewsInDatabaseErrorMessage);
-            MockMapperHelper.VerifyMapCollection<News, NewsDto>(this.mapperMock, Times.Never());
+            MockMapperHelper.VerifyMapCollection<News, NewsDtoo>(this.mapperMock, Times.Never());
         }
 
         /// <summary>
         /// Tests the scenario when the repository returns a non-empty news collection without images.
-        /// Ensures that the handler returns a successful <see cref="Result{T}"/> with news sorted by <see cref="NewsDto.CreationDate"/> descending,
+        /// Ensures that the handler returns a successful <see cref="Result{T}"/> with news sorted by <see cref="NewsDtoo.CreationDate"/> descending,
         /// does not call the blob service for image Base64, and calls the mapper exactly once.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
@@ -87,7 +87,7 @@
                 NewsTestData.CreateNewsWithDate(3, new DateTime(2024, 1, 10)),
             };
 
-            var newsDTOList = new List<NewsDto>
+            var newsDTOList = new List<NewsDtoo>
             {
                 NewsTestData.CreateNewsDTOWithDate(1, new DateTime(2024, 1, 15)),
                 NewsTestData.CreateNewsDTOWithDate(2, new DateTime(2024, 1, 25)),
@@ -110,12 +110,12 @@
 
             // Verify
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
-            MockMapperHelper.VerifyMapCollection<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMapCollection<News, NewsDtoo>(this.mapperMock, Times.Once());
         }
 
         /// <summary>
         /// Tests the scenario when the repository returns a non-empty news collection with images.
-        /// Ensures that the handler returns a successful <see cref="Result{T}"/> with news sorted by <see cref="NewsDto.CreationDate"/> descending,
+        /// Ensures that the handler returns a successful <see cref="Result{T}"/> with news sorted by <see cref="NewsDtoo.CreationDate"/> descending,
         /// populates the <see cref="ImageDTO.Base64"/> field for each news, and calls the mapper and blob service the correct number of times.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
@@ -129,7 +129,7 @@
                 NewsTestData.CreateNewsWithDate(2, new DateTime(2024, 2, 20), withImage: true),
             };
 
-            var newsDTOList = new List<NewsDto>
+            var newsDTOList = new List<NewsDtoo>
             {
                 NewsTestData.CreateNewsDTOWithDate(1, new DateTime(2024, 2, 10), withImage: true),
                 NewsTestData.CreateNewsDTOWithDate(2, new DateTime(2024, 2, 20), withImage: true),
@@ -153,7 +153,7 @@
 
             // Verify
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 2);
-            MockMapperHelper.VerifyMapCollection<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMapCollection<News, NewsDtoo>(this.mapperMock, Times.Once());
         }
     }
 }

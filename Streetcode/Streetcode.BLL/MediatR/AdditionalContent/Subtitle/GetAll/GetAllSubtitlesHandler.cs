@@ -7,7 +7,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.AdditionalContent.Subtitle.GetAll;
 
-public class GetAllSubtitlesHandler : IRequestHandler<GetAllSubtitlesQuery, Result<IEnumerable<SubtitleDto>>>
+public class GetAllSubtitlesHandler : IRequestHandler<GetAllSubtitlesQuery, Result<IEnumerable<SubtitleDtoo>>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -20,7 +20,7 @@ public class GetAllSubtitlesHandler : IRequestHandler<GetAllSubtitlesQuery, Resu
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<SubtitleDto>>> Handle(GetAllSubtitlesQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<SubtitleDtoo>>> Handle(GetAllSubtitlesQuery request, CancellationToken cancellationToken)
     {
         var subtitles = await _repositoryWrapper.SubtitleRepository.GetAllAsync();
 
@@ -32,6 +32,6 @@ public class GetAllSubtitlesHandler : IRequestHandler<GetAllSubtitlesQuery, Resu
             return Result.Fail(new Error(errorMsg));
         }
 
-        return Result.Ok(_mapper.Map<IEnumerable<SubtitleDto>>(subtitles));
+        return Result.Ok(_mapper.Map<IEnumerable<SubtitleDtoo>>(subtitles));
     }
 }

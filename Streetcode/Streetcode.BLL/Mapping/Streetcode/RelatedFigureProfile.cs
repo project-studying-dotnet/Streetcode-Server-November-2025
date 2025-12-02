@@ -9,7 +9,7 @@ public class RelatedFigureProfile : Profile
 {
     public RelatedFigureProfile()
     {
-        CreateMap<EventStreetcode, RelatedFigureDto>()
+        CreateMap<EventStreetcode, RelatedFigureDtoo>()
             .ForPath(dto => dto.Title, conf => conf
                 .MapFrom(e => e.Title))
             .ForPath(dto => dto.Url, conf => conf
@@ -17,7 +17,7 @@ public class RelatedFigureProfile : Profile
             .ForPath(dto => dto.ImageId, conf => conf
                 .MapFrom(e => e.Images.Select(i => i.Id).LastOrDefault()));
 
-        CreateMap<PersonStreetcode, RelatedFigureDto>()
+        CreateMap<PersonStreetcode, RelatedFigureDtoo>()
             .ForPath(dto => dto.Url, conf => conf
                 .MapFrom(e => e.TransliterationUrl))
             .ForPath(dto => dto.ImageId, conf => conf

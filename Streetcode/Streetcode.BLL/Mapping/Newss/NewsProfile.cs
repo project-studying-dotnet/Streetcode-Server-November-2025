@@ -8,7 +8,7 @@ namespace Streetcode.BLL.Mapping.Newss
     {
         public NewsProfile()
         {
-            CreateMap<News, NewsDto>().ReverseMap();
+            CreateMap<News, NewsDtoo>().ReverseMap();
         }
     }
 }

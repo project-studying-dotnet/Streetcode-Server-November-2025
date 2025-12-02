@@ -1,0 +1,13 @@
+using Streetcode.BLL.DTO.Streetcode;
+
+namespace Streetcode.BLL.DTO.Media.Images;
+
+public class ImageDtoo
+{
+    public int Id { get; set; }
+
+    public string? BlobName { get; set; }
+    public string? Base64 { get; set; }
+    public string? MimeType { get; set; }
+    public ImageDetailsDtoo? ImageDetails { get; set; }
+}

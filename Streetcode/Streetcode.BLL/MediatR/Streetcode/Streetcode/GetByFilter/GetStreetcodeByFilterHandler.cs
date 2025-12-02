@@ -12,7 +12,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetByFilter
 {
-    public class GetStreetcodeByFilterHandler : IRequestHandler<GetStreetcodeByFilterQuery, Result<List<StreetcodeFilterResultDto>>>
+    public class GetStreetcodeByFilterHandler : IRequestHandler<GetStreetcodeByFilterQuery, Result<List<StreetcodeFilterResultDtoo>>>
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly ILoggerService _logger;
@@ -23,11 +23,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetByFilter
             _logger = logger;
         }
 
-        public async Task<Result<List<StreetcodeFilterResultDto>>> Handle(GetStreetcodeByFilterQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<StreetcodeFilterResultDtoo>>> Handle(GetStreetcodeByFilterQuery request, CancellationToken cancellationToken)
         {
             string searchQuery = request.Filter.SearchQuery;
 
-            var results = new List<StreetcodeFilterResultDto>();
+            var results = new List<StreetcodeFilterResultDtoo>();
 
             var streetcodes = await _repositoryWrapper.StreetcodeRepository.GetAllAsync(
                  predicate: x =>
@@ -121,9 +121,9 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetByFilter
             return results;
         }
 
-        private StreetcodeFilterResultDto CreateFilterResult(StreetcodeContent streetcode, string content, string? sourceName = null, string? blockName = null)
+        private StreetcodeFilterResultDtoo CreateFilterResult(StreetcodeContent streetcode, string content, string? sourceName = null, string? blockName = null)
         {
-            return new StreetcodeFilterResultDto
+            return new StreetcodeFilterResultDtoo
             {
                 StreetcodeId = streetcode.Id,
                 StreetcodeTransliterationUrl = streetcode.TransliterationUrl,

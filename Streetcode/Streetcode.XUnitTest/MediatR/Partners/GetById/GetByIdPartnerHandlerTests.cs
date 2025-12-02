@@ -150,7 +150,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsSuccess.Should().BeTrue();
             this.MockMapper.Verify(
-                mapper => mapper.Map<PartnerDto>(partner),
+                mapper => mapper.Map<PartnerDtoo>(partner),
                 Times.Once);
         }
 

@@ -66,9 +66,9 @@
             result.Value.Should().BeEquivalentTo(dto);
 
             // Verify
-            MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<NewsDtoo, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
-            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDtoo>(this.mapperMock, Times.Once());
         }
 
         /// <summary>
@@ -97,9 +97,9 @@
             entity.ImageId.Should().BeNull();
 
             // Verify
-            MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<NewsDtoo, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
-            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDtoo>(this.mapperMock, Times.Once());
         }
 
         /// <summary>
@@ -124,7 +124,7 @@
             result.Errors.Should().ContainSingle(e => e.Message == ErrorMsgMapper);
 
             // Verify
-            MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<NewsDtoo, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateNever(this.repoMock);
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMsgMapper);
         }
@@ -154,7 +154,7 @@
             result.Errors.Should().ContainSingle(e => e.Message == ErrorMsgSave);
 
             // Verify
-            MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<NewsDtoo, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMsgSave);
         }

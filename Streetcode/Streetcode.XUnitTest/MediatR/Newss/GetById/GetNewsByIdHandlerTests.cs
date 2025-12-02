@@ -68,7 +68,7 @@
             result.Errors.Should().ContainSingle(e => e.Message == expectedErrorMessage);
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDtoo>(this.mapperMock, Times.Once());
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, expectedErrorMessage);
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
@@ -86,7 +86,7 @@
             var newsDto = NewsTestData.CreateNewsDTO(NewsId, imageId: null);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, news);
-            MockMapperHelper.SetupMapper<News, NewsDto>(this.mapperMock, news, newsDto);
+            MockMapperHelper.SetupMapper<News, NewsDtoo>(this.mapperMock, news, newsDto);
 
             var query = new GetNewsByIdQuery(NewsId);
 
@@ -99,7 +99,7 @@
             result.Value.Image.Should().BeNull();
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDtoo>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
@@ -131,7 +131,7 @@
             result.Value.Image?.Base64.Should().Be(Base64Content);
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDtoo>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 1);
         }
     }

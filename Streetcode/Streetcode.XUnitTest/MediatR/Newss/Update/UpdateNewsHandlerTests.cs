@@ -52,7 +52,7 @@
         }
 
         /// <summary>
-        /// Tests the scenario when mapping from <see cref="NewsDto"/> to <see cref="News"/> returns null.
+        /// Tests the scenario when mapping from <see cref="NewsDtoo"/> to <see cref="News"/> returns null.
         /// Ensures that the handler returns a failed result with an appropriate error message.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous test execution.</returns>
@@ -62,7 +62,7 @@
             // Arrange
             var newsDto = NewsTestData.CreateNewsDTO(NewsId);
 
-            MockMapperHelper.SetupMapper<NewsDto, News>(this.mapperMock, newsDto, null);
+            MockMapperHelper.SetupMapper<NewsDtoo, News>(this.mapperMock, newsDto, null);
 
             var command = new UpdateNewsCommand(newsDto);
 
@@ -74,7 +74,7 @@
             result.Errors.Should().ContainSingle(e => e.Message.Contains(MappingNullErrorMessage));
 
             // Verify
-            MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<NewsDtoo, News>(this.mapperMock, Times.Once());
             MockLoggerHelper.VerifyLogErrorOnce(this.loggerMock);
         }
 
@@ -90,8 +90,8 @@
             var dto = NewsTestData.CreateNewsDTO(NewsId);
             var entity = NewsTestData.CreateNews(NewsId);
 
-            MockMapperHelper.SetupMapper<NewsDto, News>(this.mapperMock, dto, entity);
-            MockMapperHelper.SetupMapper<News, NewsDto>(this.mapperMock, entity, dto);
+            MockMapperHelper.SetupMapper<NewsDtoo, News>(this.mapperMock, dto, entity);
+            MockMapperHelper.SetupMapper<News, NewsDtoo>(this.mapperMock, entity, dto);
 
             MockRepoHelper.SetupUpdate(this.repoMock);
 
@@ -126,10 +126,10 @@
             var entity = NewsTestData.CreateNews(NewsId);
 
             entity.Image = new Image { BlobName = BlobNameFile };
-            dto.Image = new ImageDto { BlobName = BlobNameFile };
+            dto.Image = new ImageDtoo { BlobName = BlobNameFile };
 
-            MockMapperHelper.SetupMapper<NewsDto, News>(this.mapperMock, dto, entity);
-            MockMapperHelper.SetupMapper<News, NewsDto>(this.mapperMock, entity, dto);
+            MockMapperHelper.SetupMapper<NewsDtoo, News>(this.mapperMock, dto, entity);
+            MockMapperHelper.SetupMapper<News, NewsDtoo>(this.mapperMock, entity, dto);
 
             MockBlobServiceHelper.SetupBlobService(this.blobServiceMock, Base64Data);
 
@@ -170,8 +170,8 @@
 
             var oldImage = new Image { Id = dto.ImageId.Value, BlobName = OldBlobName };
 
-            MockMapperHelper.SetupMapper<NewsDto, News>(this.mapperMock, dto, entity);
-            MockMapperHelper.SetupMapper<News, NewsDto>(this.mapperMock, entity, dto);
+            MockMapperHelper.SetupMapper<NewsDtoo, News>(this.mapperMock, dto, entity);
+            MockMapperHelper.SetupMapper<News, NewsDtoo>(this.mapperMock, entity, dto);
 
             MockRepoHelper.SetupGetImageById(this.repoMock, oldImage);
 
@@ -208,8 +208,8 @@
             entity.Image = null;
             dto.ImageId = null;
 
-            MockMapperHelper.SetupMapper<NewsDto, News>(this.mapperMock, dto, entity);
-            MockMapperHelper.SetupMapper<News, NewsDto>(this.mapperMock, entity, dto);
+            MockMapperHelper.SetupMapper<NewsDtoo, News>(this.mapperMock, dto, entity);
+            MockMapperHelper.SetupMapper<News, NewsDtoo>(this.mapperMock, entity, dto);
             MockRepoHelper.SetupGetImageById(this.repoMock, null);
             MockRepoHelper.SetupUpdate(this.repoMock);
             MockRepoHelper.SetupSaveSuccess(this.repoMock);

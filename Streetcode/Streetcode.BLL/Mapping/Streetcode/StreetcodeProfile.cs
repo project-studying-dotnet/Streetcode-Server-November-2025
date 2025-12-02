@@ -14,7 +14,7 @@ public class StreetcodeProfile : Profile
             .ForMember(x => x.StreetcodeType, conf => conf.MapFrom(s => GetStreetcodeType(s)))
             .ReverseMap();
         CreateMap<StreetcodeContent, StreetcodeShortDto>().ReverseMap();
-        CreateMap<StreetcodeContent, StreetcodeMainPageDto>()
+        CreateMap<StreetcodeContent, StreetcodeMainPageDtoo>()
              .ForPath(dto => dto.Text, conf => conf
                 .MapFrom(e => e.Text.Title))
             .ForPath(dto => dto.ImageId, conf => conf

@@ -9,7 +9,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.AdditionalContent.Tag.GetAll;
 
-public class GetAllTagsHandler : IRequestHandler<GetAllTagsQuery, Result<IEnumerable<TagDto>>>
+public class GetAllTagsHandler : IRequestHandler<GetAllTagsQuery, Result<IEnumerable<TagDtoo>>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -22,7 +22,7 @@ public class GetAllTagsHandler : IRequestHandler<GetAllTagsQuery, Result<IEnumer
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<TagDto>>> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<TagDtoo>>> Handle(GetAllTagsQuery request, CancellationToken cancellationToken)
     {
         var tags = await _repositoryWrapper.TagRepository.GetAllAsync();
 
@@ -33,6 +33,6 @@ public class GetAllTagsHandler : IRequestHandler<GetAllTagsQuery, Result<IEnumer
             return Result.Fail(new Error(errorMsg));
         }
 
-        return Result.Ok(_mapper.Map<IEnumerable<TagDto>>(tags));
+        return Result.Ok(_mapper.Map<IEnumerable<TagDtoo>>(tags));
     }
 }

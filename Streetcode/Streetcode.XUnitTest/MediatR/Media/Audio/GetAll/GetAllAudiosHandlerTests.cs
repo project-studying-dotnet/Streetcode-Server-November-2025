@@ -68,30 +68,30 @@
             this.VerifyLoggerErrorCalledOnce(errorMsg);
         }
 
-        private static (IEnumerable<Audio> AudioEntities, IEnumerable<AudioDto> AudioDtos) CreateValidAudioEntitiesAndDTOs()
+        private static (IEnumerable<Audio> AudioEntities, IEnumerable<AudioDtoo> AudioDtos) CreateValidAudioEntitiesAndDTOs()
         {
             var audioEntities = new List<Audio>
             {
                 new Audio { Id = 1, BlobName = "audio1.mp3" },
                 new Audio { Id = 2, BlobName = "audio2.mp3" },
             };
-            var audioDtos = new List<AudioDto>
+            var audioDtos = new List<AudioDtoo>
             {
-                new AudioDto { Id = 1, Base64 = "base64string1" },
-                new AudioDto { Id = 2, Base64 = "base64string2" },
+                new AudioDtoo { Id = 1, Base64 = "base64string1" },
+                new AudioDtoo { Id = 2, Base64 = "base64string2" },
             };
             return (audioEntities, audioDtos);
         }
 
-        private static (IEnumerable<Audio>? AudioEntities, IEnumerable<AudioDto>? AudioDtos) CreateNullAudioEntitiesAndDTOs()
+        private static (IEnumerable<Audio>? AudioEntities, IEnumerable<AudioDtoo>? AudioDtos) CreateNullAudioEntitiesAndDTOs()
         {
             List<Audio>? audioEntities = null;
-            List<AudioDto>? audioDtos = null;
+            List<AudioDtoo>? audioDtos = null;
 
             return (audioEntities, audioDtos);
         }
 
-        private void SetupMock(IEnumerable<Audio> audioEntities, IEnumerable<AudioDto> audioDtos)
+        private void SetupMock(IEnumerable<Audio> audioEntities, IEnumerable<AudioDtoo> audioDtos)
         {
             this.mockRepo.Setup(r => r.AudioRepository.GetAllAsync(
                     It.IsAny<Expression<Func<Audio, bool>>>(),
@@ -99,7 +99,7 @@
                 .ReturnsAsync(audioEntities);
 
             this.mockMapper
-                .Setup(m => m.Map<IEnumerable<AudioDto>>(It.IsAny<IEnumerable<Audio>>()))
+                .Setup(m => m.Map<IEnumerable<AudioDtoo>>(It.IsAny<IEnumerable<Audio>>()))
                 .Returns(audioDtos);
 
             this.mockBlob
@@ -116,7 +116,7 @@
                 Times.Once);
 
             this.mockMapper.Verify(
-                m => m.Map<IEnumerable<AudioDto>>(It.IsAny<IEnumerable<Audio>>()),
+                m => m.Map<IEnumerable<AudioDtoo>>(It.IsAny<IEnumerable<Audio>>()),
                 Times.Once);
 
             this.mockBlob.Verify(

@@ -10,7 +10,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Sources.SourceLink.GetCategoryById;
 
-public class GetCategoryByIdHandler : IRequestHandler<GetCategoryByIdQuery, Result<SourceLinkCategoryDto>>
+public class GetCategoryByIdHandler : IRequestHandler<GetCategoryByIdQuery, Result<SourceLinkCategoryDtoo>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -29,7 +29,7 @@ public class GetCategoryByIdHandler : IRequestHandler<GetCategoryByIdQuery, Resu
         _logger = logger;
     }
 
-    public async Task<Result<SourceLinkCategoryDto>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<SourceLinkCategoryDtoo>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
     {
         var srcCategories = await _repositoryWrapper
             .SourceCategoryRepository
@@ -46,7 +46,7 @@ public class GetCategoryByIdHandler : IRequestHandler<GetCategoryByIdQuery, Resu
             return Result.Fail(new Error(errorMsg));
         }
 
-        var mappedSrcCategories = _mapper.Map<SourceLinkCategoryDto>(srcCategories);
+        var mappedSrcCategories = _mapper.Map<SourceLinkCategoryDtoo>(srcCategories);
 
         mappedSrcCategories.Image.Base64 = _blobService.FindFileInStorageAsBase64(mappedSrcCategories.Image.BlobName);
 

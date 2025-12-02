@@ -35,7 +35,7 @@
             var email = "test@test.com";
             var content = "test content";
 
-            SendEmailCommand command = new SendEmailCommand(new EmailDto()
+            SendEmailCommand command = new SendEmailCommand(new EmailDtoo()
             {
                 From = email,
                 Content = content,
@@ -72,7 +72,7 @@
             var email = "fail@email.com";
             var content = "fail attempt";
 
-            SendEmailCommand command = new SendEmailCommand(new EmailDto()
+            SendEmailCommand command = new SendEmailCommand(new EmailDtoo()
             {
                 From = email,
                 Content = content,

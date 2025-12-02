@@ -34,7 +34,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         /// </summary>
         /// <param name="id">The partner ID.</param>
         /// <returns>A PartnerDto.</returns>
-        public static PartnerDto CreatePartnerDTO(int id = 1)
+        public static PartnerDtoo CreatePartnerDTO(int id = 1)
             => new ()
             {
                 Id = id,
@@ -78,9 +78,9 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         /// </summary>
         /// <param name="count">The number of DTOs to create.</param>
         /// <returns>A list of PartnerDTOs.</returns>
-        public static List<PartnerDto> CreatePartnerDTOs(int count)
+        public static List<PartnerDtoo> CreatePartnerDTOs(int count)
         {
-            var dtos = new List<PartnerDto>();
+            var dtos = new List<PartnerDtoo>();
             for (int i = 1; i <= count; i++)
             {
                 dtos.Add(CreatePartnerDTO(i));

@@ -7,7 +7,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Term.GetById;
 
-public class GetTermByIdHandler : IRequestHandler<GetTermByIdQuery, Result<TermDto>>
+public class GetTermByIdHandler : IRequestHandler<GetTermByIdQuery, Result<TermDtoo>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -20,7 +20,7 @@ public class GetTermByIdHandler : IRequestHandler<GetTermByIdQuery, Result<TermD
         _logger = logger;
     }
 
-    public async Task<Result<TermDto>> Handle(GetTermByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<TermDtoo>> Handle(GetTermByIdQuery request, CancellationToken cancellationToken)
     {
         var term = await _repositoryWrapper.TermRepository.GetFirstOrDefaultAsync(f => f.Id == request.Id);
 
@@ -31,6 +31,6 @@ public class GetTermByIdHandler : IRequestHandler<GetTermByIdQuery, Result<TermD
             return Result.Fail(new Error(errorMsg));
         }
 
-        return Result.Ok(_mapper.Map<TermDto>(term));
+        return Result.Ok(_mapper.Map<TermDtoo>(term));
     }
 }

@@ -9,6 +9,6 @@ public class StreetcodeArtProfile : Profile
 {
     public StreetcodeArtProfile()
     {
-        CreateMap<StreetcodeArt, StreetcodeArtDto>().ReverseMap();
+        CreateMap<StreetcodeArt, StreetcodeArtDtoo>().ReverseMap();
     }
 }

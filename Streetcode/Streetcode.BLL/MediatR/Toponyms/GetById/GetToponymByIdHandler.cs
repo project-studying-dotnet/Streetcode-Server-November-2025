@@ -7,7 +7,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Toponyms.GetById;
 
-public class GetToponymByIdHandler : IRequestHandler<GetToponymByIdQuery, Result<ToponymDto>>
+public class GetToponymByIdHandler : IRequestHandler<GetToponymByIdQuery, Result<ToponymDtoo>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -20,7 +20,7 @@ public class GetToponymByIdHandler : IRequestHandler<GetToponymByIdQuery, Result
         _logger = logger;
     }
 
-    public async Task<Result<ToponymDto>> Handle(GetToponymByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<ToponymDtoo>> Handle(GetToponymByIdQuery request, CancellationToken cancellationToken)
     {
         var toponym = await _repositoryWrapper.ToponymRepository
             .GetFirstOrDefaultAsync(f => f.Id == request.Id);
@@ -32,6 +32,6 @@ public class GetToponymByIdHandler : IRequestHandler<GetToponymByIdQuery, Result
             return Result.Fail(new Error(errorMsg));
         }
 
-        return Result.Ok(_mapper.Map<ToponymDto>(toponym));
+        return Result.Ok(_mapper.Map<ToponymDtoo>(toponym));
     }
 }

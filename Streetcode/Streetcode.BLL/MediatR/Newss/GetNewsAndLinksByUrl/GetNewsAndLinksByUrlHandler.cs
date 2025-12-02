@@ -10,7 +10,7 @@ using Streetcode.BLL.Interfaces.Logging;
 
 namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
 {
-    public class GetNewsAndLinksByUrlHandler : IRequestHandler<GetNewsAndLinksByUrlQuery, Result<NewsDtoWithUrls>>
+    public class GetNewsAndLinksByUrlHandler : IRequestHandler<GetNewsAndLinksByUrlQuery, Result<NewsDtooWithUrls>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -24,10 +24,10 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
             _logger = logger;
         }
 
-        public async Task<Result<NewsDtoWithUrls>> Handle(GetNewsAndLinksByUrlQuery request, CancellationToken cancellationToken)
+        public async Task<Result<NewsDtooWithUrls>> Handle(GetNewsAndLinksByUrlQuery request, CancellationToken cancellationToken)
         {
             string url = request.url;
-            var newsDTO = _mapper.Map<NewsDto>(await _repositoryWrapper.NewsRepository.GetFirstOrDefaultAsync(
+            var newsDTO = _mapper.Map<NewsDtoo>(await _repositoryWrapper.NewsRepository.GetFirstOrDefaultAsync(
                 predicate: sc => sc.URL == url,
                 include: scl => scl
                     .Include(sc => sc.Image)));
@@ -59,7 +59,7 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
                 nextNewsLink = news[newsIndex + 1].URL;
             }
 
-            var randomNewsTitleAndLink = new RandomNewsDto();
+            var randomNewsTitleAndLink = new RandomNewsDtoo();
 
             var arrCount = news.Count;
             if (arrCount > 3)
@@ -81,7 +81,7 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
                 randomNewsTitleAndLink.Title = news[newsIndex].Title;
             }
 
-            var newsDTOWithUrls = new NewsDtoWithUrls();
+            var newsDTOWithUrls = new NewsDtooWithUrls();
             newsDTOWithUrls.RandomNews = randomNewsTitleAndLink;
             newsDTOWithUrls.News = newsDTO;
             newsDTOWithUrls.NextNewsUrl = nextNewsLink;

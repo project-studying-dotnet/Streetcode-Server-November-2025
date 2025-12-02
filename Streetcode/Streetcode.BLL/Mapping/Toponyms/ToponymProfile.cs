@@ -8,6 +8,6 @@ public class ToponymProfile : Profile
 {
     public ToponymProfile()
     {
-        CreateMap<Toponym, ToponymDto>().ReverseMap();
+        CreateMap<Toponym, ToponymDtoo>().ReverseMap();
 	}
 }

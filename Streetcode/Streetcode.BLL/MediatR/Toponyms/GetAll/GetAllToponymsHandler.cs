@@ -9,7 +9,7 @@ using Streetcode.BLL.Interfaces.Logging;
 namespace Streetcode.BLL.MediatR.Toponyms.GetAll;
 
 public class GetAllToponymsHandler : IRequestHandler<GetAllToponymsQuery,
-    Result<GetAllToponymsResponseDto>>
+    Result<GetAllToponymsResponseDtoo>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -22,7 +22,7 @@ public class GetAllToponymsHandler : IRequestHandler<GetAllToponymsQuery,
         _logger = logger;
     }
 
-    public async Task<Result<GetAllToponymsResponseDto>> Handle(GetAllToponymsQuery query, CancellationToken cancellationToken)
+    public async Task<Result<GetAllToponymsResponseDtoo>> Handle(GetAllToponymsQuery query, CancellationToken cancellationToken)
     {
         var filterRequest = query.request;
 
@@ -36,9 +36,9 @@ public class GetAllToponymsHandler : IRequestHandler<GetAllToponymsQuery,
 
         // int pagesAmount = ApplyPagination(ref toponyms, filterRequest.Amount, filterRequest.Page);
 
-        var toponymDtos = _mapper.Map<IEnumerable<ToponymDto>>(toponyms.AsEnumerable());
+        var toponymDtos = _mapper.Map<IEnumerable<ToponymDtoo>>(toponyms.AsEnumerable());
 
-        var response = new GetAllToponymsResponseDto
+        var response = new GetAllToponymsResponseDtoo
         {
             Pages = 1,
             Toponyms = toponymDtos

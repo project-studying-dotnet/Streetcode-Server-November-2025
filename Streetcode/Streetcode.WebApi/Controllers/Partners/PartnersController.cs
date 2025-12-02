@@ -35,13 +35,13 @@ public class PartnersController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreatePartnerDto partner)
+    public async Task<IActionResult> Create([FromBody] CreatePartnerDtoo partner)
     {
         return HandleResult(await Mediator.Send(new CreatePartnerQuery(partner)));
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] CreatePartnerDto partner)
+    public async Task<IActionResult> Update([FromBody] CreatePartnerDtoo partner)
     {
         return HandleResult(await Mediator.Send(new BLL.MediatR.Partners.Update.UpdatePartnerQuery(partner)));
     }

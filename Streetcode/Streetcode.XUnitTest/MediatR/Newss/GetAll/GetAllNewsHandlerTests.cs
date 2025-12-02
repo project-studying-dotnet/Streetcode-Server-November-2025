@@ -67,7 +67,7 @@
 
             // Verify
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NoNewsInDatabaseErrorMessage);
-            MockMapperHelper.VerifyMapCollection<News, NewsDto>(this.mapperMock, Times.Never());
+            MockMapperHelper.VerifyMapCollection<News, NewsDtoo>(this.mapperMock, Times.Never());
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
@@ -97,7 +97,7 @@
             result.Value.All(n => n.Image?.Base64 == Base64Content).Should().BeTrue();
 
             // Verify
-            MockMapperHelper.VerifyMapCollection<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMapCollection<News, NewsDtoo>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, NewsCount);
         }
 
@@ -125,7 +125,7 @@
             result.Value.All(n => n.Image == null).Should().BeTrue();
 
             // Verify
-            MockMapperHelper.VerifyMapCollection<News, NewsDto>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMapCollection<News, NewsDtoo>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
     }

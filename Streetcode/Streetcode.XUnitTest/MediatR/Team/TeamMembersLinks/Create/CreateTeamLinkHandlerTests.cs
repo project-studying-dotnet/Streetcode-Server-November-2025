@@ -192,14 +192,14 @@
         private void SetupMapperToTeamLink(TeamMemberLink teamLink)
         {
             this.mockMapper
-                .Setup(m => m.Map<TeamMemberLink>(It.IsAny<TeamMemberLinkDto>()))
+                .Setup(m => m.Map<TeamMemberLink>(It.IsAny<TeamMemberLinkDtoo>()))
                 .Returns(teamLink);
         }
 
-        private void SetupMapperToTeamLinkDTO(TeamMemberLinkDto teamLinkDTO)
+        private void SetupMapperToTeamLinkDTO(TeamMemberLinkDtoo teamLinkDTO)
         {
             this.mockMapper
-                .Setup(m => m.Map<TeamMemberLinkDto>(It.IsAny<TeamMemberLink>()))
+                .Setup(m => m.Map<TeamMemberLinkDtoo>(It.IsAny<TeamMemberLink>()))
                 .Returns(teamLinkDTO);
         }
 
@@ -232,10 +232,10 @@
             TeamMemberId = 1,
         };
 
-        private static TeamMemberLinkDto GetTestTeamLinkDTO() => new TeamMemberLinkDto
+        private static TeamMemberLinkDtoo GetTestTeamLinkDTO() => new TeamMemberLinkDtoo
         {
             Id = 1,
-            LogoType = LogoTypeDto.Instagram,
+            LogoType = LogoTypeDtoo.Instagram,
             TargetUrl = "https://instagram.com/",
             TeamMemberId = 1,
         };

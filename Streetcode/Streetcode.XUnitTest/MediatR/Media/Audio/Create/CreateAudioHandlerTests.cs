@@ -38,7 +38,7 @@
         public async Task Handle_ShouldReturnSuccessResult_WhenAudioCreated()
         {
             // Arrange.
-            var audioFileBaseCreateDTO = new AudioFileBaseCreateDto
+            var audioFileBaseCreateDTO = new AudioFileBaseCreateDtoo
             {
                 Title = "Test audio title",
                 Description = "Test description",
@@ -47,7 +47,7 @@
                 Extension = "mp3",
             };
 
-            var expectedAudioDTO = new AudioDto
+            var expectedAudioDTO = new AudioDtoo
             {
                 Id = 1,
                 Base64 = "base64string",
@@ -66,7 +66,7 @@
                 .Returns(hashBlobStorageName);
 
             this.mockMapper
-                 .Setup(m => m.Map<Audio>(It.IsAny<AudioFileBaseCreateDto>()))
+                 .Setup(m => m.Map<Audio>(It.IsAny<AudioFileBaseCreateDtoo>()))
                  .Returns(new Audio
                  {
                      Title = audioFileBaseCreateDTO.Title,
@@ -84,7 +84,7 @@
                 });
 
             this.mockMapper
-                .Setup(m => m.Map<AudioDto>(It.IsAny<Audio>()))
+                .Setup(m => m.Map<AudioDtoo>(It.IsAny<Audio>()))
                 .Returns(expectedAudioDTO);
 
             this.mockRepo
@@ -106,7 +106,7 @@
         public async Task Handle_ShouldReturnFailedResult_WhenSaveChangesFailed()
         {
             // Arrange.
-            var audioFileBaseCreateDTO = new AudioFileBaseCreateDto
+            var audioFileBaseCreateDTO = new AudioFileBaseCreateDtoo
             {
                 Title = "Test audio title",
                 Description = "Test description",
@@ -115,7 +115,7 @@
                 Extension = "mp3",
             };
 
-            var expectedAudioDTO = new AudioDto
+            var expectedAudioDTO = new AudioDtoo
             {
                 Id = 1,
                 Base64 = "base64string",
@@ -136,7 +136,7 @@
                 .Returns(hashBlobStorageName);
 
             this.mockMapper
-                 .Setup(m => m.Map<Audio>(It.IsAny<AudioFileBaseCreateDto>()))
+                 .Setup(m => m.Map<Audio>(It.IsAny<AudioFileBaseCreateDtoo>()))
                  .Returns(new Audio
                  {
                      Title = audioFileBaseCreateDTO.Title,
@@ -154,7 +154,7 @@
                 });
 
             this.mockMapper
-                .Setup(m => m.Map<AudioDto>(It.IsAny<Audio>()))
+                .Setup(m => m.Map<AudioDtoo>(It.IsAny<Audio>()))
                 .Returns(expectedAudioDTO);
 
             this.mockRepo

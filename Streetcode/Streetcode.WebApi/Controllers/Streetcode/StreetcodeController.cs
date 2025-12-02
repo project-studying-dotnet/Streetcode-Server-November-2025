@@ -16,7 +16,7 @@ namespace Streetcode.WebApi.Controllers.Streetcode;
 public class StreetcodeController : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] GetAllStreetcodesRequestDto request)
+    public async Task<IActionResult> GetAll([FromQuery] GetAllStreetcodesRequestDtoo request)
     {
         return HandleResult(await Mediator.Send(new GetAllStreetcodesQuery(request)));
     }
@@ -40,7 +40,7 @@ public class StreetcodeController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetByFilter([FromQuery] StreetcodeFilterRequestDto request)
+    public async Task<IActionResult> GetByFilter([FromQuery] StreetcodeFilterRequestDtoo request)
     {
         return HandleResult(await Mediator.Send(new GetStreetcodeByFilterQuery(request)));
     }

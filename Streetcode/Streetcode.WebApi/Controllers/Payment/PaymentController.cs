@@ -7,7 +7,7 @@ namespace Streetcode.WebApi.Controllers.Payment
     public class PaymentController : BaseApiController
     {
         [HttpPost]
-        public async Task<IActionResult> CreateInvoice([FromBody] PaymentDto payment)
+        public async Task<IActionResult> CreateInvoice([FromBody] PaymentDtoo payment)
         {
             return HandleResult(await Mediator.Send(new CreateInvoiceCommand(payment)));
         }

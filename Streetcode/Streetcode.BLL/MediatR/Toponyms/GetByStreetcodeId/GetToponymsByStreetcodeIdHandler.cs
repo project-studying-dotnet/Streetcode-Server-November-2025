@@ -9,7 +9,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Toponyms.GetByStreetcodeId;
 
-public class GetToponymsByStreetcodeIdHandler : IRequestHandler<GetToponymsByStreetcodeIdQuery, Result<IEnumerable<ToponymDto>>>
+public class GetToponymsByStreetcodeIdHandler : IRequestHandler<GetToponymsByStreetcodeIdQuery, Result<IEnumerable<ToponymDtoo>>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -22,7 +22,7 @@ public class GetToponymsByStreetcodeIdHandler : IRequestHandler<GetToponymsByStr
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<ToponymDto>>> Handle(GetToponymsByStreetcodeIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<ToponymDtoo>>> Handle(GetToponymsByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
         var toponyms = await _repositoryWrapper
             .ToponymRepository
@@ -39,7 +39,7 @@ public class GetToponymsByStreetcodeIdHandler : IRequestHandler<GetToponymsByStr
             return Result.Fail(new Error(errorMsg));
         }
 
-        var toponymDto = toponyms.GroupBy(x => x.StreetName).Select(group => group.First()).Select(x => _mapper.Map<ToponymDto>(x));
+        var toponymDto = toponyms.GroupBy(x => x.StreetName).Select(group => group.First()).Select(x => _mapper.Map<ToponymDtoo>(x));
         return Result.Ok(toponymDto);
     }
 }
