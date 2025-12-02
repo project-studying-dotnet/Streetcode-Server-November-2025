@@ -4,5 +4,5 @@ using Streetcode.BLL.DTO.Team;
 
 namespace Streetcode.BLL.MediatR.Team.TeamMembersLinks.Create
 {
-    public record CreateTeamLinkQuery(TeamMemberLinkDtoo teamMember) : IRequest<Result<TeamMemberLinkDtoo>>;
+    public record CreateTeamLinkQuery(TeamMemberLinkDto teamMember) : IRequest<Result<TeamMemberLinkDto>>;
 }

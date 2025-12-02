@@ -33,7 +33,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         /// </summary>
         /// <param name="updatePartnerDTO">The DTO containing update data.</param>
         /// <param name="partnerEntity">The entity to map to.</param>
-        private void SetupMapperForUpdatePartner(CreatePartnerDtoo updatePartnerDTO, Partner partnerEntity)
+        private void SetupMapperForUpdatePartner(CreatePartnerDto updatePartnerDTO, Partner partnerEntity)
         {
             this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
@@ -96,7 +96,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         /// Sets up the mapper to return null when mapping CreatePartnerDto to Partner.
         /// </summary>
         /// <param name="updatePartnerDTO">The DTO being mapped.</param>
-        private void SetupMapperToReturnNullPartner(CreatePartnerDtoo updatePartnerDTO)
+        private void SetupMapperToReturnNullPartner(CreatePartnerDto updatePartnerDTO)
         {
             this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
@@ -111,7 +111,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsSuccess_WhenPartnerUpdatedSuccessfully()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDtoo
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
@@ -163,7 +163,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_DeletesOldLinks_WhenLinksAreRemoved()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDtoo
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
@@ -209,7 +209,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_CreatesNewStreetcodeLinks_WhenStreetcodesAreAdded()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDtoo
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
@@ -255,7 +255,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_DeletesOldStreetcodeLinks_WhenStreetcodesAreRemoved()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDtoo
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
@@ -301,7 +301,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_CallsSaveChangesTwice_WhenUpdateIsSuccessful()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDtoo
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
@@ -344,7 +344,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsFailure_WhenExceptionOccurs()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDtoo
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
@@ -385,7 +385,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsFailure_WhenSaveChangesThrowsException()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDtoo
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
@@ -432,7 +432,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_CallsMapper_WhenUpdateIsSuccessful()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDtoo
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
@@ -477,7 +477,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDtoo
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",

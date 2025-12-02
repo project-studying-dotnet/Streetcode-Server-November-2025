@@ -9,7 +9,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetAll;
 
-public class GetAllStreetcodesHandler : IRequestHandler<GetAllStreetcodesQuery, Result<GetAllStreetcodesResponseDtoo>>
+public class GetAllStreetcodesHandler : IRequestHandler<GetAllStreetcodesQuery, Result<GetAllStreetcodesResponseDto>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -22,7 +22,7 @@ public class GetAllStreetcodesHandler : IRequestHandler<GetAllStreetcodesQuery, 
         _logger = logger;
     }
 
-    public async Task<Result<GetAllStreetcodesResponseDtoo>> Handle(GetAllStreetcodesQuery query, CancellationToken cancellationToken)
+    public async Task<Result<GetAllStreetcodesResponseDto>> Handle(GetAllStreetcodesQuery query, CancellationToken cancellationToken)
     {
         var filterRequest = query.request;
 
@@ -48,7 +48,7 @@ public class GetAllStreetcodesHandler : IRequestHandler<GetAllStreetcodesQuery, 
 
         var streetcodeDtos = _mapper.Map<IEnumerable<StreetcodeDto>>(streetcodes.AsEnumerable());
 
-        var response = new GetAllStreetcodesResponseDtoo
+        var response = new GetAllStreetcodesResponseDto
         {
             Pages = pagesAmount,
             Streetcodes = streetcodeDtos

@@ -4,4 +4,4 @@ using Streetcode.BLL.DTO.Toponyms;
 
 namespace Streetcode.BLL.MediatR.Toponyms.GetByStreetcodeId;
 
-public record GetToponymsByStreetcodeIdQuery(int StreetcodeId) : IRequest<Result<IEnumerable<ToponymDtoo>>>;
+public record GetToponymsByStreetcodeIdQuery(int StreetcodeId) : IRequest<Result<IEnumerable<ToponymDto>>>;

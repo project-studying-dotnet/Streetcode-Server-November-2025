@@ -4,4 +4,4 @@ using Streetcode.BLL.DTO.Sources;
 
 namespace Streetcode.BLL.MediatR.Sources.SourceLink.GetCategoriesByStreetcodeId;
 
-public record GetCategoriesByStreetcodeIdQuery(int StreetcodeId) : IRequest<Result<IEnumerable<SourceLinkCategoryDtoo>>>;
+public record GetCategoriesByStreetcodeIdQuery(int StreetcodeId) : IRequest<Result<IEnumerable<SourceLinkCategoryDto>>>;

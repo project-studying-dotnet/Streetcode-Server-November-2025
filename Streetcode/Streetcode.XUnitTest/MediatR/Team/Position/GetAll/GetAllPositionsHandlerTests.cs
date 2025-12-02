@@ -50,10 +50,10 @@
                 new Positions { Position = "Manager" },
             };
 
-            var positionDTOs = new List<PositionDtoo>
+            var positionDTOs = new List<PositionDto>
             {
-                new PositionDtoo { Position = "Product Owner" },
-                new PositionDtoo { Position = "Manager" },
+                new PositionDto { Position = "Product Owner" },
+                new PositionDto { Position = "Manager" },
             };
 
             this.SetupRepositoryGetAllAsync(positions);
@@ -107,10 +107,10 @@
                 .ReturnsAsync(positions);
         }
 
-        private void SetupMapper(IEnumerable<PositionDtoo> positionsDTO)
+        private void SetupMapper(IEnumerable<PositionDto> positionsDTO)
         {
             this.mockMapper
-                .Setup(m => m.Map<IEnumerable<PositionDtoo>>(It.IsAny<IEnumerable<Positions>>()))
+                .Setup(m => m.Map<IEnumerable<PositionDto>>(It.IsAny<IEnumerable<Positions>>()))
                 .Returns(positionsDTO);
         }
     }

@@ -9,7 +9,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Media.Video.GetAll;
 
-public class GetAllVideosHandler : IRequestHandler<GetAllVideosQuery, Result<IEnumerable<VideoDtoo>>>
+public class GetAllVideosHandler : IRequestHandler<GetAllVideosQuery, Result<IEnumerable<VideoDto>>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -22,7 +22,7 @@ public class GetAllVideosHandler : IRequestHandler<GetAllVideosQuery, Result<IEn
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<VideoDtoo>>> Handle(GetAllVideosQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<VideoDto>>> Handle(GetAllVideosQuery request, CancellationToken cancellationToken)
     {
         var videos = await _repositoryWrapper.VideoRepository.GetAllAsync();
 
@@ -33,6 +33,6 @@ public class GetAllVideosHandler : IRequestHandler<GetAllVideosQuery, Result<IEn
             return Result.Fail(new Error(errorMsg));
         }
 
-        return Result.Ok(_mapper.Map<IEnumerable<VideoDtoo>>(videos));
+        return Result.Ok(_mapper.Map<IEnumerable<VideoDto>>(videos));
     }
 }

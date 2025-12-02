@@ -48,7 +48,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetCategoryCon
             int streetcodeId = 1;
             int categoryId = 1;
             var content = new StreetcodeCategoryContent { StreetcodeId = streetcodeId, SourceLinkCategoryId = categoryId };
-            var dto = new StreetcodeCategoryContentDtoo { StreetcodeId = streetcodeId, SourceLinkCategoryId = categoryId };
+            var dto = new StreetcodeCategoryContentDto { StreetcodeId = streetcodeId, SourceLinkCategoryId = categoryId };
             var query = new GetCategoryContentByStreetcodeIdQuery(streetcodeId, categoryId);
 
             // Mock Streetcode existance
@@ -61,7 +61,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetCategoryCon
                 It.IsAny<Expression<Func<StreetcodeCategoryContent, bool>>>(), null))
                 .ReturnsAsync(content);
 
-            this.mockMapper.Setup(m => m.Map<StreetcodeCategoryContentDtoo>(content))
+            this.mockMapper.Setup(m => m.Map<StreetcodeCategoryContentDto>(content))
                 .Returns(dto);
 
             // Act

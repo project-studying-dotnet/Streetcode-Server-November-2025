@@ -4,4 +4,4 @@ using Streetcode.BLL.DTO.Media.Audio;
 
 namespace Streetcode.BLL.MediatR.Media.Audio.GetById;
 
-public record GetAudioByIdQuery(int Id) : IRequest<Result<AudioDtoo>>;
+public record GetAudioByIdQuery(int Id) : IRequest<Result<AudioDto>>;

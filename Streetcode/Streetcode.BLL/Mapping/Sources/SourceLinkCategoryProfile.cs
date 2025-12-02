@@ -9,14 +9,14 @@ public class SourceLinkCategoryProfile : Profile
 {
     public SourceLinkCategoryProfile()
     {
-        CreateMap<SourceLinkCategory, SourceLinkCategoryDtoo>()
+        CreateMap<SourceLinkCategory, SourceLinkCategoryDto>()
             .ForMember(dto => dto.Image, c => c.MapFrom(b => b.Image))
             .ReverseMap();
-        CreateMap<SourceLinkCategory, CategoryWithNameDtoo>().ReverseMap();
+        CreateMap<SourceLinkCategory, CategoryWithNameDto>().ReverseMap();
         CreateMap<SourceLinkCategory, ImageDtoo>()
             .ForMember(dest => dest.MimeType, opt => opt.MapFrom(src => src.Image.MimeType))
             .ForMember(dest => dest.BlobName, opt => opt.MapFrom(src => src.Image.BlobName));
-        CreateMap<SourceLinkCategoryDtoo, SourceLinkCategory>()
+        CreateMap<SourceLinkCategoryDto, SourceLinkCategory>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(dto => dto.Title))

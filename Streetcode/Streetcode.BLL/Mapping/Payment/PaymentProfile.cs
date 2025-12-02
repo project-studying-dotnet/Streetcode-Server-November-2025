@@ -10,6 +10,6 @@ public class PaymentProfile : Profile
 {
     public PaymentProfile()
     {
-        CreateMap<InvoiceInfo, PaymentResponseDtoo>().ReverseMap();
+        CreateMap<InvoiceInfo, PaymentResponseDto>().ReverseMap();
     }
 }

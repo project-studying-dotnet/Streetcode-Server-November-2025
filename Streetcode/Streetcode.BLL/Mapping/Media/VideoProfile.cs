@@ -8,6 +8,6 @@ public class VideoProfile : Profile
 {
     public VideoProfile()
     {
-        CreateMap<Video, VideoDtoo>();
+        CreateMap<Video, VideoDto>();
     }
 }

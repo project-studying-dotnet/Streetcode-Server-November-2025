@@ -8,6 +8,6 @@ public class TermProfile : Profile
 {
     public TermProfile()
     {
-        CreateMap<Term, TermDtoo>().ReverseMap();
+        CreateMap<Term, TermDto>().ReverseMap();
     }
 }

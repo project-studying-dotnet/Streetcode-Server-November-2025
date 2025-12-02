@@ -11,7 +11,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Media.Video.GetByStreetcodeId;
 
-public class GetVideoByStreetcodeIdHandler : IRequestHandler<GetVideoByStreetcodeIdQuery, Result<VideoDtoo>>
+public class GetVideoByStreetcodeIdHandler : IRequestHandler<GetVideoByStreetcodeIdQuery, Result<VideoDto>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -24,7 +24,7 @@ public class GetVideoByStreetcodeIdHandler : IRequestHandler<GetVideoByStreetcod
         _logger = logger;
     }
 
-    public async Task<Result<VideoDtoo>> Handle(GetVideoByStreetcodeIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<VideoDto>> Handle(GetVideoByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
         var video = await _repositoryWrapper.VideoRepository
             .GetFirstOrDefaultAsync(video => video.StreetcodeId == request.StreetcodeId);
@@ -39,8 +39,8 @@ public class GetVideoByStreetcodeIdHandler : IRequestHandler<GetVideoByStreetcod
             }
         }
 
-        NullResult<VideoDtoo> result = new NullResult<VideoDtoo>();
-        result.WithValue(_mapper.Map<VideoDtoo>(video));
+        NullResult<VideoDto> result = new NullResult<VideoDto>();
+        result.WithValue(_mapper.Map<VideoDto>(video));
         return result;
     }
 }

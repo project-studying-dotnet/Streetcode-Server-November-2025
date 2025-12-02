@@ -4,4 +4,4 @@ using Streetcode.BLL.DTO.AdditionalContent;
 
 namespace Streetcode.BLL.MediatR.AdditionalContent.Tag.GetAll;
 
-public record GetAllTagsQuery : IRequest<Result<IEnumerable<TagDtoo>>>;
+public record GetAllTagsQuery : IRequest<Result<IEnumerable<TagDto>>>;
