@@ -35,7 +35,7 @@
         internal void VerifyMockersPositiveFlowGetAll()
         {
             this.mapperMock.Verify(
-                m => m.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()),
+                m => m.Map<IEnumerable<ArtDto>>(It.IsAny<IEnumerable<Art>>()),
                 Times.Once);
 
             this.artRepositoryMock.Verify(
@@ -48,7 +48,7 @@
         internal void VerifyMockersPositiveFlowGetFirst()
         {
             this.mapperMock.Verify(
-                m => m.Map<ArtDTO>(It.IsAny<Art>()),
+                m => m.Map<ArtDto>(It.IsAny<Art>()),
                 Times.Once);
 
             this.artRepositoryMock.Verify(
@@ -61,14 +61,14 @@
         internal void VerifyMockersNegativeFlowGetAll()
         {
             this.mapperMock.Verify(
-                m => m.Map<IEnumerable<ArtDTO>>(It.IsAny<IEnumerable<Art>>()),
+                m => m.Map<IEnumerable<ArtDto>>(It.IsAny<IEnumerable<Art>>()),
                 Times.Never);
         }
 
         internal void VerifyMockersNegativeFlowGetFirst()
         {
             this.mapperMock.Verify(
-                m => m.Map<ArtDTO>(It.IsAny<Art>()),
+                m => m.Map<ArtDto>(It.IsAny<Art>()),
                 Times.Never);
         }
 

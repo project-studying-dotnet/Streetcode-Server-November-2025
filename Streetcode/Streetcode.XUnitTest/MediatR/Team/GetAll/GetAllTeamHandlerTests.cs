@@ -98,10 +98,10 @@
                 .ReturnsAsync(teamMembers);
         }
 
-        private void SetupMapper(IEnumerable<TeamMemberDTO> teamMemberDTOs)
+        private void SetupMapper(IEnumerable<TeamMemberDto> teamMemberDTOs)
         {
             this.mockMapper
-                .Setup(m => m.Map<IEnumerable<TeamMemberDTO>>(It.IsAny<IEnumerable<TeamMember>>()))
+                .Setup(m => m.Map<IEnumerable<TeamMemberDto>>(It.IsAny<IEnumerable<TeamMember>>()))
                 .Returns(teamMemberDTOs);
         }
 
@@ -111,10 +111,10 @@
             new TeamMember() { Id = 4 },
         };
 
-        private static List<TeamMemberDTO> GetTestTeamMemberDTOs() => new List<TeamMemberDTO>
+        private static List<TeamMemberDto> GetTestTeamMemberDTOs() => new List<TeamMemberDto>
         {
-            new TeamMemberDTO() { Id = 1 },
-            new TeamMemberDTO() { Id = 4 },
+            new TeamMemberDto() { Id = 1 },
+            new TeamMemberDto() { Id = 4 },
         };
     }
 }

@@ -52,14 +52,14 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLink.GetCategoryById
             // Arrange
             int id = 1;
             var category = new SourceLinkCategory { Id = id, Image = new DAL.Entities.Media.Images.Image { BlobName = "blob" } };
-            var dto = new SourceLinkCategoryDTO { Id = id, Image = new ImageDTO { BlobName = "blob" } };
+            var dto = new SourceLinkCategoryDto { Id = id, Image = new ImageDto { BlobName = "blob" } };
 
             this.mockRepoWrapper.Setup(r => r.SourceCategoryRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<SourceLinkCategory, bool>>>(),
                 It.IsAny<Func<IQueryable<SourceLinkCategory>, IIncludableQueryable<SourceLinkCategory, object>>>()))
                 .ReturnsAsync(category);
 
-            this.mockMapper.Setup(m => m.Map<SourceLinkCategoryDTO>(category))
+            this.mockMapper.Setup(m => m.Map<SourceLinkCategoryDto>(category))
                 .Returns(dto);
 
             this.mockBlobService.Setup(b => b.FindFileInStorageAsBase64("blob"))

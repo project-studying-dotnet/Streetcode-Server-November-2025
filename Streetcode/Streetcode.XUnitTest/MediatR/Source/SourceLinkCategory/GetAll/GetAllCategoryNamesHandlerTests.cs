@@ -45,12 +45,12 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetAll
         {
             // Arrange
             var categories = new List<SourceLinkCategory> { new SourceLinkCategory { Id = 1 } };
-            var dtos = new List<CategoryWithNameDTO> { new CategoryWithNameDTO { Id = 1 } };
+            var dtos = new List<CategoryWithNameDto> { new CategoryWithNameDto { Id = 1 } };
 
             this.mockRepoWrapper.Setup(r => r.SourceCategoryRepository.GetAllAsync(null, null))
                 .ReturnsAsync(categories);
 
-            this.mockMapper.Setup(m => m.Map<IEnumerable<CategoryWithNameDTO>>(categories))
+            this.mockMapper.Setup(m => m.Map<IEnumerable<CategoryWithNameDto>>(categories))
                 .Returns(dtos);
 
             // Act

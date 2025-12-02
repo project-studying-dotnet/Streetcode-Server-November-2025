@@ -77,19 +77,19 @@
             // Verify
             timelineRepositoryMock.VerifyGetAllAsyncCalledOnce();
             this.loggerMock.VerifyLogErrorCalledOnce();
-            this.mapperMock.VerifyMapCalledNever<IEnumerable<TimelineItemDTO>>();
+            this.mapperMock.VerifyMapCalledNever<IEnumerable<TimelineItemDto>>();
         }
 
         /// <summary>
         ///     Tests that the <see cref="GetAllTimelineItemsHandler"/> correctly returns
         ///     a successful <see cref="Result{T}"/> containing mapped
-        ///     <see cref="TimelineItemDTO"/> objects when timeline items exist in the repository.
+        ///     <see cref="TimelineItemDto"/> objects when timeline items exist in the repository.
         /// </summary>
         /// <remarks>
         ///     This test verifies that:
         ///     <list type="bullet">
         ///         <item><description>The handler returns a successful <see cref="FluentResults.Result{T}"/>.</description></item>
-        ///         <item><description>The returned result contains the correct number of mapped <see cref="TimelineItemDTO"/> objects.</description></item>
+        ///         <item><description>The returned result contains the correct number of mapped <see cref="TimelineItemDto"/> objects.</description></item>
         ///         <item><description><c>GetAllAsync</c> is called exactly once on the repository.</description></item>
         ///         <item><description>The mapper's <c>Map</c> method is called exactly once with the retrieved timeline items.</description></item>
         ///         <item><description>No errors are logged.</description></item>
