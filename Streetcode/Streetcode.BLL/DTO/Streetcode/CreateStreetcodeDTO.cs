@@ -26,7 +26,7 @@ namespace Streetcode.BLL.DTO.Streetcode
 
         public string DateString { get; set; }
 
-        public IEnumerable<TagShortDTO> Tags { get; set; }
+        public IEnumerable<StreetcodeTagDTO> Tags { get; set; }
 
         public string Teaser { get; set; }
 

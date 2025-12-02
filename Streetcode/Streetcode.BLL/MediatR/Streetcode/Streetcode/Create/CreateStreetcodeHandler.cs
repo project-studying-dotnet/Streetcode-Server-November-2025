@@ -7,9 +7,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FluentResults;
 using MediatR;
+using Streetcode.BLL.DTO.AdditionalContent.Tag;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.DTO.Streetcode.Types;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.DAL.Entities.AdditionalContent;
 using Streetcode.DAL.Entities.Media.Images;
 using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Enums;
@@ -83,11 +85,29 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 }
             }
 
-            if (сreateStreetcodeDTO.Tags != null)
+            List<StreetcodeTagDTO> tagsList = сreateStreetcodeDTO.Tags.ToList();
+
+            if (tagsList != null)
             {
-                foreach (var tag in сreateStreetcodeDTO.Tags)
+                foreach (var tag in tagsList)
                 {
-                    var thisTag = await _repository.TagRepository.GetFirstOrDefaultAsync(x => x.Id == tag.Id);
+                    var thisTag = await _repository.TagRepository
+                        .GetFirstOrDefaultAsync(x => x.Id == tag.Id);
+
+                    if (thisTag == null)
+                    {
+                        _logger.LogError(request, "tag not found");
+                    }
+
+                    StreetcodeTagIndex tagIndex = new StreetcodeTagIndex()
+                    {
+                        StreetcodeId = streetcodeContent.Id,
+                        TagId = tag.Id,
+                        IsVisible = tag.IsVisible,
+                        Index = tagsList.IndexOf(tag),
+                    };
+
+                    _repository.StreetcodeTagIndexRepository.Create(tagIndex);
                 }
             }
 
