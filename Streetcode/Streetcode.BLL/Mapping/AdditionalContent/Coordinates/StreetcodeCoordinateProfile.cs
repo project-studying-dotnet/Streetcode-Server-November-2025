@@ -8,6 +8,6 @@ public class StreetcodeCoordinateProfile : Profile
 {
    public StreetcodeCoordinateProfile()
    {
-        CreateMap<StreetcodeCoordinate, StreetcodeCoordinateDto>().ReverseMap();
+        CreateMap<StreetcodeCoordinate, StreetcodeCoordinateDtoo>().ReverseMap();
    }
 }
