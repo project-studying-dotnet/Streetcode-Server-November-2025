@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace Streetcode.XUnitTest.Text.GetParsed
+namespace Streetcode.XUnitTest.MediatR.Text.GetParsed
 {
     using System.Threading;
     using System.Threading.Tasks;

@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace Streetcode.XUnitTest.Text.GetById
+namespace Streetcode.XUnitTest.MediatR.Text.GetById
 {
     using System.Linq.Expressions;
     using AutoMapper;
@@ -74,18 +74,18 @@ namespace Streetcode.XUnitTest.Text.GetById
             var query = new GetTextByIdQuery(id);
             string errorMsg = $"Cannot find any text with corresponding id: {id}";
 
-            this.mockRepoWrapper.Setup(r => r.TextRepository.GetFirstOrDefaultAsync(
+            mockRepoWrapper.Setup(r => r.TextRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Text, bool>>>(), null))
                 .ReturnsAsync((Text?)null);
 
             // Act
-            var result = await this.handler.Handle(query, CancellationToken.None);
+            var result = await handler.Handle(query, CancellationToken.None);
 
             // Assert
             result.IsFailed.Should().BeTrue();
             result.Errors.First().Message.Should().Contain(errorMsg);
 
-            this.mockLogger.Verify(l => l.LogError(It.IsAny<object>(), errorMsg), Times.Once);
+            mockLogger.Verify(l => l.LogError(It.IsAny<object>(), errorMsg), Times.Once);
         }
     }
 }

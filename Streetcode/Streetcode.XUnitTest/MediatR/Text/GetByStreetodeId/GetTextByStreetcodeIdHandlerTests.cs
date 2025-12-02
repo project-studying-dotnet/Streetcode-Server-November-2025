@@ -2,7 +2,7 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
-namespace Streetcode.XUnitTest.Text.GetByStreetodeId
+namespace Streetcode.XUnitTest.MediatR.Text.GetByStreetodeId
 {
     using System;
     using System.Linq.Expressions;
@@ -119,21 +119,21 @@ namespace Streetcode.XUnitTest.Text.GetByStreetodeId
             var textEntity = new Text { Id = 1, StreetcodeId = streetcodeId };
             var textDto = new TextDTO { Id = 1 };
 
-            this.mockRepoWrapper.Setup(r => r.TextRepository.GetFirstOrDefaultAsync(
+            mockRepoWrapper.Setup(r => r.TextRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Text, bool>>>(), null))
                 .ReturnsAsync(textEntity);
 
-            this.mockTextService.Setup(s => s.AddTermsTag(It.IsAny<string>())).ReturnsAsync("");
-            this.mockMapper.Setup(m => m.Map<TextDTO?>(textEntity)).Returns(textDto);
+            mockTextService.Setup(s => s.AddTermsTag(It.IsAny<string>())).ReturnsAsync("");
+            mockMapper.Setup(m => m.Map<TextDTO?>(textEntity)).Returns(textDto);
 
             // Act
-            var result = await this.handler.Handle(new GetTextByStreetcodeIdQuery(streetcodeId), CancellationToken.None);
+            var result = await handler.Handle(new GetTextByStreetcodeIdQuery(streetcodeId), CancellationToken.None);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
 
             // Verify that we NEVER checked for streetcode existence because we found the text
-            this.mockRepoWrapper.Verify(r => r.StreetcodeRepository.GetFirstOrDefaultAsync(
+            mockRepoWrapper.Verify(r => r.StreetcodeRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<StreetcodeContent, bool>>>(), null), Times.Never);
         }
     }
