@@ -126,7 +126,7 @@
             var entity = NewsTestData.CreateNews(NewsId);
 
             entity.Image = new Image { BlobName = BlobNameFile };
-            dto.Image = new ImageDtoo { BlobName = BlobNameFile };
+            dto.Image = new ImageDto { BlobName = BlobNameFile };
 
             MockMapperHelper.SetupMapper<NewsDto, News>(this.mapperMock, dto, entity);
             MockMapperHelper.SetupMapper<News, NewsDto>(this.mapperMock, entity, dto);

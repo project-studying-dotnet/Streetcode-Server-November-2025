@@ -82,10 +82,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         /// Sets up the mapper to map partners to PartnerDTOs.
         /// </summary>
         /// <param name="partnerDTOs">The DTOs to return from mapping.</param>
-        private void SetupMapperForPartnerDTOs(List<PartnerDtoo> partnerDTOs)
+        private void SetupMapperForPartnerDTOs(List<PartnerDto> partnerDTOs)
         {
             this.MockMapper
-                .Setup(mapper => mapper.Map<IEnumerable<PartnerDtoo>>(It.IsAny<IEnumerable<Partner>>()))
+                .Setup(mapper => mapper.Map<IEnumerable<PartnerDto>>(It.IsAny<IEnumerable<Partner>>()))
                 .Returns(partnerDTOs);
         }
 
@@ -94,10 +94,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         /// </summary>
         /// <param name="partners">The partners to map from.</param>
         /// <param name="partnerDTOs">The DTOs to return.</param>
-        private void SetupMapperForSpecificPartners(List<Partner> partners, List<PartnerDtoo> partnerDTOs)
+        private void SetupMapperForSpecificPartners(List<Partner> partners, List<PartnerDto> partnerDTOs)
         {
             this.MockMapper
-                .Setup(mapper => mapper.Map<IEnumerable<PartnerDtoo>>(partners))
+                .Setup(mapper => mapper.Map<IEnumerable<PartnerDto>>(partners))
                 .Returns(partnerDTOs);
         }
 
@@ -142,7 +142,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 PartnerTestHelpers.CreatePartnerEntity(1),
                 PartnerTestHelpers.CreatePartnerEntity(2),
             };
-            var partnerDTOs = new List<PartnerDtoo>
+            var partnerDTOs = new List<PartnerDto>
             {
                 PartnerTestHelpers.CreatePartnerDTO(1),
                 PartnerTestHelpers.CreatePartnerDTO(2),
@@ -253,7 +253,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             int streetcodeId = 1;
             var streetcode = new StreetcodeContent { Id = streetcodeId };
             var emptyPartners = new List<Partner>();
-            var emptyPartnerDTOs = new List<PartnerDtoo>();
+            var emptyPartnerDTOs = new List<PartnerDto>();
 
             this.SetupStreetcodeRepository(streetcode);
             this.SetupPartnersRepository(emptyPartners);
@@ -285,7 +285,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 PartnerTestHelpers.CreatePartnerEntity(1),
                 PartnerTestHelpers.CreatePartnerEntity(2),
             };
-            var partnerDTOs = new List<PartnerDtoo>
+            var partnerDTOs = new List<PartnerDto>
             {
                 PartnerTestHelpers.CreatePartnerDTO(1),
                 PartnerTestHelpers.CreatePartnerDTO(2),
@@ -303,7 +303,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsSuccess.Should().BeTrue();
             this.MockMapper.Verify(
-                mapper => mapper.Map<IEnumerable<PartnerDtoo>>(partners),
+                mapper => mapper.Map<IEnumerable<PartnerDto>>(partners),
                 Times.Once);
         }
 
@@ -366,7 +366,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             int streetcodeId = 1;
             var streetcode = new StreetcodeContent { Id = streetcodeId };
             var partners = new List<Partner> { PartnerTestHelpers.CreatePartnerEntity(1) };
-            var partnerDTOs = new List<PartnerDtoo> { PartnerTestHelpers.CreatePartnerDTO(1) };
+            var partnerDTOs = new List<PartnerDto> { PartnerTestHelpers.CreatePartnerDTO(1) };
 
             this.SetupStreetcodeRepository(streetcode);
 

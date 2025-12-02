@@ -35,9 +35,9 @@
             };
         }
 
-        public static ImageDtoo CreateImageDTO(int id = 1)
+        public static ImageDto CreateImageDTO(int id = 1)
         {
-            return new ImageDtoo
+            return new ImageDto
             {
                 Id = id,
                 BlobName = $"test-blob-{id}",
@@ -106,7 +106,7 @@
                 URL = $"test-url-{id}",
                 CreationDate = creationDate,
                 ImageId = withImage ? id : null,
-                Image = withImage ? new ImageDtoo
+                Image = withImage ? new ImageDto
                 {
                     Id = id,
                     BlobName = $"blob-{id}",

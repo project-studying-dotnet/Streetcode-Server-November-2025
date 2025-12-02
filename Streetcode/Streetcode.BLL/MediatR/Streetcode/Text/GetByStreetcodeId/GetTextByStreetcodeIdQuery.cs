@@ -4,4 +4,4 @@ using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Text.GetByStreetcodeId;
 
-public record GetTextByStreetcodeIdQuery(int StreetcodeId) : IRequest<Result<TextDtoo?>>;
+public record GetTextByStreetcodeIdQuery(int StreetcodeId) : IRequest<Result<TextDto?>>;

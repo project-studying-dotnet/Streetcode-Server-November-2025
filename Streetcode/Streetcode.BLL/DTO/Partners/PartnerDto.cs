@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using Streetcode.BLL.DTO.AdditionalContent;
 using Streetcode.BLL.DTO.Streetcode;
 
 namespace Streetcode.BLL.DTO.Partners;
 
-public class PartnerDtoo
+public class PartnerDto
 {
     public int Id { get; set; }
     public bool IsKeyPartner { get; set; }

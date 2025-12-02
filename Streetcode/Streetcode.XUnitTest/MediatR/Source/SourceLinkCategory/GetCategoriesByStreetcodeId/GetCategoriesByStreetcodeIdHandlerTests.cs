@@ -59,7 +59,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLink.GetCategoriesByStreetc
             };
             var dtos = new List<SourceLinkCategoryDto>
             {
-                new SourceLinkCategoryDto { Id = 1, Image = new ImageDtoo { BlobName = "blob" } },
+                new SourceLinkCategoryDto { Id = 1, Image = new ImageDto { BlobName = "blob" } },
             };
 
             this.mockRepoWrapper.Setup(r => r.SourceCategoryRepository.GetAllAsync(

@@ -60,7 +60,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetAll
             };
             var dtos = new List<SourceLinkCategoryDto>
             {
-                new SourceLinkCategoryDto { Id = 1, Image = new ImageDtoo { BlobName = "blob1" } },
+                new SourceLinkCategoryDto { Id = 1, Image = new ImageDto { BlobName = "blob1" } },
             };
             const string Base64String = "base64_string";
 

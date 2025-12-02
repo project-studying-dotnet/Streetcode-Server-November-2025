@@ -4,4 +4,4 @@ using Streetcode.BLL.DTO.Media.Images;
 
 namespace Streetcode.BLL.MediatR.Media.Image.Create;
 
-public record CreateImageCommand(ImageFileBaseCreateDtoo Image) : IRequest<Result<ImageDtoo>>;
+public record CreateImageCommand(ImageFileBaseCreateDto Image) : IRequest<Result<ImageDto>>;

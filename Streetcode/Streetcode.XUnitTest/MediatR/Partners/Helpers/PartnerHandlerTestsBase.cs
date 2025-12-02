@@ -41,10 +41,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         /// Sets up the mapper to return a specific PartnerDto for any Partner entity.
         /// </summary>
         /// <param name="partnerDTO">The PartnerDto to return.</param>
-        protected void SetupMapperForPartnerDTO(PartnerDtoo partnerDTO)
+        protected void SetupMapperForPartnerDTO(PartnerDto partnerDTO)
         {
             this.MockMapper
-                .Setup(mapper => mapper.Map<PartnerDtoo>(It.IsAny<Partner>()))
+                .Setup(mapper => mapper.Map<PartnerDto>(It.IsAny<Partner>()))
                 .Returns(partnerDTO);
         }
 
@@ -53,10 +53,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         /// </summary>
         /// <param name="partner">The Partner entity to map from.</param>
         /// <param name="partnerDTO">The PartnerDto to return.</param>
-        protected void SetupMapperForSpecificPartner(Partner partner, PartnerDtoo partnerDTO)
+        protected void SetupMapperForSpecificPartner(Partner partner, PartnerDto partnerDTO)
         {
             this.MockMapper
-                .Setup(mapper => mapper.Map<PartnerDtoo>(partner))
+                .Setup(mapper => mapper.Map<PartnerDto>(partner))
                 .Returns(partnerDTO);
         }
 

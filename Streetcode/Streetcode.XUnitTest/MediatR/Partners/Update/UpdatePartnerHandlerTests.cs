@@ -465,7 +465,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 mapper => mapper.Map<Partner>(updatePartnerDTO),
                 Times.Once);
             this.MockMapper.Verify(
-                mapper => mapper.Map<PartnerDtoo>(partnerEntity),
+                mapper => mapper.Map<PartnerDto>(partnerEntity),
                 Times.Once);
         }
 

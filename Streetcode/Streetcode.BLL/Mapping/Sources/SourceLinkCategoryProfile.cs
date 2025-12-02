@@ -13,7 +13,7 @@ public class SourceLinkCategoryProfile : Profile
             .ForMember(dto => dto.Image, c => c.MapFrom(b => b.Image))
             .ReverseMap();
         CreateMap<SourceLinkCategory, CategoryWithNameDto>().ReverseMap();
-        CreateMap<SourceLinkCategory, ImageDtoo>()
+        CreateMap<SourceLinkCategory, ImageDto>()
             .ForMember(dest => dest.MimeType, opt => opt.MapFrom(src => src.Image.MimeType))
             .ForMember(dest => dest.BlobName, opt => opt.MapFrom(src => src.Image.BlobName));
         CreateMap<SourceLinkCategoryDto, SourceLinkCategory>()

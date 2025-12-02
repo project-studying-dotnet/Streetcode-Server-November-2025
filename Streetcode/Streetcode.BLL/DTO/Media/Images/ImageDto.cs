@@ -2,7 +2,7 @@ using Streetcode.BLL.DTO.Streetcode;
 
 namespace Streetcode.BLL.DTO.Media.Images;
 
-public class ImageDtoo
+public class ImageDto
 {
     public int Id { get; set; }
 

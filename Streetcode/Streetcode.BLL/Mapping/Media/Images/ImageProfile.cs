@@ -9,8 +9,8 @@ public class ImageProfile : Profile
 {
     public ImageProfile()
     {
-        CreateMap<Image, ImageDtoo>().ReverseMap();
+        CreateMap<Image, ImageDto>().ReverseMap();
 
-        CreateMap<ImageFileBaseCreateDtoo, Image>();
+        CreateMap<ImageFileBaseCreateDto, Image>();
 	}
 }

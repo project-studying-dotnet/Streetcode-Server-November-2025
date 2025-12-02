@@ -178,7 +178,7 @@
                     {
                         Id = a.Id,
                         Image = a.Image is null ? null
-                        : new ImageDtoo
+                        : new ImageDto
                         {
                              Id = a.Image.Id,
                              BlobName = a.Image.BlobName

@@ -55,7 +55,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetByStreetodeId
             // Arrange
             int streetcodeId = 1;
             var textEntity = new Text { Id = 1, StreetcodeId = streetcodeId, TextContent = "raw" };
-            var textDto = new TextDtoo { Id = 1, TextContent = "parsed" };
+            var textDto = new TextDto { Id = 1, TextContent = "parsed" };
             var query = new GetTextByStreetcodeIdQuery(streetcodeId);
 
             mockRepoWrapper.Setup(r => r.TextRepository.GetFirstOrDefaultAsync(
@@ -65,7 +65,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetByStreetodeId
             mockTextService.Setup(s => s.AddTermsTag(It.IsAny<string>()))
                 .ReturnsAsync("parsed");
 
-            mockMapper.Setup(m => m.Map<TextDtoo?>(textEntity))
+            mockMapper.Setup(m => m.Map<TextDto?>(textEntity))
                 .Returns(textDto);
 
             // Act
@@ -117,14 +117,14 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetByStreetodeId
             // Arrange
             int streetcodeId = 1;
             var textEntity = new Text { Id = 1, StreetcodeId = streetcodeId };
-            var textDto = new TextDtoo { Id = 1 };
+            var textDto = new TextDto { Id = 1 };
 
             mockRepoWrapper.Setup(r => r.TextRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Text, bool>>>(), null))
                 .ReturnsAsync(textEntity);
 
             mockTextService.Setup(s => s.AddTermsTag(It.IsAny<string>())).ReturnsAsync("");
-            mockMapper.Setup(m => m.Map<TextDtoo?>(textEntity)).Returns(textDto);
+            mockMapper.Setup(m => m.Map<TextDto?>(textEntity)).Returns(textDto);
 
             // Act
             var result = await handler.Handle(new GetTextByStreetcodeIdQuery(streetcodeId), CancellationToken.None);
