@@ -9,5 +9,5 @@ public class RelatedFigureDto
   public string Url { get; set; }
   public string? Alias { get; set; }
   public int ImageId { get; set; }
-  public IEnumerable<TagDTO> Tags { get; set; }
+  public IEnumerable<TagDto> Tags { get; set; }
 }
