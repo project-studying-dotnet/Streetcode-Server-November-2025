@@ -5,14 +5,15 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Streetcode.BLL.DTO.AdditionalContent.Tag;
-using Streetcode.BLL.DTO.Media.Audio;
 using Streetcode.BLL.DTO.Media.Images;
 using Streetcode.DAL.Enums;
 
 namespace Streetcode.BLL.DTO.Streetcode
 {
-    public class CreateStreetcodeDto
+    public class UpdateStreetcodeDto
     {
+        public int Id { get; set; }
+
         public int Index { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]

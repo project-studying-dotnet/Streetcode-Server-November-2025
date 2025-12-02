@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Streetcode.BLL.DTO.Streetcode.Types
 {
-    public class CreateEventStreetcodeDTO : CreateStreetcodeDto
+    public class UpdateEventStreetcodeDto : UpdateStreetcodeDto
     {
     }
 }

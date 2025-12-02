@@ -13,7 +13,10 @@ public class PersonStreetcodeProfile : Profile
         CreateMap<PersonStreetcode, PersonStreetcodeDTO>()
             .IncludeBase<StreetcodeContent, StreetcodeDTO>();
 
-        CreateMap<PersonStreetcode, CreatePersonStreetcodeDTO>()
-            .IncludeBase<StreetcodeContent, CreateStreetcodeDTO>().ReverseMap();
+        CreateMap<PersonStreetcode, CreatePersonStreetcodeDto>()
+            .IncludeBase<StreetcodeContent, CreateStreetcodeDto>().ReverseMap();
+
+        CreateMap<PersonStreetcode, UpdatePersonStreetcodeDto>()
+            .IncludeBase<StreetcodeContent, UpdateStreetcodeDto>().ReverseMap();
     }
 }

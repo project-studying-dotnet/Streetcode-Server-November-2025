@@ -14,6 +14,9 @@ public class EventStreetcodeProfile : Profile
             .IncludeBase<StreetcodeContent, StreetcodeDTO>();
 
         CreateMap<EventStreetcode, CreateEventStreetcodeDTO>()
-            .IncludeBase<StreetcodeContent, CreateStreetcodeDTO>().ReverseMap();
+            .IncludeBase<StreetcodeContent, CreateStreetcodeDto>().ReverseMap();
+
+        CreateMap<EventStreetcode, UpdateEventStreetcodeDto>()
+            .IncludeBase<StreetcodeContent, UpdateStreetcodeDto>().ReverseMap();
     }
 }

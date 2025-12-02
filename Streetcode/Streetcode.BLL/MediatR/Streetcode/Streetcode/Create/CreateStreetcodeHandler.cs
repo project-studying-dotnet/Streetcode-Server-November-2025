@@ -40,7 +40,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
             var streetcodeType = rawJson.GetProperty("StreetcodeType").GetString();
 
-            CreateStreetcodeDTO сreateStreetcodeDTO;
+            CreateStreetcodeDto сreateStreetcodeDTO;
 
             сreateStreetcodeDTO = ChoseStreetcodeType(streetcodeType, request);
 
@@ -67,7 +67,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 foreach (var img in сreateStreetcodeDTO.Images)
                 {
-                    var image = await _repository.ImageRepository.GetFirstOrDefaultAsync(x => x.Id == img.ImageId);
+                    var image = await _repository.ImageRepository
+                        .GetFirstOrDefaultAsync(x => x.Id == img.ImageId);
 
                     if (image == null)
                     {
@@ -115,7 +116,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
             if (resultIsSuccess)
             {
-                var streetcodeDTO = _mapper.Map<CreateStreetcodeDTO>(result);
+                var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(result);
                 var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
                 return await Task.FromResult(Result.Ok(jsonResult));
             }
@@ -127,13 +128,13 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             }
         }
 
-        private CreateStreetcodeDTO ChoseStreetcodeType(string type, CreateStreetcodeCommand request)
+        private CreateStreetcodeDto ChoseStreetcodeType(string type, CreateStreetcodeCommand request)
         {
             switch (type)
             {
                 case "Person":
                     return JsonSerializer
-                        .Deserialize<CreatePersonStreetcodeDTO>(request.rawJsonCreateDTO.GetRawText());
+                        .Deserialize<CreatePersonStreetcodeDto>(request.rawJsonCreateDTO.GetRawText());
                 case "Event":
                     return JsonSerializer
                         .Deserialize<CreateEventStreetcodeDTO>(request.rawJsonCreateDTO.GetRawText());
