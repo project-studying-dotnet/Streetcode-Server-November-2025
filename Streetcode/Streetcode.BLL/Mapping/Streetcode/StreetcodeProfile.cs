@@ -1,6 +1,13 @@
-using AutoMapper;
+﻿using AutoMapper;
+using Streetcode.BLL.DTO.AdditionalContent.Tag;
+using Streetcode.BLL.DTO.Media.Audio;
+using Streetcode.BLL.DTO.Media.Images;
 using Streetcode.BLL.DTO.Streetcode;
+using Streetcode.DAL.Entities.AdditionalContent;
+using Streetcode.DAL.Entities.Media;
+using Streetcode.DAL.Entities.Media.Images;
 using Streetcode.DAL.Entities.Streetcode;
+using Streetcode.DAL.Entities.Streetcode.TextContent;
 using Streetcode.DAL.Entities.Streetcode.Types;
 using Streetcode.DAL.Enums;
 
@@ -19,6 +26,12 @@ public class StreetcodeProfile : Profile
                 .MapFrom(e => e.Text.Title))
             .ForPath(dto => dto.ImageId, conf => conf
                 .MapFrom(e => e.Images.Select(i => i.Id).LastOrDefault()));
+
+        // test
+        CreateMap<CreateStreetcodeDTO, StreetcodeContent>()
+            .ForMember(x => x.Images, conf => conf.Ignore())
+            .ForMember(sc => sc.Tags, conf => conf.Ignore())
+            .ReverseMap();
     }
 
     private StreetcodeType GetStreetcodeType(StreetcodeContent streetcode)
