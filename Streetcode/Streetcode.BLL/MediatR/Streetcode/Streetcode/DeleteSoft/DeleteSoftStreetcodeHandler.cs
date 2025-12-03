@@ -41,7 +41,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft
             }
             else
             {
-                const string errorMsg = "Failed to delete streetcode";
+                const string errorMsg = "Failed to change status of streetcode to deleted";
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
