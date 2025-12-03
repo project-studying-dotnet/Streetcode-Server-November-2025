@@ -1,4 +1,5 @@
-﻿using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
+﻿using Streetcode.BLL.DTO.Media.Images;
+using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
 
 namespace Streetcode.XUnitTest.MediatR.Fact.Create
 {
@@ -87,8 +88,27 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Create
         public async Task Handle_WhenImageDoesNotExist_ShouldReturnFailureResult()
         {
             // Arrange
+            const string errorMsg = "Image with provided ImageId does not exist";
+            var imageRepositoryMock = new Mock<IImageRepository>(MockBehavior.Strict);
+            var createFactDto = FactTestData.CreateCreateFactDto();
+            var command = new CreateFactCommand(createFactDto);
+
+            this.repositoryWrapperMock.SetupRepositoryWrapper(imageRepositoryMock);
+            imageRepositoryMock.SetupGetFirstOrDefaultAsync<IImageRepository, Image>(entity: null);
+            this.loggerMock.SetupLogger();
+
             // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
             // Assert
+            Assert.NotNull(result);
+            Assert.True(result.IsFailed);
+            Assert.NotEmpty(result.Errors);
+            Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
+
+            // Verify
+            imageRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IImageRepository, Image>();
+            this.loggerMock.VerifyLogErrorCalledOnce();
         }
 
         [Fact]

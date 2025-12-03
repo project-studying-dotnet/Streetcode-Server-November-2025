@@ -18,6 +18,8 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Helpers
         /// </summary>
         /// <param name="repositoryWrapperMock">The mocked repository wrapper.</param>
         /// <param name="factRepositoryMock">The mocked fact repository to be returned.</param>
+        /// <param name="imageRepositoryMock">The mocked image repository to be returned.</param>
+        /// <param name="streetcodeRepositoryMock">The mocked streetcode repository to be returned.</param>
         public static void SetupRepositoryWrapper(
             this Mock<IRepositoryWrapper> repositoryWrapperMock,
             Mock<IFactRepository> factRepositoryMock,
@@ -33,6 +35,21 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Helpers
             repositoryWrapperMock
                 .Setup(rw => rw.StreetcodeRepository)
                 .Returns(streetcodeRepositoryMock.Object);
+        }
+
+        /// <summary>
+        /// Sets up the mocked <see cref="IRepositoryWrapper"/> to return the provided mocked
+        /// <see cref="IFactRepository"/> instance when accessing the FactRepository property.
+        /// </summary>
+        /// <param name="repositoryWrapperMock">The mocked repository wrapper.</param>
+        /// <param name="imageRepositoryMock">The mocked image repository to be returned.</param>
+        public static void SetupRepositoryWrapper(
+            this Mock<IRepositoryWrapper> repositoryWrapperMock,
+            Mock<IImageRepository> imageRepositoryMock)
+        {
+            repositoryWrapperMock
+                .Setup(rw => rw.ImageRepository)
+                .Returns(imageRepositoryMock.Object);
         }
     }
 }
