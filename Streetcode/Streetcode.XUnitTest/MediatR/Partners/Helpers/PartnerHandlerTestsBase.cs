@@ -38,25 +38,25 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Sets up the mapper to return a specific PartnerDTO for any Partner entity.
+        /// Sets up the mapper to return a specific PartnerDto for any Partner entity.
         /// </summary>
-        /// <param name="partnerDTO">The PartnerDTO to return.</param>
-        protected void SetupMapperForPartnerDTO(PartnerDTO partnerDTO)
+        /// <param name="partnerDTO">The PartnerDto to return.</param>
+        protected void SetupMapperForPartnerDTO(PartnerDto partnerDTO)
         {
             this.MockMapper
-                .Setup(mapper => mapper.Map<PartnerDTO>(It.IsAny<Partner>()))
+                .Setup(mapper => mapper.Map<PartnerDto>(It.IsAny<Partner>()))
                 .Returns(partnerDTO);
         }
 
         /// <summary>
-        /// Sets up the mapper to return a specific PartnerDTO for a specific Partner entity.
+        /// Sets up the mapper to return a specific PartnerDto for a specific Partner entity.
         /// </summary>
         /// <param name="partner">The Partner entity to map from.</param>
-        /// <param name="partnerDTO">The PartnerDTO to return.</param>
-        protected void SetupMapperForSpecificPartner(Partner partner, PartnerDTO partnerDTO)
+        /// <param name="partnerDTO">The PartnerDto to return.</param>
+        protected void SetupMapperForSpecificPartner(Partner partner, PartnerDto partnerDTO)
         {
             this.MockMapper
-                .Setup(mapper => mapper.Map<PartnerDTO>(partner))
+                .Setup(mapper => mapper.Map<PartnerDto>(partner))
                 .Returns(partnerDTO);
         }
 
@@ -80,7 +80,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         protected void SetupSaveChangesToThrowException(string exceptionMessage)
         {
             this.MockRepository
-                .Setup(repo => repo.SaveChanges())
+                .Setup(repo => repo.SaveChangesAsync())
                 .Throws(new Exception(exceptionMessage));
         }
     }

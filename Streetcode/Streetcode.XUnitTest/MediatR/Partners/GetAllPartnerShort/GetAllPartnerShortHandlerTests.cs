@@ -9,7 +9,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
     /// <summary>
     /// Unit tests for <see cref="GetAllPartnerShortHandler"/>.
     /// </summary>
-    public class GetAllPartnerShortHandlerTests : GetAllPartnersTestsBase<GetAllPartnersShortQuery, PartnerShortDTO>
+    public class GetAllPartnerShortHandlerTests : GetAllPartnersTestsBase<GetAllPartnersShortQuery, PartnerShortDto>
     {
         private readonly GetAllPartnerShortHandler _handler;
 
@@ -25,33 +25,33 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <inheritdoc/>
-        protected override IRequestHandler<GetAllPartnersShortQuery, FluentResults.Result<IEnumerable<PartnerShortDTO>>> Handler => this._handler;
+        protected override IRequestHandler<GetAllPartnersShortQuery, FluentResults.Result<IEnumerable<PartnerShortDto>>> Handler => this._handler;
 
         /// <inheritdoc/>
-        protected override IEnumerable<PartnerShortDTO> CreateDtos(int count)
+        protected override IEnumerable<PartnerShortDto> CreateDtos(int count)
         {
             return PartnerTestHelpers.CreatePartnerShortDTOs(count);
         }
 
         /// <inheritdoc/>
-        protected override IEnumerable<PartnerShortDTO> CreateEmptyDtos()
+        protected override IEnumerable<PartnerShortDto> CreateEmptyDtos()
         {
-            return new List<PartnerShortDTO>();
+            return new List<PartnerShortDto>();
         }
 
         /// <inheritdoc/>
-        protected override void SetupMapperForDtos(IEnumerable<Partner> partners, IEnumerable<PartnerShortDTO> dtos)
+        protected override void SetupMapperForDtos(IEnumerable<Partner> partners, IEnumerable<PartnerShortDto> dtos)
         {
             this.MockMapper
-                .Setup(mapper => mapper.Map<IEnumerable<PartnerShortDTO>>(partners))
+                .Setup(mapper => mapper.Map<IEnumerable<PartnerShortDto>>(partners))
                 .Returns(dtos);
         }
 
         /// <inheritdoc/>
-        protected override void SetupMapperForAnyPartners(IEnumerable<PartnerShortDTO> dtos)
+        protected override void SetupMapperForAnyPartners(IEnumerable<PartnerShortDto> dtos)
         {
             this.MockMapper
-                .Setup(mapper => mapper.Map<IEnumerable<PartnerShortDTO>>(It.IsAny<IEnumerable<Partner>>()))
+                .Setup(mapper => mapper.Map<IEnumerable<PartnerShortDto>>(It.IsAny<IEnumerable<Partner>>()))
                 .Returns(dtos);
         }
 
@@ -59,7 +59,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         protected override void VerifyMapperWasCalled(IEnumerable<Partner> partners)
         {
             this.MockMapper.Verify(
-                mapper => mapper.Map<IEnumerable<PartnerShortDTO>>(partners),
+                mapper => mapper.Map<IEnumerable<PartnerShortDto>>(partners),
                 Times.Once);
         }
     }

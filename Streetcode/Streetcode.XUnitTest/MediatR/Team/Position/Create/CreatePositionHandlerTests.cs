@@ -115,15 +115,15 @@
                 .ThrowsAsync(new Exception(TestExceptionMessage));
         }
 
-        private void SetupMapperToPositionDTO(PositionDTO positionDTO)
+        private void SetupMapperToPositionDTO(PositionDto positionDTO)
         {
             this.mockMapper
-                .Setup(m => m.Map<PositionDTO>(It.IsAny<Positions>()))
+                .Setup(m => m.Map<PositionDto>(It.IsAny<Positions>()))
                 .Returns(positionDTO);
         }
 
         private static Positions GetTestPosition() => new Positions { Position = TestPositionName };
 
-        private static PositionDTO GetTestPositionDTO() => new PositionDTO { Position = TestPositionName };
+        private static PositionDto GetTestPositionDTO() => new PositionDto { Position = TestPositionName };
     }
 }

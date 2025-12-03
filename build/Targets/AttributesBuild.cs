@@ -2,6 +2,7 @@
 using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
+using Streetcode.Build;
 using static Nuke.Common.Tools.Git.GitTasks;
 
 namespace Targets;

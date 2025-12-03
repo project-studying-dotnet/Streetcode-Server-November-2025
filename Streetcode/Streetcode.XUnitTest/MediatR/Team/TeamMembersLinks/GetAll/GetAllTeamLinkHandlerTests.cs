@@ -100,10 +100,10 @@
                 .ReturnsAsync(teamLinks);
         }
 
-        private void SetupMapper(IEnumerable<TeamMemberLinkDTO> teamLinkDTOs)
+        private void SetupMapper(IEnumerable<TeamMemberLinkDto> teamLinkDTOs)
         {
             this.mockMapper
-                .Setup(m => m.Map<IEnumerable<TeamMemberLinkDTO>>(It.IsAny<IEnumerable<TeamMemberLink>>()))
+                .Setup(m => m.Map<IEnumerable<TeamMemberLinkDto>>(It.IsAny<IEnumerable<TeamMemberLink>>()))
                 .Returns(teamLinkDTOs);
         }
 
@@ -125,19 +125,19 @@
             },
         };
 
-        private static List<TeamMemberLinkDTO> GetTestTeamLinkDTOs() => new List<TeamMemberLinkDTO>
+        private static List<TeamMemberLinkDto> GetTestTeamLinkDTOs() => new List<TeamMemberLinkDto>
         {
-            new TeamMemberLinkDTO
+            new TeamMemberLinkDto
             {
                 Id = 1,
-                LogoType = LogoTypeDTO.Instagram,
+                LogoType = LogoTypeDto.Instagram,
                 TargetUrl = "https://instagram.com/",
                 TeamMemberId = 1,
             },
-            new TeamMemberLinkDTO
+            new TeamMemberLinkDto
             {
                 Id = 2,
-                LogoType = LogoTypeDTO.Facebook,
+                LogoType = LogoTypeDto.Facebook,
                 TargetUrl = "https://facebook.com/",
                 TeamMemberId = 2,
             },

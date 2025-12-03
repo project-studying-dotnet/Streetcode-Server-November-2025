@@ -46,7 +46,7 @@
         /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/>
         /// returns a failure result when no news is found for the specified Id.
         /// </summary>
-        /// <returns>A failed <see cref="Result{NewsDTO}"/> with an error message.</returns>
+        /// <returns>A failed <see cref="Result{NewsDto}"/> with an error message.</returns>
         [Theory]
         [InlineData(1)]
         [InlineData(5)]
@@ -68,7 +68,7 @@
             result.Errors.Should().ContainSingle(e => e.Message == expectedErrorMessage);
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, expectedErrorMessage);
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
@@ -77,7 +77,7 @@
         /// Tests that <see cref="GetNewsByIdHandler.Handle(GetNewsByIdQuery, CancellationToken)"/>
         /// returns a success result when news is found but has no associated image.
         /// </summary>
-        /// <returns>A successful <see cref="Result{NewsDTO}"/> with <c>null</c> image.</returns>
+        /// <returns>A successful <see cref="Result{NewsDto}"/> with <c>null</c> image.</returns>
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithoutImage()
         {
@@ -86,7 +86,7 @@
             var newsDto = NewsTestData.CreateNewsDTO(NewsId, imageId: null);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, news);
-            MockMapperHelper.SetupMapper<News, NewsDTO>(this.mapperMock, news, newsDto);
+            MockMapperHelper.SetupMapper<News, NewsDto>(this.mapperMock, news, newsDto);
 
             var query = new GetNewsByIdQuery(NewsId);
 
@@ -99,7 +99,7 @@
             result.Value.Image.Should().BeNull();
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
@@ -108,7 +108,7 @@
         /// returns a success result when news is found and has an associated image.
         /// Ensures that the Base64 content is populated via <see cref="IBlobService"/>.
         /// </summary>
-        /// <returns>A successful <see cref="Result{NewsDTO}"/> with populated <see cref="ImageDTO.Base64"/>.</returns>
+        /// <returns>A successful <see cref="Result{NewsDto}"/> with populated <see cref="ImageDTO.Base64"/>.</returns>
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenNewsFoundWithImage()
         {
@@ -131,7 +131,7 @@
             result.Value.Image?.Base64.Should().Be(Base64Content);
 
             // Verify
-            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
             MockBlobServiceHelper.VerifyTimes(this.blobServiceMock, 1);
         }
     }

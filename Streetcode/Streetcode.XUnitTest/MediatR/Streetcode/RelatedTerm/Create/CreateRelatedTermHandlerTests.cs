@@ -18,9 +18,9 @@ public class CreateRelatedTermHandlerTests
     private readonly Mock<IMapper> mockMapper;
     private readonly Mock<ILoggerService> mockLogger;
     private readonly CreateRelatedTermHandler handler;
-    private readonly RelatedTermDTO validRelatedTermDto = new () { Id = 1, TermId = 1, Word = "Тест" };
+    private readonly RelatedTermDto validRelatedTermDto = new () { Id = 1, TermId = 1, Word = "Тест" };
     private readonly Entity validRelatedTermEntity = new () { Id = 1, TermId = 1, Word = "Тест" };
-    private readonly RelatedTermDTO createdRelatedTermDto = new () { Id = 1, TermId = 1, Word = "Тест" };
+    private readonly RelatedTermDto createdRelatedTermDto = new () { Id = 1, TermId = 1, Word = "Тест" };
 
     public CreateRelatedTermHandlerTests()
     {
@@ -29,8 +29,8 @@ public class CreateRelatedTermHandlerTests
         this.mockLogger = new Mock<ILoggerService>();
         this.handler = new CreateRelatedTermHandler(this.mockRepository.Object, this.mockMapper.Object, this.mockLogger.Object);
 
-        this.mockRepository.Setup(r => r.RelatedTermRepository.Create(It.IsAny<Entity>()))
-            .Returns(this.validRelatedTermEntity);
+        this.mockRepository.Setup(r => r.RelatedTermRepository.CreateAsync(It.IsAny<Entity>()))
+            .ReturnsAsync(this.validRelatedTermEntity);
 
         this.mockRepository.Setup(r => r.RelatedTermRepository.GetAllAsync(
                 It.IsAny<Expression<Func<Entity, bool>>>(),
@@ -46,7 +46,7 @@ public class CreateRelatedTermHandlerTests
         var command = new CreateRelatedTermCommand(this.validRelatedTermDto);
 
         this.mockMapper.Setup(m => m.Map<Entity>(this.validRelatedTermDto)).Returns(this.validRelatedTermEntity);
-        this.mockMapper.Setup(m => m.Map<RelatedTermDTO>(this.validRelatedTermEntity))
+        this.mockMapper.Setup(m => m.Map<RelatedTermDto>(this.validRelatedTermEntity))
             .Returns(this.createdRelatedTermDto);
         this.mockRepository.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
 
@@ -54,11 +54,11 @@ public class CreateRelatedTermHandlerTests
 
         Assert.True(result.IsSuccess);
         Assert.Equal(this.createdRelatedTermDto.Word, result.Value.Word);
-        
+
         this.mockRepository.VerifyGetAllAsyncCalledOnce();
         this.mockRepository.VerifyCreateCalledOnce(this.validRelatedTermEntity);
         this.mockRepository.VerifySaveChangesCalledOnce();
-        
+
         this.mockMapper.VerifyMapDtoToEntityCalledOnce();
         this.mockMapper.VerifyMapEntityToDtoCalledOnce();
 
@@ -81,14 +81,14 @@ public class CreateRelatedTermHandlerTests
 
         Assert.True(result.IsFailed);
         Assert.Equal("Слово з цим визначенням уже існує", result.Errors.First().Message);
-        
+
         this.mockRepository.VerifyGetAllAsyncCalledOnce();
         this.mockRepository.VerifyCreateCalledNever();
         this.mockRepository.VerifySaveChangesCalledNever();
-        
+
         this.mockMapper.VerifyMapDtoToEntityCalledOnce();
         this.mockMapper.VerifyMapEntityToDtoCalledNever();
-        
+
         this.mockLogger.VerifyLogErrorCalledOnce();
     }
 
@@ -104,13 +104,13 @@ public class CreateRelatedTermHandlerTests
 
         Assert.True(result.IsFailed);
         Assert.Equal("Cannot save changes in the database after related word creation!", result.Errors.First().Message);
-        
+
         this.mockRepository.VerifyGetAllAsyncCalledOnce();
         this.mockRepository.VerifyCreateCalledOnce(this.validRelatedTermEntity);
         this.mockRepository.VerifySaveChangesCalledOnce();
-        
+
         this.mockMapper.VerifyMapEntityToDtoCalledNever();
-        
+
         this.mockLogger.VerifyLogErrorCalledOnce();
     }
 
@@ -125,11 +125,11 @@ public class CreateRelatedTermHandlerTests
 
         Assert.True(result.IsFailed);
         Assert.Equal("Cannot create new related word for a term!", result.Errors.First().Message);
-        
+
         this.mockRepository.VerifyGetAllAsyncCalledNever();
         this.mockRepository.VerifyCreateCalledNever();
         this.mockRepository.VerifySaveChangesCalledNever();
-        
+
         this.mockLogger.VerifyLogErrorCalledOnce();
     }
 }

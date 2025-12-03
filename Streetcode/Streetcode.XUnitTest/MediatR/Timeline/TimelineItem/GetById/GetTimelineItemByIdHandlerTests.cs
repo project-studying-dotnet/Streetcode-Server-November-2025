@@ -79,13 +79,13 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.GetById
             // Verify
             timelineRepositoryMock.VerifyGetFirstOrDefaultCalledOnce();
             this.loggerMock.VerifyLogErrorCalledOnce();
-            this.mapperMock.VerifyMapCalledNever<TimelineItemDTO>();
+            this.mapperMock.VerifyMapCalledNever<TimelineItemDto>();
         }
 
         /// <summary>
         ///     Tests that the <see cref="GetTimelineItemByIdHandler"/> correctly returns
         ///     a successful <see cref="Result"/> containing mapped
-        ///     <see cref="TimelineItemDTO"/> object when timeline item exist in the repository.
+        ///     <see cref="TimelineItemDto"/> object when timeline item exist in the repository.
         /// </summary>
         /// <remarks>
         ///     This test verifies that:
