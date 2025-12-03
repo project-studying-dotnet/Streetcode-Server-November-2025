@@ -44,7 +44,7 @@ public class TextController : BaseApiController
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TextCreateDTO textDTO)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TextUpdateDTO textDTO)
     {
         return HandleResult(await Mediator.Send(new UpdateTextCommand(id, textDTO)));
     }
