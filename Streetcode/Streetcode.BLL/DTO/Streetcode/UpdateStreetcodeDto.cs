@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -19,24 +20,26 @@ namespace Streetcode.BLL.DTO.Streetcode
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public StreetcodeType StreetcodeType { get; set; }
 
-        public string Title { get; set; }
+        public string Title { get; set; } = null!;
 
         public DateTime EventStartOrPersonBirthDate { get; set; }
 
         public DateTime? EventEndOrPersonDeathDate { get; set; }
 
-        public string DateString { get; set; }
+        public string? DateString { get; set; }
 
-        public IEnumerable<StreetcodeTagDTO> Tags { get; set; }
+        public IEnumerable<StreetcodeTagDTO>? Tags { get; set; }
 
-        public string Teaser { get; set; }
+        [MaxLength(520)]
+        public string? Teaser { get; set; }
 
-        public List<ImageDetailsDto> Images { get; set; }
+        public List<ImageDetailsDto>? Images { get; set; }
 
-        public int AudioId { get; set; }
+        public int? AudioId { get; set; }
 
-        public string TransliterationUrl { get; set; }
+        [MaxLength(100)]
+        public string TransliterationUrl { get; set; } = null!;
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }
