@@ -2,7 +2,7 @@
 
 namespace Streetcode.BLL.DTO.Streetcode.TextContent.Text
 {
-    public class TextUpdateDTO
+    public class TextUpdateDto
     {
         public string Title { get; set; }
         public string TextContent { get; set; }

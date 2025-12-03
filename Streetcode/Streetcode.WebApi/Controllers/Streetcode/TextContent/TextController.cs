@@ -49,7 +49,7 @@ public class TextController : BaseApiController
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TextUpdateDTO textDTO)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TextUpdateDto textDTO)
     {
         if (!ModelState.IsValid)
         {
