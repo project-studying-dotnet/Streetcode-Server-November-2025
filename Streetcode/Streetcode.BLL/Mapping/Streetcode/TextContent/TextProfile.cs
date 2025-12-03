@@ -8,7 +8,7 @@ public class TextProfile : Profile
 {
     public TextProfile()
     {
-        CreateMap<Text, TextDTO>().ReverseMap();
-        CreateMap<TextCreateDTO, Text>().ReverseMap();
+        CreateMap<Text, TextDto>().ReverseMap();
+        CreateMap<TextCreateDto, Text>().ReverseMap();
     }
 }

@@ -55,19 +55,19 @@ namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Fixtures
 
         public static Mock<IMapper> VerifyMapDtoToEntityCalledOnce(this Mock<IMapper> mock)
         {
-            mock.Verify(m => m.Map<Entity>(It.IsAny<RelatedTermDTO>()), Times.Once);
+            mock.Verify(m => m.Map<Entity>(It.IsAny<RelatedTermDto>()), Times.Once);
             return mock;
         }
 
         public static Mock<IMapper> VerifyMapEntityToDtoCalledOnce(this Mock<IMapper> mock)
         {
-            mock.Verify(m => m.Map<RelatedTermDTO>(It.IsAny<Entity>()), Times.Once);
+            mock.Verify(m => m.Map<RelatedTermDto>(It.IsAny<Entity>()), Times.Once);
             return mock;
         }
 
         public static Mock<IMapper> VerifyMapEntityToDtoCalledNever(this Mock<IMapper> mock)
         {
-            mock.Verify(m => m.Map<RelatedTermDTO>(It.IsAny<Entity>()), Times.Never);
+            mock.Verify(m => m.Map<RelatedTermDto>(It.IsAny<Entity>()), Times.Never);
             return mock;
         }
 
@@ -106,7 +106,7 @@ namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Fixtures
 
         public static Mock<IMapper> VerifyMapEntityListToDtoListCalledOnce(this Mock<IMapper> mock)
         {
-            mock.Verify(m => m.Map<IEnumerable<RelatedTermDTO>>(It.IsAny<IEnumerable<Entity>>()), Times.Once);
+            mock.Verify(m => m.Map<IEnumerable<RelatedTermDto>>(It.IsAny<IEnumerable<Entity>>()), Times.Once);
             return mock;
         }
     }

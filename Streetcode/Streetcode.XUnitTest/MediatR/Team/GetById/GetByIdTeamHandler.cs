@@ -46,7 +46,7 @@
         {
             // Arrange
             var teamMember = new TeamMember { Id = TestMemberId };
-            var teamMemberDTO = new TeamMemberDTO { Id = TestMemberId };
+            var teamMemberDTO = new TeamMemberDto { Id = TestMemberId };
 
             this.SetupRepositoryGetByIdAsync(teamMember);
             this.SetupMapper(teamMemberDTO);
@@ -100,10 +100,10 @@
                 .ReturnsAsync(teamMember);
         }
 
-        private void SetupMapper(TeamMemberDTO teamMemberDTO)
+        private void SetupMapper(TeamMemberDto teamMemberDTO)
         {
             this.mockMapper
-                .Setup(m => m.Map<TeamMemberDTO>(It.IsAny<TeamMember>()))
+                .Setup(m => m.Map<TeamMemberDto>(It.IsAny<TeamMember>()))
                 .Returns(teamMemberDTO);
         }
     }

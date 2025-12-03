@@ -23,7 +23,7 @@ public class DeleteRelatedTermHandlerTests
     private const string NonExistentWord = "NonExistentWord";
     
     private readonly Entity existingRelatedTermEntity = new () { Id = 1, TermId = 1, Word = ExistedWord };
-    private readonly RelatedTermDTO expectedRelatedTermDto = new () { Id = 1, TermId = 1, Word = ExistedWord };
+    private readonly RelatedTermDto expectedRelatedTermDto = new () { Id = 1, TermId = 1, Word = ExistedWord };
 
     public DeleteRelatedTermHandlerTests()
     {
@@ -47,7 +47,7 @@ public class DeleteRelatedTermHandlerTests
         this.mockRepository.Setup(r => r.RelatedTermRepository.Delete(It.IsAny<Entity>()));
         this.mockRepository.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
         
-        this.mockMapper.Setup(m => m.Map<RelatedTermDTO>(this.existingRelatedTermEntity))
+        this.mockMapper.Setup(m => m.Map<RelatedTermDto>(this.existingRelatedTermEntity))
             .Returns(this.expectedRelatedTermDto);
         
         var result = await this.handler.Handle(command, CancellationToken.None);
@@ -130,8 +130,8 @@ public class DeleteRelatedTermHandlerTests
         this.mockRepository.Setup(r => r.RelatedTermRepository.Delete(It.IsAny<Entity>()));
         this.mockRepository.Setup(r => r.SaveChangesAsync()).ReturnsAsync(1);
         
-        this.mockMapper.Setup(m => m.Map<RelatedTermDTO>(this.existingRelatedTermEntity))
-            .Returns((RelatedTermDTO)null!);
+        this.mockMapper.Setup(m => m.Map<RelatedTermDto>(this.existingRelatedTermEntity))
+            .Returns((RelatedTermDto)null!);
         
         var result = await this.handler.Handle(command, CancellationToken.None);
         
