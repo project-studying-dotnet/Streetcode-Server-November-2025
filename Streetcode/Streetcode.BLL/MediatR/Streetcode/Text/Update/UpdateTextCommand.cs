@@ -1,0 +1,7 @@
+using FluentResults;
+using MediatR;
+using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
+
+namespace Streetcode.BLL.MediatR.Streetcode.Text.Update;
+
+public record UpdateTextCommand(int Id, TextCreateDTO Text) : IRequest<Result<TextDTO>>;
