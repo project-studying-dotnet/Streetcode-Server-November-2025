@@ -70,29 +70,29 @@
             this.VerifyLoggerCalledOnce(targetAudioId);
         }
 
-        private static (Audio Audio, AudioDTO AudioDTO, int TargetAudioId) CreateValidAudioEntityAndDTO()
+        private static (Audio Audio, AudioDto AudioDTO, int TargetAudioId) CreateValidAudioEntityAndDTO()
         {
             const int targetAudioId = 1;
             const string blobName = "validBlobName";
             const string base64 = "base64string";
 
             var entity = new Audio { Id = targetAudioId, BlobName = blobName, Base64 = base64 };
-            var audioDTO = new AudioDTO { Id = targetAudioId, BlobName = blobName, Base64 = base64 };
+            var audioDTO = new AudioDto { Id = targetAudioId, BlobName = blobName, Base64 = base64 };
 
             return (entity, audioDTO, targetAudioId);
         }
 
-        private static (Audio? Audio, AudioDTO? AudioDTO, int TargetAudioId) CreateNullAudioEntity()
+        private static (Audio? Audio, AudioDto? AudioDTO, int TargetAudioId) CreateNullAudioEntity()
         {
             const int targetAudioId = 1;
 
             Audio? entity = null;
-            AudioDTO? mappedDTO = null;
+            AudioDto? mappedDTO = null;
 
             return (entity, mappedDTO, targetAudioId);
         }
 
-        private void SetupMocks(Audio? entity, AudioDTO? audioDTO)
+        private void SetupMocks(Audio? entity, AudioDto? audioDTO)
         {
             this.mockRepo
                 .Setup(r => r.AudioRepository.GetFirstOrDefaultAsync(
@@ -103,7 +103,7 @@
             if (audioDTO != null)
             {
                 this.mockMapper
-                    .Setup(m => m.Map<AudioDTO>(It.IsAny<Audio>()))
+                    .Setup(m => m.Map<AudioDto>(It.IsAny<Audio>()))
                     .Returns(audioDTO);
 
                 this.mockBlob
@@ -121,7 +121,7 @@
             Times.Once);
 
             this.mockMapper.Verify(
-                m => m.Map<AudioDTO>(It.IsAny<Audio>()),
+                m => m.Map<AudioDto>(It.IsAny<Audio>()),
                 Times.Once);
 
             this.mockBlob.Verify(

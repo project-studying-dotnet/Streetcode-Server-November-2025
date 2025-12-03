@@ -29,11 +29,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Sets up the mapper to map CreatePartnerDTO to Partner entity for updates.
+        /// Sets up the mapper to map CreatePartnerDto to Partner entity for updates.
         /// </summary>
         /// <param name="updatePartnerDTO">The DTO containing update data.</param>
         /// <param name="partnerEntity">The entity to map to.</param>
-        private void SetupMapperForUpdatePartner(CreatePartnerDTO updatePartnerDTO, Partner partnerEntity)
+        private void SetupMapperForUpdatePartner(CreatePartnerDto updatePartnerDTO, Partner partnerEntity)
         {
             this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
@@ -93,10 +93,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Sets up the mapper to return null when mapping CreatePartnerDTO to Partner.
+        /// Sets up the mapper to return null when mapping CreatePartnerDto to Partner.
         /// </summary>
         /// <param name="updatePartnerDTO">The DTO being mapped.</param>
-        private void SetupMapperToReturnNullPartner(CreatePartnerDTO updatePartnerDTO)
+        private void SetupMapperToReturnNullPartner(CreatePartnerDto updatePartnerDTO)
         {
             this.MockMapper
                 .Setup(mapper => mapper.Map<Partner>(updatePartnerDTO))
@@ -111,7 +111,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsSuccess_WhenPartnerUpdatedSuccessfully()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDTO
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
@@ -119,9 +119,9 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 IsVisibleEverywhere = false,
                 LogoId = 1,
                 Description = "Updated Description",
-                Streetcodes = new List<StreetcodeShortDTO>
+                Streetcodes = new List<StreetcodeShortDto>
                 {
-                    new StreetcodeShortDTO { Id = 1 },
+                    new StreetcodeShortDto { Id = 1 },
                 },
             };
 
@@ -151,7 +151,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
 
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Exactly(2));
         }
 
@@ -163,14 +163,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_DeletesOldLinks_WhenLinksAreRemoved()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDTO
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
                 IsKeyPartner = true,
                 IsVisibleEverywhere = false,
                 LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDTO>(),
+                Streetcodes = new List<StreetcodeShortDto>(),
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
@@ -209,17 +209,17 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_CreatesNewStreetcodeLinks_WhenStreetcodesAreAdded()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDTO
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
                 IsKeyPartner = true,
                 IsVisibleEverywhere = false,
                 LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDTO>
+                Streetcodes = new List<StreetcodeShortDto>
                 {
-                    new StreetcodeShortDTO { Id = 10 },
-                    new StreetcodeShortDTO { Id = 20 },
+                    new StreetcodeShortDto { Id = 10 },
+                    new StreetcodeShortDto { Id = 20 },
                 },
             };
 
@@ -243,7 +243,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsSuccess.Should().BeTrue();
             this.MockRepository.Verify(
-                repo => repo.PartnerStreetcodeRepository.Create(It.IsAny<StreetcodePartner>()),
+                repo => repo.PartnerStreetcodeRepository.CreateAsync(It.IsAny<StreetcodePartner>()),
                 Times.Exactly(2));
         }
 
@@ -255,14 +255,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_DeletesOldStreetcodeLinks_WhenStreetcodesAreRemoved()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDTO
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
                 IsKeyPartner = true,
                 IsVisibleEverywhere = false,
                 LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDTO>(),
+                Streetcodes = new List<StreetcodeShortDto>(),
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
@@ -301,14 +301,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_CallsSaveChangesTwice_WhenUpdateIsSuccessful()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDTO
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
                 IsKeyPartner = true,
                 IsVisibleEverywhere = false,
                 LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDTO>(),
+                Streetcodes = new List<StreetcodeShortDto>(),
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
@@ -331,7 +331,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsSuccess.Should().BeTrue();
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Exactly(2),
                 "because SaveChanges should be called after updating partner and after modifying streetcode links");
         }
@@ -344,14 +344,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsFailure_WhenExceptionOccurs()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDTO
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
                 IsKeyPartner = true,
                 IsVisibleEverywhere = false,
                 LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDTO>(),
+                Streetcodes = new List<StreetcodeShortDto>(),
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
@@ -385,14 +385,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsFailure_WhenSaveChangesThrowsException()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDTO
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
                 IsKeyPartner = true,
                 IsVisibleEverywhere = false,
                 LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDTO>(),
+                Streetcodes = new List<StreetcodeShortDto>(),
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
@@ -432,14 +432,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_CallsMapper_WhenUpdateIsSuccessful()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDTO
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
                 IsKeyPartner = true,
                 IsVisibleEverywhere = false,
                 LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDTO>(),
+                Streetcodes = new List<StreetcodeShortDto>(),
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
@@ -465,7 +465,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 mapper => mapper.Map<Partner>(updatePartnerDTO),
                 Times.Once);
             this.MockMapper.Verify(
-                mapper => mapper.Map<PartnerDTO>(partnerEntity),
+                mapper => mapper.Map<PartnerDto>(partnerEntity),
                 Times.Once);
         }
 
@@ -477,14 +477,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity()
         {
             // Arrange
-            var updatePartnerDTO = new CreatePartnerDTO
+            var updatePartnerDTO = new CreatePartnerDto
             {
                 Id = 1,
                 Title = "Updated Partner",
                 IsKeyPartner = true,
                 IsVisibleEverywhere = false,
                 LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDTO>(),
+                Streetcodes = new List<StreetcodeShortDto>(),
             };
 
             this.SetupMapperToReturnNullPartner(updatePartnerDTO);
@@ -503,7 +503,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Never);
 
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Never);
         }
     }

@@ -43,7 +43,7 @@
         /// <summary>
         /// Tests that the handler returns success when valid data is provided.
         /// </summary>
-        /// <returns>A successful <see cref="Result{NewsDTO}"/>.</returns>
+        /// <returns>A successful <see cref="Result{NewsDto}"/>.</returns>
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenDataValid()
         {
@@ -66,15 +66,15 @@
             result.Value.Should().BeEquivalentTo(dto);
 
             // Verify
-            MockMapperHelper.VerifyMap<NewsDTO, News>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
-            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
         }
 
         /// <summary>
         /// Tests that ImageId is set to null when the incoming DTO has ImageId = 0.
         /// </summary>
-        /// <returns>A successful <see cref="Result{NewsDTO}"/> with ImageId set to null.</returns>
+        /// <returns>A successful <see cref="Result{NewsDto}"/> with ImageId set to null.</returns>
         [Fact]
         public async Task Handle_ShouldSetImageIdToNull_WhenImageIdIsZero()
         {
@@ -97,15 +97,15 @@
             entity.ImageId.Should().BeNull();
 
             // Verify
-            MockMapperHelper.VerifyMap<NewsDTO, News>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
-            MockMapperHelper.VerifyMap<News, NewsDTO>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
         }
 
         /// <summary>
         /// Tests that the handler returns failure when the mapper returns null.
         /// </summary>
-        /// <returns>A failed <see cref="Result{NewsDTO}"/> with an appropriate error message.</returns>
+        /// <returns>A failed <see cref="Result{NewsDto}"/> with an appropriate error message.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenMapperReturnsNull()
         {
@@ -124,7 +124,7 @@
             result.Errors.Should().ContainSingle(e => e.Message == ErrorMsgMapper);
 
             // Verify
-            MockMapperHelper.VerifyMap<NewsDTO, News>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateNever(this.repoMock);
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMsgMapper);
         }
@@ -132,7 +132,7 @@
         /// <summary>
         /// Tests that the handler returns failure when saving changes to the repository fails.
         /// </summary>
-        /// <returns>A failed <see cref="Result{NewsDTO}"/> with an appropriate error message.</returns>
+        /// <returns>A failed <see cref="Result{NewsDto}"/> with an appropriate error message.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFailure_WhenSaveFails()
         {
@@ -154,7 +154,7 @@
             result.Errors.Should().ContainSingle(e => e.Message == ErrorMsgSave);
 
             // Verify
-            MockMapperHelper.VerifyMap<NewsDTO, News>(this.mapperMock, Times.Once());
+            MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
             MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMsgSave);
         }

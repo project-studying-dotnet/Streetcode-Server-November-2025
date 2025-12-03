@@ -86,7 +86,7 @@
         public async Task Handle_ReturnsSucces_WhenArtsNonEmpty(int requestedId)
         {
             Art art = GetArt();
-            ArtDTO artDTO = GetArtDTO();
+            ArtDto artDTO = GetArtDTO();
 
             this.SetupRepositoryMapper(art, artDTO);
 
@@ -103,7 +103,7 @@
         public async Task Handle_ReturnsProperArt_WhenArtsNonEmpty(int requestedId)
         {
             Art art = GetArt();
-            ArtDTO artDTO = GetArtDTO();
+            ArtDto artDTO = GetArtDTO();
 
             this.SetupRepositoryMapper(art, artDTO);
 
@@ -115,14 +115,14 @@
             this.verifyMockersHandler.VerifyWrapperMock();
         }
 
-        private void SetupRepositoryMapper(Art art, ArtDTO artDTO)
+        private void SetupRepositoryMapper(Art art, ArtDto artDTO)
         {
             this.artRepositoryMock.Setup(repo => repo.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Art, bool>>>(),
                 It.IsAny<Func<IQueryable<Art>, IIncludableQueryable<Art, object>>>()))
                 .ReturnsAsync(art);
 
-            this.mapperMock.Setup(map => map.Map<ArtDTO>(It.IsAny<Art>()))
+            this.mapperMock.Setup(map => map.Map<ArtDto>(It.IsAny<Art>()))
                 .Returns(artDTO);
         }
 
@@ -134,9 +134,9 @@
             };
         }
 
-        private static ArtDTO GetArtDTO()
+        private static ArtDto GetArtDTO()
         {
-            return new ArtDTO()
+            return new ArtDto()
             {
                 Id = 1,
             };

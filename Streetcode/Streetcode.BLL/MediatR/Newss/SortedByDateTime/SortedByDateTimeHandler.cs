@@ -10,7 +10,7 @@ using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
 
 namespace Streetcode.BLL.MediatR.Newss.SortedByDateTime
 {
-    public class SortedByDateTimeHandler : IRequestHandler<SortedByDateTimeQuery, Result<List<NewsDTO>>>
+    public class SortedByDateTimeHandler : IRequestHandler<SortedByDateTimeQuery, Result<List<NewsDto>>>
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IMapper _mapper;
@@ -25,7 +25,7 @@ namespace Streetcode.BLL.MediatR.Newss.SortedByDateTime
             _logger = logger;
         }
 
-        public async Task<Result<List<NewsDTO>>> Handle(SortedByDateTimeQuery request, CancellationToken cancellationToken)
+        public async Task<Result<List<NewsDto>>> Handle(SortedByDateTimeQuery request, CancellationToken cancellationToken)
         {
             var news = await _repositoryWrapper.NewsRepository.GetAllAsync(
                 include: cat => cat.Include(img => img.Image));
@@ -36,7 +36,7 @@ namespace Streetcode.BLL.MediatR.Newss.SortedByDateTime
                 return Result.Fail(errorMsg);
             }
 
-            var newsDTOs = _mapper.Map<IEnumerable<NewsDTO>>(news).OrderByDescending(x => x.CreationDate).ToList();
+            var newsDTOs = _mapper.Map<IEnumerable<NewsDto>>(news).OrderByDescending(x => x.CreationDate).ToList();
 
             foreach (var dto in newsDTOs)
             {

@@ -95,7 +95,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
 
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Once);
         }
 
@@ -126,7 +126,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Never);
 
             this.MockRepository.Verify(
-                repo => repo.SaveChanges(),
+                repo => repo.SaveChangesAsync(),
                 Times.Never);
 
             this.MockLogger.Verify(
@@ -186,7 +186,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsSuccess.Should().BeTrue();
             this.MockMapper.Verify(
-                mapper => mapper.Map<PartnerDTO>(partner),
+                mapper => mapper.Map<PartnerDto>(partner),
                 Times.Once);
         }
 
