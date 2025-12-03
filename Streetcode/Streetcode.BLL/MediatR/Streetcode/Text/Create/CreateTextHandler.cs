@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
+using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -9,7 +10,7 @@ using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.Text;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Text.Create;
 
-public class CreateTextHandler : IRequestHandler<CreateTextCommand, Result<TextDTO>>
+public class CreateTextHandler : IRequestHandler<CreateTextCommand, Result<TextDto>>
 {
     private const string DefaultAuthorship = "Текст підготовлений спільно з";
 
@@ -24,7 +25,7 @@ public class CreateTextHandler : IRequestHandler<CreateTextCommand, Result<TextD
         _logger = logger;
     }
 
-    public async Task<Result<TextDTO>> Handle(CreateTextCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TextDto>> Handle(CreateTextCommand request, CancellationToken cancellationToken)
     {
         var textDto = request.Text;
 
@@ -59,7 +60,7 @@ public class CreateTextHandler : IRequestHandler<CreateTextCommand, Result<TextD
             return Result.Fail(new Error(errorMsg));
         }
 
-        var resultDto = _mapper.Map<TextDTO>(createdText);
+        var resultDto = _mapper.Map<TextDto>(createdText);
         return Result.Ok(resultDto);
     }
 }

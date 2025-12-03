@@ -4,4 +4,4 @@ using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Text.Update;
 
-public record UpdateTextCommand(int Id, TextUpdateDto Text) : IRequest<Result<TextDTO>>;
+public record UpdateTextCommand(int Id, TextUpdateDto Text) : IRequest<Result<TextDto>>;

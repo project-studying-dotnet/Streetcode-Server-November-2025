@@ -38,25 +38,25 @@ public class TextController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] TextCreateDTO textDTO)
+    public async Task<IActionResult> Create([FromBody] TextCreateDto textDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        return HandleResult(await Mediator.Send(new CreateTextCommand(textDTO)));
+        return HandleResult(await Mediator.Send(new CreateTextCommand(textDto)));
     }
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TextUpdateDto textDTO)
+    public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TextUpdateDto textDto)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        return HandleResult(await Mediator.Send(new UpdateTextCommand(id, textDTO)));
+        return HandleResult(await Mediator.Send(new UpdateTextCommand(id, textDto)));
     }
 
     [HttpDelete("{id:int}")]

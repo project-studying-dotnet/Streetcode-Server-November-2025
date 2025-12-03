@@ -4,4 +4,4 @@ using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Text.Create;
 
-public record CreateTextCommand(TextCreateDTO Text) : IRequest<Result<TextDTO>>;
+public record CreateTextCommand(TextCreateDto Text) : IRequest<Result<TextDto>>;

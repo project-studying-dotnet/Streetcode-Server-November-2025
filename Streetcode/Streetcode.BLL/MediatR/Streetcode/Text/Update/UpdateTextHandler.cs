@@ -7,7 +7,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Text.Update;
 
-public class UpdateTextHandler : IRequestHandler<UpdateTextCommand, Result<TextDTO>>
+public class UpdateTextHandler : IRequestHandler<UpdateTextCommand, Result<TextDto>>
 {
     private const string DefaultAuthorship = "Текст підготовлений спільно з";
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -21,7 +21,7 @@ public class UpdateTextHandler : IRequestHandler<UpdateTextCommand, Result<TextD
         _logger = logger;
     }
 
-    public async Task<Result<TextDTO>> Handle(UpdateTextCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TextDto>> Handle(UpdateTextCommand request, CancellationToken cancellationToken)
     {
         var text = await _repositoryWrapper.TextRepository.GetFirstOrDefaultAsync(f => f.Id == request.Id);
 
@@ -49,7 +49,7 @@ public class UpdateTextHandler : IRequestHandler<UpdateTextCommand, Result<TextD
             return Result.Fail(new Error(errorMsg));
         }
 
-        var resultDto = _mapper.Map<TextDTO>(text);
+        var resultDto = _mapper.Map<TextDto>(text);
         return Result.Ok(resultDto);
     }
 }
