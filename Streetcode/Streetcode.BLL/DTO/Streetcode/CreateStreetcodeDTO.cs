@@ -12,33 +12,7 @@ using Streetcode.DAL.Enums;
 
 namespace Streetcode.BLL.DTO.Streetcode
 {
-    public class CreateStreetcodeDto
+    public class CreateStreetcodeDto : CreateUpdateStreetcodeDto
     {
-        public int Index { get; set; }
-
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public StreetcodeType StreetcodeType { get; set; }
-
-        public string Title { get; set; } = null!;
-
-        public DateTime EventStartOrPersonBirthDate { get; set; }
-
-        public DateTime? EventEndOrPersonDeathDate { get; set; }
-
-        public string? DateString { get; set; }
-
-        public IEnumerable<StreetcodeTagDto>? Tags { get; set; }
-
-        [MaxLength(520)]
-        public string? Teaser { get; set; }
-
-        public List<ImageDetailsDto>? Images { get; set; }
-
-        public int? AudioId { get; set; }
-
-        [MaxLength(100)]
-        public string TransliterationUrl { get; set; } = null!;
-
-        public string? Description { get; set; }
     }
 }
