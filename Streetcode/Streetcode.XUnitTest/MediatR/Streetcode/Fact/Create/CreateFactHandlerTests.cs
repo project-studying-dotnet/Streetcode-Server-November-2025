@@ -147,8 +147,39 @@
         public async Task Handle_WhenFactExists_ShouldReturnFailureResult()
         {
             // Arrange
+            const string errorMsg = "Fact with the same title already exists for this Streetcode";
+            var imageRepositoryMock = new Mock<IImageRepository>(MockBehavior.Strict);
+            var streetcodeRepositoryMock = new Mock<IStreetcodeRepository>(MockBehavior.Strict);
+            var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
+            var createFactDto = FactTestData.CreateCreateFactDto();
+            var command = new CreateFactCommand(createFactDto);
+            var image = new Image { Id = createFactDto.ImageId };
+            var streetcode = new StreetcodeContent { Id = createFactDto.StreetcodeId };
+            var exisitingFact = FactTestData.CreateFact(streetcodeId: createFactDto.StreetcodeId);
+
+            this.repositoryWrapperMock.SetupRepositoryWrapper(
+                factRepositoryMock,
+                imageRepositoryMock,
+                streetcodeRepositoryMock);
+            imageRepositoryMock.SetupGetFirstOrDefaultAsync(image);
+            streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync(streetcode);
+            factRepositoryMock.SetupGetFirstOrDefaultAsync(exisitingFact);
+            this.loggerMock.SetupLogger();
+
             // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
             // Assert
+            Assert.NotNull(result);
+            Assert.True(result.IsFailed);
+            Assert.NotEmpty(result.Errors);
+            Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
+
+            // Verify
+            imageRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IImageRepository, Image>();
+            streetcodeRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IStreetcodeRepository, StreetcodeContent>();
+            factRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IFactRepository, Fact>();
+            this.loggerMock.VerifyLogErrorCalledOnce();
         }
 
         [Fact]
