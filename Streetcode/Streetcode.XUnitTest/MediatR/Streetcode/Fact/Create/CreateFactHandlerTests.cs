@@ -1,7 +1,4 @@
-﻿using Streetcode.BLL.DTO.Media.Images;
-using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
-
-namespace Streetcode.XUnitTest.MediatR.Fact.Create
+﻿namespace Streetcode.XUnitTest.MediatR.Fact.Create
 {
     using AutoMapper;
     using Fixtures;
@@ -17,6 +14,8 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Create
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
+    using Streetcode.BLL.DTO.Media.Images;
+    using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.XUnitTest.Helpers;
     using Xunit;
 
@@ -115,8 +114,33 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Create
         public async Task Handle_WhenStreetcodeDoesNotExist_ShouldReturnFailureResult()
         {
             // Arrange
+            const string errorMsg = "Streetcode with provided StreetcodeId does not exist";
+            var imageRepositoryMock = new Mock<IImageRepository>(MockBehavior.Strict);
+            var streetcodeRepositoryMock = new Mock<IStreetcodeRepository>(MockBehavior.Strict);
+            var createFactDto = FactTestData.CreateCreateFactDto();
+            var command = new CreateFactCommand(createFactDto);
+            var image = new Image { Id = createFactDto.ImageId };
+
+            this.repositoryWrapperMock.SetupRepositoryWrapper(
+                imageRepositoryMock,
+                streetcodeRepositoryMock);
+            imageRepositoryMock.SetupGetFirstOrDefaultAsync(image);
+            streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync<IStreetcodeRepository, StreetcodeContent>(entity: null);
+            this.loggerMock.SetupLogger();
+
             // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
             // Assert
+            Assert.NotNull(result);
+            Assert.True(result.IsFailed);
+            Assert.NotEmpty(result.Errors);
+            Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
+
+            // Verify
+            imageRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IImageRepository, Image>();
+            streetcodeRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IStreetcodeRepository, StreetcodeContent>();
+            this.loggerMock.VerifyLogErrorCalledOnce();
         }
 
         [Fact]
