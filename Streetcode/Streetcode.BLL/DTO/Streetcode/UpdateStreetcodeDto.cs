@@ -28,7 +28,7 @@ namespace Streetcode.BLL.DTO.Streetcode
 
         public string? DateString { get; set; }
 
-        public IEnumerable<StreetcodeTagDTO>? Tags { get; set; }
+        public IEnumerable<StreetcodeTagDto>? Tags { get; set; }
 
         [MaxLength(520)]
         public string? Teaser { get; set; }

@@ -93,7 +93,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                     }
                 }
 
-                List<StreetcodeTagDTO> tagsList = сreateStreetcodeDTO.Tags.ToList();
+                List<StreetcodeTagDto> tagsList = сreateStreetcodeDTO.Tags.ToList();
 
                 if (tagsList != null)
                 {

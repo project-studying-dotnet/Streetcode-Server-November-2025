@@ -136,7 +136,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
 
                     _repository.StreetcodeTagIndexRepository.DeleteRange(oldTags);
 
-                    List<StreetcodeTagDTO> newTagList = updateStreetcodeDTO.Tags.ToList();
+                    List<StreetcodeTagDto> newTagList = updateStreetcodeDTO.Tags.ToList();
 
                     foreach (var tag in newTagList)
                     {
