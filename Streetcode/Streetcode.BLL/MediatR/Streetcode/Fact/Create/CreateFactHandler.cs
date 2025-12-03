@@ -8,6 +8,8 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Fact.Create
 {
+    using DAL.Entities.Streetcode.TextContent;
+
     public class CreateFactHandler : IRequestHandler<CreateFactCommand, Result<FactDto>>
     {
         private readonly IMapper _mapper;
@@ -56,7 +58,7 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                     return Result.Fail(errorMsg);
                 }
 
-                var newFact = _mapper.Map<DAL.Entities.Streetcode.TextContent.Fact>(request.newFact);
+                var newFact = _mapper.Map<Fact>(request.newFact);
                 if (newFact is null)
                 {
                     const string errorMsg = "Failed to map CreateFactDTO to Fact entity";

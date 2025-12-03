@@ -1,6 +1,4 @@
-﻿using Streetcode.BLL.DTO.Media.Images;
-
-namespace Streetcode.BLL.DTO.Streetcode.TextContent.Fact
+﻿namespace Streetcode.BLL.DTO.Streetcode.TextContent.Fact
 {
     public class CreateFactDTO
     {
