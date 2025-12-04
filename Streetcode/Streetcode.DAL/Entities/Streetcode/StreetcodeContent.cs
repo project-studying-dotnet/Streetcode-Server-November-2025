@@ -47,6 +47,9 @@ public class StreetcodeContent
     [MaxLength(150)]
     public string? TransliterationUrl { get; set; }
 
+    [MaxLength(33)]
+    public string? ShortDescription { get; set; }
+
     public int ViewCount { get; set; }
 
     public DateTime CreatedAt { get; set; }
