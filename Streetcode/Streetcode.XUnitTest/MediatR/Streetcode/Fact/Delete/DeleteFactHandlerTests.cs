@@ -15,19 +15,16 @@
 
     public class DeleteFactHandlerTests
     {
-        private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
         private readonly Mock<ILoggerService> loggerMock;
         private readonly DeleteFactHandler handler;
 
         public DeleteFactHandlerTests()
         {
-            this.mapperMock = new Mock<IMapper>();
             this.repositoryWrapperMock = new Mock<IRepositoryWrapper>();
             this.loggerMock = new Mock<ILoggerService>();
             this.handler = new DeleteFactHandler(
                 this.repositoryWrapperMock.Object,
-                this.mapperMock.Object,
                 this.loggerMock.Object);
         }
 

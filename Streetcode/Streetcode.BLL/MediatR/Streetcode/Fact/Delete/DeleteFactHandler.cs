@@ -8,14 +8,12 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Delete
 {
     public class DeleteFactHandler : IRequestHandler<DeleteFactCommand, Result<Unit>>
     {
-        private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly ILoggerService _logger;
 
-        public DeleteFactHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
+        public DeleteFactHandler(IRepositoryWrapper repositoryWrapper, ILoggerService logger)
         {
             _repositoryWrapper = repositoryWrapper;
-            _mapper = mapper;
             _logger = logger;
         }
 
