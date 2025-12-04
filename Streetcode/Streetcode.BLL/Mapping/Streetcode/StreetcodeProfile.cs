@@ -27,7 +27,6 @@ public class StreetcodeProfile : Profile
             .ForPath(dto => dto.ImageId, conf => conf
                 .MapFrom(e => e.Images.Select(i => i.Id).LastOrDefault()));
 
-        // test
         CreateMap<CreateStreetcodeDto, StreetcodeContent>()
             .ForMember(x => x.Images, conf => conf.Ignore())
             .ForMember(sc => sc.Tags, conf => conf.Ignore())
