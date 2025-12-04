@@ -11,6 +11,5 @@ namespace Streetcode.BLL.DTO.Streetcode.TextContent.Text
             @"^(https?://)?(www\.)?(youtube\.com/(watch\?v=|embed/|v/)|youtu\.be/)[\w\-]+",
             ErrorMessage = "Video must be from YouTube")]
         public string? VideoUrl { get; set; }
-        public string? Authorship { get; set; }
     }
 }

@@ -7,6 +7,5 @@ public class TextDto
     public string TextContent { get; set; }
     public string? AdditionalText { get; set; }
     public string? VideoUrl { get; set; }
-    public string? Authorship { get; set; }
     public int StreetcodeId { get; set; }
 }

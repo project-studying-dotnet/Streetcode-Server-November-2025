@@ -9,7 +9,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Text.Update;
 
 public class UpdateTextHandler : IRequestHandler<UpdateTextCommand, Result<TextDto>>
 {
-    private const string DefaultAuthorship = "Текст підготовлений спільно з";
+    private const string DefaultAuthorship = "РўРµРєСЃС‚ РїС–РґРіРѕС‚РѕРІР»РµРЅРёР№ СЃРїС–Р»СЊРЅРѕ Р·";
     private readonly IRepositoryWrapper _repositoryWrapper;
     private readonly IMapper _mapper;
     private readonly ILoggerService _logger;
@@ -34,9 +34,9 @@ public class UpdateTextHandler : IRequestHandler<UpdateTextCommand, Result<TextD
 
         text = _mapper.Map(request.Text, text);
 
-        if (!string.IsNullOrEmpty(text.Authorship) && text.Authorship.Trim() == DefaultAuthorship)
+        if (!string.IsNullOrEmpty(text.AdditionalText) && text.AdditionalText.Trim() == DefaultAuthorship)
         {
-            text.Authorship = null;
+            text.AdditionalText = null;
         }
 
         _repositoryWrapper.TextRepository.Update(text);

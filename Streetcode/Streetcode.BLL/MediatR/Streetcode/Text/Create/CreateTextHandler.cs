@@ -44,9 +44,9 @@ public class CreateTextHandler : IRequestHandler<CreateTextCommand, Result<TextD
             return Result.Fail(new Error(errorMsg));
         }
 
-        if (!string.IsNullOrEmpty(text.Authorship) && text.Authorship.Trim() == DefaultAuthorship)
+        if (!string.IsNullOrEmpty(text.AdditionalText) && text.AdditionalText.Trim() == DefaultAuthorship)
         {
-            text.Authorship = null;
+            text.AdditionalText = null;
         }
 
         var createdText = await _repositoryWrapper.TextRepository.CreateAsync(text);
