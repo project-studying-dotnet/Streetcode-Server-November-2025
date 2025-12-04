@@ -59,7 +59,7 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Helpers
 
         /// <summary>
         /// Sets up the mocked <see cref="IRepositoryWrapper"/> to return the provided mocked
-        /// <see cref="IFactRepository"/> instance when accessing the FactRepository property.
+        /// <see cref="IFactRepository"/> and <see cref="IImageRepository"/> instance when accessing the FactRepository property.
         /// </summary>
         /// <param name="repositoryWrapperMock">The mocked repository wrapper.</param>
         /// <param name="imageRepositoryMock">The mocked image repository to be returned.</param>
@@ -79,7 +79,7 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Helpers
 
         /// <summary>
         /// Sets up the mocked <see cref="IRepositoryWrapper"/> to return the provided mocked
-        /// <see cref="IFactRepository"/> instance when accessing the FactRepository property.
+        /// <see cref="IImageRepository"/> instance when accessing the ImageRepository property.
         /// </summary>
         /// <param name="repositoryWrapperMock">The mocked repository wrapper.</param>
         /// <param name="imageRepositoryMock">The mocked image repository to be returned.</param>
