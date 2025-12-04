@@ -193,8 +193,6 @@
             var command = new CreateFactCommand(createFactDto);
             var image = new Image { Id = createFactDto.ImageId };
             var streetcode = new StreetcodeContent { Id = createFactDto.StreetcodeId };
-            var newFact = FactTestData.CreateFact(streetcodeId: createFactDto.StreetcodeId);
-            var factDto = FactTestData.CreateFactDto();
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(
                 factRepositoryMock,
