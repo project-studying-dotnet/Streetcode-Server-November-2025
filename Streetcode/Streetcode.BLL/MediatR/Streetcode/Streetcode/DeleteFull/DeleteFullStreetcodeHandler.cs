@@ -30,7 +30,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull
             {
                 string errorMsg = $"Cannot find a streetcode with corresponding categoryId: {request.Id}";
                 _logger.LogError(request, errorMsg);
-                throw new ArgumentNullException(errorMsg);
+                return Result.Fail(errorMsg);
             }
 
             var streetcodeTags = _repositoryWrapper.StreetcodeTagIndexRepository
