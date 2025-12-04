@@ -2,6 +2,7 @@ using Hangfire;
 using DotNetEnv;
 using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.WebApi.Extensions;
+using Streetcode.WebApi.Middleware;
 using Streetcode.WebApi.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,6 +43,7 @@ else
 await app.ApplyMigrations();
 
 // await app.SeedDataAsync(); // uncomment for seeding data in local
+app.UseMiddleware<ValidationExceptionMiddleware>();
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseRouting();
