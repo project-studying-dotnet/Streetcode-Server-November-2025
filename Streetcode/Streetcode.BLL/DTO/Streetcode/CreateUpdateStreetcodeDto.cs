@@ -20,9 +20,15 @@ namespace Streetcode.BLL.DTO.Streetcode
 
         public string Title { get; set; } = null!;
 
+        [MaxLength(50)]
+        public string? Alias { get; set; }
+
         public DateTime EventStartOrPersonBirthDate { get; set; }
 
         public DateTime? EventEndOrPersonDeathDate { get; set; }
+
+        [MaxLength(33)]
+        public string? ShortDescription { get; set; }
 
         public string? DateString { get; set; }
 
