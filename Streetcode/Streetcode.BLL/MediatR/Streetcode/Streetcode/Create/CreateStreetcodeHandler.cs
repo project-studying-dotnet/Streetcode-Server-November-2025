@@ -13,6 +13,7 @@ using Streetcode.BLL.DTO.AdditionalContent.Tag;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.DTO.Streetcode.Types;
 using Streetcode.BLL.Interfaces.Logging;
+using Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull;
 using Streetcode.BLL.Util;
 using Streetcode.DAL.Entities.AdditionalContent;
 using Streetcode.DAL.Entities.Media.Images;
@@ -29,13 +30,15 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
         private readonly ILoggerService _logger;
-        private StreetcodeCreateHelper _streetcodeCreateHelper;
+        private readonly IMediator _mediator;
+        private readonly StreetcodeCreateHelper _streetcodeCreateHelper;
 
-        public CreateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger)
+        public CreateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger, IMediator mediator)
         {
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
+            _mediator = mediator;
             _streetcodeCreateHelper = new StreetcodeCreateHelper(_logger);
         }
 
@@ -46,79 +49,45 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 var rawJson = request.rawJsonCreateDTO;
 
-                var streetcodeIndex = rawJson.GetProperty("Index").GetInt32();
-                var existingStreetcodeWithIndex = await _repository.StreetcodeRepository
-                    .GetAllAsync(sc => sc.Index == streetcodeIndex);
-                if (existingStreetcodeWithIndex.Any())
+                int streetcodeIndex = rawJson.GetProperty("Index").GetInt32();
+
+                if (await StreetcodeIndexExists(streetcodeIndex))
                 {
-                    throw new Exception();
+                    return Result.Fail(new Error($"Streetcode with Index {streetcodeIndex} already exists"));
                 }
 
-                var streetcodeType = rawJson.GetProperty("StreetcodeType").GetString();
+                string streetcodeType = rawJson.GetProperty("StreetcodeType").GetString();
 
-                CreateStreetcodeDto сreateStreetcodeDTO;
-
-                сreateStreetcodeDTO = _streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
+                CreateStreetcodeDto сreateStreetcodeDTO = _streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
 
                 var streetcodeContent = _mapper.Map<StreetcodeContent>(сreateStreetcodeDTO);
 
-                var result = _repository.StreetcodeRepository.Create(streetcodeContent);
+                await _repository.StreetcodeRepository.CreateAsync(streetcodeContent);
                 await _repository.SaveChangesAsync();
 
-                var audio = await _repository.AudioRepository.GetFirstOrDefaultAsync(
-                    x => x.Id == сreateStreetcodeDTO.AudioId);
-
-                if (audio == null && сreateStreetcodeDTO.AudioId != null)
+                var audioResult = await HandleAudioCreate(сreateStreetcodeDTO, streetcodeContent, request);
+                if (audioResult.IsFailed)
                 {
-                    const string errorMsg = "Streetcode not found";
-                    _logger.LogError(request, errorMsg);
-                    return Result.Fail(new Error(errorMsg));
+                    return audioResult;
                 }
 
-                if (сreateStreetcodeDTO.Images != null)
+                var imagesResult = await HandleImagesCreate(сreateStreetcodeDTO, streetcodeContent, request);
+                if (imagesResult.IsFailed)
                 {
-                    foreach (var img in сreateStreetcodeDTO.Images)
-                    {
-                        var image = await _repository.ImageRepository
-                            .GetFirstOrDefaultAsync(x => x.Id == img.ImageId);
-
-                        await _repository.StreetcodeImageRepository.CreateAsync(new StreetcodeImage()
-                        {
-                            ImageId = img.ImageId,
-                            StreetcodeId = streetcodeContent.Id
-                        });
-
-                        var imgDetail = _mapper.Map<ImageDetails>(img);
-                        await _repository.ImageDetailsRepository.CreateAsync(imgDetail);
-                    }
+                    return imagesResult;
                 }
 
-                List<StreetcodeTagDto> tagsList = сreateStreetcodeDTO.Tags.ToList();
-
-                if (tagsList != null)
+                var tagsResult = await HandleTagsCreate(сreateStreetcodeDTO, streetcodeContent, request);
+                if (tagsResult.IsFailed)
                 {
-                    foreach (var tag in tagsList)
-                    {
-                        var thisTag = await _repository.TagRepository
-                            .GetFirstOrDefaultAsync(x => x.Id == tag.Id);
-
-                        StreetcodeTagIndex tagIndex = new StreetcodeTagIndex()
-                        {
-                            StreetcodeId = streetcodeContent.Id,
-                            TagId = tag.Id,
-                            IsVisible = tag.IsVisible,
-                            Index = tagsList.IndexOf(tag),
-                        };
-
-                        _repository.StreetcodeTagIndexRepository.Create(tagIndex);
-                    }
+                    return tagsResult;
                 }
 
                 var resultIsSuccess = await _repository.SaveChangesAsync() > 0;
 
                 if (resultIsSuccess)
                 {
-                    var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(result);
+                    var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(streetcodeContent);
                     var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
                     return await Task.FromResult(Result.Ok(jsonResult));
                 }
@@ -127,10 +96,98 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 string errorMsg = $"Exception occurred while creating streetcode: {ex.Message}";
                 _logger.LogError(request, errorMsg);
+
+                _mediator.Send(new DeleteFullStreetcodeCommand(
+                    request.rawJsonCreateDTO.GetProperty("Index").GetInt32()));
+
                 return Result.Fail<JsonElement>(new Error(errorMsg));
             }
 
             return await Task.FromResult(Result.Ok());
+        }
+
+        private async Task<bool> StreetcodeIndexExists(int index)
+        {
+            var existing = await _repository.StreetcodeRepository.GetAllAsync(sc => sc.Index == index);
+            return existing.Any();
+        }
+
+        private async Task<Result> HandleAudioCreate(CreateStreetcodeDto dto, StreetcodeContent entity, CreateStreetcodeCommand request)
+        {
+            if (dto.AudioId is null)
+            {
+                return Result.Ok();
+            }
+
+            var audio = await _repository.AudioRepository.GetFirstOrDefaultAsync(x => x.Id == dto.AudioId);
+            if (audio is null)
+            {
+                _logger.LogError(request, "Audio not found");
+                return Result.Fail("Audio not found");
+            }
+
+            entity.AudioId = audio.Id;
+            return Result.Ok();
+        }
+
+        private async Task<Result> HandleImagesCreate(CreateStreetcodeDto dto, StreetcodeContent entity, CreateStreetcodeCommand request)
+        {
+            if (dto.Images is null)
+            {
+                return Result.Ok();
+            }
+
+            foreach (var img in dto.Images)
+            {
+                var image = await _repository.ImageRepository.GetFirstOrDefaultAsync(x => x.Id == img.ImageId);
+                if (image is null)
+                {
+                    string errorMsg = $"Image {img.ImageId} not found";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
+                }
+
+                await _repository.StreetcodeImageRepository.CreateAsync(new StreetcodeImage
+                {
+                    ImageId = img.ImageId,
+                    StreetcodeId = entity.Id
+                });
+
+                var imgDetail = _mapper.Map<ImageDetails>(img);
+                await _repository.ImageDetailsRepository.CreateAsync(imgDetail);
+            }
+
+            return Result.Ok();
+        }
+
+        private async Task<Result> HandleTagsCreate(CreateStreetcodeDto dto, StreetcodeContent entity, CreateStreetcodeCommand request)
+        {
+            if (dto.Tags is null)
+            {
+                return Result.Ok();
+            }
+
+            var tagList = dto.Tags.ToList();
+            foreach (var tag in tagList)
+            {
+                var thisTag = await _repository.TagRepository.GetFirstOrDefaultAsync(x => x.Id == tag.Id);
+                if (thisTag is null)
+                {
+                    string errorMsg = $"Tag {tag.Id} not found";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
+                }
+
+                await _repository.StreetcodeTagIndexRepository.CreateAsync(new StreetcodeTagIndex
+                {
+                    StreetcodeId = entity.Id,
+                    TagId = tag.Id,
+                    IsVisible = tag.IsVisible,
+                    Index = tagList.IndexOf(tag)
+                });
+            }
+
+            return Result.Ok();
         }
     }
 }
