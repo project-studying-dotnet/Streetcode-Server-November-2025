@@ -10,5 +10,6 @@ public class TextProfile : Profile
     {
         CreateMap<Text, TextDto>().ReverseMap();
         CreateMap<TextCreateDto, Text>().ReverseMap();
+        CreateMap<TextUpdateDto, Text>().ReverseMap();
     }
 }
