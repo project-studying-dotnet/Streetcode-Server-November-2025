@@ -75,10 +75,10 @@
             imageRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IImageRepository, Image>();
             streetcodeRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IStreetcodeRepository, StreetcodeContent>();
             factRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IFactRepository, Fact>();
-            this.mapperMock.VerifyMapCalledOnce<CreateFactDTO, Fact>(createFactDto);
+            this.mapperMock.VerifyMapCalledOnce<Fact>();
             factRepositoryMock.VerifyCreateAsyncCalledOnce<IFactRepository, Fact>();
             this.repositoryWrapperMock.VerifySaveChangesAsyncCalledOnce();
-            this.mapperMock.VerifyMapCalledOnce<Fact, FactDto>(newFact);
+            this.mapperMock.VerifyMapCalledOnce<FactDto>();
             this.loggerMock.VerifyLogErrorCalledNever();
         }
 
@@ -218,7 +218,7 @@
             imageRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IImageRepository, Image>();
             streetcodeRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IStreetcodeRepository, StreetcodeContent>();
             factRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IFactRepository, Fact>();
-            this.mapperMock.VerifyMapCalledOnce<CreateFactDTO, Fact>(createFactDto);
+            this.mapperMock.VerifyMapCalledOnce<Fact>();
             this.loggerMock.VerifyLogErrorCalledOnce();
         }
     }

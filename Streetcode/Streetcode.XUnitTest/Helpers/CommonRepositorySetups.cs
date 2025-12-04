@@ -1,13 +1,12 @@
 namespace Streetcode.XUnitTest.Helpers
 {
+    using System.Linq.Expressions;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.DAL.Repositories.Interfaces.Base;
-    using System.Linq.Expressions;
-    using System.Runtime.Intrinsics.X86;
 
     /// <summary>
     /// Provides extension methods for configuring mocked repository, mapper, and logger behavior

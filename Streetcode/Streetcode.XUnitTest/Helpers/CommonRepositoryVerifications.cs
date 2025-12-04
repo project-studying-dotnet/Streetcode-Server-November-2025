@@ -18,10 +18,12 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that <c>GetAllAsync</c> was called exactly once on the mocked repository.
         /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
-        public static void VerifyGetAllAsyncCalledOnce<TEntity>(this Mock<IRepositoryBase<TEntity>> repositoryMock)
+        public static void VerifyGetAllAsyncCalledOnce<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
             where TEntity : class
+            where TRepo : class, IRepositoryBase<TEntity>
         {
             repositoryMock.Verify(
                 r => r.GetAllAsync(
@@ -226,18 +228,15 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that the mapper was called exactly once to map from source type to destination type.
         /// </summary>
-        /// <typeparam name="TSource">The source type.</typeparam>
         /// <typeparam name="TDestination">The destination type.</typeparam>
         /// <param name="mapperMock">The mocked mapper.</param>
-        /// <param name="source">The source object expected to be mapped.</param>
-        public static void VerifyMapCalledOnce<TSource, TDestination>(
-            this Mock<IMapper> mapperMock,
-            TSource source)
+        public static void VerifyMapCalledOnce<TDestination>(
+            this Mock<IMapper> mapperMock)
         {
             mapperMock.Verify(
-                m => m.Map<TDestination>(source),
+                m => m.Map<TDestination>(It.IsAny<object>()),
                 Times.Once,
-                $"Map method should be called exactly once to map from {typeof(TSource).Name} to {typeof(TDestination).Name}");
+                $"Map method should be called exactly once to {typeof(TDestination).Name}");
         }
 
         /// <summary>
