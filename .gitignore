@@ -345,3 +345,11 @@ healthchecksdb
 # BlobStorage
 BlobStorageFolder/
 BlobStorageTestFolder/
+
+#Sensetive data
+appsettings.Development.json
+
+secrets.json
+*.user
+*.pfx
+.env
