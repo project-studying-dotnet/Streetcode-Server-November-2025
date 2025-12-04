@@ -1,11 +1,13 @@
 namespace Streetcode.XUnitTest.Helpers
 {
-    using System.Linq.Expressions;
     using AutoMapper;
+    using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using System.Linq.Expressions;
+    using System.Runtime.Intrinsics.X86;
 
     /// <summary>
     /// Provides extension methods for configuring mocked repository, mapper, and logger behavior
@@ -80,12 +82,16 @@ namespace Streetcode.XUnitTest.Helpers
         /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
+        /// /// <param name="entity">The entity to update.</param>
         public static void SetupUpdate<TRepo, TEntity>(
-            this Mock<TRepo> repositoryMock)
+            this Mock<TRepo> repositoryMock,
+            TEntity entity)
             where TEntity : class
             where TRepo : class, IRepositoryBase<TEntity>
         {
-            repositoryMock.Setup(r => r.Update(It.IsAny<TEntity>()));
+            repositoryMock
+                .Setup(r => r.Update(It.IsAny<TEntity>()))
+                .Returns(It.IsAny<EntityEntry<TEntity>>());
         }
 
         /// <summary>
@@ -128,8 +134,9 @@ namespace Streetcode.XUnitTest.Helpers
         }
 
         /// <summary>
-        /// Configures the mocked <see cref="IMapper"/> to map from source type to destination type.
-        /// This generic method works for all mapping scenarios: entity to DTO, DTO to entity, and collections.
+        /// Configures the mocked<see cref = "IMapper" /> to map from source to a new destination object.
+        /// This method should be used when the mapper creates a new instance of the destination type.
+        /// For updating existing objects, use <see cref="SetupMapOnto{TSource, TDestination}"/> instead.
         /// </summary>
         /// <typeparam name="TSource">The source type.</typeparam>
         /// <typeparam name="TDestination">The destination type.</typeparam>

@@ -5,6 +5,7 @@
     using Helpers;
     using Moq;
     using Repositories.Interfaces;
+    using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Fact.Create;
     using Streetcode.BLL.MediatR.Streetcode.Fact.Create;
@@ -14,8 +15,6 @@
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
-    using Streetcode.BLL.DTO.Media.Images;
-    using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.XUnitTest.Helpers;
     using Xunit;
 

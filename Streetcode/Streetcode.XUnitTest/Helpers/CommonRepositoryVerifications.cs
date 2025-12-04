@@ -34,6 +34,7 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that <c>GetFirstOrDefaultAsync</c> was called exactly once on the mocked repository.
         /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
         public static void VerifyGetFirstOrDefaultCalledOnce<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
@@ -51,6 +52,7 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that <c>GetFirstOrDefaultAsync</c> was never called on the mocked repository.
         /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
         public static void VerifyGetFirstOrDefaultCalledNever<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
@@ -68,6 +70,7 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that <c>CreateAsync</c> was called exactly once on the mocked repository.
         /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
         public static void VerifyCreateAsyncCalledOnce<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
@@ -83,6 +86,7 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that <c>CreateAsync</c> was never called on the mocked repository.
         /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
         public static void VerifyCreateAsyncCalledNever<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
@@ -98,6 +102,7 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that <c>Update</c> was called exactly once on the mocked repository.
         /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
         public static void VerifyUpdateCalledOnce<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
@@ -113,6 +118,7 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that <c>Update</c> was never called on the mocked repository.
         /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
         public static void VerifyUpdateCalledNever<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
@@ -128,6 +134,7 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that <c>Delete</c> was called exactly once on the mocked repository.
         /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
         public static void VerifyDeleteCalledOnce<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
@@ -143,6 +150,7 @@ namespace Streetcode.XUnitTest.Helpers
         /// <summary>
         /// Verifies that <c>Delete</c> was never called on the mocked repository.
         /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
         /// <typeparam name="TEntity">The entity type.</typeparam>
         /// <param name="repositoryMock">The mocked repository.</param>
         public static void VerifyDeleteCalledNever<TRepo, TEntity>(this Mock<TRepo> repositoryMock)

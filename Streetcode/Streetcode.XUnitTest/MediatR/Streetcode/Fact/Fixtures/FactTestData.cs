@@ -140,5 +140,46 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
 
             return items;
         }
+
+        /// <summary>
+        /// Creates a single <see cref="UpdateFactDto"/> instance with predefined values.
+        /// </summary>
+        /// <param name="id">The ID of the fact to update.</param>
+        /// <param name="imageId">The image ID for the fact.</param>
+        /// <returns>A fully initialized <see cref="UpdateFactDto"/> object for testing.</returns>
+        public static UpdateFactDto CreateUpdateFactDto(int id = 1, int imageId = 1)
+        {
+            return new UpdateFactDto
+            {
+                Id = id,
+                Title = "Historical Fact",
+                ImageId = imageId,
+                FactContent = "This is a detailed description of an important historical fact.",
+            };
+        }
+
+        /// <summary>
+        /// Creates a collection of <see cref="UpdateFactDto"/> objects with sequential IDs.
+        /// </summary>
+        /// <param name="count">The number of DTO items to create.</param>
+        /// <param name="imageId">The starting image ID for items.</param>
+        /// <returns>A list of <see cref="UpdateFactDto"/> instances.</returns>
+        public static List<UpdateFactDto> CreateUpdateFactDtos(int count = 5, int imageId = 1)
+        {
+            var items = new List<UpdateFactDto>(count);
+
+            for (int i = 0; i < count; ++i)
+            {
+                items.Add(new UpdateFactDto
+                {
+                    Id = i + 1,
+                    Title = $"Historical Fact {i + 1}",
+                    ImageId = imageId + i,
+                    FactContent = $"This is a detailed description of historical fact number {i + 1}.",
+                });
+            }
+
+            return items;
+        }
     }
 }
