@@ -1,10 +1,10 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Fact.GetAll
+﻿namespace Streetcode.XUnitTest.MediatR.Fact.GetById
 {
     using AutoMapper;
     using Moq;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Streetcode.Fact.GetAll;
+    using Streetcode.BLL.MediatR.Streetcode.Fact.GetById;
     using Streetcode.DAL.Entities.Streetcode.TextContent;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
@@ -13,35 +13,35 @@
     using Streetcode.XUnitTest.MediatR.Fact.Helpers;
     using Xunit;
 
-    public class GetAllFactsHandlerTests
+    public class GetFactByIdHandlerTests
     {
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
         private readonly Mock<ILoggerService> loggerMock;
-        private readonly GetAllFactsHandler handler;
+        private readonly GetFactByIdHandler handler;
 
-        public GetAllFactsHandlerTests()
+        public GetFactByIdHandlerTests()
         {
             this.mapperMock = new Mock<IMapper>();
             this.repositoryWrapperMock = new Mock<IRepositoryWrapper>();
             this.loggerMock = new Mock<ILoggerService>();
-            this.handler = new GetAllFactsHandler(
+            this.handler = new GetFactByIdHandler(
                 this.repositoryWrapperMock.Object,
                 this.mapperMock.Object,
                 this.loggerMock.Object);
         }
 
         [Fact]
-        public async Task Handle_WhenFactsDoNotExist_ShouldReturnFailureResult()
+        public async Task Handle_WhenFactDoesNotExist_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Cannot find any fact";
+            var factId = 1;
+            string errorMsg = $"Cannot find any fact with corresponding id: {factId}";
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
-            var query = new GetAllFactsQuery();
+            var query = new GetFactByIdQuery(factId);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(factRepositoryMock);
-
-            factRepositoryMock.SetupGetAllAsync<IFactRepository, Fact>(entities: null);
+            factRepositoryMock.SetupGetFirstOrDefaultAsync<IFactRepository, Fact>(entity: null);
             this.loggerMock.SetupLogger();
 
             // Act
@@ -54,37 +54,35 @@
             Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
 
             // Verify
-            factRepositoryMock.VerifyGetAllAsyncCalledOnce<IFactRepository, Fact>();
+            factRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IFactRepository, Fact>();
             this.loggerMock.VerifyLogErrorCalledOnce();
         }
 
         [Fact]
-        public async Task Handle_WhenFactsExist_ShouldReturnAllFactsSuccessfully()
+        public async Task Handle_WhenFactExists_ShouldReturnSuccessResult()
         {
             // Arrange
+            var factId = 1;
+            var factEntity = FactTestData.CreateFact(factId);
+            var factDto = FactTestData.CreateFactDto(factId);
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
-            var facts = FactTestData.CreateFacts();
-            var factsDtos = FactTestData.CreateFactDtos();
-            var command = new GetAllFactsQuery();
+            var query = new GetFactByIdQuery(factId);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(factRepositoryMock);
-            factRepositoryMock.SetupGetAllAsync(facts);
-            this.mapperMock
-                .Setup(m => m.Map<IEnumerable<FactDto>>(It.IsAny<IEnumerable<Fact>>()))
-                .Returns(factsDtos);
+            factRepositoryMock.SetupGetFirstOrDefaultAsync<IFactRepository, Fact>(entity: factEntity);
+            this.mapperMock.SetupMapper(factEntity, factDto);
 
             // Act
-            var result = await this.handler.Handle(command, CancellationToken.None);
+            var result = await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
             Assert.NotNull(result);
             Assert.True(result.IsSuccess);
-            Assert.Equal(facts.Count(), result.Value.Count());
+            Assert.Equal(factDto, result.Value);
 
             // Verify
-            factRepositoryMock.VerifyGetAllAsyncCalledOnce<IFactRepository, Fact>();
-            this.mapperMock.VerifyMapCalledOnce<IEnumerable<FactDto>>();
-            this.loggerMock.VerifyLogErrorCalledNever();
+            factRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IFactRepository, Fact>();
+            this.mapperMock.VerifyMapCalledOnce<FactDto>();
         }
     }
 }
