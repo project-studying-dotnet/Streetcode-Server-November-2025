@@ -30,7 +30,7 @@ namespace Streetcode.WebApi.Controllers.Streetcode.TextContent
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateFactDTO fact)
+        public async Task<IActionResult> Create([FromBody] CreateFactDto fact)
         {
             return HandleResult(await Mediator.Send(new CreateFactCommand(fact)));
         }

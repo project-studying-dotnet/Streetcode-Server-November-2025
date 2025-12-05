@@ -100,14 +100,14 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
         }
 
         /// <summary>
-        /// Creates a single <see cref="CreateFactDTO"/> instance with predefined values.
+        /// Creates a single <see cref="BLL.DTO.Streetcode.TextContent.Fact.CreateFactDto"/> instance with predefined values.
         /// </summary>
         /// <param name="streetcodeId">The streetcode ID for the new fact.</param>
         /// <param name="imageId">The image ID for the new fact.</param>
-        /// <returns>A fully initialized <see cref="CreateFactDTO"/> object for testing.</returns>
-        public static CreateFactDTO CreateCreateFactDto(int streetcodeId = 101, int imageId = 1)
+        /// <returns>A fully initialized <see cref="BLL.DTO.Streetcode.TextContent.Fact.CreateFactDto"/> object for testing.</returns>
+        public static CreateFactDto CreateCreateFactDto(int streetcodeId = 101, int imageId = 1)
         {
-            return new CreateFactDTO
+            return new CreateFactDto
             {
                 Title = "Historical Fact",
                 ImageId = imageId,
@@ -117,19 +117,19 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
         }
 
         /// <summary>
-        /// Creates a collection of <see cref="CreateFactDTO"/> objects with sequential values.
+        /// Creates a collection of <see cref="BLL.DTO.Streetcode.TextContent.Fact.CreateFactDto"/> objects with sequential values.
         /// </summary>
         /// <param name="count">The number of DTO items to create.</param>
         /// <param name="streetcodeId">The streetcode ID for all items.</param>
         /// <param name="imageId">The starting image ID for items.</param>
-        /// <returns>A list of <see cref="CreateFactDTO"/> instances.</returns>
-        public static List<CreateFactDTO> CreateCreateFactDtos(int count = 5, int streetcodeId = 101, int imageId = 1)
+        /// <returns>A list of <see cref="BLL.DTO.Streetcode.TextContent.Fact.CreateFactDto"/> instances.</returns>
+        public static List<CreateFactDto> CreateCreateFactDtos(int count = 5, int streetcodeId = 101, int imageId = 1)
         {
-            var items = new List<CreateFactDTO>(count);
+            var items = new List<CreateFactDto>(count);
 
             for (int i = 0; i < count; ++i)
             {
-                items.Add(new CreateFactDTO
+                items.Add(new CreateFactDto
                 {
                     Title = $"Historical Fact {i + 1}",
                     ImageId = imageId + i,

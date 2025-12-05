@@ -201,7 +201,7 @@
             imageRepositoryMock.SetupGetFirstOrDefaultAsync(image);
             streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync(streetcode);
             factRepositoryMock.SetupGetFirstOrDefaultAsync<IFactRepository, Fact>(entity: null);
-            this.mapperMock.SetupMapper<CreateFactDTO, Fact>(createFactDto, null!);
+            this.mapperMock.SetupMapper<CreateFactDto, Fact>(createFactDto, null!);
 
             // Act
             var result = await this.handler.Handle(command, CancellationToken.None);

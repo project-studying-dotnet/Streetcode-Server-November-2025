@@ -1,6 +1,6 @@
 ﻿namespace Streetcode.BLL.DTO.Streetcode.TextContent.Fact
 {
-    public class CreateFactDTO
+    public class CreateFactDto
     {
         public string Title { get; set; }
         public int ImageId { get; set; }
