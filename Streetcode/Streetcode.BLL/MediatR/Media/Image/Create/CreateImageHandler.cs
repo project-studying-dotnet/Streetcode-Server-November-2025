@@ -14,6 +14,7 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
     private readonly IRepositoryWrapper _repositoryWrapper;
     private readonly IBlobService _blobService;
     private readonly ILoggerService _logger;
+    private static readonly string[] AllowedExtensions = { ".png", ".jpg", ".jpeg", ".webp" };
 
     public CreateImageHandler(
         IBlobService blobService,
@@ -29,6 +30,13 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
 
     public async Task<Result<ImageDto>> Handle(CreateImageCommand request, CancellationToken cancellationToken)
     {
+        if (!AllowedExtensions.Contains($".{request.Image.Extension.ToLower()}"))
+        {
+            const string errorMsg = "Invalid image format. Allowed formats: .png, .jpg, .jpeg, .webp";
+            _logger.LogError(request, errorMsg);
+            return Result.Fail(new Error(errorMsg));
+        }
+
         string hashBlobStorageName = _blobService.SaveFileInStorage(
             request.Image.BaseFormat,
             request.Image.Title,
