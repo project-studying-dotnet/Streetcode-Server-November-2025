@@ -79,6 +79,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 .When(x => HaveProperty("ShortDescription")(x));
 
             RuleFor(x => x)
+                .Must(HaveStringPropertyWithMaxLength("DateString", 50))
+                .WithMessage("DateString must not exceed 50 characters")
+                .When(x => HaveProperty("DateString")(x));
+
+            RuleFor(x => x)
                 .Must(HaveStringPropertyWithMaxLength("Teaser", 520))
                 .WithMessage("Teaser must not exceed 520 characters")
                 .When(x => HaveProperty("Teaser")(x));
