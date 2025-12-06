@@ -1,4 +1,5 @@
 using FluentValidation;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Newss.Delete
 {
@@ -13,7 +14,7 @@ namespace Streetcode.BLL.MediatR.Newss.Delete
         public DeleteNewsCommandValidator()
         {
             RuleFor(x => x.id)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .WithMessage("News Id must be greater than 0");
         }
     }

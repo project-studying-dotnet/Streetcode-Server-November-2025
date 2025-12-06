@@ -9,20 +9,19 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Create
     /// </summary>
     public class AudioFileBaseCreateDtoValidator : AbstractValidator<AudioFileBaseCreateDto>
     {
-        private const long MaxAudioSizeInBytes = 10 * 1024 * 1024; // 10MB
-
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioFileBaseCreateDtoValidator"/> class.
         /// </summary>
         public AudioFileBaseCreateDtoValidator()
         {
             RuleFor(x => x.BaseFormat)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage("Audio Base64 data is required")
                 .Must(Base64Validator.IsValidBase64)
                 .WithMessage("BaseFormat must be valid Base64 string")
-                .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, MaxAudioSizeInBytes))
-                .WithMessage($"Audio size must not exceed {MaxAudioSizeInBytes / 1024 / 1024}MB when decoded");
+                .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, MediaValidationConstants.MaxAudioSizeInBytes))
+                .WithMessage($"Audio size must not exceed {MediaValidationConstants.MaxAudioSizeInBytes / 1024 / 1024}MB when decoded");
 
             RuleFor(x => x.Extension)
                 .NotEmpty()
@@ -31,19 +30,19 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Create
                 .WithMessage($"Audio extension must be one of: {string.Join(", ", FileExtensionValidator.AllowedAudioExtensions)}");
 
             RuleFor(x => x.MimeType)
-                .MaximumLength(10)
+                .MaximumLength(ValidationConstants.Common.MimeTypeMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.MimeType))
-                .WithMessage("MimeType must not exceed 10 characters");
+                .WithMessage($"MimeType must not exceed {ValidationConstants.Common.MimeTypeMaxLength} characters");
 
             RuleFor(x => x.Title)
-                .MaximumLength(100)
+                .MaximumLength(ValidationConstants.Media.TitleMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.Title))
-                .WithMessage("Title must not exceed 100 characters");
+                .WithMessage($"Title must not exceed {ValidationConstants.Media.TitleMaxLength} characters");
 
             RuleFor(x => x.Description)
-                .MaximumLength(500)
+                .MaximumLength(ValidationConstants.Media.DescriptionMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.Description))
-                .WithMessage("Description must not exceed 500 characters");
+                .WithMessage($"Description must not exceed {ValidationConstants.Media.DescriptionMaxLength} characters");
         }
     }
 }

@@ -1,5 +1,6 @@
 using FluentValidation;
 using Streetcode.BLL.DTO.News;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Newss.Update
 {
@@ -19,7 +20,7 @@ namespace Streetcode.BLL.MediatR.Newss.Update
                 .SetValidator(new Create.NewsDtoValidator());
 
             RuleFor(x => x.news.Id)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .When(x => x.news != null)
                 .WithMessage("News Id must be greater than 0");
         }

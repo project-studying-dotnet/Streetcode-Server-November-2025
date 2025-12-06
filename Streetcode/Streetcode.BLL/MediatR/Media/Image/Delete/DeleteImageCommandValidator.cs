@@ -1,4 +1,5 @@
 using FluentValidation;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Media.Image.Delete
 {
@@ -13,7 +14,7 @@ namespace Streetcode.BLL.MediatR.Media.Image.Delete
         public DeleteImageCommandValidator()
         {
             RuleFor(x => x.Id)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .WithMessage("Image Id must be greater than 0");
         }
     }

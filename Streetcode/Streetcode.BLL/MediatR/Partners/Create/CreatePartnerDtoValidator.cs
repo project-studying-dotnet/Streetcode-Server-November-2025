@@ -1,5 +1,6 @@
 using FluentValidation;
 using Streetcode.BLL.DTO.Partners;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Partners.Create
 {
@@ -16,16 +17,15 @@ namespace Streetcode.BLL.MediatR.Partners.Create
             RuleFor(x => x.Title)
                 .NotEmpty()
                 .WithMessage("Partner title is required")
-                .MaximumLength(255)
-                .WithMessage("Partner title cannot exceed 255 characters");
+                .MaximumLength(ValidationConstants.Partner.TitleMaxLength)
+                .WithMessage($"Partner title cannot exceed {ValidationConstants.Partner.TitleMaxLength} characters");
 
             RuleFor(x => x.TargetUrl)
-                .Must(BeAValidUrl)
-                .When(x => !string.IsNullOrWhiteSpace(x.TargetUrl))
+                .Must(url => UrlValidator.IsValidAbsoluteUrl(url, isRequired: false))
                 .WithMessage("TargetUrl must be a valid absolute URL");
 
             RuleFor(x => x.LogoId)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .WithMessage("LogoId must be greater than 0");
 
             RuleFor(x => x.Streetcodes)
@@ -33,25 +33,14 @@ namespace Streetcode.BLL.MediatR.Partners.Create
                 .WithMessage("Streetcodes list is required");
 
             RuleFor(x => x.Description)
-                .MaximumLength(500)
+                .MaximumLength(ValidationConstants.Partner.DescriptionMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.Description))
-                .WithMessage("Description cannot exceed 500 characters");
+                .WithMessage($"Description cannot exceed {ValidationConstants.Partner.DescriptionMaxLength} characters");
 
             RuleFor(x => x.UrlTitle)
-                .MaximumLength(255)
+                .MaximumLength(ValidationConstants.Partner.UrlTitleMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.UrlTitle))
-                .WithMessage("UrlTitle cannot exceed 255 characters");
-        }
-
-        private static bool BeAValidUrl(string? url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return true;
-            }
-
-            return Uri.TryCreate(url, UriKind.Absolute, out var uriResult)
-                   && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+                .WithMessage($"UrlTitle cannot exceed {ValidationConstants.Partner.UrlTitleMaxLength} characters");
         }
     }
 }

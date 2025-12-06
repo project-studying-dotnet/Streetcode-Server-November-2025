@@ -1,4 +1,5 @@
 using FluentValidation;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Media.Audio.Delete
 {
@@ -13,7 +14,7 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Delete
         public DeleteAudioCommandValidator()
         {
             RuleFor(x => x.Id)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .WithMessage("Audio Id must be greater than 0");
         }
     }

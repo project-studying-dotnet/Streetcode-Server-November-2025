@@ -1,6 +1,6 @@
-using System;
 using FluentValidation;
 using Streetcode.BLL.DTO.Team;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Team.TeamMembersLinks.Create
 {
@@ -21,23 +21,12 @@ namespace Streetcode.BLL.MediatR.Team.TeamMembersLinks.Create
             RuleFor(x => x.TargetUrl)
                 .NotEmpty()
                 .WithMessage("TargetUrl is required")
-                .Must(BeAValidUrl)
+                .Must(url => UrlValidator.IsValidAbsoluteUrl(url, isRequired: true))
                 .WithMessage("TargetUrl must be a valid URL");
 
             RuleFor(x => x.TeamMemberId)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .WithMessage("TeamMemberId must be greater than 0");
-        }
-
-        private static bool BeAValidUrl(string? url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return false;
-            }
-
-            return Uri.TryCreate(url, UriKind.Absolute, out var uriResult) &&
-                   (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
     }
 }

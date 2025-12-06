@@ -1,4 +1,5 @@
 using FluentValidation;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Partners.Update
 {
@@ -18,7 +19,7 @@ namespace Streetcode.BLL.MediatR.Partners.Update
                 .SetValidator(new Create.CreatePartnerDtoValidator());
 
             RuleFor(x => x.Partner.Id)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .When(x => x.Partner != null)
                 .WithMessage("Partner Id must be greater than 0");
         }

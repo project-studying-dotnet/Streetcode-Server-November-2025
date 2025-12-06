@@ -1,5 +1,6 @@
 using FluentValidation;
 using Streetcode.BLL.DTO.Team;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Team.Create
 {
@@ -16,8 +17,8 @@ namespace Streetcode.BLL.MediatR.Team.Create
             RuleFor(x => x.Position)
                 .NotEmpty()
                 .WithMessage("Position name is required")
-                .MaximumLength(50)
-                .WithMessage("Position name must not exceed 50 characters");
+                .MaximumLength(ValidationConstants.Team.NameMaxLength)
+                .WithMessage($"Position name must not exceed {ValidationConstants.Team.NameMaxLength} characters");
         }
     }
 }

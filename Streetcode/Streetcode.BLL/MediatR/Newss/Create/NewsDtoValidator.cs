@@ -1,6 +1,7 @@
 using System;
 using FluentValidation;
 using Streetcode.BLL.DTO.News;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Newss.Create
 {
@@ -17,8 +18,8 @@ namespace Streetcode.BLL.MediatR.Newss.Create
             RuleFor(x => x.Title)
                 .NotEmpty()
                 .WithMessage("News title is required")
-                .MaximumLength(150)
-                .WithMessage("News title must not exceed 150 characters");
+                .MaximumLength(ValidationConstants.News.TitleMaxLength)
+                .WithMessage($"News title must not exceed {ValidationConstants.News.TitleMaxLength} characters");
 
             RuleFor(x => x.Text)
                 .NotEmpty()
@@ -27,18 +28,18 @@ namespace Streetcode.BLL.MediatR.Newss.Create
             RuleFor(x => x.URL)
                 .NotEmpty()
                 .WithMessage("News URL is required")
-                .MaximumLength(100)
-                .WithMessage("News URL must not exceed 100 characters");
+                .MaximumLength(ValidationConstants.News.UrlMaxLength)
+                .WithMessage($"News URL must not exceed {ValidationConstants.News.UrlMaxLength} characters");
 
             RuleFor(x => x.ImageId)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .When(x => x.ImageId.HasValue)
                 .WithMessage("ImageId must be greater than 0");
 
             RuleFor(x => x.CreationDate)
                 .NotEmpty()
                 .WithMessage("CreationDate is required")
-                .LessThanOrEqualTo(DateTime.Now)
+                .LessThanOrEqualTo(DateTime.UtcNow)
                 .WithMessage("CreationDate cannot be in the future");
         }
     }

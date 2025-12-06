@@ -1,4 +1,5 @@
 using FluentValidation;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft
 {
@@ -13,7 +14,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft
         public DeleteSoftStreetcodeCommandValidator()
         {
             RuleFor(x => x.Id)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .WithMessage("Id must be greater than 0");
         }
     }

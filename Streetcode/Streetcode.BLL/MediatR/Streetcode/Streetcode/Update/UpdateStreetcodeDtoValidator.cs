@@ -1,6 +1,7 @@
 using System.Text.Json;
 using FluentValidation;
 using Streetcode.BLL.MediatR.Streetcode.Streetcode.Create;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
 {
@@ -17,49 +18,18 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
             Include(new CreateStreetcodeDtoValidator());
 
             RuleFor(x => x)
-                .Must(HaveRequiredProperty("Id"))
+                .Must(JsonElementValidator.HaveRequiredProperty("Id"))
                 .WithMessage("Id is required");
 
             RuleFor(x => x)
-                .Must(HaveIntegerProperty("Id"))
+                .Must(JsonElementValidator.HaveIntegerProperty("Id"))
                 .WithMessage("Id must be an integer")
-                .When(x => HaveRequiredProperty("Id")(x));
+                .When(x => JsonElementValidator.HaveRequiredProperty("Id")(x));
 
             RuleFor(x => x)
-                .Must(HavePositiveIntegerProperty("Id"))
-                .WithMessage("Id must be greater than 0")
-                .When(x => HaveRequiredProperty("Id")(x) && HaveIntegerProperty("Id")(x));
-        }
-
-        private static System.Func<JsonElement, bool> HaveRequiredProperty(string propertyName)
-        {
-            return json => json.TryGetProperty(propertyName, out var property) && property.ValueKind != JsonValueKind.Null;
-        }
-
-        private static Func<JsonElement, bool> HaveIntegerProperty(string propertyName)
-        {
-            return json =>
-            {
-                if (json.TryGetProperty(propertyName, out var property))
-                {
-                    return property.ValueKind == JsonValueKind.Number && property.TryGetInt32(out _);
-                }
-
-                return false;
-            };
-        }
-
-        private static Func<JsonElement, bool> HavePositiveIntegerProperty(string propertyName)
-        {
-            return json =>
-            {
-                if (json.TryGetProperty(propertyName, out var property) && property.TryGetInt32(out var value))
-                {
-                    return value > 0;
-                }
-
-                return false;
-            };
+                .Must(JsonElementValidator.HavePositiveIntegerProperty("Id"))
+                .WithMessage($"Id must be greater than {ValidationConstants.Common.MinId - 1}")
+                .When(x => JsonElementValidator.HaveRequiredProperty("Id")(x) && JsonElementValidator.HaveIntegerProperty("Id")(x));
         }
     }
 }

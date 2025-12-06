@@ -1,4 +1,5 @@
 using FluentValidation;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Partners.Delete
 {
@@ -13,7 +14,7 @@ namespace Streetcode.BLL.MediatR.Partners.Delete
         public DeletePartnerQueryValidator()
         {
             RuleFor(x => x.id)
-                .GreaterThan(0)
+                .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .WithMessage("Partner Id must be greater than 0");
         }
     }
