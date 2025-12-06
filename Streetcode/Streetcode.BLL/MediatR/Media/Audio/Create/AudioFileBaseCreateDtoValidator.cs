@@ -1,7 +1,6 @@
-using System;
-using System.Linq;
 using FluentValidation;
 using Streetcode.BLL.DTO.Media.Audio;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Media.Audio.Create
 {
@@ -10,7 +9,7 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Create
     /// </summary>
     public class AudioFileBaseCreateDtoValidator : AbstractValidator<AudioFileBaseCreateDto>
     {
-        private static readonly string[] AllowedExtensions = { "mp3", "wav", "ogg", "m4a" };
+        private const long MaxAudioSizeInBytes = 10 * 1024 * 1024; // 10MB
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioFileBaseCreateDtoValidator"/> class.
@@ -20,14 +19,16 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Create
             RuleFor(x => x.BaseFormat)
                 .NotEmpty()
                 .WithMessage("Audio Base64 data is required")
-                .Must(BeValidBase64)
-                .WithMessage("BaseFormat must be valid Base64 string");
+                .Must(Base64Validator.IsValidBase64)
+                .WithMessage("BaseFormat must be valid Base64 string")
+                .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, MaxAudioSizeInBytes))
+                .WithMessage($"Audio size must not exceed {MaxAudioSizeInBytes / 1024 / 1024}MB when decoded");
 
             RuleFor(x => x.Extension)
                 .NotEmpty()
                 .WithMessage("Audio extension is required")
-                .Must(ext => AllowedExtensions.Contains(ext?.ToLower()))
-                .WithMessage($"Audio extension must be one of: {string.Join(", ", AllowedExtensions)}");
+                .Must(ext => FileExtensionValidator.IsValidExtension(ext, FileExtensionValidator.AllowedAudioExtensions))
+                .WithMessage($"Audio extension must be one of: {string.Join(", ", FileExtensionValidator.AllowedAudioExtensions)}");
 
             RuleFor(x => x.MimeType)
                 .MaximumLength(10)
@@ -43,24 +44,6 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Create
                 .MaximumLength(500)
                 .When(x => !string.IsNullOrWhiteSpace(x.Description))
                 .WithMessage("Description must not exceed 500 characters");
-        }
-
-        private static bool BeValidBase64(string? base64String)
-        {
-            if (string.IsNullOrWhiteSpace(base64String))
-            {
-                return false;
-            }
-
-            try
-            {
-                Convert.FromBase64String(base64String);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
     }
 }

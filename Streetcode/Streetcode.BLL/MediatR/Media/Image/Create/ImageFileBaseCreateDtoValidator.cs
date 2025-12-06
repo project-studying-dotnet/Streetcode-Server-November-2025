@@ -1,7 +1,6 @@
-using System;
-using System.Linq;
 using FluentValidation;
 using Streetcode.BLL.DTO.Media.Images;
+using Streetcode.BLL.Util.Validators;
 
 namespace Streetcode.BLL.MediatR.Media.Image.Create
 {
@@ -10,7 +9,7 @@ namespace Streetcode.BLL.MediatR.Media.Image.Create
     /// </summary>
     public class ImageFileBaseCreateDtoValidator : AbstractValidator<ImageFileBaseCreateDto>
     {
-        private static readonly string[] AllowedExtensions = { "png", "jpg", "jpeg", "webp" };
+        private const long MaxImageSizeInBytes = 5 * 1024 * 1024; // 5MB
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImageFileBaseCreateDtoValidator"/> class.
@@ -20,14 +19,16 @@ namespace Streetcode.BLL.MediatR.Media.Image.Create
             RuleFor(x => x.BaseFormat)
                 .NotEmpty()
                 .WithMessage("Image Base64 data is required")
-                .Must(BeValidBase64)
-                .WithMessage("BaseFormat must be valid Base64 string");
+                .Must(Base64Validator.IsValidBase64)
+                .WithMessage("BaseFormat must be valid Base64 string")
+                .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, MaxImageSizeInBytes))
+                .WithMessage($"Image size must not exceed {MaxImageSizeInBytes / 1024 / 1024}MB when decoded");
 
             RuleFor(x => x.Extension)
                 .NotEmpty()
                 .WithMessage("Image extension is required")
-                .Must(ext => AllowedExtensions.Contains(ext?.ToLower()))
-                .WithMessage($"Image extension must be one of: {string.Join(", ", AllowedExtensions)}");
+                .Must(ext => FileExtensionValidator.IsValidExtension(ext, FileExtensionValidator.AllowedImageExtensions))
+                .WithMessage($"Image extension must be one of: {string.Join(", ", FileExtensionValidator.AllowedImageExtensions)}");
 
             RuleFor(x => x.MimeType)
                 .MaximumLength(10)
@@ -43,24 +44,6 @@ namespace Streetcode.BLL.MediatR.Media.Image.Create
                 .MaximumLength(200)
                 .When(x => !string.IsNullOrWhiteSpace(x.Alt))
                 .WithMessage("Alt text must not exceed 200 characters");
-        }
-
-        private static bool BeValidBase64(string? base64String)
-        {
-            if (string.IsNullOrWhiteSpace(base64String))
-            {
-                return false;
-            }
-
-            try
-            {
-                Convert.FromBase64String(base64String);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
     }
 }
