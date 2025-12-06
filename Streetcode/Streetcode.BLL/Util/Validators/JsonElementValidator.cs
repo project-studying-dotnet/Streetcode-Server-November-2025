@@ -201,6 +201,7 @@ namespace Streetcode.BLL.Util.Validators
 
         /// <summary>
         /// Creates a cached validator function that checks if two DateTime properties form a valid date range.
+        /// Uses StreetcodeDateRangeValidator for consistent validation logic.
         /// </summary>
         /// <param name="startPropertyName">The name of the start date property.</param>
         /// <param name="endPropertyName">The name of the end date property.</param>
@@ -220,7 +221,7 @@ namespace Streetcode.BLL.Util.Validators
                         if (DateTime.TryParse(startProperty.GetString(), out var startDate) &&
                             DateTime.TryParse(endProperty.GetString(), out var endDate))
                         {
-                            return endDate > startDate;
+                            return StreetcodeDateRangeValidator.IsValidDateRange(startDate, endDate);
                         }
                     }
 
