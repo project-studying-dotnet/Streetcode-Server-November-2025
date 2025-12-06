@@ -1,5 +1,7 @@
 using FluentValidation;
+using Microsoft.Extensions.Caching.Memory;
 using Streetcode.BLL.Util.Validators;
+using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Partners.Update
 {
@@ -15,13 +17,37 @@ namespace Streetcode.BLL.MediatR.Partners.Update
         {
             RuleFor(x => x.Partner)
                 .NotNull()
-                .WithMessage("Partner data is required")
+                .WithMessage("Дані партнера є обов'язковими")
                 .SetValidator(new Create.CreatePartnerDtoValidator());
 
             RuleFor(x => x.Partner.Id)
                 .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .When(x => x.Partner != null)
-                .WithMessage("Partner Id must be greater than 0");
+                .WithMessage("Id партнера має бути більше 0");
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdatePartnerQueryValidator"/> class with repository wrapper for async validation.
+        /// </summary>
+        /// <param name="repositoryWrapper">The repository wrapper for database access.</param>
+        /// <param name="cache">Optional memory cache for performance optimization.</param>
+        public UpdatePartnerQueryValidator(IRepositoryWrapper repositoryWrapper, IMemoryCache? cache = null)
+            : this()
+        {
+            var uniqueTitleValidator = new UniquePartnerTitleValidator(repositoryWrapper, cache);
+
+            RuleFor(x => x.Partner)
+                .MustAsync(async (partner, cancellation) =>
+                {
+                    if (partner == null || string.IsNullOrWhiteSpace(partner.Title))
+                    {
+                        return true;
+                    }
+
+                    return await uniqueTitleValidator.IsTitleUniqueAsync(partner.Title, partner.Id, cancellation);
+                })
+                .WithMessage("Партнер з такою назвою вже існує")
+                .When(x => x.Partner != null);
         }
     }
 }

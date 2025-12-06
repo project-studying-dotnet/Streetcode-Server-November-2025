@@ -19,16 +19,16 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveRequiredProperty("Id"))
-                .WithMessage("Id is required");
+                .WithMessage("Id є обов'язковим");
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveIntegerProperty("Id"))
-                .WithMessage("Id must be an integer")
+                .WithMessage("Id має бути цілим числом")
                 .When(x => JsonElementValidator.HaveRequiredProperty("Id")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HavePositiveIntegerProperty("Id"))
-                .WithMessage($"Id must be greater than {ValidationConstants.Common.MinId - 1}")
+                .WithMessage($"Id має бути більше {ValidationConstants.Common.MinId - 1}")
                 .When(x => JsonElementValidator.HaveRequiredProperty("Id")(x) && JsonElementValidator.HaveIntegerProperty("Id")(x));
         }
     }

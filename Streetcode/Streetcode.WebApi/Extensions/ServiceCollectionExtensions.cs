@@ -40,6 +40,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddRepositoryServices();
         services.AddFeatureManagement();
+        services.AddMemoryCache();
         var currentAssemblies = AppDomain.CurrentDomain.GetAssemblies();
         services.AddAutoMapper(currentAssemblies);
         services.AddMediatR(currentAssemblies);

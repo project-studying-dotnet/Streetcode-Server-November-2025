@@ -15,7 +15,7 @@ namespace Streetcode.BLL.MediatR.Partners.Delete
         {
             RuleFor(x => x.id)
                 .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("Partner Id must be greater than 0");
+                .WithMessage("Id партнера має бути більше 0");
         }
     }
 }

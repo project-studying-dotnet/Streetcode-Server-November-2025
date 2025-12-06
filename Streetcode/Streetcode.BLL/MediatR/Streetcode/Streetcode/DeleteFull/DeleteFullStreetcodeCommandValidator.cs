@@ -15,7 +15,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull
         {
             RuleFor(x => x.Id)
                 .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("Id must be greater than 0");
+                .WithMessage("Id має бути більше 0");
         }
     }
 }

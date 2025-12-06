@@ -16,17 +16,17 @@ namespace Streetcode.BLL.MediatR.Team.TeamMembersLinks.Create
         {
             RuleFor(x => x.LogoType)
                 .NotNull()
-                .WithMessage("LogoType is required");
+                .WithMessage("LogoType є обов'язковим");
 
             RuleFor(x => x.TargetUrl)
                 .NotEmpty()
-                .WithMessage("TargetUrl is required")
+                .WithMessage("TargetUrl є обов'язковим")
                 .Must(url => UrlValidator.IsValidAbsoluteUrl(url, isRequired: true))
-                .WithMessage("TargetUrl must be a valid URL");
+                .WithMessage("TargetUrl має бути дійсною URL-адресою");
 
             RuleFor(x => x.TeamMemberId)
                 .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("TeamMemberId must be greater than 0");
+                .WithMessage("TeamMemberId має бути більше 0");
         }
     }
 }

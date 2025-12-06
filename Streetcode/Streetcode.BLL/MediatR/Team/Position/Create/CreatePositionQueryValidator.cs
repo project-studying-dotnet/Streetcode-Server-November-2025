@@ -15,7 +15,7 @@ namespace Streetcode.BLL.MediatR.Team.Create
         {
             RuleFor(x => x.position)
                 .NotNull()
-                .WithMessage("Position is required")
+                .WithMessage("Посада є обов'язковою")
                 .SetValidator(new PositionDtoValidator());
         }
     }

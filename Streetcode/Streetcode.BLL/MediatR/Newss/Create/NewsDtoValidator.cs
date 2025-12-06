@@ -17,30 +17,30 @@ namespace Streetcode.BLL.MediatR.Newss.Create
         {
             RuleFor(x => x.Title)
                 .NotEmpty()
-                .WithMessage("News title is required")
+                .WithMessage("Назва новини є обов'язковою")
                 .MaximumLength(ValidationConstants.News.TitleMaxLength)
-                .WithMessage($"News title must not exceed {ValidationConstants.News.TitleMaxLength} characters");
+                .WithMessage($"Назва новини не може перевищувати {ValidationConstants.News.TitleMaxLength} символів");
 
             RuleFor(x => x.Text)
                 .NotEmpty()
-                .WithMessage("News text is required");
+                .WithMessage("Текст новини є обов'язковим");
 
             RuleFor(x => x.URL)
                 .NotEmpty()
-                .WithMessage("News URL is required")
+                .WithMessage("URL новини є обов'язковим")
                 .MaximumLength(ValidationConstants.News.UrlMaxLength)
-                .WithMessage($"News URL must not exceed {ValidationConstants.News.UrlMaxLength} characters");
+                .WithMessage($"URL новини не може перевищувати {ValidationConstants.News.UrlMaxLength} символів");
 
             RuleFor(x => x.ImageId)
                 .GreaterThan(ValidationConstants.Common.MinId - 1)
                 .When(x => x.ImageId.HasValue)
-                .WithMessage("ImageId must be greater than 0");
+                .WithMessage("ImageId має бути більше 0");
 
             RuleFor(x => x.CreationDate)
                 .NotEmpty()
-                .WithMessage("CreationDate is required")
+                .WithMessage("Дата створення є обов'язковою")
                 .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("CreationDate cannot be in the future");
+                .WithMessage("Дата створення не може бути в майбутньому");
         }
     }
 }

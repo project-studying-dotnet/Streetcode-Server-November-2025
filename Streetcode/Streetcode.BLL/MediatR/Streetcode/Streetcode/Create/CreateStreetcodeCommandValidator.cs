@@ -15,9 +15,9 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
         {
             RuleFor(x => x.rawJsonCreateDTO)
                 .NotEmpty()
-                .WithMessage("Streetcode data is required")
+                .WithMessage("Дані стріткоду є обов'язковими")
                 .Must(BeValidJson)
-                .WithMessage("Invalid JSON structure")
+                .WithMessage("Невірна структура JSON")
                 .DependentRules(() =>
                 {
                     RuleFor(x => x.rawJsonCreateDTO)

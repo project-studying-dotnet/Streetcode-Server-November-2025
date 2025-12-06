@@ -15,7 +15,7 @@ namespace Streetcode.BLL.MediatR.Media.Image.Delete
         {
             RuleFor(x => x.Id)
                 .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("Image Id must be greater than 0");
+                .WithMessage("Id зображення має бути більше 0");
         }
     }
 }

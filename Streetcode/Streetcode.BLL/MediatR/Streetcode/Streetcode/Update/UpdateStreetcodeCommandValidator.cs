@@ -16,13 +16,13 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
         {
             RuleFor(x => x.id)
                 .GreaterThan(0)
-                .WithMessage("Id must be greater than 0");
+                .WithMessage("Id має бути більше 0");
 
             RuleFor(x => x.rawJsonUpdateDTO)
                 .NotEmpty()
-                .WithMessage("Streetcode data is required")
+                .WithMessage("Дані стріткоду є обов'язковими")
                 .Must(BeValidJson)
-                .WithMessage("Invalid JSON structure")
+                .WithMessage("Невірна структура JSON")
                 .DependentRules(() =>
                 {
                     RuleFor(x => x.rawJsonUpdateDTO)

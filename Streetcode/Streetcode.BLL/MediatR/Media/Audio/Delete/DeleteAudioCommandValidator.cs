@@ -15,7 +15,7 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Delete
         {
             RuleFor(x => x.Id)
                 .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("Audio Id must be greater than 0");
+                .WithMessage("Id аудіо має бути більше 0");
         }
     }
 }

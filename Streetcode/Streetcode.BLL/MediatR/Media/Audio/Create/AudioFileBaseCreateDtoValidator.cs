@@ -17,32 +17,32 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Create
             RuleFor(x => x.BaseFormat)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .WithMessage("Audio Base64 data is required")
+                .WithMessage("Дані аудіо в Base64 є обов'язковими")
                 .Must(Base64Validator.IsValidBase64)
-                .WithMessage("BaseFormat must be valid Base64 string")
+                .WithMessage("BaseFormat має бути дійсним рядком Base64")
                 .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, MediaValidationConstants.MaxAudioSizeInBytes))
-                .WithMessage($"Audio size must not exceed {MediaValidationConstants.MaxAudioSizeInBytes / 1024 / 1024}MB when decoded");
+                .WithMessage($"Розмір аудіо не може перевищувати {MediaValidationConstants.MaxAudioSizeInBytes / 1024 / 1024}МБ після декодування");
 
             RuleFor(x => x.Extension)
                 .NotEmpty()
-                .WithMessage("Audio extension is required")
+                .WithMessage("Розширення аудіо є обов'язковим")
                 .Must(ext => FileExtensionValidator.IsValidExtension(ext, FileExtensionValidator.AllowedAudioExtensions))
-                .WithMessage($"Audio extension must be one of: {string.Join(", ", FileExtensionValidator.AllowedAudioExtensions)}");
+                .WithMessage($"Розширення аудіо має бути одним з: {string.Join(", ", FileExtensionValidator.AllowedAudioExtensions)}");
 
             RuleFor(x => x.MimeType)
                 .MaximumLength(ValidationConstants.Common.MimeTypeMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.MimeType))
-                .WithMessage($"MimeType must not exceed {ValidationConstants.Common.MimeTypeMaxLength} characters");
+                .WithMessage($"MimeType не може перевищувати {ValidationConstants.Common.MimeTypeMaxLength} символів");
 
             RuleFor(x => x.Title)
                 .MaximumLength(ValidationConstants.Media.TitleMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.Title))
-                .WithMessage($"Title must not exceed {ValidationConstants.Media.TitleMaxLength} characters");
+                .WithMessage($"Назва не може перевищувати {ValidationConstants.Media.TitleMaxLength} символів");
 
             RuleFor(x => x.Description)
                 .MaximumLength(ValidationConstants.Media.DescriptionMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.Description))
-                .WithMessage($"Description must not exceed {ValidationConstants.Media.DescriptionMaxLength} characters");
+                .WithMessage($"Опис не може перевищувати {ValidationConstants.Media.DescriptionMaxLength} символів");
         }
     }
 }

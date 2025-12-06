@@ -15,7 +15,7 @@ namespace Streetcode.BLL.MediatR.Team.TeamMembersLinks.Create
         {
             RuleFor(x => x.teamMember)
                 .NotNull()
-                .WithMessage("Team member link is required")
+                .WithMessage("Посилання на члена команди є обов'язковим")
                 .SetValidator(new TeamMemberLinkDtoValidator());
         }
     }

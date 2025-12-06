@@ -16,7 +16,7 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Create
         {
             RuleFor(x => x.Audio)
                 .NotNull()
-                .WithMessage("Audio data is required")
+                .WithMessage("Дані аудіо є обов'язковими")
                 .SetValidator(new AudioFileBaseCreateDtoValidator());
         }
     }

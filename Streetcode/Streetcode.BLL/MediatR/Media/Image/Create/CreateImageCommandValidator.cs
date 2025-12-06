@@ -16,7 +16,7 @@ namespace Streetcode.BLL.MediatR.Media.Image.Create
         {
             RuleFor(x => x.Image)
                 .NotNull()
-                .WithMessage("Image data is required")
+                .WithMessage("Дані зображення є обов'язковими")
                 .SetValidator(new ImageFileBaseCreateDtoValidator());
         }
     }

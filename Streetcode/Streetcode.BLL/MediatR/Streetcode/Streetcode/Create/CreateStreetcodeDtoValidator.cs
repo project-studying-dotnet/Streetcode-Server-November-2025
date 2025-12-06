@@ -19,23 +19,23 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveRequiredProperty("Index"))
-                    .WithMessage("Index is required");
+                    .WithMessage("Index є обов'язковим");
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveRequiredProperty("StreetcodeType"))
-                    .WithMessage("StreetcodeType is required");
+                    .WithMessage("StreetcodeType є обов'язковим");
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveRequiredProperty("Title"))
-                    .WithMessage("Title is required");
+                    .WithMessage("Назва є обов'язковою");
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveRequiredProperty("EventStartOrPersonBirthDate"))
-                    .WithMessage("EventStartOrPersonBirthDate is required");
+                    .WithMessage("EventStartOrPersonBirthDate є обов'язковим");
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveRequiredProperty("TransliterationUrl"))
-                    .WithMessage("TransliterationUrl is required");
+                    .WithMessage("TransliterationUrl є обов'язковим");
             });
 
             // Data type validation
@@ -43,27 +43,27 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveIntegerProperty("Index"))
-                    .WithMessage("Index must be an integer")
+                    .WithMessage("Index має бути цілим числом")
                     .When(x => JsonElementValidator.HaveRequiredProperty("Index")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveStringPropertyWithAllowedValues("StreetcodeType", ValidationConstants.Streetcode.ValidTypes))
-                    .WithMessage($"StreetcodeType must be one of: {string.Join(", ", ValidationConstants.Streetcode.ValidTypes)}")
+                    .WithMessage($"StreetcodeType має бути одним з: {string.Join(", ", ValidationConstants.Streetcode.ValidTypes)}")
                     .When(x => JsonElementValidator.HaveRequiredProperty("StreetcodeType")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveDateTimeProperty("EventStartOrPersonBirthDate"))
-                    .WithMessage("EventStartOrPersonBirthDate must be a valid date")
+                    .WithMessage("EventStartOrPersonBirthDate має бути дійсною датою")
                     .When(x => JsonElementValidator.HaveRequiredProperty("EventStartOrPersonBirthDate")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveDateTimeProperty("EventEndOrPersonDeathDate"))
-                    .WithMessage("EventEndOrPersonDeathDate must be a valid date")
+                    .WithMessage("EventEndOrPersonDeathDate має бути дійсною датою")
                     .When(x => JsonElementValidator.HaveProperty("EventEndOrPersonDeathDate")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveIntegerProperty("AudioId"))
-                    .WithMessage("AudioId must be an integer")
+                    .WithMessage("AudioId має бути цілим числом")
                     .When(x => JsonElementValidator.HaveProperty("AudioId")(x));
             });
 
@@ -72,12 +72,12 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveNonEmptyStringProperty("Title"))
-                    .WithMessage("Title cannot be empty")
+                    .WithMessage("Назва не може бути порожньою")
                     .When(x => JsonElementValidator.HaveRequiredProperty("Title")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveNonEmptyStringProperty("TransliterationUrl"))
-                    .WithMessage("TransliterationUrl cannot be empty")
+                    .WithMessage("TransliterationUrl не може бути порожнім")
                     .When(x => JsonElementValidator.HaveRequiredProperty("TransliterationUrl")(x));
             });
 
@@ -86,32 +86,32 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("Title", ValidationConstants.Streetcode.TitleMaxLength))
-                    .WithMessage($"Title must not exceed {ValidationConstants.Streetcode.TitleMaxLength} characters")
+                    .WithMessage($"Назва не може перевищувати {ValidationConstants.Streetcode.TitleMaxLength} символів")
                     .When(x => JsonElementValidator.HaveRequiredProperty("Title")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("Alias", ValidationConstants.Streetcode.AliasMaxLength))
-                    .WithMessage($"Alias must not exceed {ValidationConstants.Streetcode.AliasMaxLength} characters")
+                    .WithMessage($"Alias не може перевищувати {ValidationConstants.Streetcode.AliasMaxLength} символів")
                     .When(x => JsonElementValidator.HaveProperty("Alias")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("ShortDescription", ValidationConstants.Streetcode.ShortDescriptionMaxLength))
-                    .WithMessage($"ShortDescription must not exceed {ValidationConstants.Streetcode.ShortDescriptionMaxLength} characters")
+                    .WithMessage($"ShortDescription не може перевищувати {ValidationConstants.Streetcode.ShortDescriptionMaxLength} символів")
                     .When(x => JsonElementValidator.HaveProperty("ShortDescription")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("DateString", ValidationConstants.Streetcode.DateStringMaxLength))
-                    .WithMessage($"DateString must not exceed {ValidationConstants.Streetcode.DateStringMaxLength} characters")
+                    .WithMessage($"DateString не може перевищувати {ValidationConstants.Streetcode.DateStringMaxLength} символів")
                     .When(x => JsonElementValidator.HaveProperty("DateString")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("Teaser", ValidationConstants.Streetcode.TeaserMaxLength))
-                    .WithMessage($"Teaser must not exceed {ValidationConstants.Streetcode.TeaserMaxLength} characters")
+                    .WithMessage($"Teaser не може перевищувати {ValidationConstants.Streetcode.TeaserMaxLength} символів")
                     .When(x => JsonElementValidator.HaveProperty("Teaser")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("TransliterationUrl", ValidationConstants.Streetcode.TransliterationUrlMaxLength))
-                    .WithMessage($"TransliterationUrl must not exceed {ValidationConstants.Streetcode.TransliterationUrlMaxLength} characters")
+                    .WithMessage($"TransliterationUrl не може перевищувати {ValidationConstants.Streetcode.TransliterationUrlMaxLength} символів")
                     .When(x => JsonElementValidator.HaveRequiredProperty("TransliterationUrl")(x));
             });
 
@@ -120,109 +120,109 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HaveValidDateRange("EventStartOrPersonBirthDate", "EventEndOrPersonDeathDate"))
-                    .WithMessage("EventEndOrPersonDeathDate must be after EventStartOrPersonBirthDate")
+                    .WithMessage("EventEndOrPersonDeathDate має бути пізніше ніж EventStartOrPersonBirthDate")
                     .When(x => JsonElementValidator.HaveProperty("EventEndOrPersonDeathDate")(x) && JsonElementValidator.HaveDateTimeProperty("EventEndOrPersonDeathDate")(x));
 
                 RuleFor(x => x)
                     .Must(JsonElementValidator.HavePositiveIntegerProperty("AudioId"))
-                    .WithMessage($"AudioId must be greater than {ValidationConstants.Common.MinId - 1}")
+                    .WithMessage($"AudioId має бути більше {ValidationConstants.Common.MinId - 1}")
                     .When(x => JsonElementValidator.HaveProperty("AudioId")(x) && JsonElementValidator.HaveIntegerProperty("AudioId")(x));
             });
 
             // Include all rule sets by default
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveRequiredProperty("Index"))
-                .WithMessage("Index is required");
+                .WithMessage("Index є обов'язковим");
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveIntegerProperty("Index"))
-                .WithMessage("Index must be an integer")
+                .WithMessage("Index має бути цілим числом")
                 .When(x => JsonElementValidator.HaveRequiredProperty("Index")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveRequiredProperty("StreetcodeType"))
-                .WithMessage("StreetcodeType is required");
+                .WithMessage("StreetcodeType є обов'язковим");
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveStringPropertyWithAllowedValues("StreetcodeType", ValidationConstants.Streetcode.ValidTypes))
-                .WithMessage($"StreetcodeType must be one of: {string.Join(", ", ValidationConstants.Streetcode.ValidTypes)}")
+                .WithMessage($"StreetcodeType має бути одним з: {string.Join(", ", ValidationConstants.Streetcode.ValidTypes)}")
                 .When(x => JsonElementValidator.HaveRequiredProperty("StreetcodeType")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveRequiredProperty("Title"))
-                .WithMessage("Title is required");
+                .WithMessage("Назва є обов'язковою");
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveNonEmptyStringProperty("Title"))
-                .WithMessage("Title cannot be empty")
+                .WithMessage("Назва не може бути порожньою")
                 .When(x => JsonElementValidator.HaveRequiredProperty("Title")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("Title", ValidationConstants.Streetcode.TitleMaxLength))
-                .WithMessage($"Title must not exceed {ValidationConstants.Streetcode.TitleMaxLength} characters")
+                .WithMessage($"Назва не може перевищувати {ValidationConstants.Streetcode.TitleMaxLength} символів")
                 .When(x => JsonElementValidator.HaveRequiredProperty("Title")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("Alias", ValidationConstants.Streetcode.AliasMaxLength))
-                .WithMessage($"Alias must not exceed {ValidationConstants.Streetcode.AliasMaxLength} characters")
+                .WithMessage($"Alias не може перевищувати {ValidationConstants.Streetcode.AliasMaxLength} символів")
                 .When(x => JsonElementValidator.HaveProperty("Alias")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveRequiredProperty("EventStartOrPersonBirthDate"))
-                .WithMessage("EventStartOrPersonBirthDate is required");
+                .WithMessage("EventStartOrPersonBirthDate є обов'язковим");
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveDateTimeProperty("EventStartOrPersonBirthDate"))
-                .WithMessage("EventStartOrPersonBirthDate must be a valid date")
+                .WithMessage("EventStartOrPersonBirthDate має бути дійсною датою")
                 .When(x => JsonElementValidator.HaveRequiredProperty("EventStartOrPersonBirthDate")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveDateTimeProperty("EventEndOrPersonDeathDate"))
-                .WithMessage("EventEndOrPersonDeathDate must be a valid date")
+                .WithMessage("EventEndOrPersonDeathDate має бути дійсною датою")
                 .When(x => JsonElementValidator.HaveProperty("EventEndOrPersonDeathDate")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveValidDateRange("EventStartOrPersonBirthDate", "EventEndOrPersonDeathDate"))
-                .WithMessage("EventEndOrPersonDeathDate must be after EventStartOrPersonBirthDate")
+                .WithMessage("EventEndOrPersonDeathDate має бути пізніше ніж EventStartOrPersonBirthDate")
                 .When(x => JsonElementValidator.HaveProperty("EventEndOrPersonDeathDate")(x) && JsonElementValidator.HaveDateTimeProperty("EventEndOrPersonDeathDate")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("ShortDescription", ValidationConstants.Streetcode.ShortDescriptionMaxLength))
-                .WithMessage($"ShortDescription must not exceed {ValidationConstants.Streetcode.ShortDescriptionMaxLength} characters")
+                .WithMessage($"ShortDescription не може перевищувати {ValidationConstants.Streetcode.ShortDescriptionMaxLength} символів")
                 .When(x => JsonElementValidator.HaveProperty("ShortDescription")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("DateString", ValidationConstants.Streetcode.DateStringMaxLength))
-                .WithMessage($"DateString must not exceed {ValidationConstants.Streetcode.DateStringMaxLength} characters")
+                .WithMessage($"DateString не може перевищувати {ValidationConstants.Streetcode.DateStringMaxLength} символів")
                 .When(x => JsonElementValidator.HaveProperty("DateString")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("Teaser", ValidationConstants.Streetcode.TeaserMaxLength))
-                .WithMessage($"Teaser must not exceed {ValidationConstants.Streetcode.TeaserMaxLength} characters")
+                .WithMessage($"Teaser не може перевищувати {ValidationConstants.Streetcode.TeaserMaxLength} символів")
                 .When(x => JsonElementValidator.HaveProperty("Teaser")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveRequiredProperty("TransliterationUrl"))
-                .WithMessage("TransliterationUrl is required");
+                .WithMessage("TransliterationUrl є обов'язковим");
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveNonEmptyStringProperty("TransliterationUrl"))
-                .WithMessage("TransliterationUrl cannot be empty")
+                .WithMessage("TransliterationUrl не може бути порожнім")
                 .When(x => JsonElementValidator.HaveRequiredProperty("TransliterationUrl")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveStringPropertyWithMaxLength("TransliterationUrl", ValidationConstants.Streetcode.TransliterationUrlMaxLength))
-                .WithMessage($"TransliterationUrl must not exceed {ValidationConstants.Streetcode.TransliterationUrlMaxLength} characters")
+                .WithMessage($"TransliterationUrl не може перевищувати {ValidationConstants.Streetcode.TransliterationUrlMaxLength} символів")
                 .When(x => JsonElementValidator.HaveRequiredProperty("TransliterationUrl")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HaveIntegerProperty("AudioId"))
-                .WithMessage("AudioId must be an integer")
+                .WithMessage("AudioId має бути цілим числом")
                 .When(x => JsonElementValidator.HaveProperty("AudioId")(x));
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HavePositiveIntegerProperty("AudioId"))
-                .WithMessage($"AudioId must be greater than {ValidationConstants.Common.MinId - 1}")
+                .WithMessage($"AudioId має бути більше {ValidationConstants.Common.MinId - 1}")
                 .When(x => JsonElementValidator.HaveProperty("AudioId")(x) && JsonElementValidator.HaveIntegerProperty("AudioId")(x));
         }
     }

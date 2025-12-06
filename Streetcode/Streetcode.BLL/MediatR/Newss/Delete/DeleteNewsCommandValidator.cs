@@ -15,7 +15,7 @@ namespace Streetcode.BLL.MediatR.Newss.Delete
         {
             RuleFor(x => x.id)
                 .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("News Id must be greater than 0");
+                .WithMessage("Id новини має бути більше 0");
         }
     }
 }

@@ -16,9 +16,9 @@ namespace Streetcode.BLL.MediatR.Team.Create
         {
             RuleFor(x => x.Position)
                 .NotEmpty()
-                .WithMessage("Position name is required")
+                .WithMessage("Назва посади є обов'язковою")
                 .MaximumLength(ValidationConstants.Team.NameMaxLength)
-                .WithMessage($"Position name must not exceed {ValidationConstants.Team.NameMaxLength} characters");
+                .WithMessage($"Назва посади не може перевищувати {ValidationConstants.Team.NameMaxLength} символів");
         }
     }
 }
