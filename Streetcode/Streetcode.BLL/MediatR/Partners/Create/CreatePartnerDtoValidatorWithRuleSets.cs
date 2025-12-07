@@ -19,15 +19,15 @@ namespace Streetcode.BLL.MediatR.Partners.Create
             {
                 RuleFor(x => x.Title)
                     .NotEmpty()
-                    .WithMessage("Partner title is required");
+                    .WithMessage("Назва партнера є обов'язковою");
 
                 RuleFor(x => x.LogoId)
-                    .GreaterThan(ValidationConstants.Common.MinId - 1)
-                    .WithMessage("LogoId must be greater than 0");
+                    .GreaterThan(ValidationConstants.Common.MinPositiveValue)
+                    .WithMessage("LogoId має бути більше 0");
 
                 RuleFor(x => x.Streetcodes)
                     .NotNull()
-                    .WithMessage("Streetcodes list is required");
+                    .WithMessage("Список стріткодів є обов'язковим");
             });
 
             // Length constraints validation
@@ -35,17 +35,17 @@ namespace Streetcode.BLL.MediatR.Partners.Create
             {
                 RuleFor(x => x.Title)
                     .MaximumLength(ValidationConstants.Partner.TitleMaxLength)
-                    .WithMessage($"Partner title cannot exceed {ValidationConstants.Partner.TitleMaxLength} characters");
+                    .WithMessage($"Назва партнера не може перевищувати {ValidationConstants.Partner.TitleMaxLength} символів");
 
                 RuleFor(x => x.Description)
                     .MaximumLength(ValidationConstants.Partner.DescriptionMaxLength)
                     .When(x => !string.IsNullOrWhiteSpace(x.Description))
-                    .WithMessage($"Description cannot exceed {ValidationConstants.Partner.DescriptionMaxLength} characters");
+                    .WithMessage($"Опис не може перевищувати {ValidationConstants.Partner.DescriptionMaxLength} символів");
 
                 RuleFor(x => x.UrlTitle)
                     .MaximumLength(ValidationConstants.Partner.UrlTitleMaxLength)
                     .When(x => !string.IsNullOrWhiteSpace(x.UrlTitle))
-                    .WithMessage($"UrlTitle cannot exceed {ValidationConstants.Partner.UrlTitleMaxLength} characters");
+                    .WithMessage($"UrlTitle не може перевищувати {ValidationConstants.Partner.UrlTitleMaxLength} символів");
             });
 
             // Format validation
@@ -53,37 +53,8 @@ namespace Streetcode.BLL.MediatR.Partners.Create
             {
                 RuleFor(x => x.TargetUrl)
                     .Must(url => UrlValidator.IsValidAbsoluteUrl(url, isRequired: false))
-                    .WithMessage("TargetUrl must be a valid absolute URL");
+                    .WithMessage("TargetUrl має бути дійсною абсолютною URL-адресою");
             });
-
-            // Default rules (always executed)
-            RuleFor(x => x.Title)
-                .NotEmpty()
-                .WithMessage("Partner title is required")
-                .MaximumLength(ValidationConstants.Partner.TitleMaxLength)
-                .WithMessage($"Partner title cannot exceed {ValidationConstants.Partner.TitleMaxLength} characters");
-
-            RuleFor(x => x.TargetUrl)
-                .Must(url => UrlValidator.IsValidAbsoluteUrl(url, isRequired: false))
-                .WithMessage("TargetUrl must be a valid absolute URL");
-
-            RuleFor(x => x.LogoId)
-                .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("LogoId must be greater than 0");
-
-            RuleFor(x => x.Streetcodes)
-                .NotNull()
-                .WithMessage("Streetcodes list is required");
-
-            RuleFor(x => x.Description)
-                .MaximumLength(ValidationConstants.Partner.DescriptionMaxLength)
-                .When(x => !string.IsNullOrWhiteSpace(x.Description))
-                .WithMessage($"Description cannot exceed {ValidationConstants.Partner.DescriptionMaxLength} characters");
-
-            RuleFor(x => x.UrlTitle)
-                .MaximumLength(ValidationConstants.Partner.UrlTitleMaxLength)
-                .When(x => !string.IsNullOrWhiteSpace(x.UrlTitle))
-                .WithMessage($"UrlTitle cannot exceed {ValidationConstants.Partner.UrlTitleMaxLength} characters");
         }
     }
 }

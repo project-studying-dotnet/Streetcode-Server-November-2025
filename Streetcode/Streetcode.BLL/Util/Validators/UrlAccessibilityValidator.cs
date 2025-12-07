@@ -11,24 +11,17 @@ namespace Streetcode.BLL.Util.Validators
     /// </summary>
     public class UrlAccessibilityValidator
     {
-        private const int DefaultMaxRedirects = 5;
         private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(10);
 
         private readonly HttpClient _httpClient;
-        private readonly bool _followRedirects;
-        private readonly int _maxRedirects;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UrlAccessibilityValidator"/> class.
         /// </summary>
         /// <param name="httpClient">Optional HttpClient instance. If not provided, a default one will be used.</param>
-        /// <param name="followRedirects">Whether to follow HTTP redirects (default: true).</param>
-        /// <param name="maxRedirects">Maximum number of redirects to follow (default: 5).</param>
-        public UrlAccessibilityValidator(HttpClient? httpClient = null, bool followRedirects = true, int maxRedirects = DefaultMaxRedirects)
+        public UrlAccessibilityValidator(HttpClient? httpClient = null)
         {
             _httpClient = httpClient ?? new HttpClient { Timeout = DefaultTimeout };
-            _followRedirects = followRedirects;
-            _maxRedirects = maxRedirects;
         }
 
         /// <summary>

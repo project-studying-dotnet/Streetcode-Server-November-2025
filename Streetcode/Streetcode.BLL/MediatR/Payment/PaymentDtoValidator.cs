@@ -21,20 +21,9 @@ namespace Streetcode.BLL.MediatR.Payment
                 .MaximumLength(ValidationConstants.Payment.RedirectUrlMaxLength)
                 .When(x => !string.IsNullOrEmpty(x.RedirectUrl))
                 .WithMessage($"URL перенаправлення не може перевищувати {ValidationConstants.Payment.RedirectUrlMaxLength} символів")
-                .Must(BeValidUrl)
+                .Must(url => UrlValidator.IsValidAbsoluteUrl(url, isRequired: false))
                 .When(x => !string.IsNullOrEmpty(x.RedirectUrl))
                 .WithMessage("URL перенаправлення має бути правильним");
-        }
-
-        private bool BeValidUrl(string? url)
-        {
-            if (string.IsNullOrEmpty(url))
-            {
-                return true;
-            }
-
-            return Uri.TryCreate(url, UriKind.Absolute, out var uriResult)
-                   && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
         }
     }
 }

@@ -28,8 +28,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
 
             RuleFor(x => x)
                 .Must(JsonElementValidator.HavePositiveIntegerProperty("Id"))
-                .WithMessage($"Id має бути більше {ValidationConstants.Common.MinId - 1}")
-                .When(x => JsonElementValidator.HaveRequiredProperty("Id")(x) && JsonElementValidator.HaveIntegerProperty("Id")(x));
+                .WithMessage($"Id має бути більше {ValidationConstants.Common.MinPositiveValue}")
+                .When(x => JsonElementValidator.HaveProperty("Id")(x) && JsonElementValidator.HaveIntegerProperty("Id")(x));
         }
     }
 }

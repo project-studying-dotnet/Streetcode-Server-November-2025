@@ -21,9 +21,8 @@ namespace Streetcode.BLL.MediatR.Partners.Update
                 .SetValidator(new Create.CreatePartnerDtoValidator());
 
             RuleFor(x => x.Partner.Id)
-                .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .When(x => x.Partner != null)
-                .WithMessage("Id партнера має бути більше 0");
+                .MustBeValidId("Id партнера має бути більше 0")
+                .When(x => x.Partner != null);
         }
 
         /// <summary>

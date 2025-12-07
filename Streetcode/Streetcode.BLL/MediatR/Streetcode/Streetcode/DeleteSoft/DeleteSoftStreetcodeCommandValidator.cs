@@ -14,8 +14,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft
         public DeleteSoftStreetcodeCommandValidator()
         {
             RuleFor(x => x.Id)
-                .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("Id має бути більше 0");
+                .MustBeValidId("Id має бути більше 0");
         }
     }
 }

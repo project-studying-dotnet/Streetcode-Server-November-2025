@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.Linq;
 using System.Text.Json;
 
@@ -78,7 +79,7 @@ namespace Streetcode.BLL.Util.Validators
                 {
                     if (json.TryGetProperty(key, out var property) && property.TryGetInt32(out var value))
                     {
-                        return value > ValidationConstants.Common.MinId - 1;
+                        return value > ValidationConstants.Common.MinPositiveValue;
                     }
 
                     return false;
@@ -149,19 +150,14 @@ namespace Streetcode.BLL.Util.Validators
                 propertyName,
                 key => json =>
                 {
-                    if (json.TryGetProperty(key, out var property))
+                    if (json.TryGetProperty(key, out var property) && property.ValueKind == JsonValueKind.Null)
                     {
-                        if (property.ValueKind == JsonValueKind.Null)
-                        {
-                            return true;
-                        }
+                        return true;
+                    }
 
-                        if (property.ValueKind == JsonValueKind.String)
-                        {
-                            return DateTime.TryParse(property.GetString(), out _);
-                        }
-
-                        return false;
+                    if (json.TryGetProperty(key, out var property2) && property2.ValueKind == JsonValueKind.String)
+                    {
+                        return DateTime.TryParse(property2.GetString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out _);
                     }
 
                     return false;
@@ -218,8 +214,8 @@ namespace Streetcode.BLL.Util.Validators
                         startProperty.ValueKind == JsonValueKind.String &&
                         endProperty.ValueKind == JsonValueKind.String)
                     {
-                        if (DateTime.TryParse(startProperty.GetString(), out var startDate) &&
-                            DateTime.TryParse(endProperty.GetString(), out var endDate))
+                        if (DateTime.TryParse(startProperty.GetString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out var startDate) &&
+                            DateTime.TryParse(endProperty.GetString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out var endDate))
                         {
                             return StreetcodeDateRangeValidator.IsValidDateRange(startDate, endDate);
                         }

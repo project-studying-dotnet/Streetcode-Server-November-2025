@@ -27,8 +27,7 @@ namespace Streetcode.BLL.MediatR.Partners.Create
                 .WithMessage("TargetUrl має бути дійсною абсолютною URL-адресою");
 
             RuleFor(x => x.LogoId)
-                .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("LogoId має бути більше 0");
+                .MustBeValidId("LogoId має бути більше 0");
 
             RuleFor(x => x.Streetcodes)
                 .NotNull()

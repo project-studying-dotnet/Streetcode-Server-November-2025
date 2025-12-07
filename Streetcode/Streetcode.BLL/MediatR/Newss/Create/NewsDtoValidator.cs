@@ -32,9 +32,8 @@ namespace Streetcode.BLL.MediatR.Newss.Create
                 .WithMessage($"URL новини не може перевищувати {ValidationConstants.News.UrlMaxLength} символів");
 
             RuleFor(x => x.ImageId)
-                .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .When(x => x.ImageId.HasValue)
-                .WithMessage("ImageId має бути більше 0");
+                .MustBeValidId("ImageId має бути більше 0")
+                .When(x => x.ImageId.HasValue);
 
             RuleFor(x => x.CreationDate)
                 .NotEmpty()

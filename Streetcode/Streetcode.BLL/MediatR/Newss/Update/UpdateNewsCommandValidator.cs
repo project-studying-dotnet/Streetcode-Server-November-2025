@@ -20,9 +20,8 @@ namespace Streetcode.BLL.MediatR.Newss.Update
                 .SetValidator(new Create.NewsDtoValidator());
 
             RuleFor(x => x.news.Id)
-                .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .When(x => x.news != null)
-                .WithMessage("Id новини має бути більше 0");
+                .MustBeValidId("Id новини має бути більше 0")
+                .When(x => x.news != null);
         }
     }
 }

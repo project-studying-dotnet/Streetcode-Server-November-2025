@@ -6,6 +6,17 @@ namespace Streetcode.BLL.Util.Validators
     public static class ValidationConstants
     {
         /// <summary>
+        /// Regular expression patterns for validation.
+        /// </summary>
+        public static class RegexPatterns
+        {
+            /// <summary>
+            /// YouTube URL validation pattern. Matches youtube.com and youtu.be URLs.
+            /// </summary>
+            public const string YouTubeUrl = @"^(https?://)?(www\.)?(youtube\.com/(watch\?v=|embed/|v/)|youtu\.be/)[\w\-]+";
+        }
+
+        /// <summary>
         /// Common validation constants.
         /// </summary>
         public static class Common
@@ -14,6 +25,11 @@ namespace Streetcode.BLL.Util.Validators
             /// Minimum valid ID value.
             /// </summary>
             public const int MinId = 1;
+
+            /// <summary>
+            /// Minimum positive value threshold (for GreaterThan validation).
+            /// </summary>
+            public const int MinPositiveValue = 0;
 
             /// <summary>
             /// Standard title maximum length.

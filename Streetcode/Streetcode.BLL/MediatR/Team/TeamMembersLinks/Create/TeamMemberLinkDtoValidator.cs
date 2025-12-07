@@ -25,8 +25,7 @@ namespace Streetcode.BLL.MediatR.Team.TeamMembersLinks.Create
                 .WithMessage("TargetUrl має бути дійсною URL-адресою");
 
             RuleFor(x => x.TeamMemberId)
-                .GreaterThan(ValidationConstants.Common.MinId - 1)
-                .WithMessage("TeamMemberId має бути більше 0");
+                .MustBeValidId("TeamMemberId має бути більше 0");
         }
     }
 }
