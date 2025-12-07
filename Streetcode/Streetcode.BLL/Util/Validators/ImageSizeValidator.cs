@@ -10,6 +10,37 @@ namespace Streetcode.BLL.Util.Validators
     public static class ImageSizeValidator
     {
         /// <summary>
+        /// Calculates the decoded size from a base64 string without allocating memory.
+        /// Uses mathematical formula: decodedSize = (base64Length * 3) / 4, accounting for padding.
+        /// </summary>
+        /// <param name="base64String">The base64-encoded image string.</param>
+        /// <returns>The calculated decoded size in bytes, or -1 if invalid.</returns>
+        public static long CalculateDecodedSize(string? base64String)
+        {
+            if (string.IsNullOrWhiteSpace(base64String))
+            {
+                return -1;
+            }
+
+            var length = base64String.Length;
+
+            // Count padding characters
+            var padding = 0;
+            if (length > 0 && base64String[length - 1] == '=')
+            {
+                padding++;
+            }
+
+            if (length > 1 && base64String[length - 2] == '=')
+            {
+                padding++;
+            }
+
+            // Calculate decoded size: (length * 3 / 4) - padding
+            return ((long)length * 3 / 4) - padding;
+        }
+
+        /// <summary>
         /// Validates that a base64 image string is within the specified size limit.
         /// </summary>
         /// <param name="base64String">The base64-encoded image string.</param>
@@ -74,13 +105,13 @@ namespace Streetcode.BLL.Util.Validators
 
         /// <summary>
         /// Validates that a base64 image string is within the default maximum image size.
-        /// Uses MediaValidationConstants.MaxImageSizeInBytes (5MB).
+        /// Uses ValidationConstants.Media.MaxImageSizeInBytes (5MB).
         /// </summary>
         /// <param name="base64String">The base64-encoded image string.</param>
         /// <returns>True if the decoded image is within the default limit, false otherwise.</returns>
         public static bool IsWithinDefaultImageLimit(string? base64String)
         {
-            return IsWithinSizeLimit(base64String, MediaValidationConstants.MaxImageSizeInBytes);
+            return IsWithinSizeLimit(base64String, ValidationConstants.Media.MaxImageSizeInBytes);
         }
 
         /// <summary>

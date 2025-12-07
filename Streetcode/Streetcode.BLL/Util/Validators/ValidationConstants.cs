@@ -98,6 +98,16 @@ namespace Streetcode.BLL.Util.Validators
             /// Audio description maximum length.
             /// </summary>
             public const int DescriptionMaxLength = 500;
+
+            /// <summary>
+            /// Maximum allowed size for images in bytes (5MB).
+            /// </summary>
+            public const long MaxImageSizeInBytes = 5 * 1024 * 1024;
+
+            /// <summary>
+            /// Maximum allowed size for audio files in bytes (10MB).
+            /// </summary>
+            public const long MaxAudioSizeInBytes = 10 * 1024 * 1024;
         }
 
         /// <summary>
@@ -139,6 +149,107 @@ namespace Streetcode.BLL.Util.Validators
             /// Valid Streetcode types.
             /// </summary>
             public static readonly string[] ValidTypes = { "Event", "Person" };
+        }
+
+        /// <summary>
+        /// Fact-specific validation constants.
+        /// </summary>
+        public static class Fact
+        {
+            /// <summary>
+            /// Fact title maximum length.
+            /// </summary>
+            public const int TitleMaxLength = 100;
+
+            /// <summary>
+            /// Fact content maximum length.
+            /// </summary>
+            public const int ContentMaxLength = 600;
+        }
+
+        /// <summary>
+        /// Text-specific validation constants.
+        /// </summary>
+        public static class Text
+        {
+            /// <summary>
+            /// Text title maximum length.
+            /// </summary>
+            public const int TitleMaxLength = 500;
+
+            /// <summary>
+            /// Text content maximum length.
+            /// </summary>
+            public const int ContentMaxLength = 15000;
+
+            /// <summary>
+            /// Additional text maximum length.
+            /// </summary>
+            public const int AdditionalTextMaxLength = 1500;
+        }
+
+        /// <summary>
+        /// RelatedTerm-specific validation constants.
+        /// </summary>
+        public static class RelatedTerm
+        {
+            /// <summary>
+            /// Word maximum length.
+            /// </summary>
+            public const int WordMaxLength = 100;
+        }
+
+        /// <summary>
+        /// Coordinate-specific validation constants.
+        /// </summary>
+        public static class Coordinate
+        {
+            /// <summary>
+            /// Minimum valid latitude value.
+            /// </summary>
+            public const decimal MinLatitude = -90;
+
+            /// <summary>
+            /// Maximum valid latitude value.
+            /// </summary>
+            public const decimal MaxLatitude = 90;
+
+            /// <summary>
+            /// Minimum valid longitude value.
+            /// </summary>
+            public const decimal MinLongitude = -180;
+
+            /// <summary>
+            /// Maximum valid longitude value.
+            /// </summary>
+            public const decimal MaxLongitude = 180;
+        }
+
+        /// <summary>
+        /// Payment-specific validation constants.
+        /// </summary>
+        public static class Payment
+        {
+            /// <summary>
+            /// Maximum payment amount allowed.
+            /// </summary>
+            public const long MaxAmount = 1000000;
+
+            /// <summary>
+            /// Redirect URL maximum length.
+            /// </summary>
+            public const int RedirectUrlMaxLength = 500;
+        }
+
+        /// <summary>
+        /// Tag-specific validation constants.
+        /// </summary>
+        public static class Tag
+        {
+            /// <summary>
+            /// Tag title maximum length.
+            /// </summary>
+            public const int TitleMaxLength = 50;
         }
     }
 }

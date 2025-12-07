@@ -20,8 +20,8 @@ namespace Streetcode.BLL.MediatR.Media.Audio.Create
                 .WithMessage("Дані аудіо в Base64 є обов'язковими")
                 .Must(Base64Validator.IsValidBase64)
                 .WithMessage("BaseFormat має бути дійсним рядком Base64")
-                .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, MediaValidationConstants.MaxAudioSizeInBytes))
-                .WithMessage($"Розмір аудіо не може перевищувати {MediaValidationConstants.MaxAudioSizeInBytes / 1024 / 1024}МБ після декодування");
+                .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, ValidationConstants.Media.MaxAudioSizeInBytes))
+                .WithMessage($"Розмір аудіо не може перевищувати {ValidationConstants.Media.MaxAudioSizeInBytes / 1024 / 1024}МБ після декодування");
 
             RuleFor(x => x.Extension)
                 .NotEmpty()

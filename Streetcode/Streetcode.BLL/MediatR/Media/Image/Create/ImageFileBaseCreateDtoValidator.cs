@@ -20,8 +20,8 @@ namespace Streetcode.BLL.MediatR.Media.Image.Create
                 .WithMessage("Дані зображення в Base64 є обов'язковими")
                 .Must(Base64Validator.IsValidBase64)
                 .WithMessage("BaseFormat має бути дійсним рядком Base64")
-                .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, MediaValidationConstants.MaxImageSizeInBytes))
-                .WithMessage($"Розмір зображення не може перевищувати {MediaValidationConstants.MaxImageSizeInBytes / 1024 / 1024}МБ після декодування");
+                .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, ValidationConstants.Media.MaxImageSizeInBytes))
+                .WithMessage($"Розмір зображення не може перевищувати {ValidationConstants.Media.MaxImageSizeInBytes / 1024 / 1024}МБ після декодування");
 
             RuleFor(x => x.Extension)
                 .NotEmpty()
