@@ -82,9 +82,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
 
             var command = new CreateTextCommand(create);
 
-            this.mapperMock
-                .Setup(m => m.Map<TextEntity>(create))
-                .Returns(mapped);
+            this.mapperMock.SetupMapper<TextCreateDto, TextEntity>(create, mapped);
 
             textRepoMock.SetupCreateAsync(mapped);
             this.repositoryWrapperMock.SetupSaveChangesAsync();
@@ -122,9 +120,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
 
             var command = new CreateTextCommand(create);
 
-            this.mapperMock
-                .Setup(m => m.Map<TextEntity>(create))
-                .Returns((TextEntity?)null);
+            this.mapperMock.SetupMapper<TextCreateDto, TextEntity>(create, null!);
 
             this.loggerMock.SetupLogger();
 
@@ -150,6 +146,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
             var textRepoMock = new Mock<ITextRepository>(MockBehavior.Strict);
             var create = new TextCreateDto { Title = "Test Title", AdditionalText = defaultAuthorship };
             var mapped = new TextEntity { Title = "Test Title", AdditionalText = defaultAuthorship };
+            var mappedAfterFix = new TextDto { Title = "Test Title", AdditionalText = null };
 
             this.repositoryWrapperMock
                 .Setup(r => r.TextRepository)
@@ -157,16 +154,12 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
 
             var command = new CreateTextCommand(create);
 
-            this.mapperMock
-                .Setup(m => m.Map<TextEntity>(It.Is<TextCreateDto>(dto => dto.AdditionalText == defaultAuthorship)))
-                .Returns(mapped);
+            this.mapperMock.SetupMapper<TextCreateDto, TextEntity>(create, mapped);
 
             textRepoMock.SetupCreateAsync(mapped);
             this.repositoryWrapperMock.SetupSaveChangesAsync();
 
-            this.mapperMock
-                .Setup(m => m.Map<TextDto>(It.Is<TextEntity>(e => e.AdditionalText == null)))
-                .Returns(new TextDto { Title = "Test Title", AdditionalText = null });
+            this.mapperMock.SetupMapper<TextEntity, TextDto>(e => e.AdditionalText == null, mappedAfterFix);
 
             // Act
             var result = await this.handler.Handle(command, CancellationToken.None);
@@ -196,9 +189,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
                 .Setup(r => r.TextRepository)
                 .Returns(textRepoMock.Object);
 
-            this.mapperMock
-                .Setup(m => m.Map<TextEntity>(create))
-                .Returns(mapped);
+            this.mapperMock.SetupMapper<TextCreateDto, TextEntity>(create, mapped);
 
             textRepoMock.SetupCreateAsync(mapped);
 
