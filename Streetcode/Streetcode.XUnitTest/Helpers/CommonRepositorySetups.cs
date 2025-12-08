@@ -151,5 +151,24 @@ namespace Streetcode.XUnitTest.Helpers
                 .Setup(m => m.Map<TDestination>(source))
                 .Returns(destination);
         }
+
+        /// <summary>
+        /// Configures the mocked <see cref = "IMapper" /> to map from source to a new destination object.
+        /// This method should be used when the mapper creates a new instance of the destination type based on a predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The source type.</typeparam>
+        /// <typeparam name="TDestination">The destination type.</typeparam>
+        /// <param name="mapperMock">The mocked mapper.</param>
+        /// <param name="predicate">The mocked predicate.</param>
+        /// <param name="destination">The destination object to return.</param>
+        public static void SetupMapper<TSource, TDestination>(
+            this Mock<IMapper> mapperMock,
+            Expression<Func<TSource, bool>> predicate,
+            TDestination destination)
+        {
+            mapperMock
+                .Setup(m => m.Map<TDestination>(It.Is(predicate)))
+                .Returns(destination);
+        }
     }
 }
