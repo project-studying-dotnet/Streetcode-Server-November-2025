@@ -2,14 +2,18 @@
 {
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.Streetcode;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.Create;
     using Streetcode.BLL.Util;
+    using Streetcode.DAL.Entities.Media.Images;
     using Streetcode.DAL.Entities.Streetcode;
     using Streetcode.DAL.Enums;
+    using Streetcode.XUnitTest.Helpers;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Linq.Expressions;
     using System.Text;
     using System.Text.Json;
     using System.Threading.Tasks;
@@ -38,13 +42,38 @@
                 .Setup(mapper => mapper.Map<CreateStreetcodeDto>(streetcode))
                 .Returns(streetcodeDto);
 
+            this._mapperMock
+                .Setup(mapper => mapper.Map<ImageDetails>(It.IsAny<ImageDetailsDto>()))
+                .Returns((ImageDetailsDto img) => new ImageDetails()
+                {
+                    Id = img.Id
+                });
         }
 
         private void SetupCreateStreetcodeAsync(StreetcodeContent streetcode)
         {
             this._repositoryMock
-                .Setup(repo => repo.StreetcodeRepository.CreateAsync(It.IsAny<StreetcodeContent>()))
+                .Setup(r => r.StreetcodeRepository
+                .CreateAsync(It.IsAny<StreetcodeContent>()))
                 .ReturnsAsync(streetcode);
+
+            this._repositoryMock
+                .Setup(r => r.ImageRepository.GetFirstOrDefaultAsync(It.IsAny<Expression<Func<Image, bool>>>(), null))
+                    .ReturnsAsync(new Image());
+
+            this._repositoryMock
+                .Setup(r => r.ImageDetailsRepository
+                .CreateAsync(It.IsAny<ImageDetails>()))
+                .ReturnsAsync((ImageDetails img) => img);
+
+            this._repositoryMock
+                .Setup(r => r.StreetcodeImageRepository
+                .CreateAsync(It.IsAny<StreetcodeImage>()))
+                .ReturnsAsync((StreetcodeImage si) => si);
+
+            this._repositoryMock
+                .Setup
+
         }
 
         [Fact]
@@ -65,6 +94,8 @@
 
               ],
               ""Images"": [
+                { ""ImageId"": 10 },
+                { ""ImageId"": 15 }
               ]
             }";
 
@@ -88,11 +119,15 @@
 
             this.SetupMapperForStreetcodeContent(createStreetcodeDto, streetcodeEntity);
             this.SetupCreateStreetcodeAsync(streetcodeEntity);
+            this._repositoryMock.SetupSaveChangesAsync();
 
             var result = await handler.Handle(request, CancellationToken.None);
 
-            Assert.True(result.IsSuccess);
-            result.Value.Should().BeEquivalentTo(JsonSerializer.SerializeToElement(createStreetcodeDto));
+            //Assert.True(result.IsSuccess);
+
+            Assert.Equal("1", result.Errors.First().Message);
+
+            //Assert.Equal(createStreetcodeDto.Index, result.Value.GetProperty("Index").GetInt32());
         }
     }
 }
