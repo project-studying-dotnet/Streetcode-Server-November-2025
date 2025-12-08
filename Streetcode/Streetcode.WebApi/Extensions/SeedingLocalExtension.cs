@@ -267,17 +267,31 @@ namespace Streetcode.WebApi.Extensions
                         }
                     }
 
-                    if (!dbContext.Users.Any())
+                    if (!dbContext.Users.Any(u => u.Email == "admin@gmail.com"))
                     {
                         dbContext.Users.AddRange(
                             new DAL.Entities.Users.User
                             {
-                                Email = "admin",
+                                Email = "admin@gmail.com",
                                 Role = UserRole.MainAdministrator,
-                                Login = "admin",
                                 Name = "admin",
-                                Password = "admin",
+                                PasswordHash = "admin",
                                 Surname = "admin",
+                            });
+
+                        await dbContext.SaveChangesAsync();
+                    }
+
+                    if (!dbContext.Users.Any(u => u.Email == "moderator@gmail.com"))
+                    {
+                        dbContext.Users.AddRange(
+                            new DAL.Entities.Users.User
+                            {
+                                Email = "moderator@gmail.com",
+                                Role = UserRole.Moderator,
+                                Name = "moderator",
+                                PasswordHash = "moderator",
+                                Surname = "moderator",
                             });
 
                         await dbContext.SaveChangesAsync();
