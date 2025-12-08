@@ -73,12 +73,12 @@ public class StreetcodeDbContext : IdentityDbContext<User, IdentityRole<int>, in
     public DbSet<StreetcodePartner> StreetcodePartners { get; set; }
     public DbSet<TeamMemberPositions> TeamMemberPosition { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(builder);
 
-        modelBuilder.UseCollation("SQL_Ukrainian_CP1251_CI_AS");
+        builder.UseCollation("SQL_Ukrainian_CP1251_CI_AS");
 
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }
