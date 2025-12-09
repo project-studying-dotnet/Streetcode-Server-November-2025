@@ -283,9 +283,9 @@ namespace Streetcode.WebApi.Extensions
                         var password = new PasswordHasher<User>();
                         var mainAdminPasswordEnvironmentVariable = Environment.GetEnvironmentVariable("MAIN_ADMIN_PASSWORD");
 
-                        if (mainAdminPasswordEnvironmentVariable is null)
+                        if (string.IsNullOrEmpty(mainAdminPasswordEnvironmentVariable))
                         {
-                            throw new ArgumentNullException(nameof(mainAdminPasswordEnvironmentVariable), "Password in environment variables is not set and equals null.");
+                            throw new InvalidOperationException("MAIN_ADMIN_PASSWORD environment variable is not set.");
                         }
 
                         var hashed = password.HashPassword(mainAdminDefault, mainAdminPasswordEnvironmentVariable);
@@ -308,9 +308,9 @@ namespace Streetcode.WebApi.Extensions
                         var password = new PasswordHasher<User>();
                         var adminPasswordEnvironmentVariable = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
 
-                        if (adminPasswordEnvironmentVariable is null)
+                        if (string.IsNullOrEmpty(adminPasswordEnvironmentVariable))
                         {
-                            throw new ArgumentNullException(nameof(adminPasswordEnvironmentVariable), "Password in environment variables is not set and equals null.");
+                            throw new InvalidOperationException("ADMIN_PASSWORD environment variable is not set.");
                         }
 
                         var hashed = password.HashPassword(adminDefault, adminPasswordEnvironmentVariable);
@@ -333,9 +333,9 @@ namespace Streetcode.WebApi.Extensions
                         var password = new PasswordHasher<User>();
                         var moderatorPasswordEnvironmentVariable = Environment.GetEnvironmentVariable("MODERATOR_PASSWORD");
 
-                        if (moderatorPasswordEnvironmentVariable is null)
+                        if (string.IsNullOrEmpty(moderatorPasswordEnvironmentVariable))
                         {
-                            throw new ArgumentNullException(nameof(moderatorPasswordEnvironmentVariable), "Password in environment variables is not set and equals null.");
+                            throw new InvalidOperationException("MODERATOR_PASSWORD environment variable is not set.");
                         }
 
                         var hashed = password.HashPassword(moderatorDefault, moderatorPasswordEnvironmentVariable);
