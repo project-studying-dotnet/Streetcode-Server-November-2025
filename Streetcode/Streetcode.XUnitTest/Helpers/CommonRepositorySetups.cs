@@ -1,5 +1,6 @@
 namespace Streetcode.XUnitTest.Helpers
 {
+    using System.Linq;
     using System.Linq.Expressions;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -14,6 +15,26 @@ namespace Streetcode.XUnitTest.Helpers
     /// </summary>
     public static class CommonRepositorySetups
     {
+        /// <summary>
+        /// Configures the mocked repository to return the specified queryable collection
+        /// of entities when calling <c>FindAll</c>.
+        /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
+        /// <typeparam name="TEntity">The entity type.</typeparam>
+        /// <param name="repositoryMock">The mocked repository.</param>
+        /// <param name="entities">The collection of entities to return as an IQueryable, or null to return an empty queryable.</param>
+        public static void SetupFindAllAsync<TRepo, TEntity>(
+            this Mock<TRepo> repositoryMock,
+            IQueryable<TEntity>? entities)
+            where TEntity : class
+            where TRepo : class, IRepositoryBase<TEntity>
+        {
+            var queryableResult = entities ?? Enumerable.Empty<TEntity>().AsQueryable();
+            repositoryMock
+                .Setup(r => r.FindAll(It.IsAny<Expression<Func<TEntity, bool>>>()))
+                .Returns(queryableResult);
+        }
+
         /// <summary>
         /// Configures the mocked repository to return the specified collection
         /// of entities when calling <c>GetAllAsync</c>.
