@@ -12,7 +12,7 @@ using Streetcode.DAL.Persistence;
 namespace Streetcode.DAL.Persistence.Migrations
 {
     [DbContext(typeof(StreetcodeDbContext))]
-    [Migration("20251208215215_Setup_Identity")]
+    [Migration("20251209001854_Setup_Identity")]
     partial class Setup_Identity
     {
         /// <inheritdoc />
@@ -1147,7 +1147,8 @@ namespace Streetcode.DAL.Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)

@@ -318,8 +318,6 @@ namespace Streetcode.WebApi.Extensions
 
                         await dbContext.Users.AddAsync(adminDefault);
                         await dbContext.SaveChangesAsync();
-
-                        var passwordHash = new PasswordHasher<User>();
                     }
 
                     if (!dbContext.Users.Any(u => u.Email == "moderator@gmail.com"))
