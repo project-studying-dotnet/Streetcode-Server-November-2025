@@ -32,24 +32,11 @@ namespace Streetcode.DAL.Persistence.Migrations
                 oldType: "nvarchar(500)",
                 oldMaxLength: 500,
                 oldNullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "VideoUrl",
-                schema: "streetcode",
-                table: "texts",
-                type: "nvarchar(500)",
-                maxLength: 500,
-                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "VideoUrl",
-                schema: "streetcode",
-                table: "texts");
-
             migrationBuilder.AlterColumn<string>(
                 name: "Title",
                 schema: "streetcode",
