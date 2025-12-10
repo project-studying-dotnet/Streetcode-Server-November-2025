@@ -55,8 +55,7 @@ jobs:
 
       - name: Test and Code Coverage
         working-directory: Streetcode
-        run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --collect:"XPlat Code Coverage" --no-build
-
+        run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
       # DEBUG STEP: This helps verify the file was created. You can remove this later.
       - name: Verify Coverage File Exists
         working-directory: Streetcode
