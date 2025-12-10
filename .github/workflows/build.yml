@@ -35,19 +35,20 @@ jobs:
       - name: Install tools
         run: |
           dotnet tool install --global dotnet-sonarscanner
+          dotnet tool install --global dotnet-reportgenerator-globaltool
           dotnet tool install xmldocmd -g
 
       - name: Restore Dependencies
         working-directory: Streetcode
         run: dotnet restore Streetcode.sln
 
-      # CRITICAL FIX: Added /d:sonar.exclusions to ignore bin/obj folders
       - name: SonarScanner Begin
         working-directory: Streetcode
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # NOTICE: reportsPaths now points to 'SonarQube.xml' which we create in the conversion step
         run: |
-          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*,**/Migrations/**/*"
+          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/SonarQube.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*,**/Migrations/**/*"
 
       - name: Build
         working-directory: Streetcode
@@ -55,11 +56,13 @@ jobs:
 
       - name: Test and Code Coverage
         working-directory: Streetcode
-        run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
-      # DEBUG STEP: This helps verify the file was created. You can remove this later.
-      - name: Verify Coverage File Exists
+        # Simplified: Just runs tests and creates the standard 'coverage.cobertura.xml'
+        run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --collect:"XPlat Code Coverage" --no-build
+
+      - name: Convert Coverage Report
         working-directory: Streetcode
-        run: Get-ChildItem -Path coverage -Recurse
+        # Converts Cobertura -> SonarQube.xml (This fixes the format mismatch 100%)
+        run: reportgenerator -reports:./coverage/**/coverage.cobertura.xml -targetdir:./coverage -reporttypes:SonarQube
 
       - name: SonarScanner End
         working-directory: Streetcode
@@ -73,4 +76,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Code Coverage Report
-          path: Streetcode/coverage/**/coverage.opencover.xml
+          path: Streetcode/coverage/SonarQube.xml
