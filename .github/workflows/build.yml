@@ -1,4 +1,5 @@
 name: SonarCloud
+
 on:
   push:
     branches:
@@ -6,9 +7,11 @@ on:
       - dev
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
   sonarcloud_branch:
     runs-on: windows-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,8 +29,10 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      - name: Install SonarScanner
-        run: dotnet tool install --global dotnet-sonarscanner
+      - name: Install tools
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+          dotnet tool install --global dotnet-coverage
 
       - name: Install xmldocmd
         run: dotnet tool install xmldocmd -g
@@ -38,15 +43,14 @@ jobs:
       - name: SonarScanner Begin
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
+        run: dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.branch.name="${{ github.ref_name }}" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
 
       - name: Build
         run: dotnet build ./Streetcode/Streetcode.sln --configuration Release --no-restore
 
       - name: Test and Code Coverage
         run: |
-          dotnet test ./Streetcode/Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+          dotnet-coverage collect "dotnet test ./Streetcode/Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --logger trx;LogFileName=test-results.trx" -f xml -o coverage.xml
 
       - name: SonarScanner End
         env:
@@ -58,5 +62,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Code Coverage Report
-          path: |
-            ./coverage/**/*.opencover.xml
+          path: coverage.xml
