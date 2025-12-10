@@ -191,5 +191,23 @@ namespace Streetcode.XUnitTest.Helpers
                 .Setup(m => m.Map<TDestination>(It.Is(predicate)))
                 .Returns(destination);
         }
+
+        /// <summary>
+        /// Configures the mocked <see cref="IMapper"/> to map from any source of the specified type to a destination object.
+        /// This method should be used when you want the mapper to return the same destination regardless of the specific source instance.
+        /// Useful for testing scenarios where source instances are created dynamically (e.g., after LINQ operations).
+        /// </summary>
+        /// <typeparam name="TSource">The source type.</typeparam>
+        /// <typeparam name="TDestination">The destination type.</typeparam>
+        /// <param name="mapperMock">The mocked mapper.</param>
+        /// <param name="destination">The destination object to return.</param>
+        public static void SetupMapperAny<TSource, TDestination>(
+            this Mock<IMapper> mapperMock,
+            TDestination destination)
+        {
+            mapperMock
+                .Setup(m => m.Map<TDestination>(It.IsAny<TSource>()))
+                .Returns(destination);
+        }
     }
 }

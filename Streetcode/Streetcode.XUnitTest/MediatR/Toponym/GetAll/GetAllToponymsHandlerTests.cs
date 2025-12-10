@@ -59,8 +59,7 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetAll
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(toponymRepositoryMock);
             toponymRepositoryMock.SetupFindAllAsync<IToponymRepository, Toponym>(emptyToponyms);
-            this.mapperMock.Setup(m => m.Map<IEnumerable<ToponymDto>>(It.IsAny<IEnumerable<Toponym>>()))
-                .Returns(emptyToponymDtos);
+            this.mapperMock.SetupMapper(emptyToponyms, emptyToponymDtos);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -95,8 +94,7 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetAll
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(toponymRepositoryMock);
             toponymRepositoryMock.SetupFindAllAsync<IToponymRepository, Toponym>(toponyms.AsQueryable());
-            this.mapperMock.Setup(m => m.Map<IEnumerable<ToponymDto>>(toponyms))
-                .Returns(toponymDtos);
+            this.mapperMock.SetupMapperAny<IEnumerable<Toponym>, IEnumerable<ToponymDto>>(toponymDtos);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -128,18 +126,16 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetAll
             var filterTitle = "Main";
             var query = new GetAllToponymsQuery(new GetAllToponymsRequestDto { Title = filterTitle });
             var toponyms = ToponymTestData.CreateToponyms();
-            var filteredToponyms = toponyms.Where(t => t.StreetName.Contains(filterTitle, StringComparison.OrdinalIgnoreCase));
-            var toponymDtos = ToponymTestData.CreateToponymDtos()
-                .Where(dto => dto.StreetName.Contains(filterTitle, StringComparison.OrdinalIgnoreCase));
+            var filteredToponyms = toponyms
+                .Where(t => t.StreetName.Contains(filterTitle, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+            var filteredToponymDtos = ToponymTestData.CreateToponymDtos()
+                .Where(dto => dto.StreetName.Contains(filterTitle, StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(toponymRepositoryMock);
             toponymRepositoryMock.SetupFindAllAsync<IToponymRepository, Toponym>(toponyms.AsQueryable());
-            this.mapperMock.Setup(m => m.Map<IEnumerable<ToponymDto>>(It.IsAny<IEnumerable<Toponym>>()))
-                .Returns((IEnumerable<Toponym> source) =>
-                {
-                    var filtered = source.Where(t => t.StreetName.Contains(filterTitle, StringComparison.OrdinalIgnoreCase));
-                    return toponymDtos.Where(dto => filtered.Any(f => f.Id == dto.Id));
-                });
+            this.mapperMock.SetupMapper(filteredToponyms, filteredToponymDtos);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -150,7 +146,7 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetAll
             Assert.Empty(result.Errors);
             Assert.NotNull(result.Value);
             Assert.NotNull(result.Value.Toponyms);
-            Assert.All(result.Value.Toponyms, toponym => 
+            Assert.All(result.Value.Toponyms, toponym =>
                 Assert.Contains(filterTitle, toponym.StreetName, StringComparison.OrdinalIgnoreCase));
             Assert.Equal(1, result.Value.Pages);
 
