@@ -46,10 +46,11 @@ jobs:
         working-directory: Streetcode
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # 1. Look for 'coverage.opencover.xml'
-        # 2. Exclude the coverage folder itself from analysis so it doesn't show up in the "Code" tab
+        # CHANGES:
+        # 1. Used /d:sonar.coverageReportPaths (Generic importer) instead of cs.opencover
+        # 2. Pointed to "SonarQube.xml"
         run: |
-          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*,**/Migrations/**/*,**/coverage/**/*"
+          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="**/SonarQube.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*,**/Migrations/**/*,**/coverage/**/*"
 
       - name: Build
         working-directory: Streetcode
@@ -57,13 +58,13 @@ jobs:
 
       - name: Test and Code Coverage
         working-directory: Streetcode
-        # Generates the raw Cobertura file
+        # Generates standard Cobertura format (Free)
         run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --collect:"XPlat Code Coverage" --no-build
 
       - name: Convert Coverage Report
         working-directory: Streetcode
-        # FIX: Convert Cobertura -> OpenCover (The format the C# scanner actually wants)
-        run: reportgenerator -reports:./coverage/**/coverage.cobertura.xml -targetdir:./coverage -reporttypes:OpenCover
+        # CHANGE: Back to "SonarQube" format (Free)
+        run: reportgenerator -reports:./coverage/**/coverage.cobertura.xml -targetdir:./coverage -reporttypes:SonarQube
 
       - name: SonarScanner End
         working-directory: Streetcode
@@ -77,4 +78,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Code Coverage Report
-          path: Streetcode/coverage/coverage.opencover.xml
+          path: Streetcode/coverage/SonarQube.xml
