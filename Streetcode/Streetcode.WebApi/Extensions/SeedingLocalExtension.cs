@@ -1,4 +1,6 @@
 ﻿using System.Text;
+using DotNetEnv;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Streetcode.BLL.Services.BlobStorageService;
@@ -15,6 +17,7 @@ using Streetcode.DAL.Entities.Streetcode.Types;
 using Streetcode.DAL.Entities.Team;
 using Streetcode.DAL.Entities.Timeline;
 using Streetcode.DAL.Entities.Transactions;
+using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Enums;
 using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Realizations.Base;
@@ -267,19 +270,78 @@ namespace Streetcode.WebApi.Extensions
                         }
                     }
 
-                    if (!dbContext.Users.Any())
+                    if (!dbContext.Users.Any(u => u.Email == "main_admin@gmail.com"))
                     {
-                        dbContext.Users.AddRange(
-                            new DAL.Entities.Users.User
-                            {
-                                Email = "admin",
-                                Role = UserRole.MainAdministrator,
-                                Login = "admin",
-                                Name = "admin",
-                                Password = "admin",
-                                Surname = "admin",
-                            });
+                        var mainAdminDefault = new User
+                        {
+                            Email = "main_admin@gmail.com",
+                            Role = UserRole.MainAdministrator,
+                            Name = "main_admin",
+                            Surname = "main_admin",
+                        };
 
+                        var password = new PasswordHasher<User>();
+                        var mainAdminPasswordEnvironmentVariable = Environment.GetEnvironmentVariable("MAIN_ADMIN_PASSWORD");
+
+                        if (string.IsNullOrEmpty(mainAdminPasswordEnvironmentVariable))
+                        {
+                            throw new InvalidOperationException("MAIN_ADMIN_PASSWORD environment variable is not set.");
+                        }
+
+                        var hashed = password.HashPassword(mainAdminDefault, mainAdminPasswordEnvironmentVariable);
+                        mainAdminDefault.PasswordHash = hashed;
+
+                        await dbContext.Users.AddAsync(mainAdminDefault);
+                        await dbContext.SaveChangesAsync();
+                    }
+
+                    if (!dbContext.Users.Any(u => u.Email == "admin@gmail.com"))
+                    {
+                        var adminDefault = new User
+                        {
+                            Email = "admin@gmail.com",
+                            Role = UserRole.Administrator,
+                            Name = "admin",
+                            Surname = "admin",
+                        };
+
+                        var password = new PasswordHasher<User>();
+                        var adminPasswordEnvironmentVariable = Environment.GetEnvironmentVariable("ADMIN_PASSWORD");
+
+                        if (string.IsNullOrEmpty(adminPasswordEnvironmentVariable))
+                        {
+                            throw new InvalidOperationException("ADMIN_PASSWORD environment variable is not set.");
+                        }
+
+                        var hashed = password.HashPassword(adminDefault, adminPasswordEnvironmentVariable);
+                        adminDefault.PasswordHash = hashed;
+
+                        await dbContext.Users.AddAsync(adminDefault);
+                        await dbContext.SaveChangesAsync();
+                    }
+
+                    if (!dbContext.Users.Any(u => u.Email == "moderator@gmail.com"))
+                    {
+                        var moderatorDefault = new User
+                        {
+                            Email = "moderator@gmail.com",
+                            Role = UserRole.Moderator,
+                            Name = "moderator",
+                            Surname = "moderator",
+                        };
+
+                        var password = new PasswordHasher<User>();
+                        var moderatorPasswordEnvironmentVariable = Environment.GetEnvironmentVariable("MODERATOR_PASSWORD");
+
+                        if (string.IsNullOrEmpty(moderatorPasswordEnvironmentVariable))
+                        {
+                            throw new InvalidOperationException("MODERATOR_PASSWORD environment variable is not set.");
+                        }
+
+                        var hashed = password.HashPassword(moderatorDefault, moderatorPasswordEnvironmentVariable);
+                        moderatorDefault.PasswordHash = hashed;
+
+                        await dbContext.Users.AddAsync(moderatorDefault);
                         await dbContext.SaveChangesAsync();
                     }
 

@@ -1,4 +1,4 @@
-﻿// <copyright file="GetAllTextsHandlerTests.cs" company="PlaceholderCompany">
+// <copyright file="GetAllTextsHandlerTests.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -27,7 +27,6 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetAll
         private readonly Mock<IMapper> mockMapper;
         private readonly Mock<ILoggerService> mockLogger;
         private readonly GetAllTextsHandler handler;
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GetAllTextsHandlerTests"/> class.

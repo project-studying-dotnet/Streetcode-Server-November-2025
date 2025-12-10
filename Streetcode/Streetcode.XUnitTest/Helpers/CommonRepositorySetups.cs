@@ -1,5 +1,6 @@
 namespace Streetcode.XUnitTest.Helpers
 {
+    using System.Linq;
     using System.Linq.Expressions;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -14,6 +15,26 @@ namespace Streetcode.XUnitTest.Helpers
     /// </summary>
     public static class CommonRepositorySetups
     {
+        /// <summary>
+        /// Configures the mocked repository to return the specified queryable collection
+        /// of entities when calling <c>FindAll</c>.
+        /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
+        /// <typeparam name="TEntity">The entity type.</typeparam>
+        /// <param name="repositoryMock">The mocked repository.</param>
+        /// <param name="entities">The collection of entities to return as an IQueryable, or null to return an empty queryable.</param>
+        public static void SetupFindAllAsync<TRepo, TEntity>(
+            this Mock<TRepo> repositoryMock,
+            IQueryable<TEntity>? entities)
+            where TEntity : class
+            where TRepo : class, IRepositoryBase<TEntity>
+        {
+            var queryableResult = entities ?? Enumerable.Empty<TEntity>().AsQueryable();
+            repositoryMock
+                .Setup(r => r.FindAll(It.IsAny<Expression<Func<TEntity, bool>>>()))
+                .Returns(queryableResult);
+        }
+
         /// <summary>
         /// Configures the mocked repository to return the specified collection
         /// of entities when calling <c>GetAllAsync</c>.
@@ -149,6 +170,43 @@ namespace Streetcode.XUnitTest.Helpers
         {
             mapperMock
                 .Setup(m => m.Map<TDestination>(source))
+                .Returns(destination);
+        }
+
+        /// <summary>
+        /// Configures the mocked <see cref = "IMapper" /> to map from source to a new destination object.
+        /// This method should be used when the mapper creates a new instance of the destination type based on a predicate.
+        /// </summary>
+        /// <typeparam name="TSource">The source type.</typeparam>
+        /// <typeparam name="TDestination">The destination type.</typeparam>
+        /// <param name="mapperMock">The mocked mapper.</param>
+        /// <param name="predicate">The mocked predicate.</param>
+        /// <param name="destination">The destination object to return.</param>
+        public static void SetupMapper<TSource, TDestination>(
+            this Mock<IMapper> mapperMock,
+            Expression<Func<TSource, bool>> predicate,
+            TDestination destination)
+        {
+            mapperMock
+                .Setup(m => m.Map<TDestination>(It.Is(predicate)))
+                .Returns(destination);
+        }
+
+        /// <summary>
+        /// Configures the mocked <see cref="IMapper"/> to map from any source of the specified type to a destination object.
+        /// This method should be used when you want the mapper to return the same destination regardless of the specific source instance.
+        /// Useful for testing scenarios where source instances are created dynamically (e.g., after LINQ operations).
+        /// </summary>
+        /// <typeparam name="TSource">The source type.</typeparam>
+        /// <typeparam name="TDestination">The destination type.</typeparam>
+        /// <param name="mapperMock">The mocked mapper.</param>
+        /// <param name="destination">The destination object to return.</param>
+        public static void SetupMapperAny<TSource, TDestination>(
+            this Mock<IMapper> mapperMock,
+            TDestination destination)
+        {
+            mapperMock
+                .Setup(m => m.Map<TDestination>(It.IsAny<TSource>()))
                 .Returns(destination);
         }
     }
