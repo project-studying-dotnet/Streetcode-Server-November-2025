@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Microsoft (R) Visual C# Compiler",
+        "version": "5.0.0.0",
+        "fileVersion": "5.0.0-2.25523.111 (b0f34d51)",
+        "semanticVersion": "5.0.0",
+        "language": "en-US"
+      },
+      "results": [
+        {
+          "ruleId": "SA1633",
+          "level": "warning",
+          "message": "The file header is missing or not located at the top of the file.",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///D:/shribak/SoftServe/netProjcetBasedLearning/Streetcode-Server/Streetcode/DbUpdate/Program.cs",
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1
+          }
+        },
+        {
+          "ruleId": "SA0001",
+          "level": "warning",
+          "message": "XML comment analysis is disabled due to project configuration",
+          "properties": {
+            "warningLevel": 1
+          }
+        }
+      ],
+      "rules": {
+        "SA0001": {
+          "id": "SA0001",
+          "shortDescription": "XML comment analysis disabled",
+          "fullDescription": "XML comment analysis can only be performed when the project is configured to parse documentation comments. To enable this functionality, update the project to produce an XML documentation file as part of the build.",
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA0001.md",
+          "properties": {
+            "category": "StyleCop.CSharp.SpecialRules",
+            "isEnabledByDefault": true
+          }
+        },
+        "SA1633": {
+          "id": "SA1633",
+          "shortDescription": "File should have header",
+          "fullDescription": "A C# code file is missing a standard file header.",
+          "defaultLevel": "warning",
+          "helpUri": "https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/SA1633.md",
+          "properties": {
+            "category": "StyleCop.CSharp.DocumentationRules",
+            "isEnabledByDefault": true
+          }
+        }
+      }
+    }
+  ]
+}

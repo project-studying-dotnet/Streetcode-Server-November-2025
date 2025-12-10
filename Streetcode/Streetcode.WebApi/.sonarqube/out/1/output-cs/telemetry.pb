@@ -1,0 +1,1 @@
+„RnD:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\Streetcode.BLL\Streetcode.BLL.csproj¢net8.0òCSharp12

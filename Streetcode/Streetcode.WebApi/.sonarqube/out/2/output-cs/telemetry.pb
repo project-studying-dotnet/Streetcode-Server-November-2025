@@ -1,0 +1,1 @@
+ŠRtD:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\Streetcode.WebApi\Streetcode.WebApi.csproj¢net8.0òCSharp12

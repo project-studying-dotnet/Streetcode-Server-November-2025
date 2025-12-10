@@ -1,0 +1,1 @@
+xRbD:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\DbUpdate\DbUpdate.csproj¢net8.0òCSharp12

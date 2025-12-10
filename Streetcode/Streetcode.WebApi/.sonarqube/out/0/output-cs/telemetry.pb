@@ -1,0 +1,1 @@
+„RnD:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\Streetcode.DAL\Streetcode.DAL.csproj¢net8.0òCSharp12

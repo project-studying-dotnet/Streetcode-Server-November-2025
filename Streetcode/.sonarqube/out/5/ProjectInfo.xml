@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProjectInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+  <ProjectName>Streetcode.XIntegrationTest</ProjectName>
+  <ProjectLanguage>C#</ProjectLanguage>
+  <ProjectType>Test</ProjectType>
+  <ProjectGuid>f2345cdb-3bcb-4741-9a3e-ce45d9bdfe5e</ProjectGuid>
+  <FullPath>D:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\Streetcode.XIntegrationTest\Streetcode.XIntegrationTest.csproj</FullPath>
+  <IsExcluded>false</IsExcluded>
+  <AnalysisResultFiles>
+    <AnalysisResultFile Id="FilesToAnalyze" Location="D:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\.sonarqube\conf\5\FilesToAnalyze.txt" />
+  </AnalysisResultFiles>
+  <AnalysisSettings>
+    <Property Name="sonar.cs.roslyn.reportFilePaths">D:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\.sonarqube\out\5\Issues.json</Property>
+    <Property Name="sonar.cs.analyzer.projectOutPaths">D:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\.sonarqube\out\5</Property>
+    <Property Name="sonar.cs.scanner.telemetry">D:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\.sonarqube\out\5\Telemetry.json</Property>
+  </AnalysisSettings>
+  <Configuration>Debug</Configuration>
+  <Platform>AnyCPU</Platform>
+  <TargetFramework>net8.0</TargetFramework>
+</ProjectInfo>

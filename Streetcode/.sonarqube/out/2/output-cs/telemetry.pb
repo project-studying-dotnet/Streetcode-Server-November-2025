@@ -1,0 +1,1 @@
+êRzD:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\Streetcode.XUnitTest\Streetcode.XUnitTest.csproj¢net8.0ÚCSharp12

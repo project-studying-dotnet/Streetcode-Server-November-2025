@@ -35,10 +35,7 @@ jobs:
       - name: Install tools
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet tool install --global dotnet-coverage
-
-      - name: Install xmldocmd
-        run: dotnet tool install xmldocmd -g
+          dotnet tool install xmldocmd -g
 
       - name: Restore Dependencies
         working-directory: Streetcode
@@ -48,15 +45,14 @@ jobs:
         working-directory: Streetcode
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="coverage.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
+        run: dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.cobertura.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
 
       - name: Build
         run: dotnet build ./Streetcode/Streetcode.sln --configuration Release --no-restore
 
       - name: Test and Code Coverage
         working-directory: Streetcode
-        run: |
-          dotnet-coverage collect "dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --logger trx;LogFileName=test-results.trx" -f xml -o coverage.xml
+        run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --collect:"XPlat Code Coverage" --no-build
 
       - name: SonarScanner End
         working-directory: Streetcode
@@ -70,4 +66,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Code Coverage Report
-          path: Streetcode/coverage.xml
+          path: Streetcode/coverage/**/coverage.cobertura.xml

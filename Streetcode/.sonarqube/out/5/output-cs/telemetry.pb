@@ -1,0 +1,1 @@
+žRˆD:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\Streetcode.XIntegrationTest\Streetcode.XIntegrationTest.csproj¢net8.0òPreview

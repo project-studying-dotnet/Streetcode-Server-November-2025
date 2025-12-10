@@ -1,0 +1,2 @@
+﻿D:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\DbUpdate\Program.cs
+D:\shribak\SoftServe\netProjcetBasedLearning\Streetcode-Server\Streetcode\DbUpdate\Properties\launchSettings.json
