@@ -29,6 +29,9 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Ensure dotnet tools PATH
+        run: echo "$env:USERPROFILE\.dotnet\tools" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
       - name: Install tools
         run: |
           dotnet tool install --global dotnet-sonarscanner
@@ -43,7 +46,7 @@ jobs:
       - name: SonarScanner Begin
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.projectBaseDir="Streetcode" /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
+        run: dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
 
       - name: Restore
         run: dotnet restore ./Streetcode/Streetcode.sln
