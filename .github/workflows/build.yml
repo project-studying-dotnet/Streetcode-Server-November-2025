@@ -46,11 +46,9 @@ jobs:
         working-directory: Streetcode
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # CHANGES:
-        # 1. Used /d:sonar.coverageReportPaths (Generic importer) instead of cs.opencover
-        # 2. Pointed to "SonarQube.xml"
+        # FIX: Removed wildcards (**) from coverageReportPaths. Pointed directly to 'coverage/SonarQube.xml'
         run: |
-          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="**/SonarQube.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*,**/Migrations/**/*,**/coverage/**/*"
+          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="coverage/SonarQube.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*,**/Migrations/**/*,**/coverage/**/*"
 
       - name: Build
         working-directory: Streetcode
@@ -58,12 +56,11 @@ jobs:
 
       - name: Test and Code Coverage
         working-directory: Streetcode
-        # Generates standard Cobertura format (Free)
         run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --collect:"XPlat Code Coverage" --no-build
 
       - name: Convert Coverage Report
         working-directory: Streetcode
-        # CHANGE: Back to "SonarQube" format (Free)
+        # Converts Cobertura -> SonarQube (Generic)
         run: reportgenerator -reports:./coverage/**/coverage.cobertura.xml -targetdir:./coverage -reporttypes:SonarQube
 
       - name: SonarScanner End
