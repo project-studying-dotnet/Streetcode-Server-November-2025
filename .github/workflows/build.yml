@@ -60,7 +60,7 @@ jobs:
       # DEBUG STEP: This helps verify the file was created. You can remove this later.
       - name: Verify Coverage File Exists
         working-directory: Streetcode
-        run: dir coverage /s
+        run: Get-ChildItem -Path coverage -Recurse
 
       - name: SonarScanner End
         working-directory: Streetcode
