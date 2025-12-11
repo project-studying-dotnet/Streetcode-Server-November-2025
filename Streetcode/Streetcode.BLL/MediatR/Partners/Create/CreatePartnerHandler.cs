@@ -24,26 +24,18 @@ namespace Streetcode.BLL.MediatR.Partners.Create
         public async Task<Result<PartnerDto>> Handle(CreatePartnerQuery request, CancellationToken cancellationToken)
         {
             var newPartner = _mapper.Map<Partner>(request.newPartner);
-            try
-            {
-                newPartner.Streetcodes.Clear();
-                newPartner = await _repositoryWrapper.PartnersRepository.CreateAsync(newPartner);
+            newPartner.Streetcodes.Clear();
+            newPartner = await _repositoryWrapper.PartnersRepository.CreateAsync(newPartner);
 
-                await _repositoryWrapper.SaveChangesAsync();
+            await _repositoryWrapper.SaveChangesAsync();
 
-                var streetcodeIds = request.newPartner.Streetcodes.Select(s => s.Id).ToList();
-                newPartner.Streetcodes.AddRange(await _repositoryWrapper
-                    .StreetcodeRepository
-                    .GetAllAsync(s => streetcodeIds.Contains(s.Id)));
+            var streetcodeIds = request.newPartner.Streetcodes.Select(s => s.Id).ToList();
+            newPartner.Streetcodes.AddRange(await _repositoryWrapper
+                .StreetcodeRepository
+                .GetAllAsync(s => streetcodeIds.Contains(s.Id)));
 
-                await _repositoryWrapper.SaveChangesAsync();
-                return Result.Ok(_mapper.Map<PartnerDto>(newPartner));
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
-            }
+            await _repositoryWrapper.SaveChangesAsync();
+            return Result.Ok(_mapper.Map<PartnerDto>(newPartner));
         }
     }
 }

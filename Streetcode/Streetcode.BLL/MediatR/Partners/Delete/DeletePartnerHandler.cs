@@ -29,20 +29,10 @@ namespace Streetcode.BLL.MediatR.Partners.Delete
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
-            else
-            {
-                _repositoryWrapper.PartnersRepository.Delete(partner);
-                try
-                {
-                    await _repositoryWrapper.SaveChangesAsync();
-                    return Result.Ok(_mapper.Map<PartnerDto>(partner));
-                }
-                catch(Exception ex)
-                {
-                    _logger.LogError(request, ex.Message);
-                    return Result.Fail(ex.Message);
-                }
-            }
+
+            _repositoryWrapper.PartnersRepository.Delete(partner);
+            await _repositoryWrapper.SaveChangesAsync();
+            return Result.Ok(_mapper.Map<PartnerDto>(partner));
         }
     }
 }
