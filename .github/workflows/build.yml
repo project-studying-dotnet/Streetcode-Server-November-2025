@@ -7,11 +7,9 @@ on:
       - dev
   pull_request:
     types: [opened, synchronize, reopened]
-  workflow_dispatch:
 
 jobs:
-  build:
-    name: Build and analyze
+  sonarcloud_branch:
     runs-on: windows-latest
 
     steps:
@@ -20,13 +18,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
           java-version: '17'
+          distribution: 'temurin'
 
-      - name: Setup .NET 8
+      - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
@@ -37,44 +35,42 @@ jobs:
       - name: Install tools
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet tool install --global dotnet-coverage
+          dotnet tool install --global dotnet-reportgenerator-globaltool
+          dotnet tool install xmldocmd -g
 
-      - name: Restore
-        run: dotnet restore ./Streetcode/Streetcode.sln
+      - name: Restore Dependencies
+        working-directory: Streetcode
+        run: dotnet restore Streetcode.sln
 
       - name: SonarScanner Begin
+        working-directory: Streetcode
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: >
-          dotnet sonarscanner begin
-          /k:"ita-social-projects_StreetCode"
-          /o:"ita-social-projects"
-          /d:sonar.token="$env:SONAR_TOKEN"
-          /d:sonar.host.url="https://sonarcloud.io"
-          /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.xml"
-          /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
+        run: |
+          dotnet sonarscanner begin /k:"project-studying-dotnet_Streetcode-Server-November-2025" /o:"project-studying-dotnet" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="coverage/SonarQube.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*,**/Migrations/**/*,**/coverage/**/*"
 
       - name: Build
-        run: dotnet build ./Streetcode/Streetcode.sln --configuration Release --no-restore
+        working-directory: Streetcode
+        run: dotnet build Streetcode.sln --configuration Release --no-restore
 
       - name: Test and Code Coverage
-        run: >
-          dotnet-coverage collect
-          "dotnet test ./Streetcode/Streetcode.XUnitTest/Streetcode.XUnitTest.csproj
-          --configuration Release
-          --results-directory ./coverage
-          --logger trx;LogFileName=test-results.trx"
-          -f xml -o coverage.xml
+        working-directory: Streetcode
+        run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --collect:"XPlat Code Coverage" --no-build
+
+      - name: Convert Coverage Report
+        working-directory: Streetcode
+        run: reportgenerator -reports:./coverage/**/coverage.cobertura.xml -targetdir:./coverage -reporttypes:SonarQube
 
       - name: SonarScanner End
+        working-directory: Streetcode
         if: always()
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
-      - name: Save Test Results
+      - name: Publish Code Coverage Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: "**/*.trx"
+          name: Code Coverage Report
+          path: Streetcode/coverage/SonarQube.xml
