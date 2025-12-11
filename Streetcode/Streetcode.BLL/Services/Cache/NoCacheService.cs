@@ -9,7 +9,7 @@ public class NoCacheService : ICacheService
         return Task.FromResult<T?>(default);
     }
 
-    public Task SetAsync<T>(string key, T value, TimeSpan? expiration = null)
+    public Task SetAsync<T>(string key, T value, TimeSpan? absoluteExpiration = null)
     {
         return Task.CompletedTask;
     }
