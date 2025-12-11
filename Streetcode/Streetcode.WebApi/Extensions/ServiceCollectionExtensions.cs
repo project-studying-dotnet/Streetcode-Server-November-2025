@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog.Events;
 using Streetcode.BLL.Interfaces.BlobStorage;
+using Streetcode.BLL.Interfaces.Cache;
 using Streetcode.BLL.Interfaces.Email;
 using Streetcode.BLL.Interfaces.Instagram;
 using Streetcode.BLL.Interfaces.Logging;
@@ -17,6 +18,7 @@ using Streetcode.BLL.Interfaces.Payment;
 using Streetcode.BLL.Interfaces.Text;
 using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.Services.BlobStorageService;
+using Streetcode.BLL.Services.Cache;
 using Streetcode.BLL.Services.Email;
 using Streetcode.BLL.Services.Instagram;
 using Streetcode.BLL.Services.Logging;
@@ -55,6 +57,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IInstagramService, InstagramService>();
         services.AddScoped<ITextService, AddTermsToTextService>();
+
+        services.AddCachingServices();
     }
 
     public static void AddApplicationServices(this IServiceCollection services, ConfigurationManager configuration)
@@ -109,6 +113,30 @@ public static class ServiceCollectionExtensions
             opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyApi", Version = "v1" });
             opt.CustomSchemaIds(x => x.FullName);
         });
+    }
+
+    public static IServiceCollection AddCachingServices(this IServiceCollection services, ILogger? logger = null)
+    {
+        var redisConnectionString = Environment.GetEnvironmentVariable("REDIS_CONNECTION_STRING");
+
+        if (!string.IsNullOrEmpty(redisConnectionString))
+        {
+            Console.WriteLine($"[CACHE] Redis connection string found: {redisConnectionString}");
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = redisConnectionString;
+                options.InstanceName = "Streetcode_";
+            });
+
+            services.AddSingleton<ICacheService, RedisCacheService>();
+            Console.WriteLine("[CACHE] Using RedisCacheService");
+        }
+        else
+        {
+            services.AddSingleton<ICacheService, NoCacheService>();
+        }
+
+        return services;
     }
 
     public class CorsConfiguration
