@@ -108,7 +108,6 @@
             // Act
             var result = _validator.TestValidate(dto);
 
-
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.StreetcodeId)
                   .WithErrorMessage("ID стріткоду має бути більше 0");

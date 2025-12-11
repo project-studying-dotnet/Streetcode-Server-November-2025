@@ -1,0 +1,60 @@
+﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Tag.Create
+{
+    using FluentValidation.TestHelper;
+    using Streetcode.BLL.DTO.AdditionalContent.Tag;
+    using Streetcode.BLL.MediatR.AdditionalContent.Tag.Create;
+    using Xunit;
+
+    public class CreateTagQueryValidatorTests
+    {
+        private readonly CreateTagQueryValidator _validator;
+
+        public CreateTagQueryValidatorTests()
+        {
+            _validator = new CreateTagQueryValidator();
+        }
+
+        [Fact]
+        public void Should_Have_Error_When_TagDto_Is_Null()
+        {
+            // Arrange
+            var query = new CreateTagQuery(null);
+
+            // Act
+            var result = _validator.TestValidate(query);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.tag)
+                  .WithErrorMessage("Дані тегу не можуть бути порожніми");
+        }
+
+        [Fact]
+        public void Should_Not_Have_Error_When_TagDto_Is_Valid()
+        {
+            // Arrange
+            var validDto = new CreateTagDto { Title = "Valid Title" };
+            var query = new CreateTagQuery(validDto);
+
+            // Act
+            var result = _validator.TestValidate(query);
+
+            // Assert
+            result.ShouldNotHaveValidationErrorFor(x => x.tag);
+        }
+
+        [Fact]
+        public void Should_Have_Error_When_Nested_TagDto_Is_Invalid()
+        {
+            // Arrange
+            var invalidDto = new CreateTagDto { Title = string.Empty };
+            var query = new CreateTagQuery(invalidDto);
+
+            // Act
+            var result = _validator.TestValidate(query);
+
+            // Assert
+            result.ShouldHaveValidationErrorFor(x => x.tag.Title)
+                  .WithErrorMessage("Назва тегу є обов'язковою");
+        }
+    }
+}
