@@ -46,9 +46,8 @@ jobs:
         working-directory: Streetcode
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # FIX: Removed wildcards (**) from coverageReportPaths. Pointed directly to 'coverage/SonarQube.xml'
         run: |
-          dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="coverage/SonarQube.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*,**/Migrations/**/*,**/coverage/**/*"
+          dotnet sonarscanner begin /k:"project-studying-dotnet_Streetcode-Server-November-2025" /o:"project-studying-dotnet" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.coverageReportPaths="coverage/SonarQube.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*,**/Migrations/**/*,**/coverage/**/*"
 
       - name: Build
         working-directory: Streetcode
@@ -60,7 +59,6 @@ jobs:
 
       - name: Convert Coverage Report
         working-directory: Streetcode
-        # Converts Cobertura -> SonarQube (Generic)
         run: reportgenerator -reports:./coverage/**/coverage.cobertura.xml -targetdir:./coverage -reporttypes:SonarQube
 
       - name: SonarScanner End
