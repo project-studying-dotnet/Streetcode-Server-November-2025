@@ -13,53 +13,61 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout
+      - name: 📥 Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Java
+      - name: ☕ Setup Java
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup .NET
+      - name: 🧱 Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
 
-      - name: Install tools
+      - name: 🛠 Install tools
         run: |
           dotnet tool install --global dotnet-sonarscanner
-          dotnet tool install --global dotnet-coverage
+          dotnet tool install --global dotnet-reportgenerator-globaltool
 
-      - name: Install xmldocmd
-        run: dotnet tool install xmldocmd -g
-
-      - name: Restore Dependencies
+      - name: 📦 Restore Dependencies
         run: dotnet restore ./Streetcode/Streetcode.sln
 
-      - name: SonarScanner Begin
+      - name: 🚀 SonarScanner Begin
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: dotnet sonarscanner begin /k:"ita-social-projects_StreetCode" /o:"ita-social-projects" /d:sonar.branch.name="${{ github.ref_name }}" /d:sonar.token="$env:SONAR_TOKEN" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths="**/coverage.xml" /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
+        run: dotnet sonarscanner begin `
+          /k:"ita-social-projects_StreetCode" `
+          /o:"ita-social-projects" `
+          /d:sonar.branch.name="${{ github.ref_name }}" `
+          /d:sonar.token="$env:SONAR_TOKEN" `
+          /d:sonar.host.url="https://sonarcloud.io" `
+          /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.cobertura.xml" `
+          /d:sonar.coverage.exclusions="**/*Tests.cs,**/*Test.cs"
 
-      - name: Build
+      - name: 🏗 Build
         run: dotnet build ./Streetcode/Streetcode.sln --configuration Release --no-restore
 
-      - name: Test and Code Coverage
+      - name: ✅ Test and Generate Coverage (Cobertura)
         run: |
-          dotnet-coverage collect "dotnet test ./Streetcode/Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --results-directory ./coverage --logger trx;LogFileName=test-results.trx" -f xml -o coverage.xml
+          dotnet test ./Streetcode/Streetcode.XUnitTest/Streetcode.XUnitTest.csproj `
+            --configuration Release `
+            /p:CollectCoverage=true `
+            /p:CoverletOutput=./TestResults/ `
+            /p:CoverletOutputFormat=cobertura
 
-      - name: SonarScanner End
+      - name: ☁️ SonarScanner End
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: dotnet sonarscanner end /d:sonar.token="$env:SONAR_TOKEN"
 
-      - name: Publish Code Coverage Report
+      - name: 📤 Upload Coverage Report (для відлагодження)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: Code Coverage Report
-          path: coverage.xml
+          name: Cobertura Report
+          path: TestResults/coverage.cobertura.xml
