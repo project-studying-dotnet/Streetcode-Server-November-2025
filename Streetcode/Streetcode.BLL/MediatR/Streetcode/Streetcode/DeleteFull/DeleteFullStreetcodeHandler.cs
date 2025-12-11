@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentResults;
 using MediatR;
+using Streetcode.BLL.Interfaces.Cache;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -14,11 +15,13 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly ILoggerService _logger;
+        private readonly ICacheService _cacheService;
 
-        public DeleteFullStreetcodeHandler(IRepositoryWrapper repositoryWrapper, ILoggerService logger)
+        public DeleteFullStreetcodeHandler(IRepositoryWrapper repositoryWrapper, ILoggerService logger, ICacheService cacheService)
         {
             _repositoryWrapper = repositoryWrapper;
             _logger = logger;
+            _cacheService = cacheService;
         }
 
         async Task<Result<Unit>> IRequestHandler<DeleteFullStreetcodeCommand, Result<Unit>>.Handle(DeleteFullStreetcodeCommand request, CancellationToken cancellationToken)
@@ -60,6 +63,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull
 
             if (resultIsDeleteSucces)
             {
+                await _cacheService.RemoveAsync($"Streetcode_{request.Id}");
+
                 return Result.Ok(Unit.Value);
             }
             else
