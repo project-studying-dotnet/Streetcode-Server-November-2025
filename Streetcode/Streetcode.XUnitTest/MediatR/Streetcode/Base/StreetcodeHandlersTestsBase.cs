@@ -1,20 +1,25 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.EntityFrameworkCore.Query;
-using Moq;
-using Streetcode.BLL.DTO.Media.Images;
-using Streetcode.BLL.DTO.Streetcode;
-using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.DAL.Entities.AdditionalContent;
-using Streetcode.DAL.Entities.Media;
-using Streetcode.DAL.Entities.Media.Images;
-using Streetcode.DAL.Entities.Streetcode;
-using Streetcode.DAL.Repositories.Interfaces.Base;
-using System.Linq.Expressions;
+﻿using MediatR;
 
-namespace Streetcode.XUnitTest.MediatR.Post
+namespace Streetcode.XUnitTest.MediatR.Base
 {
-    public class CreateStreetcodeHandlerTestsBase
+    using System.Linq.Expressions;
+    using AutoMapper;
+    using Microsoft.EntityFrameworkCore.Query;
+    using Moq;
+    using Streetcode.BLL.DTO.Media.Images;
+    using Streetcode.BLL.DTO.Streetcode;
+    using Streetcode.BLL.Interfaces.Logging;
+    using Streetcode.DAL.Entities.AdditionalContent;
+    using Streetcode.DAL.Entities.Media;
+    using Streetcode.DAL.Entities.Media.Images;
+    using Streetcode.DAL.Entities.Streetcode;
+    using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
+    using Streetcode.DAL.Repositories.Interfaces.Base;
+    using Streetcode.DAL.Repositories.Interfaces.Media.Images;
+    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
+    using Streetcode.XUnitTest.Helpers;
+
+    public class StreetcodeHandlersTestsBase
     {
         protected Mock<IRepositoryWrapper> _repositoryMock;
 
@@ -23,6 +28,14 @@ namespace Streetcode.XUnitTest.MediatR.Post
         protected Mock<ILoggerService> _loggerMock;
 
         protected Mock<IMediator> _mediatorMock;
+
+        protected StreetcodeHandlersTestsBase()
+        {
+            this._repositoryMock = new Mock<IRepositoryWrapper>();
+            this._mapperMock = new Mock<IMapper>();
+            this._loggerMock = new Mock<ILoggerService>();
+            this._mediatorMock = new Mock<IMediator>();
+        }
 
         protected void SetupMappers(CreateStreetcodeDto streetcodeDto, StreetcodeContent streetcode)
         {
@@ -70,6 +83,9 @@ namespace Streetcode.XUnitTest.MediatR.Post
 
                     return fakeDb.FirstOrDefault(compiled);
                 });
+            this._repositoryMock
+                .Setup(r => r.AudioRepository
+                .Delete(It.IsAny<Audio>()));
         }
 
         protected void SetupImageRepoMocks()
@@ -133,12 +149,50 @@ namespace Streetcode.XUnitTest.MediatR.Post
                 .ReturnsAsync((StreetcodeTagIndex si) => si);
         }
 
-        protected CreateStreetcodeHandlerTestsBase()
+        protected void SetMocksForDelete()
         {
-            this._repositoryMock = new Mock<IRepositoryWrapper>();
-            this._mapperMock = new Mock<IMapper>();
-            this._loggerMock = new Mock<ILoggerService>();
-            this._mediatorMock = new Mock<IMediator>();
+            var streetcodeTagIndexRepoMock = new Mock<IStreetcodeTagIndexRepository>();
+            var streetcodeImageRepoMock = new Mock<IStreetcodeImageRepository>();
+            var imageDetailsRepoMock = new Mock<IImageDetailsRepository>();
+
+            this._repositoryMock
+                .Setup(r => r.StreetcodeTagIndexRepository)
+                .Returns(streetcodeTagIndexRepoMock.Object);
+
+            this._repositoryMock
+                .Setup(r => r.StreetcodeImageRepository)
+                .Returns(streetcodeImageRepoMock.Object);
+
+            this._repositoryMock
+                .Setup(r => r.ImageDetailsRepository)
+                .Returns(imageDetailsRepoMock.Object);
+
+            streetcodeTagIndexRepoMock.SetupGetAllAsync(new List<StreetcodeTagIndex>()
+            {
+                new StreetcodeTagIndex { TagId = 15, StreetcodeId = 1 },
+                new StreetcodeTagIndex { TagId = 20, StreetcodeId = 1 },
+            });
+
+            streetcodeImageRepoMock.SetupGetAllAsync(new List<StreetcodeImage>()
+            {
+                new StreetcodeImage { StreetcodeId = 1, ImageId = 10 },
+                new StreetcodeImage { StreetcodeId = 1, ImageId = 15 },
+            });
+
+            imageDetailsRepoMock.SetupGetAllAsync(new List<ImageDetails>()
+            {
+                new ImageDetails { Id = 1, ImageId = 10 },
+                new ImageDetails { Id = 2, ImageId = 15 },
+            });
+
+            streetcodeTagIndexRepoMock
+                .Setup(r => r.DeleteRange(It.IsAny<IEnumerable<StreetcodeTagIndex>>()));
+
+            streetcodeImageRepoMock
+                .Setup(r => r.DeleteRange(It.IsAny<IEnumerable<StreetcodeImage>>()));
+
+            imageDetailsRepoMock
+                .Setup(r => r.DeleteRange(It.IsAny<IEnumerable<ImageDetails>>()));
         }
     }
 }

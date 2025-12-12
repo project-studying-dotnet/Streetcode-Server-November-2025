@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentResults;
+﻿using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -21,7 +16,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull
             _logger = logger;
         }
 
-        async Task<Result<Unit>> IRequestHandler<DeleteFullStreetcodeCommand, Result<Unit>>.Handle(DeleteFullStreetcodeCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(DeleteFullStreetcodeCommand request, CancellationToken cancellationToken)
         {
             var streetcode = await _repositoryWrapper.StreetcodeRepository
             .GetFirstOrDefaultAsync(f => f.Id == request.Id);

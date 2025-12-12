@@ -14,10 +14,11 @@
     using Streetcode.DAL.Entities.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using Streetcode.XUnitTest.Helpers;
+    using Streetcode.XUnitTest.MediatR.Base;
     using Streetcode.XUnitTest.MediatR.Fixture;
     using Xunit;
 
-    public class CreateStreetcodeHandlerTests : CreateStreetcodeHandlerTestsBase
+    public class CreateStreetcodeHandlerTests : StreetcodeHandlersTestsBase
     {
         private CreateStreetcodeHandler handler;
 
@@ -95,7 +96,6 @@
 
             this.SetupMappers(createStreetcodeDto, streetcodeEntity);
             this.SetupCreateStreetcodeAsync(streetcodeEntity);
-            this._repositoryMock.SetupSaveChangesAsync();
 
             var streetcodeRepoMock = new Mock<IStreetcodeRepository>();
 
@@ -113,6 +113,42 @@
             Assert.True(result.IsFailed);
 
             Assert.Equal($"Streetcode with Index {1} already exists", result.Errors[0].Message);
+        }
+
+        [Fact]
+        public async Task HandlerReturnsExceptionMessageWhenExceprionTrown()
+        {
+            StreetcodeCreateHelper streetcodeCreateHelper = new StreetcodeCreateHelper(this._loggerMock.Object);
+
+            string json = StreetcodeTestData.CreatePersonStreetcode();
+            using var doc = JsonDocument.Parse(json);
+            JsonElement createStreetcodeDtoRaw = doc.RootElement.Clone();
+
+            string streetcodeType = createStreetcodeDtoRaw.GetProperty("StreetcodeType").GetString();
+
+            CreateStreetcodeCommand request = new CreateStreetcodeCommand(createStreetcodeDtoRaw);
+
+            CreateStreetcodeDto createStreetcodeDto =
+                streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
+
+            var streetcodeEntity = new StreetcodeContent
+            {
+                Id = 1,
+                Index = createStreetcodeDto.Index,
+                Title = createStreetcodeDto.Title,
+                TransliterationUrl = createStreetcodeDto.TransliterationUrl,
+            };
+
+            this.SetupMappers(createStreetcodeDto, streetcodeEntity);
+
+            this._repositoryMock.Setup(r => r.StreetcodeRepository.CreateAsync(It.IsAny<StreetcodeContent>()))
+                .ThrowsAsync(new InvalidOperationException("Test exception"));
+
+            var result = await this.handler.Handle(request, CancellationToken.None);
+
+            Assert.True(result.IsFailed);
+
+            Assert.Equal($"Exception occurred while creating streetcode: Test exception", result.Errors[0].Message);
         }
 
         [Fact]
