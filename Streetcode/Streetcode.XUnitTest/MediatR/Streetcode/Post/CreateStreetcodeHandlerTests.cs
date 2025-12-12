@@ -157,7 +157,7 @@
         {
             StreetcodeCreateHelper streetcodeCreateHelper = new StreetcodeCreateHelper(this._loggerMock.Object);
 
-            string json = StreetcodeTestData.CreatePersonStreetcode(tagIds: images);
+            string json = StreetcodeTestData.CreatePersonStreetcode(imgIds: images);
             using var doc = JsonDocument.Parse(json);
             JsonElement createStreetcodeDtoRaw = doc.RootElement.Clone();
 
@@ -194,7 +194,7 @@
         {
             StreetcodeCreateHelper streetcodeCreateHelper = new StreetcodeCreateHelper(this._loggerMock.Object);
 
-            string json = StreetcodeTestData.CreatePersonStreetcode(imgIds: tags);
+            string json = StreetcodeTestData.CreatePersonStreetcode(tagIds: tags);
             using var doc = JsonDocument.Parse(json);
             JsonElement createStreetcodeDtoRaw = doc.RootElement.Clone();
 
@@ -268,16 +268,12 @@
         }
 
         [Theory]
-        [InlineData(-1)]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(int.MinValue)]
-        [InlineData(int.MaxValue)]
-        public async Task Handler_ReturnsFail_When_AudioNotFound(int testedImageId)
+        [MemberData(nameof(ImagesTestData))]
+        public async Task Handler_ReturnsFail_When_ImagesNotFound(int?[] testedImageId, string errorMessage)
         {
             StreetcodeCreateHelper streetcodeCreateHelper = new StreetcodeCreateHelper(this._loggerMock.Object);
 
-            string json = StreetcodeTestData.CreatePersonStreetcode(audioId: testedAudioId);
+            string json = StreetcodeTestData.CreatePersonStreetcode(imgIds: testedImageId);
             using var doc = JsonDocument.Parse(json);
             JsonElement createStreetcodeDtoRaw = doc.RootElement.Clone();
 
@@ -306,7 +302,63 @@
             var result = await this.handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsFailed);
-            Assert.Equal("Audio not found", result.Errors[0].Message);
+            Assert.Equal(errorMessage, result.Errors[0].Message);
+        }
+
+        [Theory]
+        [MemberData(nameof(TagsTestData))]
+        public async Task Handler_ReturnsFail_When_TagsNotFound(int?[] testedTagId, string errorMessage)
+        {
+            StreetcodeCreateHelper streetcodeCreateHelper = new StreetcodeCreateHelper(this._loggerMock.Object);
+
+            string json = StreetcodeTestData.CreatePersonStreetcode(tagIds: testedTagId);
+            using var doc = JsonDocument.Parse(json);
+            JsonElement createStreetcodeDtoRaw = doc.RootElement.Clone();
+
+            string streetcodeType = createStreetcodeDtoRaw.GetProperty("StreetcodeType").GetString();
+
+            CreateStreetcodeCommand request = new CreateStreetcodeCommand(createStreetcodeDtoRaw);
+
+            CreateStreetcodeDto createStreetcodeDto =
+                streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
+
+            var streetcodeEntity = new StreetcodeContent
+            {
+                Id = 1,
+                Index = createStreetcodeDto.Index,
+                Title = createStreetcodeDto.Title,
+                TransliterationUrl = createStreetcodeDto.TransliterationUrl,
+            };
+
+            this.SetupImageRepoMocks();
+            this.SetupAudioRepoMocks();
+            this.SetupTagsRepositoryMocks();
+            this.SetupMappers(createStreetcodeDto, streetcodeEntity);
+            this.SetupCreateStreetcodeAsync(streetcodeEntity);
+            this._repositoryMock.SetupSaveChangesAsync();
+
+            var result = await this.handler.Handle(request, CancellationToken.None);
+
+            Assert.True(result.IsFailed);
+            Assert.Equal(errorMessage, result.Errors[0].Message);
+        }
+
+        public static IList<object[]> ImagesTestData()
+        {
+            return new List<object[]>
+            {
+                new object[] { new int?[] { 1, 5 }, "Image 1 not found; Image 5 not found" },
+                new object[] { new int?[] { 1 }, "Image 1 not found" },
+            };
+        }
+
+        public static IList<object[]> TagsTestData()
+        {
+            return new List<object[]>
+            {
+                new object[] { new int?[] { 5, 10 }, "Tag 5 not found; Tag 10 not found" },
+                new object[] { new int?[] { 5 }, "Tag 5 not found" },
+            };
         }
 
         public static IList<object[]> NullOrEmptyArrayData()

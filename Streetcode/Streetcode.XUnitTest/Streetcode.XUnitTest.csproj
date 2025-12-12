@@ -43,7 +43,6 @@
     <ProjectReference Include="..\Streetcode.DAL\Streetcode.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MediatR\Streetcode\FullDelete\" />
     <Folder Include="MediatR\Streetcode\Update\" />
   </ItemGroup>
 </Project>

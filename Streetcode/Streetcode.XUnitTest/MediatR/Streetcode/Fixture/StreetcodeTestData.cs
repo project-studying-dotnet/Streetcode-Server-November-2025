@@ -16,16 +16,24 @@
 
             if (tagIds.Length > 0)
             {
-                tags = $@"
-                {{""Id"": {(tagIds[0].HasValue ? tagIds[0].Value.ToString() : "null")}, ""IsVisible"": true}},
-                {{""Id"": {(tagIds[1].HasValue ? tagIds[1].Value.ToString() : "null")}, ""IsVisible"": true}}";
+                for (int i = 0; i < tagIds.Length; i++)
+                {
+                    tags += $@"
+                    {{""Id"": {(tagIds[i].HasValue ? tagIds[i].Value.ToString() : "null")}, ""IsVisible"": true}},";
+                }
+
+                tags = tags.TrimEnd(',');
             }
 
             if (imgIds.Length > 0)
             {
-                imgs = $@"
-                {{ ""ImageId"": {(imgIds[0].HasValue ? imgIds[0].Value.ToString() : "null")} }},
-                {{ ""ImageId"": {(imgIds[1].HasValue ? imgIds[1].Value.ToString() : "null")} }}";
+                for (int i = 0; i < imgIds.Length; i++)
+                {
+                    imgs += $@"
+                    {{ ""ImageId"": {(imgIds[i].HasValue ? imgIds[i].Value.ToString() : "null")} }},";
+                }
+
+                imgs = imgs.TrimEnd(',');
             }
 
             return $@"
