@@ -19,28 +19,20 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Delete
 
         public async Task<Result<Unit>> Handle(DeleteFactCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var fact =
-                    await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
-                        f.Id == request.id);
+            var fact =
+                await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
+                    f.Id == request.id);
 
-                if (fact is null)
-                {
-                    const string errorMsg = "Fact was not found";
-                    _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
-                }
-
-                _repositoryWrapper.FactRepository.Delete(fact);
-                await _repositoryWrapper.SaveChangesAsync();
-                return Result.Ok(Unit.Value);
-            }
-            catch (Exception ex)
+            if (fact is null)
             {
-                _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                const string errorMsg = "Fact was not found";
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(errorMsg);
             }
+
+            _repositoryWrapper.FactRepository.Delete(fact);
+            await _repositoryWrapper.SaveChangesAsync();
+            return Result.Ok(Unit.Value);
         }
     }
 }

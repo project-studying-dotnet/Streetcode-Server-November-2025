@@ -22,59 +22,51 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Update
 
         public async Task<Result<FactDto>> Handle(UpdateFactCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var existingFact =
-                    await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
-                        f.Id == request.updateFact.Id);
+            var existingFact =
+                await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
+                    f.Id == request.updateFact.Id);
 
-                if (existingFact is null)
+            if (existingFact is null)
+            {
+                const string errorMsg = "Fact was not found";
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(errorMsg);
+            }
+
+            if (existingFact.ImageId != request.updateFact.ImageId)
+            {
+                var imageExists =
+                    await _repositoryWrapper.ImageRepository.GetFirstOrDefaultAsync(img =>
+                        img.Id == request.updateFact.ImageId);
+
+                if (imageExists is null)
                 {
-                    const string errorMsg = "Fact was not found";
+                    const string errorMsg = "Image was not found";
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
-
-                if (existingFact.ImageId != request.updateFact.ImageId)
-                {
-                    var imageExists =
-                        await _repositoryWrapper.ImageRepository.GetFirstOrDefaultAsync(img =>
-                            img.Id == request.updateFact.ImageId);
-
-                    if (imageExists is null)
-                    {
-                        const string errorMsg = "Image was not found";
-                        _logger.LogError(request, errorMsg);
-                        return Result.Fail(errorMsg);
-                    }
-                }
-
-                if (existingFact.Title != request.updateFact.Title)
-                {
-                    var duplicateTitle =
-                        await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
-                            f.Title == request.updateFact.Title);
-
-                    if (duplicateTitle is not null)
-                    {
-                        const string errorMsg = "Title already exists";
-                        _logger.LogError(request, errorMsg);
-                        return Result.Fail(errorMsg);
-                    }
-                }
-
-                _mapper.Map(request.updateFact, existingFact);
-
-                _repositoryWrapper.FactRepository.Update(existingFact);
-                await _repositoryWrapper.SaveChangesAsync();
-
-                return Result.Ok(_mapper.Map<FactDto>(existingFact));
             }
-            catch (Exception ex)
+
+            if (existingFact.Title != request.updateFact.Title)
             {
-                _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                var duplicateTitle =
+                    await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
+                        f.Title == request.updateFact.Title);
+
+                if (duplicateTitle is not null)
+                {
+                    const string errorMsg = "Title already exists";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
+                }
             }
+
+            _mapper.Map(request.updateFact, existingFact);
+
+            _repositoryWrapper.FactRepository.Update(existingFact);
+            await _repositoryWrapper.SaveChangesAsync();
+
+            return Result.Ok(_mapper.Map<FactDto>(existingFact));
         }
     }
 }
