@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Transactions;
 using AutoMapper;
 using Azure;
 using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Streetcode.BLL.DTO.AdditionalContent.Tag;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.DTO.Streetcode.Types;
@@ -44,6 +46,9 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
         public async Task<Result<JsonElement>> Handle(CreateStreetcodeCommand request, CancellationToken cancellationToken)
         {
+            using var transaction = new TransactionScope(
+                TransactionScopeAsyncFlowOption.Enabled);
+
             // try catch block is temporary solution until validation would be implemented.
             try
             {
@@ -85,6 +90,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
                 var resultIsSuccess = await _repository.SaveChangesAsync() > 0;
 
+                transaction.Complete();
+
                 if (resultIsSuccess)
                 {
                     var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(streetcodeContent);
@@ -96,9 +103,6 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 string errorMsg = $"Exception occurred while creating streetcode: {ex.Message}";
                 _logger.LogError(request, errorMsg);
-
-                _mediator.Send(new DeleteFullStreetcodeCommand(
-                    request.rawJsonCreateDTO.GetProperty("Index").GetInt32()));
 
                 return Result.Fail<JsonElement>(new Error(errorMsg));
             }
@@ -132,10 +136,12 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
         private async Task<Result> HandleImagesCreate(CreateStreetcodeDto dto, StreetcodeContent entity, CreateStreetcodeCommand request)
         {
-            if (dto.Images is null)
+            if (dto.Images.IsNullOrEmpty())
             {
                 return Result.Ok();
             }
+
+            List<string> imageErrors = new List<string>();
 
             foreach (var img in dto.Images)
             {
@@ -144,7 +150,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 {
                     string errorMsg = $"Image {img.ImageId} not found";
                     _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
+                    imageErrors.Add(errorMsg);
+                    continue;
                 }
 
                 await _repository.StreetcodeImageRepository.CreateAsync(new StreetcodeImage
@@ -157,15 +164,22 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 await _repository.ImageDetailsRepository.CreateAsync(imgDetail);
             }
 
+            if (imageErrors.Any())
+            {
+                return Result.Fail(string.Join("; ", imageErrors));
+            }
+
             return Result.Ok();
         }
 
         private async Task<Result> HandleTagsCreate(CreateStreetcodeDto dto, StreetcodeContent entity, CreateStreetcodeCommand request)
         {
-            if (dto.Tags is null)
+            if (dto.Tags.IsNullOrEmpty())
             {
                 return Result.Ok();
             }
+
+            List<string> tagErrors = new List<string>();
 
             var tagList = dto.Tags.ToList();
             foreach (var tag in tagList)
@@ -175,7 +189,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 {
                     string errorMsg = $"Tag {tag.Id} not found";
                     _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
+                    tagErrors.Add(errorMsg);
                 }
 
                 await _repository.StreetcodeTagIndexRepository.CreateAsync(new StreetcodeTagIndex
@@ -185,6 +199,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                     IsVisible = tag.IsVisible,
                     Index = tagList.IndexOf(tag)
                 });
+            }
+
+            if (tagErrors.Any())
+            {
+                return Result.Fail(string.Join("; ", tagErrors));
             }
 
             return Result.Ok();

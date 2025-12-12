@@ -15,7 +15,7 @@ var dbUser = Environment.GetEnvironmentVariable("DB_USER");
 var dbName = Environment.GetEnvironmentVariable("DB_NAME");
 
 var connectionString =
-   $"Server={dbServer};Database={dbName};User Id={dbUser};Password={dbPassword};MultipleActiveResultSets=true;TrustServerCertificate=True;";
+   $"Server=localhost;Database=StreetcodeDb;MultipleActiveResultSets=true;Trusted_Connection=True;TrustServerCertificate=True;";
 
 builder.Configuration.AddEnvironmentVariables();
 builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
