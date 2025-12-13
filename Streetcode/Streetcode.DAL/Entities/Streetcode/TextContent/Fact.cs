@@ -19,6 +19,12 @@ public class Fact
     [MaxLength(600)]
     public string FactContent { get; set; }
 
+    [MaxLength(200)]
+    public string? ImageDescription { get; set; }
+
+    [Required]
+    public int Order { get; set; }
+
     [Required]
     public int ImageId { get; set; }
 
@@ -28,6 +34,4 @@ public class Fact
     public int StreetcodeId { get; set; }
 
     public StreetcodeContent? Streetcode { get; set; }
-
-    public int Order { get; set; }
 }

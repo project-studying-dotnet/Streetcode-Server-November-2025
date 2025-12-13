@@ -38,15 +38,6 @@ public static class ConfigureHostBuilderExtensions
     public static void ConfigureBlob(this IServiceCollection services, WebApplicationBuilder builder)
     {
         services.Configure<BlobEnvironmentVariables>(builder.Configuration.GetSection("Blob"));
-        services.AddHttpClient<IBlobService, BlobService>()
-            .ConfigurePrimaryHttpMessageHandler(() =>
-            {
-                var handler = new HttpClientHandler
-                {
-                    ServerCertificateCustomValidationCallback = DefaultSslValidation
-                };
-                return handler;
-            });
     }
 
     public static void ConfigurePayment(this IServiceCollection services, WebApplicationBuilder builder)
