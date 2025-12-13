@@ -148,7 +148,7 @@
 
             Assert.True(result.IsFailed);
 
-            Assert.Equal($"Exception occurred while updating streetcode: Test exception", result.Errors[0].Message);
+            Assert.Equal($"Exception occurred while creating streetcode: Test exception", result.Errors[0].Message);
         }
 
         [Fact]
