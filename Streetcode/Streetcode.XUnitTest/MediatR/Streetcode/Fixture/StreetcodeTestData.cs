@@ -1,7 +1,4 @@
-﻿using Streetcode.DAL.Entities.Media;
-using System.Security.Policy;
-
-namespace Streetcode.XUnitTest.MediatR.Fixture
+﻿namespace Streetcode.XUnitTest.MediatR.Fixture
 {
     public static class StreetcodeTestData
     {

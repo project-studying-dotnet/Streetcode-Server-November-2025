@@ -1,35 +1,29 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Update
 {
+    using System;
+    using System.Threading.Tasks;
     using AutoMapper;
     using Moq;
     using Streetcode.BLL.DTO.Streetcode;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
-    using Streetcode.BLL.Util;
     using Streetcode.DAL.Entities.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
-    using Streetcode.XUnitTest.Helpers;
     using Streetcode.XUnitTest.MediatR.Base;
     using Streetcode.XUnitTest.MediatR.Fixture;
-    using System;
-    using System.Linq.Expressions;
-    using System.Text.Json;
-    using System.Threading.Tasks;
     using Xunit;
-    using static System.Runtime.InteropServices.JavaScript.JSType;
 
     public class UpdateStreetcodeHandlerTests
     {
+        private readonly UpdateStreetcodeHandler handler;
+
+        private readonly StreetcodeHandlersTestsHelper streetcodeHandlersTestsHelper;
+
         private Mock<IRepositoryWrapper> repositoryMock = new Mock<IRepositoryWrapper>();
 
         private Mock<IMapper> mapperMock = new Mock<IMapper>();
 
         private Mock<ILoggerService> loggerMock = new Mock<ILoggerService>();
-
-        private readonly UpdateStreetcodeHandler handler;
-
-        private readonly StreetcodeHandlersTestsHelper streetcodeHandlersTestsHelper;
 
         public UpdateStreetcodeHandlerTests()
         {

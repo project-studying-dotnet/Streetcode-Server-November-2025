@@ -1,29 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using System.Transactions;
 using AutoMapper;
-using Azure;
 using FluentResults;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Streetcode.BLL.DTO.AdditionalContent.Tag;
 using Streetcode.BLL.DTO.Streetcode;
-using Streetcode.BLL.DTO.Streetcode.Types;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull;
 using Streetcode.BLL.Util;
 using Streetcode.DAL.Entities.AdditionalContent;
 using Streetcode.DAL.Entities.Media.Images;
 using Streetcode.DAL.Entities.Streetcode;
-using Streetcode.DAL.Enums;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using Streetcode.DAL.Repositories.Realizations.Base;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 {
@@ -32,15 +19,13 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
         private readonly ILoggerService _logger;
-        private readonly IMediator _mediator;
         private readonly StreetcodeCreateHelper _streetcodeCreateHelper;
 
-        public CreateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger, IMediator mediator)
+        public CreateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger)
         {
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
-            _mediator = mediator;
             _streetcodeCreateHelper = new StreetcodeCreateHelper(_logger);
         }
 
@@ -164,7 +149,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 await _repository.ImageDetailsRepository.CreateAsync(imgDetail);
             }
 
-            if (imageErrors.Any())
+            if (imageErrors.Count > 0)
             {
                 return Result.Fail(string.Join("; ", imageErrors));
             }
@@ -202,7 +187,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 });
             }
 
-            if (tagErrors.Any())
+            if (tagErrors.Count > 0)
             {
                 return Result.Fail(string.Join("; ", tagErrors));
             }

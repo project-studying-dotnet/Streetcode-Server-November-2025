@@ -184,7 +184,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 await _repository.ImageDetailsRepository.CreateAsync(imgDetail);
             }
 
-            if (imageErrors.Any())
+            if (imageErrors.Count > 0)
             {
                 return Result.Fail(string.Join("; ", imageErrors));
             }
@@ -225,7 +225,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 });
             }
 
-            if (tagsErrors.Any())
+            if (tagsErrors.Count > 0)
             {
                 return Result.Fail(string.Join("; ", tagsErrors));
             }

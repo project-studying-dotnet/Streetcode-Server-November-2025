@@ -1,5 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Post
 {
+    using System.Linq.Expressions;
+    using System.Text.Json;
     using AutoMapper;
     using global::MediatR;
     using Microsoft.EntityFrameworkCore.Query;
@@ -18,31 +20,26 @@
     using Streetcode.XUnitTest.Helpers;
     using Streetcode.XUnitTest.MediatR.Base;
     using Streetcode.XUnitTest.MediatR.Fixture;
-    using System.Linq.Expressions;
-    using System.Text.Json;
     using Xunit;
 
     public class CreateStreetcodeHandlerTests
     {
+        private readonly StreetcodeHandlersTestsHelper streetcodeHandlersTestsHelper;
+
+        private readonly CreateStreetcodeHandler handler;
+
         private Mock<IRepositoryWrapper> repositoryMock = new Mock<IRepositoryWrapper>();
 
         private Mock<IMapper> mapperMock = new Mock<IMapper>();
 
         private Mock<ILoggerService> loggerMock = new Mock<ILoggerService>();
 
-        private Mock<IMediator> mediatorMock = new Mock<IMediator>();
-
-        private readonly StreetcodeHandlersTestsHelper streetcodeHandlersTestsHelper;
-
-        private readonly CreateStreetcodeHandler handler;
-
         public CreateStreetcodeHandlerTests()
         {
             this.handler = new CreateStreetcodeHandler(
                 this.repositoryMock.Object,
                 this.mapperMock.Object,
-                this.loggerMock.Object,
-                this.mediatorMock.Object);
+                this.loggerMock.Object);
 
             this.streetcodeHandlersTestsHelper =
                 new StreetcodeHandlersTestsHelper(this.repositoryMock, this.mapperMock, this.loggerMock);

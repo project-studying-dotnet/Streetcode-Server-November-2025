@@ -83,7 +83,6 @@
                     return fakeDb.FirstOrDefault(compiled);
                 });
 
-
             this.repositoryMock
                 .Setup(r => r.AudioRepository
                 .Delete(It.IsAny<Audio>()));
