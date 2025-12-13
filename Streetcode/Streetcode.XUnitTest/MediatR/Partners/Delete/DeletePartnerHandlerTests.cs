@@ -191,11 +191,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Verifies that the handler returns failure when SaveChanges throws an exception.
+        /// Verifies that the handler throws an exception when SaveChanges fails.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
-        public async Task Handle_ReturnsFailure_WhenSaveChangesThrowsException()
+        public async Task Handle_ThrowsException_WhenSaveChangesThrowsException()
         {
             // Arrange
             int partnerId = 1;
@@ -208,21 +208,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var query = new DeletePartnerQuery(partnerId);
 
             // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
+            Func<Task> act = async () => await this._handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Be(exceptionMessage);
+            await act.Should().ThrowAsync<Exception>()
+                .WithMessage(exceptionMessage);
 
             this.MockRepository.Verify(
                 repo => repo.PartnersRepository.Delete(partner),
-                Times.Once);
-
-            this.MockLogger.Verify(
-                logger => logger.LogError(
-                    It.IsAny<object>(),
-                    exceptionMessage),
                 Times.Once);
         }
 
