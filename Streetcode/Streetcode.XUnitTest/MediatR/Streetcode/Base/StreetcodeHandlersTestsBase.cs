@@ -2,13 +2,14 @@
 
 namespace Streetcode.XUnitTest.MediatR.Base
 {
-    using System.Linq.Expressions;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.Streetcode;
     using Streetcode.BLL.Interfaces.Logging;
+    using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
+    using Streetcode.BLL.Util;
     using Streetcode.DAL.Entities.AdditionalContent;
     using Streetcode.DAL.Entities.Media;
     using Streetcode.DAL.Entities.Media.Images;
@@ -18,6 +19,9 @@ namespace Streetcode.XUnitTest.MediatR.Base
     using Streetcode.DAL.Repositories.Interfaces.Media.Images;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using Streetcode.XUnitTest.Helpers;
+    using Streetcode.XUnitTest.MediatR.Fixture;
+    using System.Linq.Expressions;
+    using System.Text.Json;
 
     public class StreetcodeHandlersTestsBase
     {
@@ -37,14 +41,14 @@ namespace Streetcode.XUnitTest.MediatR.Base
             this._mediatorMock = new Mock<IMediator>();
         }
 
-        protected void SetupMappers(CreateStreetcodeDto streetcodeDto, StreetcodeContent streetcode)
+        protected void SetupMappers(CreateUpdateStreetcodeDto streetcodeDto, StreetcodeContent streetcode)
         {
             this._mapperMock
                 .Setup(mapper => mapper.Map<StreetcodeContent>(It.IsAny<CreateStreetcodeDto>()))
                 .Returns(streetcode);
 
             this._mapperMock
-                .Setup(mapper => mapper.Map<CreateStreetcodeDto>(streetcode))
+                .Setup(mapper => mapper.Map<CreateUpdateStreetcodeDto>(streetcode))
                 .Returns(streetcodeDto);
 
             this._mapperMock
@@ -149,6 +153,7 @@ namespace Streetcode.XUnitTest.MediatR.Base
                 .ReturnsAsync((StreetcodeTagIndex si) => si);
         }
 
+        // DeleteStreetcodeCommand Helpers
         protected void SetMocksForDelete()
         {
             var streetcodeTagIndexRepoMock = new Mock<IStreetcodeTagIndexRepository>();
@@ -193,6 +198,76 @@ namespace Streetcode.XUnitTest.MediatR.Base
 
             imageDetailsRepoMock
                 .Setup(r => r.DeleteRange(It.IsAny<IEnumerable<ImageDetails>>()));
+        }
+
+        // UpdateStreetcodeCommand Helpers
+        protected UpdateStreetcodeCommand PrepareValidRequest(string json = null)
+        {
+            json ??= StreetcodeTestData.CreatePersonStreetcode();
+
+            using var doc = JsonDocument.Parse(json);
+            return new UpdateStreetcodeCommand(1, doc.RootElement.Clone());
+        }
+
+        protected void SetupSuccessfulUpdate(UpdateStreetcodeCommand request)
+        {
+            var dto = new StreetcodeCreateHelper(_loggerMock.Object)
+                .ChoseStreetcodeType(
+                    request.rawJsonUpdateDTO.GetProperty("StreetcodeType").GetString(),
+                    request);
+
+            var entity = new StreetcodeContent
+            {
+                Id = 1,
+                Index = dto.Index,
+                Title = dto.Title,
+                TransliterationUrl = dto.TransliterationUrl
+            };
+
+            this.SetupMappers(dto, entity);
+            this.SetMocksForDelete();
+            this.SetupAudioRepoMocks();
+            this.SetupImageRepoMocks();
+            this.SetupTagsRepositoryMocks();
+
+            this._repositoryMock.SetupSaveChangesAsync();
+
+            this.SetupStreetcodeExists(entity);
+        }
+
+        protected void SetupStreetcodeExists(StreetcodeContent entity = null)
+        {
+            entity ??= new StreetcodeContent { Id = 1, Index = 1 };
+
+            var streetcodeRepoMock = new Mock<IStreetcodeRepository>();
+
+            this._repositoryMock
+                .Setup(r => r.StreetcodeRepository)
+                .Returns(streetcodeRepoMock.Object);
+
+            streetcodeRepoMock
+                .Setup(r => r.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
+                    null))
+                .ReturnsAsync(entity);
+
+            streetcodeRepoMock
+                .Setup(r => r.Update(It.IsAny<StreetcodeContent>()));
+        }
+
+        protected void SetupStreetcodeNotFound()
+        {
+            var streetcodeRepoMock = new Mock<IStreetcodeRepository>();
+
+            this._repositoryMock
+                .Setup(r => r.StreetcodeRepository)
+                .Returns(streetcodeRepoMock.Object);
+
+            streetcodeRepoMock
+                .Setup(r => r.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
+                    null))
+                .ReturnsAsync((StreetcodeContent)null);
         }
     }
 }

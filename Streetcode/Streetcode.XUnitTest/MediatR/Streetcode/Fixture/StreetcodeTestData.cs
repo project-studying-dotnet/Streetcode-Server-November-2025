@@ -1,4 +1,7 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Fixture
+﻿using Streetcode.DAL.Entities.Media;
+using System.Security.Policy;
+
+namespace Streetcode.XUnitTest.MediatR.Fixture
 {
     public static class StreetcodeTestData
     {
@@ -52,6 +55,23 @@
               ""Images"": [
                 {imgs}
               ]
+            }}";
+        }
+
+        public static string CreateNullValuesStreetcode()
+        {
+            return $@"
+            {{
+              ""Index"": 1,
+              ""Title"": ""Test Title"",
+              ""StreetcodeType"": ""Person"",
+              ""FirstName"": ""John"",
+              ""LastName"": ""Doe"",
+              ""TransliterationUrl"": ""test-john-doe"",
+              ""Date"": ""2024-12-03"",
+              ""AudioId"": 7,
+              ""Tags"": null,
+              ""Images"": null
             }}";
         }
     }

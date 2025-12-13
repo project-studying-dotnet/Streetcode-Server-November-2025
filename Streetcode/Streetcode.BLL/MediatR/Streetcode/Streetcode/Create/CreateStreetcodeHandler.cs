@@ -190,6 +190,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                     string errorMsg = $"Tag {tag.Id} not found";
                     _logger.LogError(request, errorMsg);
                     tagErrors.Add(errorMsg);
+                    continue;
                 }
 
                 await _repository.StreetcodeTagIndexRepository.CreateAsync(new StreetcodeTagIndex
