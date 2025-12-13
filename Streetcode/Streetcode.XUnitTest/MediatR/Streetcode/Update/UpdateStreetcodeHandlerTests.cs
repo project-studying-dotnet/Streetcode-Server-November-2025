@@ -1,39 +1,53 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Update
 {
-    using System;
-    using System.Linq.Expressions;
-    using System.Text.Json;
-    using System.Threading.Tasks;
+    using AutoMapper;
     using Moq;
     using Streetcode.BLL.DTO.Streetcode;
+    using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
     using Streetcode.BLL.Util;
     using Streetcode.DAL.Entities.Streetcode;
+    using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using Streetcode.XUnitTest.Helpers;
     using Streetcode.XUnitTest.MediatR.Base;
     using Streetcode.XUnitTest.MediatR.Fixture;
+    using System;
+    using System.Linq.Expressions;
+    using System.Text.Json;
+    using System.Threading.Tasks;
     using Xunit;
     using static System.Runtime.InteropServices.JavaScript.JSType;
 
-    public class UpdateStreetcodeHandlerTests : StreetcodeHandlersTestsBase
+    public class UpdateStreetcodeHandlerTests
     {
+        private Mock<IRepositoryWrapper> repositoryMock = new Mock<IRepositoryWrapper>();
+
+        private Mock<IMapper> mapperMock = new Mock<IMapper>();
+
+        private Mock<ILoggerService> loggerMock = new Mock<ILoggerService>();
+
         private readonly UpdateStreetcodeHandler handler;
+
+        private readonly StreetcodeHandlersTestsHelper streetcodeHandlersTestsHelper;
 
         public UpdateStreetcodeHandlerTests()
         {
             this.handler = new UpdateStreetcodeHandler(
-                this._repositoryMock.Object,
-                this._mapperMock.Object,
-                this._loggerMock.Object);
+                this.repositoryMock.Object,
+                this.mapperMock.Object,
+                this.loggerMock.Object);
+
+            this.streetcodeHandlersTestsHelper =
+                new StreetcodeHandlersTestsHelper(this.repositoryMock, this.mapperMock, this.loggerMock);
         }
 
         [Fact]
         public async Task Handle_ShouldReturnSuccess_When_ProperInput()
         {
-            var request = PrepareValidRequest();
+            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest();
 
-            this.SetupSuccessfulUpdate(request);
+            this.streetcodeHandlersTestsHelper.SetupSuccessfulUpdate(request);
 
             var result = await handler.Handle(request, CancellationToken.None);
 
@@ -43,10 +57,10 @@
         [Fact]
         public async Task Handle_ShouldReturnSuccess_When_ImgAndTagsAreNull()
         {
-            var request = this.PrepareValidRequest(
+            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest(
                 StreetcodeTestData.CreateNullValuesStreetcode());
 
-            this.SetupSuccessfulUpdate(request);
+            this.streetcodeHandlersTestsHelper.SetupSuccessfulUpdate(request);
 
             var result = await this.handler.Handle(request, CancellationToken.None);
 
@@ -58,10 +72,10 @@
         [InlineData(7)]
         public async Task Handle_ShouldReturnSuccess_When_AudioIsProper(int? audioId)
         {
-            var request = this.PrepareValidRequest(
+            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest(
                 StreetcodeTestData.CreatePersonStreetcode(audioId: audioId));
 
-            this.SetupSuccessfulUpdate(request);
+            this.streetcodeHandlersTestsHelper.SetupSuccessfulUpdate(request);
 
             var result = await this.handler.Handle(request, CancellationToken.None);
 
@@ -73,10 +87,10 @@
         public async Task Handle_ShouldReturnSuccess_When_ProperTagsImagesInput(
             int?[] tags, int?[] images)
         {
-            var request = this.PrepareValidRequest(
+            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest(
                 StreetcodeTestData.CreatePersonStreetcode(tagIds: tags, imgIds: images));
 
-            this.SetupSuccessfulUpdate(request);
+            this.streetcodeHandlersTestsHelper.SetupSuccessfulUpdate(request);
 
             var result = await this.handler.Handle(request, CancellationToken.None);
 
@@ -86,9 +100,9 @@
         [Fact]
         public async Task Handle_ShouldReturnFail_When_StreetcodeNotFound()
         {
-            var request = this.PrepareValidRequest();
+            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest();
 
-            this.SetupStreetcodeNotFound();
+            this.streetcodeHandlersTestsHelper.SetupStreetcodeNotFound();
 
             var result = await this.handler.Handle(request, CancellationToken.None);
 
@@ -99,13 +113,13 @@
         [Fact]
         public async Task Handle_ShouldReturnFail_When_MappingFailed()
         {
-            var request = this.PrepareValidRequest();
+            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest();
 
-            this._mapperMock
+            this.mapperMock
                 .Setup(m => m.Map(It.IsAny<UpdateStreetcodeDto>(), It.IsAny<StreetcodeContent>()))
                 .Throws(new Exception());
 
-            this.SetupStreetcodeExists();
+            this.streetcodeHandlersTestsHelper.SetupStreetcodeExists();
 
             var result = await handler.Handle(request, CancellationToken.None);
 
@@ -118,10 +132,10 @@
         [InlineData(14, "Audio doesn't exist")]
         public async Task Handle_ShouldReturnFail_When_WrongAudio(int audioId, string error)
         {
-            var request = this.PrepareValidRequest(
+            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest(
                 StreetcodeTestData.CreatePersonStreetcode(audioId: audioId));
 
-            this.SetupSuccessfulUpdate(request);
+            this.streetcodeHandlersTestsHelper.SetupSuccessfulUpdate(request);
 
             var result = await this.handler.Handle(request, CancellationToken.None);
 
@@ -133,10 +147,10 @@
         [MemberData(nameof(TagsTestData))]
         public async Task Handle_ShouldReturnFail_When_TagsNotFound(int?[] tags, string error)
         {
-            var request = this.PrepareValidRequest(
+            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest(
                 StreetcodeTestData.CreatePersonStreetcode(tagIds: tags));
 
-            this.SetupSuccessfulUpdate(request);
+            this.streetcodeHandlersTestsHelper.SetupSuccessfulUpdate(request);
 
             var result = await this.handler.Handle(request, CancellationToken.None);
 
@@ -148,10 +162,10 @@
         [MemberData(nameof(ImagesTestData))]
         public async Task Handle_ShouldReturnFail_When_ImagesNotFound(int?[] images, string error)
         {
-            var request = this.PrepareValidRequest(
+            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest(
                 StreetcodeTestData.CreatePersonStreetcode(imgIds: images));
 
-            this.SetupSuccessfulUpdate(request);
+            this.streetcodeHandlersTestsHelper.SetupSuccessfulUpdate(request);
 
             var result = await this.handler.Handle(request, CancellationToken.None);
 

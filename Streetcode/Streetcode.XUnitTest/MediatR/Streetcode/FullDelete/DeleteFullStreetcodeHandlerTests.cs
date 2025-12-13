@@ -1,33 +1,45 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.FullDelete
 {
-    using System.Linq.Expressions;
+    using AutoMapper;
     using Moq;
+    using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull;
     using Streetcode.DAL.Entities.Streetcode;
+    using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using Streetcode.XUnitTest.Helpers;
     using Streetcode.XUnitTest.MediatR.Base;
+    using System.Linq.Expressions;
     using Xunit;
 
-    public class DeleteFullStreetcodeHandlerTests : StreetcodeHandlersTestsBase
+    public class DeleteFullStreetcodeHandlerTests
     {
-        private DeleteFullStreetcodeHandler handler;
+        private Mock<IRepositoryWrapper> repositoryMock = new Mock<IRepositoryWrapper>();
+
+        private Mock<ILoggerService> loggerMock = new Mock<ILoggerService>();
+
+        private readonly DeleteFullStreetcodeHandler handler;
+
+        private readonly StreetcodeHandlersTestsHelper streetcodeHandlersTestsHelper;
 
         public DeleteFullStreetcodeHandlerTests()
         {
             this.handler = new DeleteFullStreetcodeHandler(
-                this._repositoryMock.Object,
-                this._loggerMock.Object);
+                this.repositoryMock.Object,
+                this.loggerMock.Object);
+
+            this.streetcodeHandlersTestsHelper =
+                new StreetcodeHandlersTestsHelper(this.repositoryMock, new Mock<IMapper>(), this.loggerMock);
         }
 
         [Fact]
         public async Task Handler_Returns_Success_WhenProper_Id()
         {
-            this._repositoryMock.SetupSaveChangesAsync();
+            this.repositoryMock.SetupSaveChangesAsync();
 
             var streetcodeRepoMock = new Mock<IStreetcodeRepository>();
 
-            this._repositoryMock
+            this.repositoryMock
             .Setup(r => r.StreetcodeRepository)
             .Returns(streetcodeRepoMock.Object);
 
@@ -37,9 +49,9 @@
                     null))
                 .ReturnsAsync(new StreetcodeContent { Id = 1, Index = 1, AudioId = 7 });
 
-            this.SetMocksForDelete();
+            this.streetcodeHandlersTestsHelper.SetMocksForDelete();
 
-            this.SetupAudioRepoMocks();
+            this.streetcodeHandlersTestsHelper.SetupAudioRepoMocks();
 
             var result = await this.handler.Handle(new DeleteFullStreetcodeCommand(1), CancellationToken.None);
 
@@ -54,11 +66,11 @@
         [InlineData(int.MaxValue)]
         public async Task Handler_Returns_Fail_WhenWrong_Id(int id)
         {
-            this._repositoryMock.SetupSaveChangesAsync();
+            this.repositoryMock.SetupSaveChangesAsync();
 
             var streetcodeRepoMock = new Mock<IStreetcodeRepository>();
 
-            this._repositoryMock
+            this.repositoryMock
             .Setup(r => r.StreetcodeRepository)
             .Returns(streetcodeRepoMock.Object);
 
@@ -68,9 +80,9 @@
                     null))
                 .ReturnsAsync((StreetcodeContent?)null);
 
-            this.SetMocksForDelete();
+            this.streetcodeHandlersTestsHelper.SetMocksForDelete();
 
-            this.SetupAudioRepoMocks();
+            this.streetcodeHandlersTestsHelper.SetupAudioRepoMocks();
 
             var result = await this.handler.Handle(new DeleteFullStreetcodeCommand(id), CancellationToken.None);
 
@@ -86,13 +98,13 @@
         [InlineData(int.MaxValue)]
         public async Task Handler_Returns_Fail_SaveChangesFailed(int id)
         {
-            this._repositoryMock
+            this.repositoryMock
                 .Setup(r => r.SaveChangesAsync())
                 .ReturnsAsync(0);
 
             var streetcodeRepoMock = new Mock<IStreetcodeRepository>();
 
-            this._repositoryMock
+            this.repositoryMock
             .Setup(r => r.StreetcodeRepository)
             .Returns(streetcodeRepoMock.Object);
 
@@ -102,9 +114,9 @@
                     null))
                 .ReturnsAsync(new StreetcodeContent { Id = 1, Index = 1, AudioId = 7 });
 
-            this.SetMocksForDelete();
+            this.streetcodeHandlersTestsHelper.SetMocksForDelete();
 
-            this.SetupAudioRepoMocks();
+            this.streetcodeHandlersTestsHelper.SetupAudioRepoMocks();
 
             var result = await this.handler.Handle(new DeleteFullStreetcodeCommand(id), CancellationToken.None);
 
