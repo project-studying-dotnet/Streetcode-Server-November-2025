@@ -4,61 +4,63 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Users.Register;
 using Streetcode.DAL.Entities.Users;
 
-public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<RegisterUserResponseDto>>
+namespace Streetcode.BLL.MediatR.Users.Register
 {
-    private readonly IMapper _mapper;
-    private readonly UserManager<User> _userManager;
-    private readonly ILoggerService _logger;
-
-    public RegisterUserHandler(
-        UserManager<User> userManager,
-        IMapper mapper,
-        ILoggerService logger)
+    public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, Result<RegisterUserResponseDto>>
     {
-        _userManager = userManager;
-        _mapper = mapper;
-        _logger = logger;
-    }
+        private readonly IMapper _mapper;
+        private readonly UserManager<User> _userManager;
+        private readonly ILoggerService _logger;
 
-    public async Task<Result<RegisterUserResponseDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
-    {
-        try
+        public RegisterUserHandler(
+            UserManager<User> userManager,
+            IMapper mapper,
+            ILoggerService logger)
         {
-            var existingUser = await _userManager.FindByNameAsync(request.newUser.UserName);
-            if (existingUser != null)
-            {
-                return Result.Fail("User already exists");
-            }
-
-            var newUser = _mapper.Map<User>(request.newUser);
-            var createResult = await _userManager.CreateAsync(newUser, request.newUser.Password);
-
-            if (!createResult.Succeeded)
-            {
-                var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
-                return Result.Fail(errors);
-            }
-
-            string roleName = request.newUser.Role.ToString();
-            var addToRoleResult = await _userManager.AddToRoleAsync(newUser, roleName);
-
-            if (!addToRoleResult.Succeeded)
-            {
-                var errors = string.Join(", ", addToRoleResult.Errors.Select(e => e.Description));
-                return Result.Fail($"Failed to assign role: {errors}");
-            }
-
-            var createdUser = _mapper.Map<RegisterUserResponseDto>(newUser);
-            createdUser.Role = request.newUser.Role;
-            return Result.Ok(createdUser);
+            _userManager = userManager;
+            _mapper = mapper;
+            _logger = logger;
         }
-        catch (Exception ex)
+
+        public async Task<Result<RegisterUserResponseDto>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogError(request, ex.Message);
-            return Result.Fail(ex.Message);
+            try
+            {
+                var existingUser = await _userManager.FindByNameAsync(request.newUser.UserName);
+                if (existingUser != null)
+                {
+                    return Result.Fail("User already exists");
+                }
+
+                var newUser = _mapper.Map<User>(request.newUser);
+                var createResult = await _userManager.CreateAsync(newUser, request.newUser.Password);
+
+                if (!createResult.Succeeded)
+                {
+                    var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                    return Result.Fail(errors);
+                }
+
+                string roleName = request.newUser.Role.ToString();
+                var addToRoleResult = await _userManager.AddToRoleAsync(newUser, roleName);
+
+                if (!addToRoleResult.Succeeded)
+                {
+                    var errors = string.Join(", ", addToRoleResult.Errors.Select(e => e.Description));
+                    return Result.Fail($"Failed to assign role: {errors}");
+                }
+
+                var createdUser = _mapper.Map<RegisterUserResponseDto>(newUser);
+                createdUser.Role = request.newUser.Role;
+                return Result.Ok(createdUser);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(request, ex.Message);
+                return Result.Fail(ex.Message);
+            }
         }
     }
 }
