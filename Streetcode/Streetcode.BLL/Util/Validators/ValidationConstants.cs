@@ -14,6 +14,21 @@ namespace Streetcode.BLL.Util.Validators
             /// YouTube URL validation pattern. Matches youtube.com and youtu.be URLs.
             /// </summary>
             public const string YouTubeUrl = @"^(https?://)?(www\.)?(youtube\.com/(watch\?v=|embed/|v/)|youtu\.be/)[\w\-]+";
+
+            /// <summary>
+            /// Password pattern: at least one uppercase, one lowercase, one digit, min 6 chars (default Identity requirements, no special required by default).
+            /// </summary>
+            public const string Password = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$";
+
+            /// <summary>
+            /// Username pattern: letters, digits, underscores, dot, dash only (per Identity default, no spaces or forbidden chars).
+            /// </summary>
+            public const string UserName = @"^[A-Za-z0-9_.-]+$";
+
+            /// <summary>
+            /// Phone number pattern: international format (starts with +, country code, digits only, 8-15 digits)
+            /// </summary>
+            public const string PhoneNumber = @"^\+[0-9]{8,15}$";
         }
 
         /// <summary>
@@ -266,6 +281,19 @@ namespace Streetcode.BLL.Util.Validators
             /// Tag title maximum length.
             /// </summary>
             public const int TitleMaxLength = 50;
+        }
+
+        /// <summary>
+        /// User-specific validation constants.
+        /// </summary>
+        public static class User
+        {
+            public const int NameMaxLength = 50;
+            public const int SurnameMaxLength = 50;
+            public const int UserNameMaxLength = 20;
+            public const int EmailMaxLength = 100;
+            public const int PasswordMinLength = 6;
+            public const int PasswordMaxLength = 20;
         }
     }
 }
