@@ -69,7 +69,7 @@ namespace Streetcode.BLL.MediatR.Fact.Create
 
                 var lastFactOrderPosition = await _repositoryWrapper.FactRepository
                     .FindAll(f => f.StreetcodeId == request.newFact.StreetcodeId)
-                    .MaxAsync(f => (int?)f.Order) ?? 0;
+                    .MaxAsync(f => (int?)f.Order, CancellationToken.None) ?? 0;
 
                 newFact.Order = lastFactOrderPosition + 1;
 
