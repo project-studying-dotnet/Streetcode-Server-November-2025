@@ -1,8 +1,8 @@
-﻿namespace Streetcode.XUnitTest.MediatR.FullDelete
+namespace Streetcode.XUnitTest.MediatR.FullDelete
 {
-    using System.Linq.Expressions;
     using AutoMapper;
     using Moq;
+    using Streetcode.BLL.Interfaces.Cache;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull;
     using Streetcode.DAL.Entities.Streetcode;
@@ -10,6 +10,7 @@
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using Streetcode.XUnitTest.Helpers;
     using Streetcode.XUnitTest.MediatR.Base;
+    using System.Linq.Expressions;
     using Xunit;
 
     public class DeleteFullStreetcodeHandlerTests
@@ -21,12 +22,15 @@
         private Mock<IRepositoryWrapper> repositoryMock = new Mock<IRepositoryWrapper>();
 
         private Mock<ILoggerService> loggerMock = new Mock<ILoggerService>();
+        private Mock<ICacheService> cacheServiceMock = new Mock<ICacheService>();
+
 
         public DeleteFullStreetcodeHandlerTests()
         {
             this.handler = new DeleteFullStreetcodeHandler(
                 this.repositoryMock.Object,
-                this.loggerMock.Object);
+                this.loggerMock.Object,
+                this.cacheServiceMock.Object);
 
             this.streetcodeHandlersTestsHelper =
                 new StreetcodeHandlersTestsHelper(this.repositoryMock, new Mock<IMapper>(), this.loggerMock);

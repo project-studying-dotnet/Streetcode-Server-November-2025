@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,7 @@ using Streetcode.BLL.DTO.AdditionalContent.Tag;
 using Streetcode.BLL.DTO.Media.Images;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.DTO.Streetcode.Types;
+using Streetcode.BLL.Interfaces.Cache;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.Streetcode.Create;
 using Streetcode.BLL.Util;
@@ -28,12 +29,14 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
         private readonly ILoggerService _logger;
+        private readonly ICacheService _cacheService;
         private readonly StreetcodeCreateHelper _streetcodeCreateHelper;
-        public UpdateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger)
+        public UpdateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger, ICacheService cacheService)
         {
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
+            _cacheService = cacheService;
             _streetcodeCreateHelper = new StreetcodeCreateHelper(_logger);
         }
 
@@ -83,6 +86,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
 
                 if (resultIsSuccess)
                 {
+                    await _cacheService.RemoveAsync($"Streetcode_{updateStreetcodeDTO.Id}");
+
                     var streetcodeDTO = _mapper.Map<UpdateStreetcodeDto>(existingStreetcode);
                     var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
                     return Result.Ok(jsonResult);
