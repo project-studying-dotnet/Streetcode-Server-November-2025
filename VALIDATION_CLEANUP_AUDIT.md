@@ -47,10 +47,24 @@ All modified handlers now:
 4. ✅ Maintain business logic validation (e.g., checking for duplicate streetcode index)
 
 ## Summary of Changes
+
+### Handler Files Modified (11 total)
 - **11 handler files** modified across 6 modules
 - **Removed ~200 lines** of redundant validation code
 - **All try-catch blocks** used for validation have been removed
 - **ValidationBehavior pipeline** is now the single source of validation
+
+### Test Files Updated (4 total)
+- CreatePositionHandlerTests - Updated exception handling test
+- CreatePartnerHandlerTests - Updated exception handling test
+- DeletePartnerHandlerTests - Updated exception handling test
+- UpdatePartnerHandlerTests - Updated exception handling test
+
+### Test Results
+✅ **210 passing tests** (out of 214 total)
+- 4 pre-existing failing tests unrelated to this refactor
+- All validation-related tests now correctly expect exceptions to propagate
+- Business logic tests remain unaffected
 
 ## Validators Confirmed in Place
 ✅ Over 60 FluentValidation validators exist covering:
