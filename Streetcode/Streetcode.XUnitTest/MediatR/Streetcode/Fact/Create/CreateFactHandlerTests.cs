@@ -16,7 +16,10 @@
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
     using Streetcode.XUnitTest.Helpers;
+    using System.Linq.Expressions;
     using Xunit;
+    using MockQueryable.Moq;
+    using MockQueryable;
 
     public class CreateFactHandlerTests
     {
@@ -49,6 +52,11 @@
             var streetcode = new StreetcodeContent { Id = createFactDto.StreetcodeId };
             var newFact = FactTestData.CreateFact(streetcodeId: createFactDto.StreetcodeId);
             var factDto = FactTestData.CreateFactDto();
+            var existingFactsMockQueryable = new List<Fact>
+            {
+                new Fact { Id = 1, StreetcodeId = createFactDto.StreetcodeId, Order = 1 },
+                new Fact { Id = 2, StreetcodeId = createFactDto.StreetcodeId, Order = 2 },
+            }.BuildMock();
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(
                 factRepositoryMock,
@@ -58,6 +66,7 @@
             streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync(streetcode);
             factRepositoryMock.SetupGetFirstOrDefaultAsync<IFactRepository, Fact>(entity: null);
             this.mapperMock.SetupMapper(createFactDto, newFact);
+            factRepositoryMock.SetupFindAllAsync(existingFactsMockQueryable);
             factRepositoryMock.SetupCreateAsync(newFact);
             this.repositoryWrapperMock.SetupSaveChangesAsync();
             this.mapperMock.SetupMapper(newFact, factDto);
@@ -76,6 +85,7 @@
             streetcodeRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IStreetcodeRepository, StreetcodeContent>();
             factRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IFactRepository, Fact>();
             this.mapperMock.VerifyMapCalledOnce<Fact>();
+            factRepositoryMock.VerifyFindAllCalledOnce<IFactRepository, Fact>();
             factRepositoryMock.VerifyCreateAsyncCalledOnce<IFactRepository, Fact>();
             this.repositoryWrapperMock.VerifySaveChangesAsyncCalledOnce();
             this.mapperMock.VerifyMapCalledOnce<FactDto>();
