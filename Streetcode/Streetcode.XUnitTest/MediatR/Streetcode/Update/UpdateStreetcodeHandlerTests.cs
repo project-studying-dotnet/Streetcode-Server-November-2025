@@ -1,10 +1,11 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Update
+namespace Streetcode.XUnitTest.MediatR.Update
 {
     using System;
     using System.Threading.Tasks;
     using AutoMapper;
     using Moq;
     using Streetcode.BLL.DTO.Streetcode;
+    using Streetcode.BLL.Interfaces.Cache;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
     using Streetcode.DAL.Entities.Streetcode;
@@ -24,13 +25,15 @@
         private Mock<IMapper> mapperMock = new Mock<IMapper>();
 
         private Mock<ILoggerService> loggerMock = new Mock<ILoggerService>();
+        private Mock<ICacheService> cacheServiceMock = new Mock<ICacheService>();
 
         public UpdateStreetcodeHandlerTests()
         {
             this.handler = new UpdateStreetcodeHandler(
                 this.repositoryMock.Object,
                 this.mapperMock.Object,
-                this.loggerMock.Object);
+                this.loggerMock.Object,
+                this.cacheServiceMock.Object);
 
             this.streetcodeHandlersTestsHelper =
                 new StreetcodeHandlersTestsHelper(this.repositoryMock, this.mapperMock, this.loggerMock);
