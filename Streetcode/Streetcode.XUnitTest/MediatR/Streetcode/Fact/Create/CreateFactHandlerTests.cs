@@ -1,8 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact.Create
 {
     using AutoMapper;
-    using Fixtures;
-    using Helpers;
+    using MockQueryable;
     using Moq;
     using Repositories.Interfaces;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
@@ -16,10 +15,9 @@
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
     using Streetcode.XUnitTest.Helpers;
-    using System.Linq.Expressions;
+    using Streetcode.XUnitTest.MediatR.Fact.Fixtures;
+    using Streetcode.XUnitTest.MediatR.Fact.Helpers;
     using Xunit;
-    using MockQueryable.Moq;
-    using MockQueryable;
 
     public class CreateFactHandlerTests
     {
