@@ -4,6 +4,7 @@ using FluentValidation;
 using Hangfire;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
@@ -24,6 +25,7 @@ using Streetcode.BLL.Services.Payment;
 using Streetcode.BLL.Services.Text;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
 using Streetcode.DAL.Persistence;
+using Streetcode.DAL.Entities.Users;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Streetcode.DAL.Repositories.Realizations.Base;
 
@@ -71,6 +73,11 @@ public static class ServiceCollectionExtensions
                 opt.MigrationsHistoryTable("__EFMigrationsHistory", schema: "entity_framework");
             });
         });
+
+        // ASP.NET Identity setup for UserManager / RoleManager
+        services.AddIdentity<User, IdentityRole<int>>()
+                .AddEntityFrameworkStores<StreetcodeDbContext>()
+                .AddUserManager<UserManager<User>>();
 
         services.AddHangfire(config =>
         {
