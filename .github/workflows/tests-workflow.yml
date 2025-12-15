@@ -37,5 +37,3 @@ jobs:
     - name: Run Unit Tests
       working-directory: Streetcode
       run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --no-build
-
-    
