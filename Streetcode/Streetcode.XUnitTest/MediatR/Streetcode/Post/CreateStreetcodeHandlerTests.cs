@@ -126,7 +126,7 @@
 
             Assert.True(result.IsFailed);
 
-            Assert.Equal($"Streetcode with Index 99 already exists", result.Errors[0].Message);
+            Assert.Equal($"Streetcode with Index {1} already exists", result.Errors[0].Message);
         }
 
         [Fact]
