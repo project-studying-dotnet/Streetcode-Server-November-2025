@@ -4,11 +4,7 @@ namespace Streetcode.BLL.DTO.Users
 {
     public class UserLoginDto
     {
-        [Required]
-        [MaxLength(20)]
-        public string Login { get; set; }
-        [Required]
-        [MaxLength(20)]
+        public string Email { get; set; }
         public string Password { get; set; }
     }
 }
