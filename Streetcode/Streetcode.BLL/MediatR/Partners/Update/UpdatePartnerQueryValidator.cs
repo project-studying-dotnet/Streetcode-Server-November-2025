@@ -8,7 +8,7 @@ namespace Streetcode.BLL.MediatR.Partners.Update
     /// <summary>
     /// Validator for UpdatePartnerQuery.
     /// </summary>
-    public class UpdatePartnerQueryValidator : AbstractValidator<UpdatePartnerQuery>
+    public class UpdatePartnerQueryValidator : AbstractValidator<UpdatePartnerCommand>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdatePartnerQueryValidator"/> class.

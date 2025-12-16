@@ -55,7 +55,7 @@
             this.SetupRepositorySaveChangesSuccess();
             this.SetupMapperToTeamLinkDTO(teamLinkDTO);
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -76,7 +76,7 @@
 
             this.SetupMapperToTeamLink(null!);
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -90,7 +90,7 @@
 
                 this.mockLogger.Verify(
                     logger => logger.LogError(
-                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<CreateTeamLinkCommand>(q => q == query),
                         It.Is<string>(msg => msg == ErrorMsgCannotConvertNull)),
                     Times.Once);
             }
@@ -106,7 +106,7 @@
             this.SetupMapperToTeamLink(teamLink);
             this.SetupRepositoryCreate(null!);
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -120,7 +120,7 @@
 
                 this.mockLogger.Verify(
                     logger => logger.LogError(
-                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<CreateTeamLinkCommand>(q => q == query),
                         It.Is<string>(msg => msg == ErrorMsgCannotCreateTeamLink)),
                     Times.Once);
             }
@@ -137,7 +137,7 @@
             this.SetupRepositoryCreate(teamLink);
             this.SetupRepositorySaveChangesFailure();
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -151,7 +151,7 @@
 
                 this.mockLogger.Verify(
                     logger => logger.LogError(
-                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<CreateTeamLinkCommand>(q => q == query),
                         It.Is<string>(msg => msg == ErrorMsgFailedToCreate)),
                     Times.Once);
             }
@@ -169,7 +169,7 @@
             this.SetupRepositorySaveChangesSuccess();
             this.SetupMapperToTeamLinkDTO(null!);
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -183,7 +183,7 @@
 
                 this.mockLogger.Verify(
                     logger => logger.LogError(
-                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<CreateTeamLinkCommand>(q => q == query),
                         It.Is<string>(msg => msg == ErrorMsgFailedToMap)),
                     Times.Once);
             }

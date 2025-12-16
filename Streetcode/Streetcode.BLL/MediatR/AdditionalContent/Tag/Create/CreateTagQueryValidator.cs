@@ -5,7 +5,7 @@ namespace Streetcode.BLL.MediatR.AdditionalContent.Tag.Create
     /// <summary>
     /// Validator for CreateTagQuery.
     /// </summary>
-    public class CreateTagQueryValidator : AbstractValidator<CreateTagQuery>
+    public class CreateTagQueryValidator : AbstractValidator<CreateTagCommand>
     {
         public CreateTagQueryValidator()
         {

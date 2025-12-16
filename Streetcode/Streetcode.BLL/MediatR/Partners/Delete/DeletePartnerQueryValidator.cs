@@ -6,7 +6,7 @@ namespace Streetcode.BLL.MediatR.Partners.Delete
     /// <summary>
     /// Validator for DeletePartnerQuery.
     /// </summary>
-    public class DeletePartnerQueryValidator : AbstractValidator<DeletePartnerQuery>
+    public class DeletePartnerQueryValidator : AbstractValidator<DeletePartnerCommand>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="DeletePartnerQueryValidator"/> class.
