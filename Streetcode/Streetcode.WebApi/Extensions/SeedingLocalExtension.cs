@@ -270,12 +270,22 @@ namespace Streetcode.WebApi.Extensions
                         }
                     }
 
+                    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<int>>>();
+                    var roleNames = Enum.GetNames(typeof(UserRole));
+
+                    foreach (var roleName in roleNames)
+                    {
+                        if (!await roleManager.RoleExistsAsync(roleName))
+                        {
+                            await roleManager.CreateAsync(new IdentityRole<int>(roleName));
+                        }
+                    }
+
                     if (!dbContext.Users.Any(u => u.Email == "main_admin@gmail.com"))
                     {
                         var mainAdminDefault = new User
                         {
                             Email = "main_admin@gmail.com",
-                            Role = UserRole.MainAdministrator,
                             Name = "main_admin",
                             Surname = "main_admin",
                         };
@@ -300,7 +310,6 @@ namespace Streetcode.WebApi.Extensions
                         var adminDefault = new User
                         {
                             Email = "admin@gmail.com",
-                            Role = UserRole.Administrator,
                             Name = "admin",
                             Surname = "admin",
                         };
@@ -325,7 +334,6 @@ namespace Streetcode.WebApi.Extensions
                         var moderatorDefault = new User
                         {
                             Email = "moderator@gmail.com",
-                            Role = UserRole.Moderator,
                             Name = "moderator",
                             Surname = "moderator",
                         };

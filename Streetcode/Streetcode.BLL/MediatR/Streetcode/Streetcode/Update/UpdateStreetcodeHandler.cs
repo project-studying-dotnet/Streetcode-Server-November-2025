@@ -9,8 +9,10 @@ using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Streetcode.BLL.DTO.AdditionalContent.Tag;
+using Streetcode.BLL.DTO.Media.Images;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.DTO.Streetcode.Types;
+using Streetcode.BLL.Interfaces.Cache;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.Streetcode.Create;
 using Streetcode.BLL.Util;
@@ -27,13 +29,14 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
         private readonly ILoggerService _logger;
+        private readonly ICacheService _cacheService;
         private readonly StreetcodeCreateHelper _streetcodeCreateHelper;
-
-        public UpdateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger)
+        public UpdateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger, ICacheService cacheService)
         {
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
+            _cacheService = cacheService;
             _streetcodeCreateHelper = new StreetcodeCreateHelper(_logger);
         }
 
@@ -83,6 +86,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
 
                 if (resultIsSuccess)
                 {
+                    await _cacheService.RemoveAsync($"Streetcode_{updateStreetcodeDTO.Id}");
+
                     var streetcodeDTO = _mapper.Map<UpdateStreetcodeDto>(existingStreetcode);
                     var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
                     return Result.Ok(jsonResult);
@@ -151,7 +156,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
         {
             if (dto.Images is null)
             {
-                return Result.Ok();
+                dto.Images = new List<ImageDetailsDto>();
             }
 
             var streetcodeImages = (await _repository.StreetcodeImageRepository.GetAllAsync(i => i.StreetcodeId == entity.Id)).ToList();
@@ -161,6 +166,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
             _repository.StreetcodeImageRepository.DeleteRange(streetcodeImages);
             _repository.ImageDetailsRepository.DeleteRange(imageDetails);
 
+            List<string> imageErrors = new List<string>();
+
             foreach (var img in dto.Images)
             {
                 var image = await _repository.ImageRepository.GetFirstOrDefaultAsync(x => x.Id == img.ImageId);
@@ -168,7 +175,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 {
                     var errorMsg = string.Format(ErrorMessages.StreetcodeImageNotFoundById, img.ImageId);
                     _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
+                    imageErrors.Add(errorMsg);
+                    continue;
                 }
 
                 await _repository.StreetcodeImageRepository.CreateAsync(new StreetcodeImage
@@ -181,6 +189,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 await _repository.ImageDetailsRepository.CreateAsync(imgDetail);
             }
 
+            if (imageErrors.Count > 0)
+            {
+                return Result.Fail(string.Join("; ", imageErrors));
+            }
+
             return Result.Ok();
         }
 
@@ -188,13 +201,15 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
         {
             if (dto.Tags is null)
             {
-                return Result.Ok();
+                dto.Tags = new List<StreetcodeTagDto>();
             }
 
             var oldTags = (await _repository.StreetcodeTagIndexRepository.GetAllAsync(t => t.StreetcodeId == entity.Id)).ToList();
             _repository.StreetcodeTagIndexRepository.DeleteRange(oldTags);
 
             var newTagList = dto.Tags.ToList();
+
+            List<string> tagsErrors = new List<string>();
             foreach (var tag in newTagList)
             {
                 var thisTag = await _repository.TagRepository.GetFirstOrDefaultAsync(x => x.Id == tag.Id);
@@ -202,7 +217,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 {
                     var errorMsg = string.Format(ErrorMessages.StreetcodeTagNotFoundById, tag.Id);
                     _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
+                    tagsErrors.Add(errorMsg);
+                    continue;
                 }
 
                 await _repository.StreetcodeTagIndexRepository.CreateAsync(new StreetcodeTagIndex
@@ -212,6 +228,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                     IsVisible = tag.IsVisible,
                     Index = newTagList.IndexOf(tag)
                 });
+            }
+
+            if (tagsErrors.Count > 0)
+            {
+                return Result.Fail(string.Join("; ", tagsErrors));
             }
 
             return Result.Ok();

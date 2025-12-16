@@ -1,23 +1,16 @@
 using System.Text.Json;
 using System.Transactions;
 using AutoMapper;
-using Azure;
 using FluentResults;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Streetcode.BLL.DTO.AdditionalContent.Tag;
+using Microsoft.IdentityModel.Tokens;
 using Streetcode.BLL.DTO.Streetcode;
-using Streetcode.BLL.DTO.Streetcode.Types;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull;
 using Streetcode.BLL.Util;
 using Streetcode.DAL.Entities.AdditionalContent;
 using Streetcode.DAL.Entities.Media.Images;
 using Streetcode.DAL.Entities.Streetcode;
-using Streetcode.DAL.Enums;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using Streetcode.DAL.Repositories.Realizations.Base;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 {
@@ -26,20 +19,21 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
         private readonly ILoggerService _logger;
-        private readonly IMediator _mediator;
         private readonly StreetcodeCreateHelper _streetcodeCreateHelper;
 
-        public CreateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger, IMediator mediator)
+        public CreateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger)
         {
             _repository = repository;
             _mapper = mapper;
             _logger = logger;
-            _mediator = mediator;
             _streetcodeCreateHelper = new StreetcodeCreateHelper(_logger);
         }
 
         public async Task<Result<JsonElement>> Handle(CreateStreetcodeCommand request, CancellationToken cancellationToken)
         {
+            using var transaction = new TransactionScope(
+                TransactionScopeAsyncFlowOption.Enabled);
+
             // try catch block is temporary solution until validation would be implemented.
             try
             {
@@ -81,6 +75,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
                 var resultIsSuccess = await _repository.SaveChangesAsync() > 0;
 
+                transaction.Complete();
+
                 if (resultIsSuccess)
                 {
                     var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(streetcodeContent);
@@ -92,9 +88,6 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             {
                 var errorMsg = $"Exception occurred while creating streetcode: {ex.Message}";
                 _logger.LogError(request, errorMsg);
-
-                _mediator.Send(new DeleteFullStreetcodeCommand(
-                    request.rawJsonCreateDTO.GetProperty("Index").GetInt32()));
 
                 return Result.Fail<JsonElement>(new Error(errorMsg));
             }
@@ -128,10 +121,12 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
         private async Task<Result> HandleImagesCreate(CreateStreetcodeDto dto, StreetcodeContent entity, CreateStreetcodeCommand request)
         {
-            if (dto.Images is null)
+            if (dto.Images.IsNullOrEmpty())
             {
                 return Result.Ok();
             }
+
+            List<string> imageErrors = new List<string>();
 
             foreach (var img in dto.Images)
             {
@@ -140,7 +135,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 {
                     var errorMsg = string.Format(ErrorMessages.ImageNotFoundById, img.ImageId);
                     _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
+                    imageErrors.Add(errorMsg);
+                    continue;
                 }
 
                 await _repository.StreetcodeImageRepository.CreateAsync(new StreetcodeImage
@@ -153,15 +149,22 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 await _repository.ImageDetailsRepository.CreateAsync(imgDetail);
             }
 
+            if (imageErrors.Count > 0)
+            {
+                return Result.Fail(string.Join("; ", imageErrors));
+            }
+
             return Result.Ok();
         }
 
         private async Task<Result> HandleTagsCreate(CreateStreetcodeDto dto, StreetcodeContent entity, CreateStreetcodeCommand request)
         {
-            if (dto.Tags is null)
+            if (dto.Tags.IsNullOrEmpty())
             {
                 return Result.Ok();
             }
+
+            List<string> tagErrors = new List<string>();
 
             var tagList = dto.Tags.ToList();
             foreach (var tag in tagList)
@@ -171,7 +174,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 {
                     var errorMsg = ErrorMessages.TagNotFoundById;
                     _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
+                    tagErrors.Add(errorMsg);
+                    continue;
                 }
 
                 await _repository.StreetcodeTagIndexRepository.CreateAsync(new StreetcodeTagIndex
@@ -181,6 +185,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                     IsVisible = tag.IsVisible,
                     Index = tagList.IndexOf(tag)
                 });
+            }
+
+            if (tagErrors.Count > 0)
+            {
+                return Result.Fail(string.Join("; ", tagErrors));
             }
 
             return Result.Ok();
