@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Rewrite;
@@ -16,6 +16,7 @@ public class GetTransactLinkByStreetcodeIdHandler : IRequestHandler<GetTransactL
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
     private readonly ILoggerService _logger;
+
     public GetTransactLinkByStreetcodeIdHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
     {
         _repositoryWrapper = repositoryWrapper;
@@ -33,7 +34,7 @@ public class GetTransactLinkByStreetcodeIdHandler : IRequestHandler<GetTransactL
             if (await _repositoryWrapper.StreetcodeRepository
                 .GetFirstOrDefaultAsync(s => s.Id == request.StreetcodeId) == null)
             {
-                string errorMsg = $"Cannot find a transaction link by a streetcode id: {request.StreetcodeId}, because such streetcode doesn`t exist";
+                var errorMsg = string.Format(ErrorMessages.TransactionLinkNotFoundByStreetcodeId, request.StreetcodeId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

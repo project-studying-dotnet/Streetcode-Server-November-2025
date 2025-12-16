@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -33,7 +33,7 @@ public class GetVideoByStreetcodeIdHandler : IRequestHandler<GetVideoByStreetcod
             StreetcodeContent? streetcode = await _repositoryWrapper.StreetcodeRepository.GetFirstOrDefaultAsync(x => x.Id == request.StreetcodeId);
             if (streetcode is null)
             {
-                string errorMsg = $"Streetcode with id: {request.StreetcodeId} doesn`t exist";
+                var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, request.StreetcodeId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

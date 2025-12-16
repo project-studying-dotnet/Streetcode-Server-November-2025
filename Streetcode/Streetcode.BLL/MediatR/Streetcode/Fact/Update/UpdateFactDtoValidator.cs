@@ -13,7 +13,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Update
         {
             RuleFor(x => x.Id)
                 .GreaterThan(0)
-                .WithMessage("ID факту має бути більше 0");
+                .WithMessage(ErrorMessages.FactIdMustBeGreaterThanZero);
 
             ConfigureSharedRules();
         }

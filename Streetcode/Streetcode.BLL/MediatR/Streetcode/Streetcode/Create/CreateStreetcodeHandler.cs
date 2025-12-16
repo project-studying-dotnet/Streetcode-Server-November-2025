@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
+using System.Transactions;
 using AutoMapper;
 using Azure;
 using FluentResults;
@@ -53,7 +49,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
                 if (await StreetcodeIndexExists(streetcodeIndex))
                 {
-                    return Result.Fail(new Error($"Streetcode with Index {streetcodeIndex} already exists"));
+                    return Result.Fail(new Error(string.Format(ErrorMessages.StreetcodeWithIndexAlreadyExists, streetcodeIndex)));
                 }
 
                 string streetcodeType = rawJson.GetProperty("StreetcodeType").GetString();
@@ -94,7 +90,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             }
             catch (Exception ex)
             {
-                string errorMsg = $"Exception occurred while creating streetcode: {ex.Message}";
+                var errorMsg = $"Exception occurred while creating streetcode: {ex.Message}";
                 _logger.LogError(request, errorMsg);
 
                 _mediator.Send(new DeleteFullStreetcodeCommand(
@@ -122,8 +118,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             var audio = await _repository.AudioRepository.GetFirstOrDefaultAsync(x => x.Id == dto.AudioId);
             if (audio is null)
             {
-                _logger.LogError(request, "Audio not found");
-                return Result.Fail("Audio not found");
+                _logger.LogError(request, ErrorMessages.AudioNotFound);
+                return Result.Fail(ErrorMessages.AudioNotFound);
             }
 
             entity.AudioId = audio.Id;
@@ -142,7 +138,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 var image = await _repository.ImageRepository.GetFirstOrDefaultAsync(x => x.Id == img.ImageId);
                 if (image is null)
                 {
-                    string errorMsg = $"Image {img.ImageId} not found";
+                    var errorMsg = string.Format(ErrorMessages.ImageNotFoundById, img.ImageId);
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -173,7 +169,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 var thisTag = await _repository.TagRepository.GetFirstOrDefaultAsync(x => x.Id == tag.Id);
                 if (thisTag is null)
                 {
-                    string errorMsg = $"Tag {tag.Id} not found";
+                    var errorMsg = ErrorMessages.TagNotFoundById;
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }

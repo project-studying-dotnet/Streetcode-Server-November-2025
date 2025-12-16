@@ -1,4 +1,4 @@
-﻿using FluentResults;
+using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.Interfaces.BlobStorage;
@@ -30,7 +30,7 @@ public class DeleteImageHandler : IRequestHandler<DeleteImageCommand, Result<Uni
 
         if (image is null)
         {
-            string errorMsg = $"Cannot find an image with corresponding categoryId: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.ImageNotFoundByCategoryId, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -50,7 +50,7 @@ public class DeleteImageHandler : IRequestHandler<DeleteImageCommand, Result<Uni
         }
         else
         {
-            const string errorMsg = $"Failed to delete an image";
+            var errorMsg = ErrorMessages.ImageDeletionFailed;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

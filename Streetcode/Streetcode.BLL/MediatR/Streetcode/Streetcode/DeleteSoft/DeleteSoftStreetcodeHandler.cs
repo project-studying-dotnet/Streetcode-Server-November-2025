@@ -23,7 +23,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft
 
             if (streetcode is null)
             {
-                string errorMsg = $"Cannot find a streetcode with corresponding categoryId: {request.Id}";
+                var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundByCategoryId, request.Id);
                 _logger.LogError(request, errorMsg);
                 throw new ArgumentNullException(errorMsg);
             }
@@ -41,7 +41,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft
             }
             else
             {
-                const string errorMsg = "Failed to change status of streetcode to deleted";
+                var errorMsg = ErrorMessages.StreetcodeSoftDeletionFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

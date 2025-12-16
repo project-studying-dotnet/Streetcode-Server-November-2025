@@ -17,32 +17,42 @@ namespace Streetcode.BLL.MediatR.Media.Image.Create
             RuleFor(x => x.BaseFormat)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .WithMessage("Дані зображення в Base64 є обов'язковими")
+                .WithMessage(ErrorMessages.ImageBase64Required)
                 .Must(Base64Validator.IsValidBase64)
-                .WithMessage("BaseFormat має бути дійсним рядком Base64")
+                .WithMessage(ErrorMessages.ImageBase64Invalid)
                 .Must(base64 => Base64Validator.IsWithinSizeLimit(base64, ValidationConstants.Media.MaxImageSizeInBytes))
-                .WithMessage($"Розмір зображення не може перевищувати {ValidationConstants.Media.MaxImageSizeInBytes / 1024 / 1024}МБ після декодування");
+                .WithMessage(string.Format(
+                    ErrorMessages.ImageSizeExceeded,
+                    ValidationConstants.Media.MaxImageSizeInBytes / 1024 / 1024));
 
             RuleFor(x => x.Extension)
                 .NotEmpty()
-                .WithMessage("Розширення зображення є обов'язковим")
+                .WithMessage(ErrorMessages.ImageExtensionRequired)
                 .Must(ext => FileExtensionValidator.IsValidExtension(ext, FileExtensionValidator.AllowedImageExtensions))
-                .WithMessage($"Розширення зображення має бути одним з: {string.Join(", ", FileExtensionValidator.AllowedImageExtensions)}");
+                .WithMessage(string.Format(
+                    ErrorMessages.ImageExtensionInvalid,
+                    string.Join(", ", FileExtensionValidator.AllowedImageExtensions)));
 
             RuleFor(x => x.MimeType)
                 .MaximumLength(ValidationConstants.Common.MimeTypeMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.MimeType))
-                .WithMessage($"MimeType не може перевищувати {ValidationConstants.Common.MimeTypeMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.MimeTypeTooLong,
+                    ValidationConstants.Common.MimeTypeMaxLength));
 
             RuleFor(x => x.Title)
                 .MaximumLength(ValidationConstants.Media.TitleMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.Title))
-                .WithMessage($"Назва не може перевищувати {ValidationConstants.Media.TitleMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.TitleTooLong,
+                    ValidationConstants.Media.TitleMaxLength));
 
             RuleFor(x => x.Alt)
                 .MaximumLength(ValidationConstants.Media.AltMaxLength)
                 .When(x => !string.IsNullOrWhiteSpace(x.Alt))
-                .WithMessage($"Alt текст не може перевищувати {ValidationConstants.Media.AltMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.AltTextTooLong,
+                    ValidationConstants.Media.AltMaxLength));
         }
     }
 }

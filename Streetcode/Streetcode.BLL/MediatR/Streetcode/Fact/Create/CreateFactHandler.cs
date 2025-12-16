@@ -32,7 +32,7 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                         img.Id == request.newFact.ImageId);
                 if (imageExists is null)
                 {
-                    const string errorMsg = "Image with provided ImageId does not exist";
+                    var errorMsg = string.Format(ErrorMessages.ImageNotFoundById, request.newFact.ImageId);
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -42,7 +42,7 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                         s.Id == request.newFact.StreetcodeId);
                 if (streetcodeExists is null)
                 {
-                    const string errorMsg = "Streetcode with provided StreetcodeId does not exist";
+                    var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, request.newFact.StreetcodeId);
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -53,7 +53,7 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                         f.StreetcodeId == request.newFact.StreetcodeId);
                 if (factExists is not null)
                 {
-                    const string errorMsg = "Fact with the same title already exists for this Streetcode";
+                    var errorMsg = ErrorMessages.FactTitleAlreadyExists;
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -61,7 +61,7 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                 var newFact = _mapper.Map<Fact>(request.newFact);
                 if (newFact is null)
                 {
-                    const string errorMsg = "Failed to map CreateFactDTO to Fact entity";
+                    var errorMsg = ErrorMessages.FactMappingFailed;
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }

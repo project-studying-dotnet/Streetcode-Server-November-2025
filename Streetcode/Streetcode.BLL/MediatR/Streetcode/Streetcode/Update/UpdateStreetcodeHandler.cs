@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +28,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
         private readonly IMapper _mapper;
         private readonly ILoggerService _logger;
         private readonly StreetcodeCreateHelper _streetcodeCreateHelper;
+
         public UpdateStreetcodeHandler(IRepositoryWrapper repository, IMapper mapper, ILoggerService logger)
         {
             _repository = repository;
@@ -50,12 +51,12 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 var existingStreetcode = await GetExistingStreetcode(updateStreetcodeDTO.Id, request);
                 if (existingStreetcode is null)
                 {
-                    return Result.Fail(new Error("Streetcode not found"));
+                    return Result.Fail(new Error(ErrorMessages.StreetcodeNotFound));
                 }
 
                 if (!TryMapStreetcode(updateStreetcodeDTO, existingStreetcode))
                 {
-                    return Result.Fail<JsonElement>(new Error("StreetcodeType value can't be changed"));
+                    return Result.Fail<JsonElement>(new Error(ErrorMessages.StreetcodeTypeCannotBeChanged));
                 }
 
                 var audioResult = await HandleAudioUpdate(updateStreetcodeDTO, existingStreetcode, request);
@@ -89,7 +90,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
             }
             catch(Exception ex)
             {
-                string errorMsg = $"Exception occurred while updating streetcode: {ex.Message}";
+                var errorMsg = string.Format(ErrorMessages.StreetcodeUpdateExceptionOccurred, ex.Message);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail<JsonElement>(new Error(errorMsg));
             }
@@ -102,7 +103,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
             var sc = await _repository.StreetcodeRepository.GetFirstOrDefaultAsync(s => s.Id == id);
             if (sc is null)
             {
-                _logger.LogError(request, "Streetcode not found");
+                _logger.LogError(request, ErrorMessages.StreetcodeNotFound);
             }
 
             return sc;
@@ -131,15 +132,15 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
 
             if (dto.AudioId < 0)
             {
-                _logger.LogError(request, "invalid audio Id");
-                return Result.Fail("invalid audio Id");
+                _logger.LogError(request, ErrorMessages.StreetcodeAudioIdInvalid);
+                return Result.Fail(ErrorMessages.StreetcodeAudioIdInvalid);
             }
 
             var audio = await _repository.AudioRepository.GetFirstOrDefaultAsync(a => a.Id == dto.AudioId);
             if (audio is null)
             {
-                _logger.LogError(request, "Audio doesn't exist");
-                return Result.Fail("Audio doesn't exist");
+                _logger.LogError(request, ErrorMessages.StreetcodeAudioNotFound);
+                return Result.Fail(ErrorMessages.StreetcodeAudioNotFound);
             }
 
             entity.AudioId = audio.Id;
@@ -165,7 +166,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 var image = await _repository.ImageRepository.GetFirstOrDefaultAsync(x => x.Id == img.ImageId);
                 if (image is null)
                 {
-                    string errorMsg = $"Image {img.ImageId} not found";
+                    var errorMsg = string.Format(ErrorMessages.StreetcodeImageNotFoundById, img.ImageId);
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -199,7 +200,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 var thisTag = await _repository.TagRepository.GetFirstOrDefaultAsync(x => x.Id == tag.Id);
                 if (thisTag is null)
                 {
-                    string errorMsg = $"Tag {tag.Id} not found";
+                    var errorMsg = string.Format(ErrorMessages.StreetcodeTagNotFoundById, tag.Id);
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }

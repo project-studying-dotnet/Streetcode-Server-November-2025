@@ -12,9 +12,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
         {
             RuleFor(x => x.word)
                 .NotEmpty()
-                .WithMessage("Слово для видалення є обов'язковим")
+                .WithMessage(ErrorMessages.RelatedTermWordForDeletionRequired)
                 .MaximumLength(ValidationConstants.RelatedTerm.WordMaxLength)
-                .WithMessage($"Слово не може перевищувати {ValidationConstants.RelatedTerm.WordMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.RelatedTermWordTooLong,
+                    ValidationConstants.RelatedTerm.WordMaxLength));
         }
     }
 }
