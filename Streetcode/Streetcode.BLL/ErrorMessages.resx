@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="NewsNotFoundByUrl" xml:space="preserve">
-    <value>No news by entered Url - '{0}'</value>
+    <value>No news by entered Url - {0}</value>
   </data>
   <data name="StreetcodeCreationFailed" xml:space="preserve">
     <value>Failed to create a streetcode</value>
@@ -133,10 +133,10 @@
     <value>Cannot find any arts</value>
   </data>
   <data name="ArtNotFoundById" xml:space="preserve">
-    <value>Cannot find an art with corresponding id: '{0}'</value>
+    <value>Cannot find an art with corresponding id: {0}</value>
   </data>
   <data name="ArtNotFoundByStreetcodeId" xml:space="preserve">
-    <value>Cannot find any art with corresponding streetcode id: '{0}'</value>
+    <value>Cannot find any art with corresponding streetcode id: {0}</value>
   </data>
   <data name="AudioBase64Required" xml:space="preserve">
     <value>Дані аудіо в Base64 є обов'язковими</value>
@@ -172,13 +172,13 @@
     <value>Failed to delete an audio</value>
   </data>
   <data name="AudioNotFoundById" xml:space="preserve">
-    <value>Cannot find an audio with corresponding audioId: '{0}'</value>
+    <value>Cannot find an audio with corresponding audioId: {0}</value>
   </data>
   <data name="AudiosNotFound" xml:space="preserve">
     <value>Cannot find any audios</value>
   </data>
   <data name="AudioNotFoundByStreetcodeId" xml:space="preserve">
-    <value>Cannot find an audio with the corresponding streetcode id: '{0}'</value>
+    <value>Cannot find an audio with the corresponding streetcode id: {0}</value>
   </data>
   <data name="ImageDataRequired" xml:space="preserve">
     <value>Дані зображення є обов'язковими</value>
@@ -211,7 +211,7 @@
     <value>ID зображення має бути більше 0</value>
   </data>
   <data name="ImageNotFoundByCategoryId" xml:space="preserve">
-    <value>Cannot find an image with corresponding categoryId: '{0}'</value>
+    <value>Cannot find an image with corresponding categoryId: {0}</value>
   </data>
   <data name="ImageDeletionFailed" xml:space="preserve">
     <value>Failed to delete an image</value>
@@ -220,7 +220,7 @@
     <value>Cannot find any image</value>
   </data>
   <data name="ImageNotFoundById" xml:space="preserve">
-    <value>Cannot find an image with corresponding id: '{0}'</value>
+    <value>Cannot find an image with corresponding id: {0}</value>
   </data>
   <data name="ImageNotFoundByStreetcodeId" xml:space="preserve">
     <value>Cannot find an image with the corresponding streetcode id:</value>
@@ -229,10 +229,10 @@
     <value>Cannot find any videos</value>
   </data>
   <data name="StreetcodeNotFoundById" xml:space="preserve">
-    <value>Streetcode with id: '{0}' doesn't exist</value>
+    <value>Streetcode with id: {0} doesn't exist</value>
   </data>
   <data name="VideoNotFoundById" xml:space="preserve">
-    <value>Cannot find a video with corresponding id: '{0}'</value>
+    <value>Cannot find a video with corresponding id: {0}</value>
   </data>
   <data name="NewsTitleRequired" xml:space="preserve">
     <value>Назва новини є обов'язковою</value>
@@ -268,7 +268,7 @@
     <value>Id новини має бути більше 0</value>
   </data>
   <data name="NewsNotFoundById" xml:space="preserve">
-    <value>No news found by entered Id - '{0}'</value>
+    <value>No news found by entered Id - {0}</value>
   </data>
   <data name="NewsDeletionFailed" xml:space="preserve">
     <value>Failed to delete news</value>
@@ -313,10 +313,10 @@
     <value>No partner with such id</value>
   </data>
   <data name="PartnerNotFoundById" xml:space="preserve">
-    <value>Cannot find any partner with corresponding id: '{0}'</value>
+    <value>Cannot find any partner with corresponding id: {0}</value>
   </data>
   <data name="PartnersNotFoundByStreetcodeId" xml:space="preserve">
-    <value>Cannot find any partners with corresponding streetcode id: '{0}'</value>
+    <value>Cannot find any partners with corresponding streetcode id: {0}</value>
   </data>
   <data name="PaymentAmountMustBeGreaterThanZero" xml:space="preserve">
     <value>Сума платежу має бути більше 0</value>
@@ -337,10 +337,10 @@
     <value>The streetcode content is null</value>
   </data>
   <data name="CategoryNotFoundById" xml:space="preserve">
-    <value>Cannot find any srcCategory by the corresponding id: '{0}'</value>
+    <value>Cannot find any srcCategory by the corresponding id: {0}</value>
   </data>
   <data name="CategoryNotFoundByStreetcodeId" xml:space="preserve">
-    <value>Cant find any source category with the streetcode id '{0}'</value>
+    <value>Cant find any source category with the streetcode id {0}</value>
   </data>
   <data name="CategoriesNotFound" xml:space="preserve">
     <value>Categories is null</value>
@@ -364,7 +364,7 @@
     <value>ID факту має бути більше 0</value>
   </data>
   <data name="FactNotFoundById" xml:space="preserve">
-    <value>Cannot find any fact with corresponding id: '{0}'</value>
+    <value>Cannot find any fact with corresponding id: {0}</value>
   </data>
   <data name="FactNotFoundByStreetcodeId" xml:space="preserve">
     <value>Cannot find any fact by the streetcode id:</value>
@@ -397,13 +397,13 @@
     <value>Стріткод не може бути пов'язаний сам з собою</value>
   </data>
   <data name="RelatedFigureNotFound" xml:space="preserve">
-    <value>Cannot find a relation between streetcodes with corresponding ids: '{0}' &amp; '{1}'</value>
+    <value>Cannot find a relation between streetcodes with corresponding ids: {0} &amp; '{1}'</value>
   </data>
   <data name="RelatedFigureDeletionFailed" xml:space="preserve">
     <value>Failed to delete a relation</value>
   </data>
   <data name="StreetcodeNotFoundByTagId" xml:space="preserve">
-    <value>Cannot find any streetcode with corresponding tagid: '{0}'</value>
+    <value>Cannot find any streetcode with corresponding tagid: {0}</value>
   </data>
   <data name="RelatedTermWordRequired" xml:space="preserve">
     <value>Слово є обов'язковим</value>
@@ -430,7 +430,7 @@
     <value>Failed to delete a related term</value>
   </data>
   <data name="RelatedTermNotFound" xml:space="preserve">
-    <value>Cannot find a related term: '{0}'</value>
+    <value>Cannot find a related term: {0}</value>
   </data>
   <data name="RelatedTermsNotFoundByTermId" xml:space="preserve">
     <value>Cannot get words by term id</value>
@@ -505,13 +505,13 @@
     <value>Audio not found</value>
   </data>
   <data name="TagNotFoundById" xml:space="preserve">
-    <value>Tag '{0}' not found</value>
+    <value>Tag {0} not found</value>
   </data>
   <data name="StreetcodeWithIndexAlreadyExists" xml:space="preserve">
-    <value>Streetcode with Index '{0}' already exists</value>
+    <value>Streetcode with Index {0} already exists</value>
   </data>
   <data name="StreetcodeNotFoundByCategoryId" xml:space="preserve">
-    <value>Cannot find a streetcode with corresponding categoryId: '{0}'</value>
+    <value>Cannot find a streetcode with corresponding categoryId: {0}</value>
   </data>
   <data name="StreetcodeFullDeletionFailed" xml:space="preserve">
     <value>Failed to delete streetcode fully</value>
@@ -526,10 +526,10 @@
     <value>No such streetcode exists</value>
   </data>
   <data name="StreetcodeNotFoundByIndex" xml:space="preserve">
-    <value>Streetcode with index: '{0}' doesn't exist</value>
+    <value>Streetcode with index: {0} doesn't exist</value>
   </data>
   <data name="StreetcodeNotFoundByTransliterationUrl" xml:space="preserve">
-    <value>Cannot find streetcode by transliteration url: '{0}'</value>
+    <value>Cannot find streetcode by transliteration url: {0}</value>
   </data>
   <data name="StreetcodeMappingToShortDtoFailed" xml:space="preserve">
     <value>Cannot map streetcode to shortDTO</value>
@@ -562,7 +562,7 @@
     <value>Cannot find any term</value>
   </data>
   <data name="TermNotFoundById" xml:space="preserve">
-    <value>Cannot find any term with corresponding id: '{0}'</value>
+    <value>Cannot find any term with corresponding id: {0}</value>
   </data>
   <data name="TextDataRequired" xml:space="preserve">
     <value>Дані тексту не можуть бути порожніми</value>
@@ -574,7 +574,7 @@
     <value>ID тексту має бути більше 0</value>
   </data>
   <data name="TextNotFoundById" xml:space="preserve">
-    <value>Cannot find text with corresponding id: '{0}'</value>
+    <value>Cannot find text with corresponding id: {0}</value>
   </data>
   <data name="TextNotFound" xml:space="preserve">
     <value>Cannot find any text</value>
@@ -583,7 +583,7 @@
     <value>Text was not parsed successfully</value>
   </data>
   <data name="TransactionLinkNotFoundByStreetcodeId" xml:space="preserve">
-    <value>Cannot find a transaction link by streetcode id: '{0}', because such streetcode doesn't exist</value>
+    <value>Cannot find a transaction link by streetcode id: {0}, because such streetcode doesn't exist</value>
   </data>
   <data name="TextTitleRequired" xml:space="preserve">
     <value>Заголовок тексту є обов'язковим</value>
@@ -607,7 +607,7 @@
     <value>Cannot find any team</value>
   </data>
   <data name="TeamNotFoundById" xml:space="preserve">
-    <value>Cannot find any team with corresponding id: '{0}'</value>
+    <value>Cannot find any team with corresponding id: {0}</value>
   </data>
   <data name="PositionNameRequired" xml:space="preserve">
     <value>Назва посади є обов'язковою</value>
@@ -652,22 +652,22 @@
     <value>Cannot find any timelineItem</value>
   </data>
   <data name="TimelineItemNotFoundByStreetcodeId" xml:space="preserve">
-    <value>Cannot find any timeline item by the streetcode id: '{0}'</value>
+    <value>Cannot find any timeline item by the streetcode id: {0}</value>
   </data>
   <data name="TimelineItemNotFoundById" xml:space="preserve">
-    <value>Cannot find a timeline item with corresponding id: '{0}'</value>
+    <value>Cannot find a timeline item with corresponding id: {0}</value>
   </data>
   <data name="ToponymNotFoundById" xml:space="preserve">
-    <value>Cannot find any toponym with corresponding id: '{0}'</value>
+    <value>Cannot find any toponym with corresponding id: {0}</value>
   </data>
   <data name="ToponymNotFoundByStreetcodeId" xml:space="preserve">
-    <value>Cannot find any toponym by the streetcode id: '{0}'</value>
+    <value>Cannot find any toponym by the streetcode id: {0}</value>
   </data>
   <data name="TransactionLinkNotFound" xml:space="preserve">
     <value>Cannot find any transaction link</value>
   </data>
   <data name="TransactionLinkNotFoundById" xml:space="preserve">
-    <value>Cannot find any transaction link with corresponding id: '{0}'</value>
+    <value>Cannot find any transaction link with corresponding id: {0}</value>
   </data>
   <data name="UserDataRequired" xml:space="preserve">
     <value>Дані користувача є обов'язковими</value>

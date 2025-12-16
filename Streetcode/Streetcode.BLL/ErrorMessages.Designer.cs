@@ -70,7 +70,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find an art with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find an art with corresponding id: {0}.
         /// </summary>
         internal static string ArtNotFoundById {
             get {
@@ -79,7 +79,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any art with corresponding streetcode id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any art with corresponding streetcode id: {0}.
         /// </summary>
         internal static string ArtNotFoundByStreetcodeId {
             get {
@@ -169,7 +169,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find an audio with corresponding audioId: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find an audio with corresponding audioId: {0}.
         /// </summary>
         internal static string AudioNotFoundById {
             get {
@@ -178,7 +178,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find an audio with the corresponding streetcode id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find an audio with the corresponding streetcode id: {0}.
         /// </summary>
         internal static string AudioNotFoundByStreetcodeId {
             get {
@@ -232,7 +232,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any srcCategory by the corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any srcCategory by the corresponding id: {0}.
         /// </summary>
         internal static string CategoryNotFoundById {
             get {
@@ -241,7 +241,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cant find any source category with the streetcode id &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cant find any source category with the streetcode id {0}.
         /// </summary>
         internal static string CategoryNotFoundByStreetcodeId {
             get {
@@ -322,7 +322,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any fact with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any fact with corresponding id: {0}.
         /// </summary>
         internal static string FactNotFoundById {
             get {
@@ -466,7 +466,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find an image with corresponding categoryId: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find an image with corresponding categoryId: {0}.
         /// </summary>
         internal static string ImageNotFoundByCategoryId {
             get {
@@ -475,7 +475,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find an image with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find an image with corresponding id: {0}.
         /// </summary>
         internal static string ImageNotFoundById {
             get {
@@ -592,7 +592,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No news found by entered Id - &apos;{0}&apos;.
+        ///   Looks up a localized string similar to No news found by entered Id - {0}.
         /// </summary>
         internal static string NewsNotFoundById {
             get {
@@ -601,7 +601,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No news by entered Url - &apos;{0}&apos;.
+        ///   Looks up a localized string similar to No news by entered Url - {0}.
         /// </summary>
         internal static string NewsNotFoundByUrl {
             get {
@@ -709,7 +709,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any partner with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any partner with corresponding id: {0}.
         /// </summary>
         internal static string PartnerNotFoundById {
             get {
@@ -718,7 +718,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any partners with corresponding streetcode id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any partners with corresponding streetcode id: {0}.
         /// </summary>
         internal static string PartnersNotFoundByStreetcodeId {
             get {
@@ -871,7 +871,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find a relation between streetcodes with corresponding ids: &apos;{0}&apos; &amp; &apos;{1}&apos;.
+        ///   Looks up a localized string similar to Cannot find a relation between streetcodes with corresponding ids: {0} &amp; &apos;{1}&apos;.
         /// </summary>
         internal static string RelatedFigureNotFound {
             get {
@@ -925,7 +925,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find a related term: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find a related term: {0}.
         /// </summary>
         internal static string RelatedTermNotFound {
             get {
@@ -1186,7 +1186,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find a streetcode with corresponding categoryId: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find a streetcode with corresponding categoryId: {0}.
         /// </summary>
         internal static string StreetcodeNotFoundByCategoryId {
             get {
@@ -1195,7 +1195,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Streetcode with id: &apos;{0}&apos; doesn&apos;t exist.
+        ///   Looks up a localized string similar to Streetcode with id: {0} doesn&apos;t exist.
         /// </summary>
         internal static string StreetcodeNotFoundById {
             get {
@@ -1204,7 +1204,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Streetcode with index: &apos;{0}&apos; doesn&apos;t exist.
+        ///   Looks up a localized string similar to Streetcode with index: {0} doesn&apos;t exist.
         /// </summary>
         internal static string StreetcodeNotFoundByIndex {
             get {
@@ -1213,7 +1213,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any streetcode with corresponding tagid: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any streetcode with corresponding tagid: {0}.
         /// </summary>
         internal static string StreetcodeNotFoundByTagId {
             get {
@@ -1222,7 +1222,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find streetcode by transliteration url: {0}.
         /// </summary>
         internal static string StreetcodeNotFoundByTransliterationUrl {
             get {
@@ -1357,7 +1357,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Streetcode with Index &apos;{0}&apos; already exists.
+        ///   Looks up a localized string similar to Streetcode with Index {0} already exists.
         /// </summary>
         internal static string StreetcodeWithIndexAlreadyExists {
             get {
@@ -1375,7 +1375,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tag &apos;{0}&apos; not found.
+        ///   Looks up a localized string similar to Tag {0} not found.
         /// </summary>
         internal static string TagNotFoundById {
             get {
@@ -1474,7 +1474,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any team with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any team with corresponding id: {0}.
         /// </summary>
         internal static string TeamNotFoundById {
             get {
@@ -1492,7 +1492,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any term with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any term with corresponding id: {0}.
         /// </summary>
         internal static string TermNotFoundById {
             get {
@@ -1555,7 +1555,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find text with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find text with corresponding id: {0}.
         /// </summary>
         internal static string TextNotFoundById {
             get {
@@ -1609,7 +1609,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find a timeline item with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find a timeline item with corresponding id: {0}.
         /// </summary>
         internal static string TimelineItemNotFoundById {
             get {
@@ -1618,7 +1618,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any timeline item by the streetcode id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any timeline item by the streetcode id: {0}.
         /// </summary>
         internal static string TimelineItemNotFoundByStreetcodeId {
             get {
@@ -1636,7 +1636,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any toponym with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any toponym with corresponding id: {0}.
         /// </summary>
         internal static string ToponymNotFoundById {
             get {
@@ -1645,7 +1645,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any toponym by the streetcode id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any toponym by the streetcode id: {0}.
         /// </summary>
         internal static string ToponymNotFoundByStreetcodeId {
             get {
@@ -1663,7 +1663,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any transaction link with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find any transaction link with corresponding id: {0}.
         /// </summary>
         internal static string TransactionLinkNotFoundById {
             get {
@@ -1672,7 +1672,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find a transaction link by streetcode id: &apos;{0}&apos;, because such streetcode doesn&apos;t exist.
+        ///   Looks up a localized string similar to Cannot find a transaction link by streetcode id: {0}, because such streetcode doesn&apos;t exist.
         /// </summary>
         internal static string TransactionLinkNotFoundByStreetcodeId {
             get {
@@ -1852,7 +1852,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find a video with corresponding id: &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Cannot find a video with corresponding id: {0}.
         /// </summary>
         internal static string VideoNotFoundById {
             get {
