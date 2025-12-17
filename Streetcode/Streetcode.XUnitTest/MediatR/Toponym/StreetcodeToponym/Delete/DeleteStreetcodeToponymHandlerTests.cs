@@ -41,7 +41,7 @@
             this.streetcodeToponymRepositoryMock.SetupGetFirstOrDefaultAsync(entity);
             this.streetcodeToponymRepositoryMock
                 .SetupDelete<IStreetcodeToponymRepository, DAL.Entities.Toponyms.StreetcodeToponym>();
-            this.SetupSaveChangesAsyncSuccess();
+            this.MockRepository.SetupSaveChangesAsync();
 
             // Act.
             var result = await this.handler.Handle(command, CancellationToken.None);
@@ -73,7 +73,7 @@
             this.streetcodeToponymRepositoryMock
                 .SetupGetFirstOrDefaultAsync<IStreetcodeToponymRepository,
                     DAL.Entities.Toponyms.StreetcodeToponym>(null);
-            this.SetupLogger();
+            this.MockLogger.SetupLogger();
 
             // Act.
             var result = await this.handler.Handle(command, CancellationToken.None);
@@ -108,8 +108,10 @@
             this.streetcodeToponymRepositoryMock.SetupGetFirstOrDefaultAsync(entity);
             this.streetcodeToponymRepositoryMock
                 .SetupDelete<IStreetcodeToponymRepository, DAL.Entities.Toponyms.StreetcodeToponym>();
-            this.SetupSaveChangesAsyncFailure();
-            this.SetupLogger();
+            this.MockRepository
+                .Setup(repo => repo.SaveChangesAsync())
+                .ReturnsAsync(0);
+            this.MockLogger.SetupLogger();
 
             // Act.
             var result = await this.handler.Handle(command, CancellationToken.None);
@@ -120,6 +122,12 @@
             result.Errors.First().Message.Should().Be(expectedError);
 
             // Verify.
+            this.streetcodeToponymRepositoryMock
+                .VerifyGetFirstOrDefaultCalledOnce<IStreetcodeToponymRepository,
+                    DAL.Entities.Toponyms.StreetcodeToponym>();
+            this.streetcodeToponymRepositoryMock
+                .VerifyDeleteCalledOnce<IStreetcodeToponymRepository, DAL.Entities.Toponyms.StreetcodeToponym>();
+            this.MockRepository.VerifySaveChangesAsyncCalledOnce();
             this.MockLogger.VerifyLogErrorCalledOnce();
         }
     }
