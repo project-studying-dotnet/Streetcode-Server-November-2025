@@ -32,7 +32,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Delete
 
                 _repositoryWrapper.TimelineRepository.Delete(timelineItem);
                 await _repositoryWrapper.SaveChangesAsync();
-                
+
                 return Result.Ok(Unit.Value);
             }
             catch (Exception ex)

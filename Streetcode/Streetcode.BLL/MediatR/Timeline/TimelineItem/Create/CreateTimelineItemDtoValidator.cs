@@ -1,6 +1,5 @@
 using FluentValidation;
 using Streetcode.BLL.DTO.Timeline;
-using System.Text.RegularExpressions;
 
 namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create
 {

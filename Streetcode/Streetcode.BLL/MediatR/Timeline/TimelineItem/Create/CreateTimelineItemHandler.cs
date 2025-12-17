@@ -56,7 +56,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create
                 }
 
                 var newTimelineItem = _mapper.Map<TimelineItem>(request.TimelineItem);
-                
+
                 newTimelineItem.HistoricalContextTimelines = request.TimelineItem.HistoricalContextIds
                     .Select(id => new HistoricalContextTimeline
                     {

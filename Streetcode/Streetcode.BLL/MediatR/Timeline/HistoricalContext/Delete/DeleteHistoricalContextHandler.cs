@@ -32,7 +32,7 @@ namespace Streetcode.BLL.MediatR.Timeline.HistoricalContext.Delete
 
                 _repositoryWrapper.HistoricalContextRepository.Delete(historicalContext);
                 await _repositoryWrapper.SaveChangesAsync();
-                
+
                 return Result.Ok(Unit.Value);
             }
             catch (Exception ex)
