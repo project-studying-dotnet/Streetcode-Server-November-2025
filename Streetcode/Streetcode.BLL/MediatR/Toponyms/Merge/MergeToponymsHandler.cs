@@ -24,8 +24,8 @@ namespace Streetcode.BLL.MediatR.Toponyms.Merge
         }
 
         public async Task<Result<ToponymDto>> Handle(
-        MergeToponymsCommand request,
-        CancellationToken cancellationToken)
+            MergeToponymsCommand request,
+            CancellationToken cancellationToken)
         {
             var targetToponym = await _repositoryWrapper.ToponymRepository
                 .GetFirstOrDefaultAsync(t => t.Id == request.MergeRequest.TargetToponymId);
@@ -43,39 +43,8 @@ namespace Streetcode.BLL.MediatR.Toponyms.Merge
             {
                 foreach (var sourceId in request.MergeRequest.SourceToponymIds)
                 {
-                    var sourceRelationships = await _repositoryWrapper.StreetcodeToponymRepository
-                        .GetAllAsync(st => st.ToponymId == sourceId);
-
-                    if (sourceRelationships is not null)
-                    {
-                        foreach (var relationship in sourceRelationships)
-                        {
-                            var existingRelation = await _repositoryWrapper.StreetcodeToponymRepository
-                                .GetFirstOrDefaultAsync(st =>
-                                    st.ToponymId == request.MergeRequest.TargetToponymId &&
-                                    st.StreetcodeId == relationship.StreetcodeId);
-
-                            if (existingRelation is null)
-                            {
-                                await _repositoryWrapper.StreetcodeToponymRepository.CreateAsync(
-                                    new DAL.Entities.Toponyms.StreetcodeToponym
-                                    {
-                                        StreetcodeId = relationship.StreetcodeId,
-                                        ToponymId = request.MergeRequest.TargetToponymId
-                                    });
-                            }
-
-                            _repositoryWrapper.StreetcodeToponymRepository.Delete(relationship);
-                        }
-                    }
-
-                    var sourceToponym = await _repositoryWrapper.ToponymRepository
-                        .GetFirstOrDefaultAsync(t => t.Id == sourceId);
-
-                    if (sourceToponym is not null)
-                    {
-                        _repositoryWrapper.ToponymRepository.Delete(sourceToponym);
-                    }
+                    await MergeToponymRelationships(sourceId, request.MergeRequest.TargetToponymId);
+                    await DeleteSourceToponym(sourceId);
                 }
 
                 await _repositoryWrapper.SaveChangesAsync();
@@ -88,6 +57,43 @@ namespace Streetcode.BLL.MediatR.Toponyms.Merge
                 string errorMsg = $"Failed to merge toponyms: {ex.Message}";
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
+            }
+        }
+
+        private async Task MergeToponymRelationships(int sourceToponymId, int targetToponymId)
+        {
+            var sourceRelationships = await _repositoryWrapper.StreetcodeToponymRepository
+                .GetAllAsync(st => st.ToponymId == sourceToponymId);
+
+            foreach (var relationship in sourceRelationships)
+            {
+                var existingRelation = await _repositoryWrapper.StreetcodeToponymRepository
+                    .GetFirstOrDefaultAsync(st =>
+                        st.ToponymId == targetToponymId &&
+                        st.StreetcodeId == relationship.StreetcodeId);
+
+                if (existingRelation is null)
+                {
+                    await _repositoryWrapper.StreetcodeToponymRepository.CreateAsync(
+                        new DAL.Entities.Toponyms.StreetcodeToponym
+                        {
+                            StreetcodeId = relationship.StreetcodeId,
+                            ToponymId = targetToponymId
+                        });
+                }
+
+                _repositoryWrapper.StreetcodeToponymRepository.Delete(relationship);
+            }
+        }
+
+        private async Task DeleteSourceToponym(int sourceToponymId)
+        {
+            var sourceToponym = await _repositoryWrapper.ToponymRepository
+                .GetFirstOrDefaultAsync(t => t.Id == sourceToponymId);
+
+            if (sourceToponym is not null)
+            {
+                _repositoryWrapper.ToponymRepository.Delete(sourceToponym);
             }
         }
     }
