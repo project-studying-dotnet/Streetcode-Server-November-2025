@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -31,7 +31,7 @@ namespace Streetcode.BLL.MediatR.Users.Register
                 var existingUser = await _userManager.FindByNameAsync(request.newUser.UserName);
                 if (existingUser != null)
                 {
-                    return Result.Fail("User already exists");
+                    return Result.Fail(ErrorMessages.UserAlreadyExists);
                 }
 
                 var newUser = _mapper.Map<User>(request.newUser);
@@ -49,7 +49,7 @@ namespace Streetcode.BLL.MediatR.Users.Register
                 if (!addToRoleResult.Succeeded)
                 {
                     var errors = string.Join(", ", addToRoleResult.Errors.Select(e => e.Description));
-                    return Result.Fail($"Failed to assign role: {errors}");
+                    return Result.Fail(string.Format(ErrorMessages.UserRoleAssignmentFailed, errors));
                 }
 
                 var createdUser = _mapper.Map<RegisterUserResponseDto>(newUser);

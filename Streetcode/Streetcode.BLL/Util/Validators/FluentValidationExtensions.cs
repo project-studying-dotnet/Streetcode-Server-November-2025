@@ -20,7 +20,7 @@ namespace Streetcode.BLL.Util.Validators
         {
             return ruleBuilder
                 .GreaterThan(ValidationConstants.Common.MinPositiveValue)
-                .WithMessage(errorMessage ?? "ID має бути більше 0");
+                .WithMessage(errorMessage ?? ErrorMessages.IdMustBeGreaterThan);
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Streetcode.BLL.Util.Validators
             return ruleBuilder
                 .GreaterThan(ValidationConstants.Common.MinPositiveValue)
                 .When(x => ruleBuilder.GetType().GetProperty("CurrentValue")?.GetValue(ruleBuilder) is int?)
-                .WithMessage(errorMessage ?? "ID має бути більше 0");
+                .WithMessage(errorMessage ?? ErrorMessages.IdMustBeGreaterThan);
         }
     }
 }

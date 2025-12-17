@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.News;
@@ -33,7 +33,7 @@ namespace Streetcode.BLL.MediatR.Newss.GetById
                     .Include(sc => sc.Image)));
             if(newsDTO is null)
             {
-                string errorMsg = $"No news by entered Id - {id}";
+                var errorMsg = string.Format(ErrorMessages.NewsNotFoundById, id);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }

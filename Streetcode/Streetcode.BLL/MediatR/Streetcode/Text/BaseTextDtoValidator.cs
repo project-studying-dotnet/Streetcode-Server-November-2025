@@ -12,25 +12,31 @@ namespace Streetcode.BLL.MediatR.Streetcode.Text
         {
             RuleFor(x => GetTitle(x))
                 .NotEmpty()
-                .WithMessage("Заголовок тексту є обов'язковим")
+                .WithMessage(ErrorMessages.TextTitleRequired)
                 .MaximumLength(ValidationConstants.Text.TitleMaxLength)
-                .WithMessage($"Заголовок тексту не може перевищувати {ValidationConstants.Text.TitleMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.TextTitleTooLong,
+                    ValidationConstants.Text.TitleMaxLength));
 
             RuleFor(x => GetTextContent(x))
                 .NotEmpty()
-                .WithMessage("Зміст тексту є обов'язковим")
+                .WithMessage(ErrorMessages.TextContentRequired)
                 .MaximumLength(ValidationConstants.Text.ContentMaxLength)
-                .WithMessage($"Зміст тексту не може перевищувати {ValidationConstants.Text.ContentMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.TextContentTooLong,
+                    ValidationConstants.Text.ContentMaxLength));
 
             RuleFor(x => GetAdditionalText(x))
                 .MaximumLength(ValidationConstants.Text.AdditionalTextMaxLength)
                 .When(x => !string.IsNullOrEmpty(GetAdditionalText(x)))
-                .WithMessage($"Додатковий текст не може перевищувати {ValidationConstants.Text.AdditionalTextMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.TextAdditionalTextTooLong,
+                    ValidationConstants.Text.AdditionalTextMaxLength));
 
             RuleFor(x => GetVideoUrl(x))
                 .Matches(ValidationConstants.RegexPatterns.YouTubeUrl)
                 .When(x => !string.IsNullOrEmpty(GetVideoUrl(x)))
-                .WithMessage("Відео повинно бути з YouTube");
+                .WithMessage(ErrorMessages.TextVideoMustBeYouTube);
         }
 
         protected abstract string GetTitle(T dto);

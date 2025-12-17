@@ -15,7 +15,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Text.Create
 
             RuleFor(x => x.StreetcodeId)
                 .GreaterThan(0)
-                .WithMessage("ID стріткоду має бути більше 0");
+                .WithMessage(ErrorMessages.StreetcodeIdMustBeGreaterThanZero);
         }
 
         protected override string GetTitle(TextCreateDto dto) => dto.Title;

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +36,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedFigure.GetByTagId
 
             if (streetcodes is null)
             {
-                string errorMsg = $"Cannot find any streetcode with corresponding tagid: {request.tagId}";
+                var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundByTagId, request.tagId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

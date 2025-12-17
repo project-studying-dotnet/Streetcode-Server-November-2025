@@ -11,7 +11,7 @@ namespace Streetcode.BLL.MediatR.Payment
         {
             RuleFor(x => x.Payment)
                 .NotNull()
-                .WithMessage("Дані платежу не можуть бути порожніми")
+                .WithMessage(ErrorMessages.PaymentDataRequired)
                 .SetValidator(new PaymentDtoValidator());
         }
     }
