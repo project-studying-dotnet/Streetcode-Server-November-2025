@@ -34,15 +34,13 @@
         public async Task Handle_WhenRelationshipDoesNotExist_ShouldCreateSuccessfully()
         {
             // Arrange.
-            const string successMessage = "Streetcode-toponym relationship created successfully";
             var dto = StreetcodeToponymTestData.CreateStreetcodeToponymDto();
             var entity = StreetcodeToponymTestData.CreateStreetcodeToponym();
             var command = new CreateStreetcodeToponymCommand(dto);
 
             this.MockRepository.SetupRepositoryWrapper(this.streetcodeToponymRepositoryMock);
             this.streetcodeToponymRepositoryMock
-                .SetupGetFirstOrDefaultAsync<IStreetcodeToponymRepository,
-                    DAL.Entities.Toponyms.StreetcodeToponym>(null);
+                .SetupGetFirstOrDefaultAsync<IStreetcodeToponymRepository, DAL.Entities.Toponyms.StreetcodeToponym>(null);
             this.streetcodeToponymRepositoryMock.SetupCreateAsync(entity);
             this.SetupMapperForStreetcodeToponymEntity(entity);
             this.SetupMapperForStreetcodeToponymDto(dto);
