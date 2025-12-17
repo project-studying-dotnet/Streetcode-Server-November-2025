@@ -1,4 +1,7 @@
-﻿IF OBJECT_ID(N'[entity_framework].[__EFMigrationsHistory]') IS NULL
+﻿DECLARE @Migration_Initial NVARCHAR(150) = N'20230622110726_Initial';
+DECLARE @Migration_UpdatePartnerModel NVARCHAR(150) = N'20230703154732_UpdatePartnerModel';
+
+IF OBJECT_ID(N'[entity_framework].[__EFMigrationsHistory]') IS NULL
 BEGIN
     IF SCHEMA_ID(N'entity_framework') IS NULL EXEC(N'CREATE SCHEMA [entity_framework];');
     CREATE TABLE [entity_framework].[__EFMigrationsHistory] (
@@ -12,85 +15,85 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'media') IS NULL EXEC(N'CREATE SCHEMA [media];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'add_content') IS NULL EXEC(N'CREATE SCHEMA [add_content];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'streetcode') IS NULL EXEC(N'CREATE SCHEMA [streetcode];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'timeline') IS NULL EXEC(N'CREATE SCHEMA [timeline];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'news') IS NULL EXEC(N'CREATE SCHEMA [news];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'partners') IS NULL EXEC(N'CREATE SCHEMA [partners];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'team') IS NULL EXEC(N'CREATE SCHEMA [team];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'coordinates') IS NULL EXEC(N'CREATE SCHEMA [coordinates];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'feedback') IS NULL EXEC(N'CREATE SCHEMA [feedback];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'sources') IS NULL EXEC(N'CREATE SCHEMA [sources];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'toponyms') IS NULL EXEC(N'CREATE SCHEMA [toponyms];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'transactions') IS NULL EXEC(N'CREATE SCHEMA [transactions];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     IF SCHEMA_ID(N'Users') IS NULL EXEC(N'CREATE SCHEMA [Users];');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [media].[audios] (
         [Id] int NOT NULL IDENTITY,
@@ -102,7 +105,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [timeline].[historical_contexts] (
         [Id] int NOT NULL IDENTITY,
@@ -112,7 +115,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [media].[images] (
         [Id] int NOT NULL IDENTITY,
@@ -123,7 +126,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [team].[positions] (
         [Id] int NOT NULL IDENTITY,
@@ -133,7 +136,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [feedback].[responses] (
         [Id] int NOT NULL IDENTITY,
@@ -145,7 +148,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [add_content].[tags] (
         [Id] int NOT NULL IDENTITY,
@@ -155,7 +158,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[terms] (
         [Id] int NOT NULL IDENTITY,
@@ -166,7 +169,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [toponyms].[toponyms] (
         [Id] int NOT NULL IDENTITY,
@@ -182,7 +185,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [Users].[Users] (
         [Id] int NOT NULL IDENTITY,
@@ -197,7 +200,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[streetcodes] (
         [Id] int NOT NULL IDENTITY,
@@ -224,7 +227,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [media].[arts] (
         [Id] int NOT NULL IDENTITY,
@@ -237,7 +240,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [media].[image_details] (
         [Id] int NOT NULL IDENTITY,
@@ -250,7 +253,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [news].[news] (
         [Id] int NOT NULL IDENTITY,
@@ -265,7 +268,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [partners].[partners] (
         [Id] int NOT NULL IDENTITY,
@@ -282,7 +285,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [sources].[source_link_categories] (
         [Id] int NOT NULL IDENTITY,
@@ -294,7 +297,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [team].[team_members] (
         [Id] int NOT NULL IDENTITY,
@@ -309,7 +312,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[related_terms] (
         [Id] int NOT NULL IDENTITY,
@@ -321,7 +324,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [add_content].[coordinates] (
         [Id] int NOT NULL IDENTITY,
@@ -337,7 +340,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[facts] (
         [Id] int NOT NULL IDENTITY,
@@ -352,7 +355,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[related_figures] (
         [ObserverId] int NOT NULL,
@@ -364,7 +367,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[streetcode_image] (
         [StreetcodeId] int NOT NULL,
@@ -376,7 +379,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [add_content].[streetcode_tag_index] (
         [StreetcodeId] int NOT NULL,
@@ -390,7 +393,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[streetcode_toponym] (
         [StreetcodeId] int NOT NULL,
@@ -402,7 +405,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [add_content].[subtitles] (
         [Id] int NOT NULL IDENTITY,
@@ -414,7 +417,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[texts] (
         [Id] int NOT NULL IDENTITY,
@@ -428,7 +431,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [timeline].[timeline_items] (
         [Id] int NOT NULL IDENTITY,
@@ -443,7 +446,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [transactions].[transaction_links] (
         [Id] int NOT NULL IDENTITY,
@@ -456,7 +459,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [media].[videos] (
         [Id] int NOT NULL IDENTITY,
@@ -470,7 +473,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[streetcode_art] (
         [StreetcodeId] int NOT NULL,
@@ -483,7 +486,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [partners].[partner_source_links] (
         [Id] int NOT NULL IDENTITY,
@@ -497,7 +500,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [streetcode].[streetcode_partners] (
         [StreetcodeId] int NOT NULL,
@@ -509,7 +512,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [sources].[streetcode_source_link_categories] (
         [SourceLinkCategoryId] int NOT NULL,
@@ -522,7 +525,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [team].[team_member_links] (
         [Id] int NOT NULL IDENTITY,
@@ -535,7 +538,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [team].[team_member_positions] (
         [TeamMemberId] int NOT NULL,
@@ -547,7 +550,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [coordinates].[qr_coordinates] (
         [Id] int NOT NULL IDENTITY,
@@ -563,7 +566,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE TABLE [HistoricalContextsTimelines] (
         [HistoricalContextId] int NOT NULL,
@@ -575,214 +578,214 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_arts_ImageId] ON [media].[arts] ([ImageId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_coordinates_StreetcodeId] ON [add_content].[coordinates] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_coordinates_ToponymId] ON [add_content].[coordinates] ([ToponymId]) WHERE [ToponymId] IS NOT NULL');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_facts_ImageId] ON [streetcode].[facts] ([ImageId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_facts_StreetcodeId] ON [streetcode].[facts] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_HistoricalContextsTimelines_HistoricalContextId] ON [HistoricalContextsTimelines] ([HistoricalContextId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_image_details_ImageId] ON [media].[image_details] ([ImageId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_news_ImageId] ON [news].[news] ([ImageId]) WHERE [ImageId] IS NOT NULL');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_news_URL] ON [news].[news] ([URL]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_partner_source_links_PartnerId] ON [partners].[partner_source_links] ([PartnerId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_partners_LogoId] ON [partners].[partners] ([LogoId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_qr_coordinates_StreetcodeCoordinateId] ON [coordinates].[qr_coordinates] ([StreetcodeCoordinateId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_qr_coordinates_StreetcodeId] ON [coordinates].[qr_coordinates] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_related_figures_TargetId] ON [streetcode].[related_figures] ([TargetId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_related_terms_TermId] ON [streetcode].[related_terms] ([TermId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_source_link_categories_ImageId] ON [sources].[source_link_categories] ([ImageId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_streetcode_art_ArtId_StreetcodeId] ON [streetcode].[streetcode_art] ([ArtId], [StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_streetcode_art_StreetcodeId] ON [streetcode].[streetcode_art] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_streetcode_image_StreetcodeId] ON [streetcode].[streetcode_image] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_streetcode_partners_StreetcodeId] ON [streetcode].[streetcode_partners] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_streetcode_source_link_categories_StreetcodeId] ON [sources].[streetcode_source_link_categories] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_streetcode_tag_index_TagId] ON [add_content].[streetcode_tag_index] ([TagId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_streetcode_toponym_ToponymId] ON [streetcode].[streetcode_toponym] ([ToponymId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     EXEC(N'CREATE UNIQUE INDEX [IX_streetcodes_AudioId] ON [streetcode].[streetcodes] ([AudioId]) WHERE [AudioId] IS NOT NULL');
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_streetcodes_Index] ON [streetcode].[streetcodes] ([Index]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_streetcodes_TransliterationUrl] ON [streetcode].[streetcodes] ([TransliterationUrl]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_subtitles_StreetcodeId] ON [add_content].[subtitles] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_team_member_links_TeamMemberId] ON [team].[team_member_links] ([TeamMemberId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_team_member_positions_PositionsId] ON [team].[team_member_positions] ([PositionsId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_team_members_ImageId] ON [team].[team_members] ([ImageId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_texts_StreetcodeId] ON [streetcode].[texts] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_timeline_items_StreetcodeId] ON [timeline].[timeline_items] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE UNIQUE INDEX [IX_transaction_links_StreetcodeId] ON [transactions].[transaction_links] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     CREATE INDEX [IX_videos_StreetcodeId] ON [media].[videos] ([StreetcodeId]);
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230622110726_Initial')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_Initial)
 BEGIN
     INSERT INTO [entity_framework].[__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230622110726_Initial', N'6.0.11');
+    VALUES (@Migration_Initial, N'6.0.11');
 END;
 GO
 
@@ -792,7 +795,7 @@ GO
 BEGIN TRANSACTION;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230703154732_UpdatePartnerModel')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_UpdatePartnerModel)
 BEGIN
     DECLARE @var0 sysname;
     SELECT @var0 = [d].[name]
@@ -804,7 +807,7 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230703154732_UpdatePartnerModel')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_UpdatePartnerModel)
 BEGIN
     DECLARE @var1 sysname;
     SELECT @var1 = [d].[name]
@@ -816,10 +819,10 @@ BEGIN
 END;
 GO
 
-IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = N'20230703154732_UpdatePartnerModel')
+IF NOT EXISTS(SELECT * FROM [entity_framework].[__EFMigrationsHistory] WHERE [MigrationId] = @Migration_UpdatePartnerModel)
 BEGIN
     INSERT INTO [entity_framework].[__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20230703154732_UpdatePartnerModel', N'6.0.11');
+    VALUES (@Migration_UpdatePartnerModel, N'6.0.11');
 END;
 GO
 
