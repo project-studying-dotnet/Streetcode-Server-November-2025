@@ -410,11 +410,12 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var query = new UpdatePartnerQuery(updatePartnerDTO);
 
             // Act
-            Func<Task> act = async () => await this._handler.Handle(query, CancellationToken.None);
+            var result = await this._handler.Handle(query, CancellationToken.None);
 
             // Assert
-            await act.Should().ThrowAsync<Exception>()
-                .WithMessage(exceptionMessage);
+            result.IsFailed.Should().BeTrue();
+            result.Errors.Should().ContainSingle();
+            result.Errors.First().Message.Should().Be(exceptionMessage);
         }
 
         /// <summary>
@@ -462,42 +463,9 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
-        /// <summary>
-        /// Verifies that the handler returns failure when the mapper returns null for the partner entity.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [Fact]
-        public async Task Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity()
-        {
-            // Arrange
-            var updatePartnerDTO = new CreatePartnerDto
-            {
-                Id = 1,
-                Title = "Updated Partner",
-                IsKeyPartner = true,
-                IsVisibleEverywhere = false,
-                LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDto>(),
-            };
-
-            this.SetupMapperToReturnNullPartner(updatePartnerDTO);
-
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
-
-            // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle();
-
-            this.MockRepository.Verify(
-                repo => repo.PartnersRepository.Update(It.IsAny<Partner>()),
-                Times.Never);
-
-            this.MockRepository.Verify(
-                repo => repo.SaveChangesAsync(),
-                Times.Never);
-        }
+        // NOTE: Removed test Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity
+        // Mapper returning null is a configuration error that should fail fast in development,
+        // not a runtime validation scenario. This aligns with issue #121 goal of removing
+        // validation logic from handlers.
     }
 }

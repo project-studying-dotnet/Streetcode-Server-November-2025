@@ -303,11 +303,12 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var query = new CreatePartnerQuery(createPartnerDTO);
 
             // Act
-            Func<Task> act = async () => await this._handler.Handle(query, CancellationToken.None);
+            var result = await this._handler.Handle(query, CancellationToken.None);
 
             // Assert
-            await act.Should().ThrowAsync<Exception>()
-                .WithMessage(exceptionMessage);
+            result.IsFailed.Should().BeTrue();
+            result.Errors.Should().ContainSingle();
+            result.Errors.First().Message.Should().Be(exceptionMessage);
         }
 
         /// <summary>
@@ -413,41 +414,10 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
-        /// <summary>
-        /// Verifies that the handler returns failure when the mapper returns null for the partner entity.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [Fact]
-        public async Task Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity()
-        {
-            // Arrange
-            var createPartnerDTO = new CreatePartnerDto
-            {
-                Id = 1,
-                Title = "New Partner",
-                IsKeyPartner = true,
-                IsVisibleEverywhere = false,
-                LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDto>(),
-            };
-
-            this.SetupMapperToReturnNullPartner(createPartnerDTO);
-
-            var query = new CreatePartnerQuery(createPartnerDTO);
-
-            // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle();
-
-            this.MockLogger.Verify(
-                logger => logger.LogError(
-                    It.IsAny<object>(),
-                    It.IsAny<string>()),
-                Times.Once);
-        }
+        // NOTE: Removed test Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity
+        // Mapper returning null is a configuration error that should fail fast in development,
+        // not a runtime validation scenario. This aligns with issue #121 goal of removing
+        // validation logic from handlers.
 
         /// <summary>
         /// Verifies that the handler returns failure when the streetcode repository throws an exception.

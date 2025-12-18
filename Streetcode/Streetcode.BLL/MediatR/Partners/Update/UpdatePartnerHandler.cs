@@ -23,49 +23,57 @@ namespace Streetcode.BLL.MediatR.Partners.Update
 
         public async Task<Result<PartnerDto>> Handle(UpdatePartnerQuery request, CancellationToken cancellationToken)
         {
-            var partner = _mapper.Map<Partner>(request.Partner);
-
-            var links = await _repositoryWrapper.PartnerSourceLinkRepository
-               .GetAllAsync(predicate: l => l.PartnerId == partner.Id);
-
-            var newLinkIds = partner.PartnerSourceLinks.Select(l => l.Id).ToList();
-
-            foreach (var link in links)
+            try
             {
-                if (!newLinkIds.Contains(link.Id))
+                var partner = _mapper.Map<Partner>(request.Partner);
+
+                var links = await _repositoryWrapper.PartnerSourceLinkRepository
+                   .GetAllAsync(predicate: l => l.PartnerId == partner.Id);
+
+                var newLinkIds = partner.PartnerSourceLinks.Select(l => l.Id).ToList();
+
+                foreach (var link in links)
                 {
-                    _repositoryWrapper.PartnerSourceLinkRepository.Delete(link);
+                    if (!newLinkIds.Contains(link.Id))
+                    {
+                        _repositoryWrapper.PartnerSourceLinkRepository.Delete(link);
+                    }
                 }
+
+                partner.Streetcodes.Clear();
+                _repositoryWrapper.PartnersRepository.Update(partner);
+                await _repositoryWrapper.SaveChangesAsync();
+                var newStreetcodeIds = request.Partner.Streetcodes.Select(s => s.Id).ToList();
+                var oldStreetcodes = await _repositoryWrapper.PartnerStreetcodeRepository
+                    .GetAllAsync(ps => ps.PartnerId == partner.Id);
+
+                foreach (var old in oldStreetcodes!)
+                {
+                    if (!newStreetcodeIds.Contains(old.StreetcodeId))
+                    {
+                        _repositoryWrapper.PartnerStreetcodeRepository.Delete(old);
+                    }
+                }
+
+                foreach (var newCodeId in newStreetcodeIds!)
+                {
+                    if (oldStreetcodes.FirstOrDefault(x => x.StreetcodeId == newCodeId) == null)
+                    {
+                        _repositoryWrapper.PartnerStreetcodeRepository.CreateAsync(
+                            new StreetcodePartner() { PartnerId = partner.Id, StreetcodeId = newCodeId });
+                    }
+                }
+
+                await _repositoryWrapper.SaveChangesAsync();
+                var dbo = _mapper.Map<PartnerDto>(partner);
+                dbo.Streetcodes = request.Partner.Streetcodes;
+                return Result.Ok(dbo);
             }
-
-            partner.Streetcodes.Clear();
-            _repositoryWrapper.PartnersRepository.Update(partner);
-            await _repositoryWrapper.SaveChangesAsync();
-            var newStreetcodeIds = request.Partner.Streetcodes.Select(s => s.Id).ToList();
-            var oldStreetcodes = await _repositoryWrapper.PartnerStreetcodeRepository
-                .GetAllAsync(ps => ps.PartnerId == partner.Id);
-
-            foreach (var old in oldStreetcodes!)
+            catch (Exception ex)
             {
-                if (!newStreetcodeIds.Contains(old.StreetcodeId))
-                {
-                    _repositoryWrapper.PartnerStreetcodeRepository.Delete(old);
-                }
+                _logger.LogError(request, ex.Message);
+                return Result.Fail(new Error(ex.Message));
             }
-
-            foreach (var newCodeId in newStreetcodeIds!)
-            {
-                if (oldStreetcodes.FirstOrDefault(x => x.StreetcodeId == newCodeId) == null)
-                {
-                    _repositoryWrapper.PartnerStreetcodeRepository.CreateAsync(
-                        new StreetcodePartner() { PartnerId = partner.Id, StreetcodeId = newCodeId });
-                }
-            }
-
-            await _repositoryWrapper.SaveChangesAsync();
-            var dbo = _mapper.Map<PartnerDto>(partner);
-            dbo.Streetcodes = request.Partner.Streetcodes;
-            return Result.Ok(dbo);
         }
     }
 }
