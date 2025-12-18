@@ -21,25 +21,17 @@ namespace Streetcode.BLL.MediatR.Payment
 
         public async Task<Result<InvoiceInfo>> Handle(CreateInvoiceCommand request, CancellationToken cancellationToken)
         {
-            try
-            {
-                var invoice = new Invoice(
-                    request.Payment.Amount * _currencyMultiplier,
-                    _hryvnyaCurrencyCode,
-                    new MerchantPaymentInfo
-                    {
-                        Destination = "Добровільний внесок на статутну діяльність ГО «Історична Платформа»"
-                    },
-                    request.Payment.RedirectUrl);
+            var invoice = new Invoice(
+                request.Payment.Amount * _currencyMultiplier,
+                _hryvnyaCurrencyCode,
+                new MerchantPaymentInfo
+                {
+                    Destination = "Добровільний внесок на статутну діяльність ГО «Історична Платформа»"
+                },
+                request.Payment.RedirectUrl);
 
-                var invoiceInfo = await _paymentService.CreateInvoiceAsync(invoice);
-                return Result.Ok();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to create invoice");
-                throw;
-            }
+            var invoiceInfo = await _paymentService.CreateInvoiceAsync(invoice);
+            return Result.Ok(invoiceInfo);
         }
     }
 }
