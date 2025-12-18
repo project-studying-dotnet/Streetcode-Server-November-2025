@@ -28,6 +28,7 @@
             configuration["JwtSettings:Audience"] = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
             configuration["JwtSettings:AccessTokenExpirationMinutes"] = Environment.GetEnvironmentVariable("JWT_ACCESS_TOKEN_EXPIRATION_MINUTES") ?? "15";
             configuration["JwtSettings:RefreshTokenExpirationMinutes"] = Environment.GetEnvironmentVariable("JWT_REFRESH_TOKEN_EXPIRATION_MINUTES") ?? "10080";
+            configuration["JwtSettings:RequireHttpsMetadata"] = Environment.GetEnvironmentVariable("JWT_REQUIRE_HTTPS_METADATA") ?? "true";
         }
     }
 }
