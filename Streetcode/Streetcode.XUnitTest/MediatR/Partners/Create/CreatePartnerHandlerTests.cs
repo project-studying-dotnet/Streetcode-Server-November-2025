@@ -414,11 +414,6 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 Times.Once);
         }
 
-        // NOTE: Removed test Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity
-        // Mapper returning null is a configuration error that should fail fast in development,
-        // not a runtime validation scenario. This aligns with issue #121 goal of removing
-        // validation logic from handlers.
-
         /// <summary>
         /// Verifies that the handler returns failure when the streetcode repository throws an exception.
         /// </summary>

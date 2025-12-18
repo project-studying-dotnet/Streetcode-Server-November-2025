@@ -127,7 +127,7 @@
     <value>One or more validation failures have occurred.</value>
   </data>
   <data name="IdMustBeGreaterThan" xml:space="preserve">
-    <value>ID має бути більше 0</value>
+    <value>Id має бути більше 0</value>
   </data>
   <data name="ArtsNotFound" xml:space="preserve">
     <value>Cannot find any arts</value>
@@ -334,7 +334,7 @@
     <value>Дані платежу не можуть бути порожніми</value>
   </data>
   <data name="StreetcodeDataRequired" xml:space="preserve">
-    <value>The streetcode content is null</value>
+    <value>Дані стріткоду є обов'язковими</value>
   </data>
   <data name="CategoryNotFoundById" xml:space="preserve">
     <value>Cannot find any srcCategory by the corresponding id: {0}</value>
@@ -568,7 +568,7 @@
     <value>Дані тексту не можуть бути порожніми</value>
   </data>
   <data name="CannotSaveChangesInDatabase" xml:space="preserve">
-    <value>Cannot save changes in the database</value>
+    <value>Cannot save changes in the database.</value>
   </data>
   <data name="TextIdMustBeGreaterThanZero" xml:space="preserve">
     <value>ID тексту має бути більше 0</value>
