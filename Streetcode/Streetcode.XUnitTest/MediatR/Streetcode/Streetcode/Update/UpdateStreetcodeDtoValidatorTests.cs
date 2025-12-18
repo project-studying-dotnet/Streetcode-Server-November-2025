@@ -56,7 +56,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage(ErrorMessages.StreetcodeAudioIdMustBeInteger);
+                  .WithErrorMessage(ErrorMessages.StreetcodeIdMustBeInteger);
         }
 
         [Fact]
@@ -77,7 +77,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage(ErrorMessages.StreetcodeAudioIdMustBeInteger);
+                  .WithErrorMessage(ErrorMessages.StreetcodeIdMustBeGreaterThanZero);
         }
 
         [Fact]
@@ -98,7 +98,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage(ErrorMessages.TeamMemberIdMustBeGreaterThanZero);
+                  .WithErrorMessage(ErrorMessages.StreetcodeIdMustBeGreaterThanZero);
         }
 
         [Fact]

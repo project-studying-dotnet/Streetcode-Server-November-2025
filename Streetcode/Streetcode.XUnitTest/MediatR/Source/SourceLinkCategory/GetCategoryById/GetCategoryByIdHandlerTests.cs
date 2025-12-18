@@ -80,7 +80,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLink.GetCategoryById
         public async Task Handle_ShouldReturnFail_WhenCategoryDoesNotExist(int id)
         {
             // Arrange
-            string errorMsg = string.Format(ErrorMessages.CategoryNotFoundByStreetcodeId, id);
+            string errorMsg = string.Format(ErrorMessages.CategoryNotFoundById, id);
 
             this.mockRepoWrapper.Setup(r => r.SourceCategoryRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<SourceLinkCategory, bool>>>(),

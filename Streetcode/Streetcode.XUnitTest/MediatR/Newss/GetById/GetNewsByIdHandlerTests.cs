@@ -55,7 +55,7 @@
         public async Task Handle_ShouldReturnFailure_WhenNewsNotFound(int newsId)
         {
             // Arrange
-            string expectedErrorMessage = string.Format(ErrorMessages.NewsNotFoundById, NewsId);
+            string expectedErrorMessage = string.Format(ErrorMessages.NewsNotFoundById, newsId);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, null);
 

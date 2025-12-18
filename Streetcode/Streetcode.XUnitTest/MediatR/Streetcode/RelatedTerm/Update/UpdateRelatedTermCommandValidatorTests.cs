@@ -42,7 +42,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.RelatedTerm)
-                  .WithErrorMessage(ErrorMessages.RelatedTermDataRequired);
+                  .WithErrorMessage(ErrorMessages.RelatedTermWordRequired);
         }
 
         [Fact]

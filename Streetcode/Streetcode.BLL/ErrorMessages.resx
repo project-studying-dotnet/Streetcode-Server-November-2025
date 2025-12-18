@@ -316,7 +316,7 @@
     <value>Cannot find any partner with corresponding id: {0}</value>
   </data>
   <data name="PartnersNotFoundByStreetcodeId" xml:space="preserve">
-    <value>Cannot find any partners with corresponding streetcode id: {0}</value>
+    <value>Cannot find any partner with corresponding streetcode id: {0}</value>
   </data>
   <data name="PaymentAmountMustBeGreaterThanZero" xml:space="preserve">
     <value>Сума платежу має бути більше 0</value>
@@ -836,5 +836,8 @@
   </data>
   <data name="ToponymByIdMerge" xml:space="preserve">
     <value>Target toponym with Id={0} not found.</value>
+  </data>
+  <data name="DatabaseErrorOccured" xml:space="preserve">
+    <value>Database error occurred</value>
   </data>
 </root>

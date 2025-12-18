@@ -175,7 +175,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
-                .WithMessage("Database error");
+                .WithMessage(ErrorMessages.DataBaseError);
         }
 
         /// <summary>

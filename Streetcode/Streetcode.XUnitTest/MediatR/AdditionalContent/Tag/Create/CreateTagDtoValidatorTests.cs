@@ -64,7 +64,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Title)
-                  .WithErrorMessage(ErrorMessages.TagNameCantExceed);
+                  .WithErrorMessage(string.Format(ErrorMessages.TagNameCantExceed, ValidationConstants.Tag.TitleMaxLength));
         }
 
         [Theory]

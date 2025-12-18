@@ -322,6 +322,15 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database error occurred.
+        /// </summary>
+        internal static string DatabaseErrorOccured {
+            get {
+                return ResourceManager.GetString("DatabaseErrorOccured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete verification not implemented for type {0}.
         /// </summary>
         internal static string DeleteVerificationWrongType {
@@ -862,7 +871,7 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any partners with corresponding streetcode id: {0}.
+        ///   Looks up a localized string similar to Cannot find any partner with corresponding streetcode id: {0}.
         /// </summary>
         internal static string PartnersNotFoundByStreetcodeId {
             get {

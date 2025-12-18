@@ -28,7 +28,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Id)
-                  .WithErrorMessage(ErrorMessages.StreetcodeAudioIdMustBePositive);
+                  .WithErrorMessage(ErrorMessages.IdMustBeGreaterThan);
         }
 
         [Theory]

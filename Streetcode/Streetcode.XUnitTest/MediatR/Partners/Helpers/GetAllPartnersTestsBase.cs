@@ -107,7 +107,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Contain(ErrorMessages.PartnersNotFound);
+            result.Errors.First().Message.Should().Contain(ErrorMessages.PartnerNotFound);
 
             this.MockLogger.Verify(
                 logger => logger.LogError(

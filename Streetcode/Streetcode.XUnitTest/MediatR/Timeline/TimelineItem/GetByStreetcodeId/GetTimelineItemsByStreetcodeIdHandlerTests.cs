@@ -75,7 +75,7 @@
             Assert.NotNull(result);
             Assert.True(result.IsFailed);
             Assert.NotEmpty(result.Errors);
-            Assert.Equal(string.Format(ErrorMessages.TimelineItemNotFoundById, streetcodeId), result.Errors.FirstOrDefault()?.Message);
+            Assert.Equal(string.Format(ErrorMessages.TimelineItemNotFoundByStreetcodeId, streetcodeId), result.Errors.FirstOrDefault()?.Message);
 
             // Verify
             timelineRepositoryMock.VerifyGetAllAsyncCalledOnce();

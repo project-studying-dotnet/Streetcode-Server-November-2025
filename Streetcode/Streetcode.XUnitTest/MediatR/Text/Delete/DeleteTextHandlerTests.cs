@@ -47,7 +47,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Delete
         public async Task Handle_WhenTextNotFound_ShouldReturnFailure()
         {
             // Arrange
-            string errorMsg = ErrorMessages.TextNotFoundById;
+            string errorMsg = string.Format(ErrorMessages.TextNotFoundById, 99);
             var textRepoMock = new Mock<ITextRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock

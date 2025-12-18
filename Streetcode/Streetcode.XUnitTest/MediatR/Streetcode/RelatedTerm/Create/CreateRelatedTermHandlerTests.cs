@@ -81,7 +81,7 @@ public class CreateRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-        Assert.Equal(ErrorMessages.RelatedTermWordAlreadyExists, result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermWordRequired, result.Errors.First().Message);
 
         this.mockRepository.VerifyGetAllAsyncCalledOnce();
         this.mockRepository.VerifyCreateCalledNever();
@@ -125,7 +125,7 @@ public class CreateRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-        Assert.Equal(ErrorMessages.CannotCreateRelatedWordForTerm, result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermWordRequired, result.Errors.First().Message);
 
         this.mockRepository.VerifyGetAllAsyncCalledNever();
         this.mockRepository.VerifyCreateCalledNever();

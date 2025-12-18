@@ -78,7 +78,7 @@ public class DeleteRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
         
         Assert.True(result.IsFailed);
-        Assert.Equal(string.Format(ErrorMessages.RelatedTermNotFound, NonExistentWord), result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermNotFound, result.Errors.First().Message);
         
         this.mockRepository.VerifyGetFirstOrDefaultAsyncCalledOnce();
         

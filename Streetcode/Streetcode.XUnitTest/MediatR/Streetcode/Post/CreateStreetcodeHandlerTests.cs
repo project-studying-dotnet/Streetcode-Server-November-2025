@@ -394,23 +394,19 @@
             Assert.Equal(errorMessage, result.Errors[0].Message);
         }
 
-        public static IList<object[]> ImagesTestData()
-        {
-            return new List<object[]>
+        public static IList<object[]> ImagesTestData() =>
+            new List<object[]>
             {
-                new object[] { new int?[] { 1, 5 }, "Image 1 not found; Image 5 not found" },
-                new object[] { new int?[] { 1 }, "Image 1 not found" },
+            new object[] { new int?[] { 1, 5 }, $"{string.Format(ErrorMessages.StreetcodeImageNotFoundById, 1)}; {string.Format(ErrorMessages.StreetcodeImageNotFoundById, 5)}" },
+            new object[] { new int?[] { 1 }, string.Format(ErrorMessages.StreetcodeImageNotFoundById, 1) },
             };
-        }
 
-        public static IList<object[]> TagsTestData()
-        {
-            return new List<object[]>
+        public static IList<object[]> TagsTestData() =>
+            new List<object[]>
             {
-                new object[] { new int?[] { 5, 10 }, "Tag 5 not found; Tag 10 not found" },
-                new object[] { new int?[] { 5 }, "Tag 5 not found" },
+            new object[] { new int?[] { 5, 10 }, $"{string.Format(ErrorMessages.StreetcodeTagNotFoundById, 5)}; {string.Format(ErrorMessages.StreetcodeTagNotFoundById, 10)}" },
+            new object[] { new int?[] { 5 }, string.Format(ErrorMessages.StreetcodeTagNotFoundById, 5) },
             };
-        }
 
         public static IList<object[]> NullOrEmptyArrayData()
         {

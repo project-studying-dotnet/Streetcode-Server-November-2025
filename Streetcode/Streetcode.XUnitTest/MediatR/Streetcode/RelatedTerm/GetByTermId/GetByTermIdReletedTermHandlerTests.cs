@@ -133,7 +133,7 @@ public class GetByTermIdRelatedTermsHandlerTests
         var result = await this.handler.Handle(query, CancellationToken.None);
         
         Assert.True(result.IsFailed);
-        Assert.Equal("Cannot create DTOs for related words!", result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermsMappingFailed, result.Errors.First().Message);
         
         this.mockRepository.VerifyGetAllAsyncCalledOnce();
         this.mockMapper.VerifyMapEntityListToDtoListCalledOnce(); 

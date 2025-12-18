@@ -50,7 +50,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
         public async Task Handle_WhenRequestIsNull_ShouldReturnFailure()
         {
             // Arrange
-            string errorMsg = ErrorMessages.NullRequest;
+            string errorMsg = ErrorMessages.TextDataRequired;
             var command = new CreateTextCommand(null!);
 
             this.loggerMock.SetupLogger();
