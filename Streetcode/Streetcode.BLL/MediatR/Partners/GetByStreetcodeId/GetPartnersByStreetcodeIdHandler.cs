@@ -29,7 +29,7 @@ public class GetPartnersByStreetcodeIdHandler : IRequestHandler<GetPartnersByStr
 
         if (streetcode is null)
         {
-            string errorMsg = $"Cannot find any partners with corresponding streetcode id: {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.PartnersNotFoundByStreetcodeId, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -39,9 +39,9 @@ public class GetPartnersByStreetcodeIdHandler : IRequestHandler<GetPartnersByStr
                 predicate: p => p.Streetcodes.Any(sc => sc.Id == streetcode.Id) || p.IsVisibleEverywhere,
                 include: p => p.Include(pl => pl.PartnerSourceLinks));
 
-        if (partners is null)
+        if (!partners.Any())
         {
-            string errorMsg = $"Cannot find a partners by a streetcode id: {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.PartnersNotFoundByStreetcodeId, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

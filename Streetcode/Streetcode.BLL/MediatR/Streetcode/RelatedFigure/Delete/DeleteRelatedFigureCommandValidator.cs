@@ -11,13 +11,13 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedFigure.Delete
         {
             RuleFor(x => x.ObserverId)
                 .GreaterThan(0)
-                .WithMessage("ID стріткоду-спостерігача має бути більше 0")
+                .WithMessage(ErrorMessages.RelatedFigureObserverIdMustBeGreaterThanZero)
                 .NotEqual(x => x.TargetId)
-                .WithMessage("Стріткод не може бути пов'язаний сам з собою");
+                .WithMessage(ErrorMessages.RelatedFigureSelfReferenceNotAllowed);
 
             RuleFor(x => x.TargetId)
                 .GreaterThan(0)
-                .WithMessage("ID цільового стріткоду має бути більше 0");
+                .WithMessage(ErrorMessages.RelatedFigureTargetIdMustBeGreaterThanZero);
         }
     }
 }

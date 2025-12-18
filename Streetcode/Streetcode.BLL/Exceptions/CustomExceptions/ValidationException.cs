@@ -11,7 +11,7 @@ namespace Streetcode.BLL.Exceptions.CustomExceptions
         /// Initializes a new instance of the <see cref="ValidationException"/> class.
         /// </summary>
         public ValidationException()
-            : base("One or more validation failures have occurred.")
+            : base(ErrorMessages.ValidationException)
         {
             Errors = new Dictionary<string, string[]>();
         }

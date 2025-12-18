@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +32,7 @@ public class GetImageByIdHandler : IRequestHandler<GetImageByIdQuery, Result<Ima
 
         if (image is null)
         {
-            string errorMsg = $"Cannot find a image with corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.ImageNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

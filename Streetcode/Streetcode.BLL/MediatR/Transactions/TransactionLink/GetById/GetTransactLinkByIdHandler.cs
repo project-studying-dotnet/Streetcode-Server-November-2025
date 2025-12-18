@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -28,7 +28,7 @@ public class GetTransactLinkByIdHandler : IRequestHandler<GetTransactLinkByIdQue
 
         if (transactLink is null)
         {
-            string errorMsg = $"Cannot find any transaction link with corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.TransactionLinkNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

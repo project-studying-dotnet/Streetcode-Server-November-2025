@@ -13,17 +13,21 @@ namespace Streetcode.BLL.MediatR.Payment
         {
             RuleFor(x => x.Amount)
                 .GreaterThan(0)
-                .WithMessage("Сума платежу має бути більше 0")
+                .WithMessage(ErrorMessages.PaymentAmountMustBeGreaterThanZero)
                 .LessThanOrEqualTo(ValidationConstants.Payment.MaxAmount)
-                .WithMessage($"Сума платежу не може перевищувати {ValidationConstants.Payment.MaxAmount:N0}");
+                .WithMessage(string.Format(
+                    ErrorMessages.PaymentAmountExceeded,
+                    ValidationConstants.Payment.MaxAmount));
 
             RuleFor(x => x.RedirectUrl)
                 .MaximumLength(ValidationConstants.Payment.RedirectUrlMaxLength)
                 .When(x => !string.IsNullOrEmpty(x.RedirectUrl))
-                .WithMessage($"URL перенаправлення не може перевищувати {ValidationConstants.Payment.RedirectUrlMaxLength} символів")
+                .WithMessage(string.Format(
+                    ErrorMessages.PaymentRedirectUrlTooLong,
+                    ValidationConstants.Payment.RedirectUrlMaxLength))
                 .Must(url => UrlValidator.IsValidAbsoluteUrl(url, isRequired: false))
                 .When(x => !string.IsNullOrEmpty(x.RedirectUrl))
-                .WithMessage("URL перенаправлення має бути правильним");
+                .WithMessage(ErrorMessages.PaymentRedirectUrlInvalid);
         }
     }
 }
