@@ -723,4 +723,7 @@
 	<data name="UserRoleAssignmentFailed" xml:space="preserve">
   <value>Failed to assign role: {0}</value>
 </data>
+  <data name="UserEmailOrPasswordInvalid" xml:space="preserve">
+    <value>Не вірний email або пароль</value>
+  </data>
 </root>

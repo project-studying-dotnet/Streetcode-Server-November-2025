@@ -5,6 +5,7 @@ using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Entities.Users;
 using MediatR;
+using Streetcode.BLL.Interfaces.Users;
 
 namespace Streetcode.BLL.MediatR.Users.Login
 {
@@ -13,6 +14,7 @@ namespace Streetcode.BLL.MediatR.Users.Login
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly ITokenService _tokenService;
         private readonly ILoggerService _logger;
 
         public UserLoginHandler(
@@ -34,14 +36,33 @@ namespace Streetcode.BLL.MediatR.Users.Login
                 var user = await _userManager.FindByEmailAsync(request.userLoginDto.Email);
                 if (user is null)
                 {
-                    return Result.Fail("Invalid email or password");
+                    return Result.Fail(ErrorMessages.UserEmailOrPasswordInvalid);
                 }
 
                 var passwordValid = await _signInManager.CheckPasswordSignInAsync(user, request.userLoginDto.Password, false);
+                if (!passwordValid.Succeeded)
+                {
+                    return Result.Fail(ErrorMessages.UserEmailOrPasswordInvalid);
+                }
+
+                var accessToken = _tokenService.GenerateJWTToken(user);
+                var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user);
+
+                var result = new LoginResultDto
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    UserId = user.Id,
+                    AccessTokenExpiresAt = accessToken.ValidTo,
+                    RefreshTokenExpiresAt = DateTime.Now, // TODO: change on right time
+                };
+
+                return Result.Ok(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred during user login");
+                _logger.LogError(ex, "Error occurred during user login"); // TODO: Use constant from resx
+                return Result.Fail<LoginResultDto>("An error occurred during login"); // TODO: Use constant from resx
             }
         }
     }
