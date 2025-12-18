@@ -208,7 +208,7 @@
                 audience: Audience,
                 repository: this.repositoryWrapperMock.Object,
                 userManager: this.mockUserManager.Object,
-                accessTokenExpirationMinutes: -1); // Використовуємо негативне значення для гарантованого expired токена
+                accessTokenExpirationMinutes: -1);
 
             var user = JwtTestData.CreateUser();
             this.mockUserManager.Setup(x => x.GetRolesAsync(user))
