@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
@@ -30,7 +30,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Update
 
                 if (existingFact is null)
                 {
-                    var errorMsg = ErrorMessages.FactNotFound;
+                    const string errorMsg = "Fact was not found";
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -43,7 +43,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Update
 
                     if (imageExists is null)
                     {
-                        var errorMsg = ErrorMessages.ImageNotFound;
+                        const string errorMsg = "Image was not found";
                         _logger.LogError(request, errorMsg);
                         return Result.Fail(errorMsg);
                     }
@@ -57,7 +57,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Update
 
                     if (duplicateTitle is not null)
                     {
-                        var errorMsg = ErrorMessages.FactTitleAlreadyExists;
+                        const string errorMsg = "Title already exists";
                         _logger.LogError(request, errorMsg);
                         return Result.Fail(errorMsg);
                     }
@@ -73,7 +73,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Update
             catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                return Result.Fail(new Error(ex.Message));
             }
         }
     }

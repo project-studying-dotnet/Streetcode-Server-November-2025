@@ -31,68 +31,47 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
         public async Task<Result<JsonElement>> Handle(CreateStreetcodeCommand request, CancellationToken cancellationToken)
         {
-            using var transaction = new TransactionScope(
-                TransactionScopeAsyncFlowOption.Enabled);
+            var rawJson = request.rawJsonCreateDTO;
 
-            // try catch block is temporary solution until validation would be implemented.
-            try
+            int streetcodeIndex = rawJson.GetProperty("Index").GetInt32();
+
+            if (await StreetcodeIndexExists(streetcodeIndex))
             {
-                var rawJson = request.rawJsonCreateDTO;
-
-                int streetcodeIndex = rawJson.GetProperty("Index").GetInt32();
-
-                if (await StreetcodeIndexExists(streetcodeIndex))
-                {
-                    return Result.Fail(new Error(string.Format(ErrorMessages.StreetcodeWithIndexAlreadyExists, streetcodeIndex)));
-                }
-
-                string streetcodeType = rawJson.GetProperty("StreetcodeType").GetString();
-
-                CreateStreetcodeDto сreateStreetcodeDTO = _streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
-
-                var streetcodeContent = _mapper.Map<StreetcodeContent>(сreateStreetcodeDTO);
-
-                await _repository.StreetcodeRepository.CreateAsync(streetcodeContent);
-                await _repository.SaveChangesAsync();
-
-                var audioResult = await HandleAudioCreate(сreateStreetcodeDTO, streetcodeContent, request);
-                if (audioResult.IsFailed)
-                {
-                    return audioResult;
-                }
-
-                var imagesResult = await HandleImagesCreate(сreateStreetcodeDTO, streetcodeContent, request);
-                if (imagesResult.IsFailed)
-                {
-                    return imagesResult;
-                }
-
-                var tagsResult = await HandleTagsCreate(сreateStreetcodeDTO, streetcodeContent, request);
-                if (tagsResult.IsFailed)
-                {
-                    return tagsResult;
-                }
-
-                var resultIsSuccess = await _repository.SaveChangesAsync() > 0;
-
-                transaction.Complete();
-
-                if (resultIsSuccess)
-                {
-                    var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(streetcodeContent);
-                    var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
-                    return await Task.FromResult(Result.Ok(jsonResult));
-                }
-            }
-            catch (Exception ex)
-            {
-                var errorMsg = $"Exception occurred while creating streetcode: {ex.Message}";
-                _logger.LogError(request, errorMsg);
-
-                return Result.Fail<JsonElement>(new Error(errorMsg));
+                return Result.Fail(new Error(string.Format(ErrorMessages.StreetcodeWithIndexAlreadyExists, streetcodeIndex)));
             }
 
-            return await Task.FromResult(Result.Ok());
+            string streetcodeType = rawJson.GetProperty("StreetcodeType").GetString();
+
+            CreateStreetcodeDto сreateStreetcodeDTO = _streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
+
+            var streetcodeContent = _mapper.Map<StreetcodeContent>(сreateStreetcodeDTO);
+
+            await _repository.StreetcodeRepository.CreateAsync(streetcodeContent);
+            await _repository.SaveChangesAsync();
+
+            var audioResult = await HandleAudioCreate(сreateStreetcodeDTO, streetcodeContent, request);
+            if (audioResult.IsFailed)
+            {
+                return audioResult;
+            }
+
+            var imagesResult = await HandleImagesCreate(сreateStreetcodeDTO, streetcodeContent, request);
+            if (imagesResult.IsFailed)
+            {
+                return imagesResult;
+            }
+
+            var tagsResult = await HandleTagsCreate(сreateStreetcodeDTO, streetcodeContent, request);
+            if (tagsResult.IsFailed)
+            {
+                return tagsResult;
+            }
+
+            await _repository.SaveChangesAsync();
+
+            var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(streetcodeContent);
+            var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
+            return Result.Ok(jsonResult);
         }
 
         private async Task<bool> StreetcodeIndexExists(int index)

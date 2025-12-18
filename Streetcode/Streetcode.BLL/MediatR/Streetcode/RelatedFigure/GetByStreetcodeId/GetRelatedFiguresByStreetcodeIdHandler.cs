@@ -60,19 +60,12 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
 
     private IQueryable<int> GetRelatedFigureIdsByStreetcodeId(int StreetcodeId)
     {
-        try
-        {
-            var observerIds = _repositoryWrapper.RelatedFigureRepository
-            .FindAll(f => f.TargetId == StreetcodeId).Select(o => o.ObserverId);
+        var observerIds = _repositoryWrapper.RelatedFigureRepository
+        .FindAll(f => f.TargetId == StreetcodeId).Select(o => o.ObserverId);
 
-            var targetIds = _repositoryWrapper.RelatedFigureRepository
-                .FindAll(f => f.ObserverId == StreetcodeId).Select(t => t.TargetId);
+        var targetIds = _repositoryWrapper.RelatedFigureRepository
+            .FindAll(f => f.ObserverId == StreetcodeId).Select(t => t.TargetId);
 
-            return observerIds.Union(targetIds).Distinct();
-        }
-        catch (ArgumentNullException)
-        {
-            return null;
-        }
+        return observerIds.Union(targetIds).Distinct();
     }
 }
