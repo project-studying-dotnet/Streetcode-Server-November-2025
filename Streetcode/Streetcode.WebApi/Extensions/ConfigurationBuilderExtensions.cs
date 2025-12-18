@@ -11,5 +11,23 @@
 
             return builder;
         }
+
+        public static void LoadEnvironmentVariables(this ConfigurationManager configuration)
+        {
+            // Database configuration
+            var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
+            var dbPassword = Environment.GetEnvironmentVariable("DB_USER_PASSWORD");
+            var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+            var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+            var connectionString = $"Server={dbServer};Database={dbName};User Id={dbUser};Password={dbPassword};MultipleActiveResultSets=true;TrustServerCertificate=True;";
+            configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+
+            // JWT configuration
+            configuration["JwtSettings:SecretKey"] = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
+            configuration["JwtSettings:Issuer"] = Environment.GetEnvironmentVariable("JWT_ISSUER");
+            configuration["JwtSettings:Audience"] = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+            configuration["JwtSettings:AccessTokenExpirationMinutes"] = Environment.GetEnvironmentVariable("JWT_ACCESS_TOKEN_EXPIRATION_MINUTES") ?? "15";
+            configuration["JwtSettings:RefreshTokenExpirationMinutes"] = Environment.GetEnvironmentVariable("JWT_REFRESH_TOKEN_EXPIRATION_MINUTES") ?? "10080";
+        }
     }
 }
