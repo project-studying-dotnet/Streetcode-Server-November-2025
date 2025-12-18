@@ -4,10 +4,12 @@ using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using RelatedTermEntity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
+using TermEntity = Streetcode.DAL.Entities.Streetcode.TextContent.Term;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Term.Create;
 
-public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermDTO>>
+public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermDto>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _wrapper;
@@ -20,19 +22,19 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
         _logger = logger;
     }
 
-    public async Task<Result<TermDTO>> Handle(CreateTermCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TermDto>> Handle(CreateTermCommand request, CancellationToken cancellationToken)
     {
-        var newTerm = _mapper.Map<DAL.Entities.Streetcode.TextContent.Term>(request.term);
+        var newTerm = _mapper.Map<TermEntity>(request.Term);
 
-        if (newTerm is null)
+        newTerm.RelatedTerms = request.Term.RelatedTerms.Select(id => new RelatedTermEntity { Id = id }).ToList();
+
+        await _wrapper.TermRepository.CreateAsync(newTerm);
+
+        if (await _wrapper.SaveChangesAsync() <= 0)
         {
-            const string errorMsg = "Can not convert null to Term";
-            _logger.LogError(request, errorMsg);
-            return Result.Fail(errorMsg);
+            return Result.Fail("Помилка при збереженні терміну");
         }
 
-        var createdTerm = await _wrapper.TermRepository.CreateAsync(newTerm);
-        var resultDto = _mapper.Map<TermDTO>(createdTerm);
-        return Result.Ok(resultDto);
+        return Result.Ok(_mapper.Map<TermDto>(newTerm));
     }
 }
