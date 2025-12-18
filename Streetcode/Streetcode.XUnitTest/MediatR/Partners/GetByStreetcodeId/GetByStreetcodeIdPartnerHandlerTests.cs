@@ -1,11 +1,12 @@
-using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.MediatR.Partners.GetByStreetcodeId;
 using Streetcode.DAL.Entities.Partners;
 using Streetcode.DAL.Entities.Streetcode;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
@@ -196,7 +197,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Contain($"Cannot find any partners with corresponding streetcode id: {streetcodeId}");
+            result.Errors.First().Message.Should().Contain(string.Format(ErrorMessages.PartnerNotFoundById, streetcodeId));
 
             this.MockLogger.Verify(
                 logger => logger.LogError(
@@ -233,7 +234,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Contain($"Cannot find a partners by a streetcode id: {streetcodeId}");
+            result.Errors.First().Message.Should().Contain(string.Format(ErrorMessages.PartnerNotFoundById, streetcodeId));
 
             this.MockLogger.Verify(
                 logger => logger.LogError(
@@ -316,7 +317,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         {
             // Arrange
             int streetcodeId = 1;
-            var expectedException = new InvalidOperationException("Database error");
+            var expectedException = new InvalidOperationException(ErrorMessages.DataBaseError);
 
             this.SetupStreetcodeRepositoryToThrowException(expectedException);
 
@@ -327,7 +328,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
-                .WithMessage("Database error");
+                .WithMessage(ErrorMessages.DataBaseError);
         }
 
         /// <summary>
@@ -340,7 +341,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Arrange
             int streetcodeId = 1;
             var streetcode = new StreetcodeContent { Id = streetcodeId };
-            var expectedException = new InvalidOperationException("Database error");
+            var expectedException = new InvalidOperationException(ErrorMessages.DataBaseError);
 
             this.SetupStreetcodeRepository(streetcode);
             this.SetupPartnersRepositoryToThrowException(expectedException);
@@ -388,7 +389,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            capturedInclude.Should().NotBeNull("because include expression should be provided");
+            capturedInclude.Should().NotBeNull(ErrorMessages.IncludeExpressionNotProvided);
 
             this.MockRepository.Verify(
                 repo => repo.PartnersRepository.GetAllAsync(

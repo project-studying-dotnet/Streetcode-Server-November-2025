@@ -4,14 +4,11 @@
 
 namespace Streetcode.XUnitTest.MediatR.Sources.SourceLink.GetCategoryById
 {
-    using System;
-    using System.Linq.Expressions;
-    using System.Threading;
-    using System.Threading.Tasks;
     using AutoMapper;
     using FluentAssertions;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.Sources;
     using Streetcode.BLL.Interfaces.BlobStorage;
@@ -19,6 +16,10 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLink.GetCategoryById
     using Streetcode.BLL.MediatR.Sources.SourceLink.GetCategoryById;
     using Streetcode.DAL.Entities.Sources;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using System;
+    using System.Linq.Expressions;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Xunit;
 
     /// <summary>
@@ -79,7 +80,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLink.GetCategoryById
         public async Task Handle_ShouldReturnFail_WhenCategoryDoesNotExist(int id)
         {
             // Arrange
-            string errorMsg = $"Cannot find any srcCategory by the corresponding id: {id}";
+            string errorMsg = string.Format(ErrorMessages.CategoryNotFoundByStreetcodeId, id);
 
             this.mockRepoWrapper.Setup(r => r.SourceCategoryRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<SourceLinkCategory, bool>>>(),

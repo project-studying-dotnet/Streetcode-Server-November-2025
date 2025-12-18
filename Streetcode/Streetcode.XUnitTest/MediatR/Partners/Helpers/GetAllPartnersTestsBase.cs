@@ -3,6 +3,7 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.DAL.Entities.Partners;
 using Xunit;
 
@@ -106,7 +107,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Contain("Cannot find any partners");
+            result.Errors.First().Message.Should().Contain(ErrorMessages.PartnersNotFound);
 
             this.MockLogger.Verify(
                 logger => logger.LogError(
@@ -182,7 +183,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ThrowsInvalidOperationException_WhenRepositoryThrowsException()
         {
             // Arrange
-            var expectedException = new InvalidOperationException("Database connection failed");
+            var expectedException = new InvalidOperationException(ErrorMessages.DatabaseConntectionFailed);
 
             this.MockRepository
                 .Setup(repo => repo.PartnersRepository.GetAllAsync(
@@ -197,7 +198,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
-                .WithMessage("Database connection failed");
+                .WithMessage(ErrorMessages.DatabaseConntectionFailed);
         }
 
         /// <summary>

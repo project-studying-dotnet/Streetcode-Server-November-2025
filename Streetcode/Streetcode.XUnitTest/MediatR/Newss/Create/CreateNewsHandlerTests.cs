@@ -3,6 +3,7 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.News;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Newss.Create;
@@ -17,9 +18,6 @@
     /// </summary>
     public class CreateNewsHandlerTests
     {
-        private const string ErrorMsgSave = "Failed to create a news";
-        private const string ErrorMsgMapper = "Cannot convert null to news";
-
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<ILoggerService> loggerMock;
@@ -121,12 +119,12 @@
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.Message == ErrorMsgMapper);
+            result.Errors.Should().ContainSingle(e => e.Message == ErrorMessages.NewsConversionFailed);
 
             // Verify
             MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateNever(this.repoMock);
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMsgMapper);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMessages.NewsConversionFailed);
         }
 
         /// <summary>
@@ -151,12 +149,12 @@
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.Message == ErrorMsgSave);
+            result.Errors.Should().ContainSingle(e => e.Message == ErrorMessages.NewsCreationFailed);
 
             // Verify
             MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
             MockRepoHelper.VerifyNewsCreateOnce(this.repoMock);
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMsgSave);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMessages.NewsCreationFailed);
         }
     }
 }

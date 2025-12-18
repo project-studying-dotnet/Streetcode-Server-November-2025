@@ -3,6 +3,7 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Audio;
     using Streetcode.BLL.Interfaces.BlobStorage;
     using Streetcode.BLL.Interfaces.Logging;
@@ -127,8 +128,6 @@
 
             var expectedBlobName = $"{hashBlobStorageName}.{audioFileBaseCreateDTO.Extension}";
 
-            const string expectedErrorMsg = "Failed to create an audio";
-
             var createAudioCommand = new CreateAudioCommand(audioFileBaseCreateDTO);
 
             this.mockBlob
@@ -167,9 +166,9 @@
             // Assert.
             result.IsFailed.Should().BeTrue();
 
-            result.Errors.Should().Contain(e => e.Message == expectedErrorMsg);
+            result.Errors.Should().Contain(e => e.Message == ErrorMessages.AudioCreationFailed);
 
-            this.mockLogger.Verify(l => l.LogError(It.IsAny<object>(), expectedErrorMsg), Times.Once);
+            this.mockLogger.Verify(l => l.LogError(It.IsAny<object>(), ErrorMessages.AudioCreationFailed), Times.Once);
 
             this.mockRepo.Verify(r => r.AudioRepository.CreateAsync(It.IsAny<Audio>()), Times.Once);
         }

@@ -1,15 +1,16 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Partners.Create
 {
-    using System.Linq.Expressions;
     using FluentValidation.TestHelper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Partners;
     using Streetcode.BLL.DTO.Streetcode;
     using Streetcode.BLL.MediatR.Partners.Create;
     using Streetcode.BLL.Util.Validators;
     using Streetcode.DAL.Entities.Partners;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using System.Linq.Expressions;
     using Xunit;
 
     public class CreatePartnerDtoValidatorTests
@@ -74,7 +75,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Title)
-                  .WithErrorMessage("Партнер з такою назвою вже існує");
+                  .WithErrorMessage(ErrorMessages.PartnerTitleAlreadyExists);
         }
 
         [Fact]

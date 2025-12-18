@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.MediatR.Partners.Create;
@@ -253,7 +254,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
-            var exceptionMessage = "Database error occurred";
+            var exceptionMessage = ErrorMessages.DataBaseError;
 
             this.SetupMapperForCreatePartner(createPartnerDTO, partnerEntity);
             this.SetupCreateAsyncToThrowException(new Exception(exceptionMessage));
@@ -294,7 +295,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
-            var exceptionMessage = "Save changes failed";
+            var exceptionMessage = ErrorMessages.CannotSaveChangesInDatabase;
 
             this.SetupMapperForCreatePartner(createPartnerDTO, partnerEntity);
             this.SetupCreateAsync(partnerEntity);
@@ -357,7 +358,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.MockRepository.Verify(
                 repo => repo.SaveChangesAsync(),
                 Times.Exactly(2),
-                "because SaveChanges should be called after creating partner and after adding streetcodes");
+                ErrorMessages.VerifySaveChangesCalledTwicePartnerStreetcode);
         }
 
         /// <summary>
@@ -478,7 +479,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
-            var exceptionMessage = "Streetcode repository error";
+            var exceptionMessage = ErrorMessages.StreetcodeRepositoryError;
 
             this.SetupMapperForCreatePartner(createPartnerDTO, partnerEntity);
             this.SetupCreateAsync(partnerEntity);
