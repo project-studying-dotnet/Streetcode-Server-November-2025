@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact.Create
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.BLL.MediatR.Streetcode.Fact.Create;
     using Xunit;
@@ -25,7 +26,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.newFact)
-                  .WithErrorMessage("Дані факту не можуть бути порожніми");
+                  .WithErrorMessage(ErrorMessages.FactDataRequired);
         }
 
         [Fact]
@@ -45,7 +46,7 @@
             var result = _validator.TestValidate(command);
 
             // Assert
-            Assert.Contains(result.Errors, e => e.ErrorMessage == "Заголовок факту є обов'язковим");
+            Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorMessages.FactTitleRequired);
         }
 
         [Fact]

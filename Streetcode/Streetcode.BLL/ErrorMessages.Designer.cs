@@ -1375,6 +1375,15 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exception occurred while creating streetcode: Test exception.
+        /// </summary>
+        internal static string StreetcodeTestException {
+            get {
+                return ResourceManager.GetString("StreetcodeTestException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Назва не може бути порожньою.
         /// </summary>
         internal static string StreetcodeTitleCannotBeEmpty {

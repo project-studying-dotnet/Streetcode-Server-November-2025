@@ -786,4 +786,7 @@
   <data name="VerifySaveChangesCalledPartnerStreetcode" xml:space="preserve">
     <value>because SaveChanges should be called after updating partner and after modifying streetcode links</value>
   </data>
+  <data name="StreetcodeTestException" xml:space="preserve">
+    <value>Exception occurred while creating streetcode: Test exception</value>
+  </data>
 </root>

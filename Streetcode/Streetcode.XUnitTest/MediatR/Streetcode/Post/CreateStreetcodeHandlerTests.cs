@@ -6,6 +6,7 @@
     using global::MediatR;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.Streetcode;
     using Streetcode.BLL.Interfaces.Logging;
@@ -126,7 +127,7 @@
 
             Assert.True(result.IsFailed);
 
-            Assert.Equal($"Streetcode with Index {1} already exists", result.Errors[0].Message);
+            Assert.Equal(string.Format(ErrorMessages.StreetcodeWithIndexAlreadyExists, 1), result.Errors[0].Message);
         }
 
         [Fact]
@@ -162,7 +163,7 @@
 
             Assert.True(result.IsFailed);
 
-            Assert.Equal($"Exception occurred while creating streetcode: Test exception", result.Errors[0].Message);
+            Assert.Equal(ErrorMessages.StreetcodeTestException, result.Errors[0].Message);
         }
 
         [Fact]

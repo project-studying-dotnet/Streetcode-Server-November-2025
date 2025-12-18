@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Fact.GetAll;
@@ -35,7 +36,7 @@
         public async Task Handle_WhenFactsDoNotExist_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Cannot find any fact";
+            string errorMsg = ErrorMessages.FactNotFound;
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
             var query = new GetAllFactsQuery();
 
