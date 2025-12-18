@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode;
@@ -26,7 +26,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetShortById
 
             if (streetcode == null)
             {
-                const string errorMsg = "Cannot find streetcode by id";
+                var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, request.id);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -35,7 +35,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetShortById
 
             if(streetcodeShortDTO == null)
             {
-                const string errorMsg = "Cannot map streetcode to shortDTO";
+                var errorMsg = ErrorMessages.StreetcodeMappingToShortDtoFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

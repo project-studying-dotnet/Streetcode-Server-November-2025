@@ -1,5 +1,6 @@
-﻿using FluentResults;
+using FluentResults;
 using MediatR;
+using Streetcode.BLL.Interfaces.Cache;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -9,11 +10,13 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly ILoggerService _logger;
+        private readonly ICacheService _cacheService;
 
-        public DeleteSoftStreetcodeHandler(IRepositoryWrapper repositoryWrapper, ILoggerService logger)
+        public DeleteSoftStreetcodeHandler(IRepositoryWrapper repositoryWrapper, ILoggerService logger, ICacheService cacheService)
         {
             _repositoryWrapper = repositoryWrapper;
             _logger = logger;
+            _cacheService = cacheService;
         }
 
         public async Task<Result<Unit>> Handle(DeleteSoftStreetcodeCommand request, CancellationToken cancellationToken)
@@ -23,7 +26,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft
 
             if (streetcode is null)
             {
-                string errorMsg = $"Cannot find a streetcode with corresponding categoryId: {request.Id}";
+                var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundByCategoryId, request.Id);
                 _logger.LogError(request, errorMsg);
                 throw new ArgumentNullException(errorMsg);
             }
@@ -37,11 +40,13 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft
 
             if (resultIsDeleteSucces)
             {
+                await _cacheService.RemoveAsync($"Streetcode_{request.Id}");
+
                 return Result.Ok(Unit.Value);
             }
             else
             {
-                const string errorMsg = "Failed to change status of streetcode to deleted";
+                var errorMsg = ErrorMessages.StreetcodeSoftDeletionFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

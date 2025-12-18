@@ -30,7 +30,7 @@ public class CreateTextHandler : IRequestHandler<CreateTextCommand, Result<TextD
 
         if (textDto is null)
         {
-            const string errorMsg = "Request is null.";
+            var errorMsg = ErrorMessages.TextDataRequired;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -39,7 +39,7 @@ public class CreateTextHandler : IRequestHandler<CreateTextCommand, Result<TextD
 
         if (text is null)
         {
-            const string errorMsg = "Cannot map entity.";
+            var errorMsg = ErrorMessages.CannotMapEntity;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -54,7 +54,7 @@ public class CreateTextHandler : IRequestHandler<CreateTextCommand, Result<TextD
 
         if (!isSuccessResult)
         {
-            const string errorMsg = "Cannot save changes in the database.";
+            var errorMsg = ErrorMessages.CannotSaveChangesInDatabase;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

@@ -251,5 +251,21 @@ namespace Streetcode.XUnitTest.Helpers
                 Times.Never,
                 $"Map method to {typeof(TDestination).Name} should not be called at all");
         }
+
+        /// <summary>
+        /// Verifies that <c>FindAll</c> was called exactly once on the mocked repository.
+        /// </summary>
+        /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
+        /// <typeparam name="TEntity">The entity type.</typeparam>
+        /// <param name="repositoryMock">The mocked repository.</param>
+        public static void VerifyFindAllCalledOnce<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
+            where TEntity : class
+            where TRepo : class, IRepositoryBase<TEntity>
+        {
+            repositoryMock.Verify(
+                r => r.FindAll(It.IsAny<Expression<Func<TEntity, bool>>>()),
+                Times.Once(),
+                $"FindAll method should be called exactly once for {typeof(TEntity).Name}");
+        }
     }
 }

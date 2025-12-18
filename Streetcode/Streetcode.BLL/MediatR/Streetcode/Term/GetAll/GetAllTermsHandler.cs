@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -28,7 +28,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Term.GetAll
 
             if (terms is null)
             {
-                const string errorMsg = $"Cannot find any term";
+                var errorMsg = ErrorMessages.TermNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

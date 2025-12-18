@@ -32,7 +32,7 @@ public class GetTimelineItemByIdHandler : IRequestHandler<GetTimelineItemByIdQue
 
         if (timelineItem is null)
         {
-            string errorMsg = $"Cannot find a timeline item with corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.TimelineItemNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

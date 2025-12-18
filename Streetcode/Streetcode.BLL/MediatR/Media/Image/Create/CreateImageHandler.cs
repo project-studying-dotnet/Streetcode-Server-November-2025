@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Media.Images;
@@ -32,7 +32,7 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
     {
         if (!AllowedExtensions.Contains($".{request.Image.Extension.ToLower()}"))
         {
-            const string errorMsg = "Invalid image format. Allowed formats: .png, .jpg, .jpeg, .webp";
+            var errorMsg = ErrorMessages.InvalidImageFormat;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -59,7 +59,7 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
         }
         else
         {
-            const string errorMsg = "Failed to create an image";
+            var errorMsg = ErrorMessages.ImageCreationFailed;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

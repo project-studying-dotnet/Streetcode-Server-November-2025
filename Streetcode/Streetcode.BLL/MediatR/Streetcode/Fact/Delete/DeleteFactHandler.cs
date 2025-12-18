@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.Logging;
@@ -25,7 +25,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Delete
 
             if (fact is null)
             {
-                const string errorMsg = "Fact was not found";
+                var errorMsg = ErrorMessages.FactNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }

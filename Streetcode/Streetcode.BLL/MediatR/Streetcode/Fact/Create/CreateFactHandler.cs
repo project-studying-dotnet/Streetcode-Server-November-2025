@@ -9,6 +9,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 namespace Streetcode.BLL.MediatR.Fact.Create
 {
     using DAL.Entities.Streetcode.TextContent;
+    using Microsoft.EntityFrameworkCore;
 
     public class CreateFactHandler : IRequestHandler<CreateFactCommand, Result<FactDto>>
     {
@@ -30,7 +31,7 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                     img.Id == request.newFact.ImageId);
             if (imageExists is null)
             {
-                const string errorMsg = "Image with provided ImageId does not exist";
+                var errorMsg = string.Format(ErrorMessages.ImageNotFoundById, request.newFact.ImageId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
@@ -40,7 +41,7 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                     s.Id == request.newFact.StreetcodeId);
             if (streetcodeExists is null)
             {
-                const string errorMsg = "Streetcode with provided StreetcodeId does not exist";
+                var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, request.newFact.StreetcodeId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
@@ -51,7 +52,7 @@ namespace Streetcode.BLL.MediatR.Fact.Create
                     f.StreetcodeId == request.newFact.StreetcodeId);
             if (factExists is not null)
             {
-                const string errorMsg = "Fact with the same title already exists for this Streetcode";
+                var errorMsg = ErrorMessages.FactTitleAlreadyExists;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
@@ -59,10 +60,16 @@ namespace Streetcode.BLL.MediatR.Fact.Create
             var newFact = _mapper.Map<Fact>(request.newFact);
             if (newFact is null)
             {
-                const string errorMsg = "Failed to map CreateFactDTO to Fact entity";
+                var errorMsg = ErrorMessages.FactMappingFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
+
+            var lastFactOrderPosition = await _repositoryWrapper.FactRepository
+                .FindAll(f => f.StreetcodeId == request.newFact.StreetcodeId)
+                .MaxAsync(f => (int?)f.Order, CancellationToken.None) ?? 0;
+
+            newFact.Order = lastFactOrderPosition + 1;
 
             newFact = await _repositoryWrapper.FactRepository.CreateAsync(newFact);
             await _repositoryWrapper.SaveChangesAsync();
