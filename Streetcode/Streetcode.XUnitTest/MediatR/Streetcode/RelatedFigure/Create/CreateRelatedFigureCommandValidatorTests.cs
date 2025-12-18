@@ -42,7 +42,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.ObserverId)
-                  .WithErrorMessage("Стріткод не може бути пов'язаний сам з собою");
+                  .WithErrorMessage(ErrorMessages.RelatedFigureSelfReferenceNotAllowed);
         }
 
         [Theory]
@@ -58,7 +58,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.TargetId)
-                  .WithErrorMessage("ID цільового стріткоду має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.RelatedFigureTargetIdMustBeGreaterThanZero);
         }
 
         [Fact]

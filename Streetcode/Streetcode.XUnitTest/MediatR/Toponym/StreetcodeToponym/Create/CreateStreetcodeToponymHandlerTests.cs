@@ -2,6 +2,7 @@
 {
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Toponyms;
     using Streetcode.BLL.MediatR.Toponyms.Create;
     using Streetcode.DAL.Repositories.Interfaces.Toponyms;
@@ -69,7 +70,7 @@
         public async Task Handle_WhenRelationshipAlreadyExists_ShouldReturnFailure()
         {
             // Arrange.
-            const string expectedError = "This toponym is already linked to the streetcode.";
+            string expectedError = ErrorMessages.ToponymAlreadyLinked;
             var dto = StreetcodeToponymTestData.CreateStreetcodeToponymDto();
             var existingEntity = StreetcodeToponymTestData.CreateStreetcodeToponym();
             var command = new CreateStreetcodeToponymCommand(dto);
@@ -101,7 +102,7 @@
         public async Task Handle_WhenMappingReturnsNull_ShouldReturnFailure()
         {
             // Arrange.
-            const string expectedError = "Cannot map StreetcodeToponymDto to entity.";
+            string expectedError = ErrorMessages.ToponymCantBeMapped;
             var dto = StreetcodeToponymTestData.CreateStreetcodeToponymDto();
             var command = new CreateStreetcodeToponymCommand(dto);
 
@@ -134,7 +135,7 @@
         public async Task Handle_WhenSaveChangesFails_ShouldReturnFailure()
         {
             // Arrange.
-            const string expectedError = "Failed to create streetcode-toponym relationship.";
+            string expectedError = ErrorMessages.ToponymStreetcodeFailedToCreate;
             var dto = StreetcodeToponymTestData.CreateStreetcodeToponymDto();
             var entity = StreetcodeToponymTestData.CreateStreetcodeToponym();
             var command = new CreateStreetcodeToponymCommand(dto);

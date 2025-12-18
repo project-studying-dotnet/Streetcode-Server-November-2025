@@ -2,6 +2,7 @@
 {
     using System.Text.Json;
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
     using Xunit;
 
@@ -34,7 +35,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("Id є обов'язковим");
+                  .WithErrorMessage(ErrorMessages.StreetcodeIdRequired);
         }
 
         [Fact]
@@ -55,7 +56,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("Id має бути цілим числом");
+                  .WithErrorMessage(ErrorMessages.StreetcodeAudioIdMustBeInteger);
         }
 
         [Fact]
@@ -76,7 +77,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("Id має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.StreetcodeAudioIdMustBeInteger);
         }
 
         [Fact]
@@ -97,7 +98,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("Id має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.TeamMemberIdMustBeGreaterThanZero);
         }
 
         [Fact]

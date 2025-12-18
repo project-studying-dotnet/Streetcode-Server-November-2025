@@ -411,7 +411,7 @@
   <data name="RelatedTermWordTooLong" xml:space="preserve">
     <value>Слово не може перевищувати {0} символів</value>
   </data>
-  <data name="RelatedTermTermIdMustBeGreaterThanZero" xml:space="preserve">
+  <data name="RelatedTermIdMustBeGreaterThanZero" xml:space="preserve">
     <value>ID терміну має бути більше 0</value>
   </data>
   <data name="RelatedTermWordAlreadyExists" xml:space="preserve">
@@ -788,5 +788,53 @@
   </data>
   <data name="StreetcodeTestException" xml:space="preserve">
     <value>Exception occurred while creating streetcode: Test exception</value>
+  </data>
+  <data name="CannotSaveChangesInDbAfterStreetcodeCreated" xml:space="preserve">
+    <value>Cannot save changes in the database after related word creation!</value>
+  </data>
+  <data name="CannotCreateRelatedWordForTerm" xml:space="preserve">
+    <value>Cannot create new related word for a term!</value>
+  </data>
+  <data name="NullRequest" xml:space="preserve">
+    <value>Request is null</value>
+  </data>
+  <data name="VerifyGetAllAsyncCalledOnce" xml:space="preserve">
+    <value>GetAllAsync method should be called exactly once</value>
+  </data>
+  <data name="VerifyGetFirstOrDefaultAsyncCalledOnce" xml:space="preserve">
+    <value>GetFirstOrDefaultAsync method should be called exactly once</value>
+  </data>
+  <data name="VerifyLogCalledOnceTimelineNull" xml:space="preserve">
+    <value>LogError method should be called exactly once when timelineItems is null</value>
+  </data>
+  <data name="VerifyLogDidntCalledWhenTimelineexists" xml:space="preserve">
+    <value>LogError method should not be called when timelineItems exists</value>
+  </data>
+  <data name="VerifyMapperCalledOnce" xml:space="preserve">
+    <value>Map method should be called exactly once</value>
+  </data>
+  <data name="MapToExatct" xml:space="preserve">
+    <value>Map method to {0} should not be called at all</value>
+  </data>
+  <data name="ToponymAlreadyLinked" xml:space="preserve">
+    <value>This toponym is already linked to the streetcode.</value>
+  </data>
+  <data name="ToponymCantBeMapped" xml:space="preserve">
+    <value>Cannot map StreetcodeToponymDto to entity.</value>
+  </data>
+  <data name="ToponymStreetcodeFailedToCreate" xml:space="preserve">
+    <value>Failed to create streetcode-toponym relationship.</value>
+  </data>
+  <data name="ToponymStreetcodeRelationsDelete" xml:space="preserve">
+    <value>Cannot find relationship with StreetcodeId={0} and ToponymId={1}</value>
+  </data>
+  <data name="FailedToDeleteToponymStreetcode" xml:space="preserve">
+    <value>Failed to delete streetcode-toponym relationship.</value>
+  </data>
+  <data name="FailedToMergeToponyms" xml:space="preserve">
+    <value>Failed to merge toponyms</value>
+  </data>
+  <data name="ToponymByIdMerge" xml:space="preserve">
+    <value>Target toponym with Id={0} not found.</value>
   </data>
 </root>

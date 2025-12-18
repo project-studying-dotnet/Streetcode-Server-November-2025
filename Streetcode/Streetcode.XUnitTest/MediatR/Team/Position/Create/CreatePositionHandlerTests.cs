@@ -4,6 +4,7 @@
     using FluentAssertions;
     using FluentAssertions.Execution;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Team.Create;
@@ -15,7 +16,7 @@
     public class CreatePositionHandlerTests
     {
         private const string TestPositionName = "Developer";
-        private const string TestExceptionMessage = "Database connection failed";
+        private readonly string TestExceptionMessage = ErrorMessages.DatabaseConntectionFailed;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<IPositionRepository> mockPositionRepository;
         private readonly Mock<ILoggerService> mockLogger;

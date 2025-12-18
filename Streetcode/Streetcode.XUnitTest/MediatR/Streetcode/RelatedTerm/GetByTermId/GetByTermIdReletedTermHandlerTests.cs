@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId;
@@ -84,7 +85,7 @@ public class GetByTermIdRelatedTermsHandlerTests
         var result = await this.handler.Handle(query, CancellationToken.None);
         
         Assert.True(result.IsFailed);
-        Assert.Equal("Cannot get words by term id", result.Errors.First().Message);
+        Assert.Equal(string.Format(ErrorMessages.RelatedTermsNotFoundByTermId, VALID_TERM_ID), result.Errors.First().Message);
         
         this.mockRepository.VerifyGetAllAsyncCalledOnce();
         

@@ -7,6 +7,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Text.Create;
@@ -49,7 +50,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
         public async Task Handle_WhenRequestIsNull_ShouldReturnFailure()
         {
             // Arrange
-            const string errorMsg = "Request is null.";
+            string errorMsg = ErrorMessages.NullRequest;
             var command = new CreateTextCommand(null!);
 
             this.loggerMock.SetupLogger();
@@ -111,7 +112,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
         public async Task Handle_WhenTextIsNull_ShouldReturnFailure()
         {
             // Arrange
-            const string errorMsg = "Cannot map entity.";
+            string errorMsg = ErrorMessages.CannotMapEntity;
             var create = new TextCreateDto { Title = "Test Title", TextContent = "Test Content" };
 
             this.repositoryWrapperMock
@@ -180,7 +181,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Create
         [Fact]
         public async Task Handle_WhenSaveChangesFails_ShouldReturnFailure()
         {
-            const string errorMsg = "Cannot save changes in the database.";
+            string errorMsg = ErrorMessages.CannotSaveChangesInDatabase;
             var textRepoMock = new Mock<ITextRepository>(MockBehavior.Strict);
             var create = new TextCreateDto { Title = "Test Title", TextContent = "Test Content" };
             var mapped = new TextEntity { Title = "Test Title", TextContent = "Test Content" };
