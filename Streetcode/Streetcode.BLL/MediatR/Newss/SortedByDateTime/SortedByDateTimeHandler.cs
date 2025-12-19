@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.News;
@@ -31,7 +31,7 @@ namespace Streetcode.BLL.MediatR.Newss.SortedByDateTime
                 include: cat => cat.Include(img => img.Image));
             if (news == null)
             {
-                const string errorMsg = "There are no news in the database";
+                var errorMsg = ErrorMessages.NewsNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Toponyms;
@@ -27,7 +27,7 @@ public class GetToponymByIdHandler : IRequestHandler<GetToponymByIdQuery, Result
 
         if (toponym is null)
         {
-            string errorMsg = $"Cannot find any toponym with corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.ToponymNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

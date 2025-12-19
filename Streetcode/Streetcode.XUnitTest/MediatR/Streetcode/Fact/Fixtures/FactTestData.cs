@@ -15,8 +15,9 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
         /// <param name="id">The ID of the fact.</param>
         /// <param name="streetcodeId">The streetcode ID associated with the fact.</param>
         /// <param name="imageId">The image ID associated with the fact.</param>
+        /// <param name="order">The order of the fact.</param>
         /// <returns>A fully initialized <see cref="Fact"/> object for testing.</returns>
-        public static Fact CreateFact(int id = 1, int streetcodeId = 101, int imageId = 1)
+        public static Fact CreateFact(int id = 1, int streetcodeId = 101, int imageId = 1, int order = 1)
         {
             return new Fact
             {
@@ -25,6 +26,8 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
                 ImageId = imageId,
                 StreetcodeId = streetcodeId,
                 FactContent = "This is a detailed description of an important historical fact.",
+                ImageDescription = null,
+                Order = order,
                 Image = null,
                 Streetcode = null,
             };
@@ -50,6 +53,8 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
                     ImageId = imageId + i,
                     StreetcodeId = streetcodeId,
                     FactContent = $"This is a detailed description of historical fact number {i + 1}.",
+                    ImageDescription = null,
+                    Order = i + 1,
                     Image = null,
                     Streetcode = null,
                 });
@@ -63,8 +68,9 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
         /// </summary>
         /// <param name="id">The ID of the fact DTO.</param>
         /// <param name="imageId">The image ID associated with the fact.</param>
+        /// <param name="order">The order of the fact.</param>
         /// <returns>A fully initialized <see cref="FactDto"/> object for testing.</returns>
-        public static FactDto CreateFactDto(int id = 1, int imageId = 1)
+        public static FactDto CreateFactDto(int id = 1, int imageId = 1, int order = 1)
         {
             return new FactDto
             {
@@ -72,6 +78,8 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
                 Title = "Historical Fact",
                 ImageId = imageId,
                 FactContent = "This is a detailed description of an important historical fact.",
+                ImageDescription = null,
+                Order = order,
             };
         }
 
@@ -93,6 +101,8 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
                     Title = $"Historical Fact {i + 1}",
                     ImageId = imageId + i,
                     FactContent = $"This is a detailed description of historical fact number {i + 1}.",
+                    ImageDescription = null,
+                    Order = i + 1,
                 });
             }
 
@@ -113,6 +123,7 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
                 ImageId = imageId,
                 StreetcodeId = streetcodeId,
                 FactContent = "This is a detailed description of an important historical fact.",
+                ImageDescription = null,
             };
         }
 
@@ -135,6 +146,7 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
                     ImageId = imageId + i,
                     StreetcodeId = streetcodeId,
                     FactContent = $"This is a detailed description of historical fact number {i + 1}.",
+                    ImageDescription = null,
                 });
             }
 
@@ -146,8 +158,9 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
         /// </summary>
         /// <param name="id">The ID of the fact to update.</param>
         /// <param name="imageId">The image ID for the fact.</param>
+        /// <param name="order">The order of the fact.</param>
         /// <returns>A fully initialized <see cref="UpdateFactDto"/> object for testing.</returns>
-        public static UpdateFactDto CreateUpdateFactDto(int id = 1, int imageId = 1)
+        public static UpdateFactDto CreateUpdateFactDto(int id = 1, int imageId = 1, int order = 1)
         {
             return new UpdateFactDto
             {
@@ -155,6 +168,8 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
                 Title = "Historical Fact",
                 ImageId = imageId,
                 FactContent = "This is a detailed description of an important historical fact.",
+                ImageDescription = null,
+                Order = order,
             };
         }
 
@@ -176,6 +191,8 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
                     Title = $"Historical Fact {i + 1}",
                     ImageId = imageId + i,
                     FactContent = $"This is a detailed description of historical fact number {i + 1}.",
+                    ImageDescription = null,
+                    Order = i + 1,
                 });
             }
 

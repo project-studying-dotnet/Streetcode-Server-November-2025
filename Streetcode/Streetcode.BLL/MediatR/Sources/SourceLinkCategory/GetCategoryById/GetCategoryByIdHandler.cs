@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -41,7 +41,7 @@ public class GetCategoryByIdHandler : IRequestHandler<GetCategoryByIdQuery, Resu
 
         if (srcCategories is null)
         {
-            string errorMsg = $"Cannot find any srcCategory by the corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.CategoryNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

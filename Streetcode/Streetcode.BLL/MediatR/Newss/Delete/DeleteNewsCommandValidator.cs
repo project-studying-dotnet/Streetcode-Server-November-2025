@@ -14,7 +14,7 @@ namespace Streetcode.BLL.MediatR.Newss.Delete
         public DeleteNewsCommandValidator()
         {
             RuleFor(x => x.id)
-                .MustBeValidId("Id новини має бути більше 0");
+                .MustBeValidId(ErrorMessages.NewsIdMustBeGreaterThanZero);
         }
     }
 }
