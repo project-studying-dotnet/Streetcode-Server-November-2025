@@ -8,27 +8,27 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Update
         public UpdateTimelineItemDtoValidator()
         {
             RuleFor(x => x.Id)
-                .GreaterThan(0).WithMessage("Id must be greater than 0");
+                .GreaterThan(0).WithMessage(ErrorMessages.TimelineItemIdMustBeGreaterThanZero);
 
             RuleFor(x => x.Title)
-                .NotEmpty().WithMessage("Title is required")
-                .MaximumLength(28).WithMessage("Title cannot exceed 28 characters");
+                .NotEmpty().WithMessage(ErrorMessages.TimelineItemTitleRequired)
+                .MaximumLength(28).WithMessage(string.Format(ErrorMessages.TimelineItemTitleTooLong, 28));
 
             RuleFor(x => x.Description)
-                .NotEmpty().WithMessage("Description is required")
-                .MaximumLength(400).WithMessage("Description cannot exceed 400 characters");
+                .NotEmpty().WithMessage(ErrorMessages.TimelineItemDescriptionRequired)
+                .MaximumLength(400).WithMessage(string.Format(ErrorMessages.TimelineItemDescriptionTooLong, 400));
 
             RuleFor(x => x.Date)
-                .NotEmpty().WithMessage("Date is required");
+                .NotEmpty().WithMessage(ErrorMessages.TimelineItemDateRequired);
 
             RuleFor(x => x.DateViewPattern)
-                .IsInEnum().WithMessage("Invalid DateViewPattern value");
+                .IsInEnum().WithMessage(ErrorMessages.TimelineItemDateViewPatternInvalid);
 
             RuleFor(x => x.StreetcodeId)
-                .GreaterThan(0).WithMessage("StreetcodeId must be greater than 0");
+                .GreaterThan(0).WithMessage(ErrorMessages.TimelineItemStreetcodeIdMustBeGreaterThanZero);
 
             RuleForEach(x => x.HistoricalContextIds)
-                .GreaterThan(0).WithMessage("HistoricalContextId must be greater than 0");
+                .GreaterThan(0).WithMessage(ErrorMessages.TimelineItemHistoricalContextIdMustBeGreaterThanZero);
         }
     }
 }

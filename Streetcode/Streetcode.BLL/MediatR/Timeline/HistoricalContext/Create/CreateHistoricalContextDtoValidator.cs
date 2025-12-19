@@ -9,9 +9,9 @@ namespace Streetcode.BLL.MediatR.Timeline.HistoricalContext.Create
         public CreateHistoricalContextDtoValidator()
         {
             RuleFor(x => x.Title)
-                .NotEmpty().WithMessage("Title is required")
-                .MaximumLength(50).WithMessage("Title cannot exceed 50 characters")
-                .Must(BeAlphabeticWithSpaces).WithMessage("Title can only contain letters and spaces");
+                .NotEmpty().WithMessage(ErrorMessages.HistoricalContextTitleRequired)
+                .MaximumLength(50).WithMessage(string.Format(ErrorMessages.HistoricalContextTitleTooLong, 50))
+                .Must(BeAlphabeticWithSpaces).WithMessage(ErrorMessages.HistoricalContextTitleInvalidFormat);
         }
 
         private bool BeAlphabeticWithSpaces(string title)

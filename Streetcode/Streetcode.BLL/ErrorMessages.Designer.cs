@@ -430,6 +430,42 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Title is required.
+        /// </summary>
+        internal static string HistoricalContextTitleRequired {
+            get {
+                return ResourceManager.GetString("HistoricalContextTitleRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title cannot exceed {0} characters.
+        /// </summary>
+        internal static string HistoricalContextTitleTooLong {
+            get {
+                return ResourceManager.GetString("HistoricalContextTitleTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title can only contain letters and spaces.
+        /// </summary>
+        internal static string HistoricalContextTitleInvalidFormat {
+            get {
+                return ResourceManager.GetString("HistoricalContextTitleInvalidFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id must be greater than 0.
+        /// </summary>
+        internal static string HistoricalContextIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("HistoricalContextIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ID має бути більше 0.
         /// </summary>
         internal static string IdMustBeGreaterThan {
@@ -1704,6 +1740,87 @@ namespace Streetcode.BLL {
         internal static string TimelineItemDeletionFailed {
             get {
                 return ResourceManager.GetString("TimelineItemDeletionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title is required.
+        /// </summary>
+        internal static string TimelineItemTitleRequired {
+            get {
+                return ResourceManager.GetString("TimelineItemTitleRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title cannot exceed {0} characters.
+        /// </summary>
+        internal static string TimelineItemTitleTooLong {
+            get {
+                return ResourceManager.GetString("TimelineItemTitleTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description is required.
+        /// </summary>
+        internal static string TimelineItemDescriptionRequired {
+            get {
+                return ResourceManager.GetString("TimelineItemDescriptionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description cannot exceed {0} characters.
+        /// </summary>
+        internal static string TimelineItemDescriptionTooLong {
+            get {
+                return ResourceManager.GetString("TimelineItemDescriptionTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date is required.
+        /// </summary>
+        internal static string TimelineItemDateRequired {
+            get {
+                return ResourceManager.GetString("TimelineItemDateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid DateViewPattern value.
+        /// </summary>
+        internal static string TimelineItemDateViewPatternInvalid {
+            get {
+                return ResourceManager.GetString("TimelineItemDateViewPatternInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to StreetcodeId must be greater than 0.
+        /// </summary>
+        internal static string TimelineItemStreetcodeIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("TimelineItemStreetcodeIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HistoricalContextId must be greater than 0.
+        /// </summary>
+        internal static string TimelineItemHistoricalContextIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("TimelineItemHistoricalContextIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id must be greater than 0.
+        /// </summary>
+        internal static string TimelineItemIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("TimelineItemIdMustBeGreaterThanZero", resourceCulture);
             }
         }
         

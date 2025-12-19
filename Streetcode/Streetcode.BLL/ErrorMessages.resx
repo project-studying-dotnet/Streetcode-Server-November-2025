@@ -684,6 +684,45 @@
   <data name="TimelineItemDeletionFailed" xml:space="preserve">
     <value>Failed to delete a timeline item</value>
   </data>
+  <data name="TimelineItemTitleRequired" xml:space="preserve">
+    <value>Title is required</value>
+  </data>
+  <data name="TimelineItemTitleTooLong" xml:space="preserve">
+    <value>Title cannot exceed {0} characters</value>
+  </data>
+  <data name="TimelineItemDescriptionRequired" xml:space="preserve">
+    <value>Description is required</value>
+  </data>
+  <data name="TimelineItemDescriptionTooLong" xml:space="preserve">
+    <value>Description cannot exceed {0} characters</value>
+  </data>
+  <data name="TimelineItemDateRequired" xml:space="preserve">
+    <value>Date is required</value>
+  </data>
+  <data name="TimelineItemDateViewPatternInvalid" xml:space="preserve">
+    <value>Invalid DateViewPattern value</value>
+  </data>
+  <data name="TimelineItemStreetcodeIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>StreetcodeId must be greater than 0</value>
+  </data>
+  <data name="TimelineItemHistoricalContextIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>HistoricalContextId must be greater than 0</value>
+  </data>
+  <data name="HistoricalContextTitleRequired" xml:space="preserve">
+    <value>Title is required</value>
+  </data>
+  <data name="HistoricalContextTitleTooLong" xml:space="preserve">
+    <value>Title cannot exceed {0} characters</value>
+  </data>
+  <data name="HistoricalContextTitleInvalidFormat" xml:space="preserve">
+    <value>Title can only contain letters and spaces</value>
+  </data>
+  <data name="HistoricalContextIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>Id must be greater than 0</value>
+  </data>
+  <data name="TimelineItemIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>Id must be greater than 0</value>
+  </data>
   <data name="ToponymNotFoundById" xml:space="preserve">
     <value>Cannot find any toponym with corresponding id: {0}</value>
   </data>
