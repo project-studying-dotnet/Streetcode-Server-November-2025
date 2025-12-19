@@ -26,62 +26,54 @@ namespace Streetcode.BLL.MediatR.Fact.Create
 
         public async Task<Result<FactDto>> Handle(CreateFactCommand request, CancellationToken cancellationToken)
         {
-            try
+            var imageExists =
+                await _repositoryWrapper.ImageRepository.GetFirstOrDefaultAsync(img =>
+                    img.Id == request.newFact.ImageId);
+            if (imageExists is null)
             {
-                var imageExists =
-                    await _repositoryWrapper.ImageRepository.GetFirstOrDefaultAsync(img =>
-                        img.Id == request.newFact.ImageId);
-                if (imageExists is null)
-                {
-                    const string errorMsg = "Image with provided ImageId does not exist";
-                    _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
-                }
-
-                var streetcodeExists =
-                    await _repositoryWrapper.StreetcodeRepository.GetFirstOrDefaultAsync(s =>
-                        s.Id == request.newFact.StreetcodeId);
-                if (streetcodeExists is null)
-                {
-                    const string errorMsg = "Streetcode with provided StreetcodeId does not exist";
-                    _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
-                }
-
-                var factExists =
-                    await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
-                        f.Title == request.newFact.Title &&
-                        f.StreetcodeId == request.newFact.StreetcodeId);
-                if (factExists is not null)
-                {
-                    const string errorMsg = "Fact with the same title already exists for this Streetcode";
-                    _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
-                }
-
-                var newFact = _mapper.Map<Fact>(request.newFact);
-                if (newFact is null)
-                {
-                    const string errorMsg = "Failed to map CreateFactDTO to Fact entity";
-                    _logger.LogError(request, errorMsg);
-                    return Result.Fail(errorMsg);
-                }
-
-                var lastFactOrderPosition = await _repositoryWrapper.FactRepository
-                    .FindAll(f => f.StreetcodeId == request.newFact.StreetcodeId)
-                    .MaxAsync(f => (int?)f.Order, CancellationToken.None) ?? 0;
-
-                newFact.Order = lastFactOrderPosition + 1;
-
-                newFact = await _repositoryWrapper.FactRepository.CreateAsync(newFact);
-                await _repositoryWrapper.SaveChangesAsync();
-                return Result.Ok(_mapper.Map<FactDto>(newFact));
+                var errorMsg = string.Format(ErrorMessages.ImageNotFoundById, request.newFact.ImageId);
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(errorMsg);
             }
-            catch (Exception ex)
+
+            var streetcodeExists =
+                await _repositoryWrapper.StreetcodeRepository.GetFirstOrDefaultAsync(s =>
+                    s.Id == request.newFact.StreetcodeId);
+            if (streetcodeExists is null)
             {
-                _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, request.newFact.StreetcodeId);
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(errorMsg);
             }
+
+            var factExists =
+                await _repositoryWrapper.FactRepository.GetFirstOrDefaultAsync(f =>
+                    f.Title == request.newFact.Title &&
+                    f.StreetcodeId == request.newFact.StreetcodeId);
+            if (factExists is not null)
+            {
+                var errorMsg = ErrorMessages.FactTitleAlreadyExists;
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(errorMsg);
+            }
+
+            var newFact = _mapper.Map<Fact>(request.newFact);
+            if (newFact is null)
+            {
+                var errorMsg = ErrorMessages.FactMappingFailed;
+                _logger.LogError(request, errorMsg);
+                return Result.Fail(errorMsg);
+            }
+
+            var lastFactOrderPosition = await _repositoryWrapper.FactRepository
+                .FindAll(f => f.StreetcodeId == request.newFact.StreetcodeId)
+                .MaxAsync(f => (int?)f.Order, CancellationToken.None) ?? 0;
+
+            newFact.Order = lastFactOrderPosition + 1;
+
+            newFact = await _repositoryWrapper.FactRepository.CreateAsync(newFact);
+            await _repositoryWrapper.SaveChangesAsync();
+            return Result.Ok(_mapper.Map<FactDto>(newFact));
         }
     }
 }

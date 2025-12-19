@@ -7,6 +7,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Update
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Text.Update;
@@ -50,9 +51,6 @@ namespace Streetcode.XUnitTest.MediatR.Text.Update
         [Fact]
         public async Task Handle_WhenTextNotFound_ShouldReturnFailure()
         {
-            // Arrange
-            const string errorMsg = "Cannot find text with corresponding id.";
-
             var textRepoMock = new Mock<ITextRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock
@@ -69,7 +67,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Update
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors.First().Message.Should().Be(errorMsg);
+            result.Errors.First().Message.Should().Be(string.Format(ErrorMessages.TextNotFoundById, 99));
 
             textRepoMock.VerifyGetFirstOrDefaultCalledOnce<ITextRepository, TextEntity>();
             textRepoMock.VerifyUpdateCalledNever<ITextRepository, TextEntity>();
@@ -172,7 +170,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Update
         public async Task Handle_WhenSaveChangesFails_ShouldReturnFailure()
         {
             // Arrange
-            const string errorMsg = "Cannot save changes in the database.";
+            string errorMsg = ErrorMessages.CannotSaveChangesInDatabase;
             var textRepoMock = new Mock<ITextRepository>(MockBehavior.Strict);
             var existing = new TextEntity { Id = 33 };
             var update = new TextUpdateDto();

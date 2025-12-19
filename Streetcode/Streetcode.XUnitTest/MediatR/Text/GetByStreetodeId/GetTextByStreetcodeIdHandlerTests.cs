@@ -11,6 +11,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetByStreetodeId
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.Interfaces.Text;
@@ -88,7 +89,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetByStreetodeId
         public async Task Handle_ShouldReturnFail_WhenTextAndStreetcodeDoNotExist(int invalidStreetcodeId)
         {
             // Arrange
-            string errorMsg = $"Cannot find a transaction link by a streetcode id: {invalidStreetcodeId}, because such streetcode doesn`t exist";
+            string errorMsg = string.Format(ErrorMessages.TransactionLinkNotFoundByStreetcodeId, invalidStreetcodeId);
             var query = new GetTextByStreetcodeIdQuery(invalidStreetcodeId);
 
             mockRepoWrapper.Setup(r => r.TextRepository.GetFirstOrDefaultAsync(

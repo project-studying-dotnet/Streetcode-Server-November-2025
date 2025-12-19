@@ -1,10 +1,10 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.GetByStreetcodeId
 {
-    using System.Linq.Expressions;
     using AutoMapper;
     using FluentAssertions;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Audio;
     using Streetcode.BLL.Interfaces.BlobStorage;
     using Streetcode.BLL.Interfaces.Logging;
@@ -13,6 +13,7 @@
     using Streetcode.DAL.Entities.Media;
     using Streetcode.DAL.Entities.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using System.Linq.Expressions;
     using Xunit;
 
     public class GetByStreetcodeIdHandlerTests
@@ -174,7 +175,7 @@
             this.mockLogger.Verify(
                 logger => logger.LogError(
                     It.IsAny<object>(),
-                    $"Cannot find an audio with the corresponding streetcode id: {targetStreetcodeId}"),
+                    string.Format(ErrorMessages.AudioNotFoundByStreetcodeId, targetStreetcodeId)),
                 Times.Once);
         }
     }

@@ -17,11 +17,11 @@ namespace Streetcode.BLL.MediatR.Partners.Update
         {
             RuleFor(x => x.Partner)
                 .NotNull()
-                .WithMessage("Дані партнера є обов'язковими")
+                .WithMessage(ErrorMessages.PartnerDataRequired)
                 .SetValidator(new Create.CreatePartnerDtoValidator());
 
             RuleFor(x => x.Partner.Id)
-                .MustBeValidId("Id партнера має бути більше 0")
+                .MustBeValidId(ErrorMessages.PartnerIdMustBeGreaterThanZero)
                 .When(x => x.Partner != null);
         }
 
@@ -45,7 +45,7 @@ namespace Streetcode.BLL.MediatR.Partners.Update
 
                     return await uniqueTitleValidator.IsTitleUniqueAsync(partner.Title, partner.Id, cancellation);
                 })
-                .WithMessage("Партнер з такою назвою вже існує")
+                .WithMessage(ErrorMessages.PartnerTitleAlreadyExists)
                 .When(x => x.Partner != null);
         }
     }

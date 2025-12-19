@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -28,7 +28,7 @@ public class GetAllArtsHandler : IRequestHandler<GetAllArtsQuery, Result<IEnumer
 
         if (arts is null)
         {
-            const string errorMsg = $"Cannot find any arts";
+            var errorMsg = ErrorMessages.ArtsNotFound;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

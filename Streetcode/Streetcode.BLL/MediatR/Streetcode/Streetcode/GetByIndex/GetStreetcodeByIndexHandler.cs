@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -29,7 +29,7 @@ public class GetStreetcodeByIndexHandler : IRequestHandler<GetStreetcodeByIndexQ
 
         if (streetcode is null)
         {
-            string errorMsg = $"Cannot find any streetcode with corresponding index: {request.Index}";
+            var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundByIndex, request.Index);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

@@ -13,13 +13,15 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update
         {
             RuleFor(x => x.Word)
                 .NotEmpty()
-                .WithMessage("Слово є обов'язковим")
+                .WithMessage(ErrorMessages.RelatedTermWordRequired)
                 .MaximumLength(ValidationConstants.RelatedTerm.WordMaxLength)
-                .WithMessage($"Слово не може перевищувати {ValidationConstants.RelatedTerm.WordMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.RelatedTermWordTooLong,
+                    ValidationConstants.RelatedTerm.WordMaxLength));
 
             RuleFor(x => x.TermId)
                 .GreaterThan(0)
-                .WithMessage("ID терміну має бути більше 0");
+                .WithMessage(ErrorMessages.RelatedTermIdMustBeGreaterThanZero);
         }
     }
 }

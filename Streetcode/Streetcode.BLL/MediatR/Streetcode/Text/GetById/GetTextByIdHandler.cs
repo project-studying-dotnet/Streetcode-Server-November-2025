@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
@@ -26,7 +26,7 @@ public class GetTextByIdHandler : IRequestHandler<GetTextByIdQuery, Result<TextD
 
         if (text is null)
         {
-            string errorMsg = $"Cannot find any text with corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.TextNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

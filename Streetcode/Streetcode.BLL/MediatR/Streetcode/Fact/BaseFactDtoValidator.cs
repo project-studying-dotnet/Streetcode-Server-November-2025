@@ -12,19 +12,23 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact
         {
             RuleFor(x => GetTitle(x))
                 .NotEmpty()
-                .WithMessage("Заголовок факту є обов'язковим")
+                .WithMessage(ErrorMessages.FactTitleRequired)
                 .MaximumLength(ValidationConstants.Fact.TitleMaxLength)
-                .WithMessage($"Заголовок факту не може перевищувати {ValidationConstants.Fact.TitleMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.FactTitleTooLong,
+                    ValidationConstants.Fact.TitleMaxLength));
 
             RuleFor(x => GetFactContent(x))
                 .NotEmpty()
-                .WithMessage("Зміст факту є обов'язковим")
+                .WithMessage(ErrorMessages.FactContentRequired)
                 .MaximumLength(ValidationConstants.Fact.ContentMaxLength)
-                .WithMessage($"Зміст факту не може перевищувати {ValidationConstants.Fact.ContentMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.FactContentTooLong,
+                    ValidationConstants.Fact.ContentMaxLength));
 
             RuleFor(x => GetImageId(x))
                 .GreaterThan(0)
-                .WithMessage("ID зображення має бути більше 0");
+                .WithMessage(ErrorMessages.FactImageIdMustBeGreaterThanZero);
         }
 
         protected abstract string GetTitle(T dto);

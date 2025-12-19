@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Media.Video;
@@ -26,7 +26,7 @@ public class GetVideoByIdHandler : IRequestHandler<GetVideoByIdQuery, Result<Vid
 
         if (video is null)
         {
-            string errorMsg = $"Cannot find a video with corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.VideoNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

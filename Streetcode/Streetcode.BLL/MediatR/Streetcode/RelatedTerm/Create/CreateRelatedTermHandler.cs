@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
@@ -28,7 +28,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
 
             if (relatedTerm is null)
             {
-                const string errorMsg = "Cannot create new related word for a term!";
+                var errorMsg = ErrorMessages.RelatedTermWordRequired;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -39,7 +39,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
 
             if (existingTerms is null || existingTerms.Any())
             {
-                const string errorMsg = "Слово з цим визначенням уже існує";
+                var errorMsg = ErrorMessages.RelatedTermWordRequired;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -50,7 +50,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
 
             if(!isSuccessResult)
             {
-                const string errorMsg = "Cannot save changes in the database after related word creation!";
+                string errorMsg = ErrorMessages.CannotSaveChangesInDbAfterStreetcodeCreated;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -63,7 +63,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
             }
             else
             {
-                const string errorMsg = "Cannot map entity!";
+                var errorMsg = ErrorMessages.CannotMapEntity;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

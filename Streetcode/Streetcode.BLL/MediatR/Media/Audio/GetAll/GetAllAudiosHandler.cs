@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Media.Audio;
@@ -30,7 +30,7 @@ public class GetAllAudiosHandler : IRequestHandler<GetAllAudiosQuery, Result<IEn
 
         if (audios is null)
         {
-            const string errorMsg = "Cannot find any audios";
+            var errorMsg = ErrorMessages.AudiosNotFound;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
