@@ -4,6 +4,7 @@
     using FluentValidation.TestHelper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Partners;
     using Streetcode.BLL.DTO.Streetcode;
     using Streetcode.BLL.MediatR.Partners.Update;
@@ -64,7 +65,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Partner)
-                  .WithErrorMessage("Партнер з такою назвою вже існує");
+                  .WithErrorMessage(ErrorMessages.PartnerTitleAlreadyExists);
         }
 
         [Fact]

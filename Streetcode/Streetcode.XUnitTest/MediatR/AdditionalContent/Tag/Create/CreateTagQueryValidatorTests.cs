@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Tag.Create
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.AdditionalContent.Tag;
     using Streetcode.BLL.MediatR.AdditionalContent.Tag.Create;
     using Xunit;
@@ -25,7 +26,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.tag)
-                  .WithErrorMessage("Дані тегу не можуть бути порожніми");
+                  .WithErrorMessage(ErrorMessages.TagDataCantBeEmpty);
         }
 
         [Fact]
@@ -54,7 +55,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.tag.Title)
-                  .WithErrorMessage("Назва тегу є обов'язковою");
+                  .WithErrorMessage(ErrorMessages.TagNameIsRequired);
         }
     }
 }

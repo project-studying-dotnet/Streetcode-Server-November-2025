@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.Create
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Audio;
     using Streetcode.BLL.MediatR.Media.Audio.Create;
     using Streetcode.BLL.Util.Validators;
@@ -41,7 +42,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.BaseFormat)
-                  .WithErrorMessage("BaseFormat має бути дійсним рядком Base64");
+                  .WithErrorMessage(ErrorMessages.AudioBase64Invalid);
         }
 
         [Fact]
@@ -61,7 +62,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.BaseFormat)
-                  .WithErrorMessage($"Розмір аудіо не може перевищувати {ValidationConstants.Media.MaxAudioSizeInBytes / 1024 / 1024}МБ після декодування");
+                  .WithErrorMessage(string.Format(ErrorMessages.AudioSizeExceeded, ValidationConstants.Media.MaxAudioSizeInBytes / 1024 / 1024));
         }
 
         [Theory]

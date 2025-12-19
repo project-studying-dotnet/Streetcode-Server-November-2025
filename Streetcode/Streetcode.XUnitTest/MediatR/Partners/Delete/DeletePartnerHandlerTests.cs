@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.MediatR.Partners.Delete;
 using Streetcode.DAL.Entities.Partners;
@@ -119,7 +120,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Be("No partner with such id");
+            result.Errors.First().Message.Should().Be(ErrorMessages.PartnerNotFound);
 
             this.MockRepository.Verify(
                 repo => repo.PartnersRepository.Delete(It.IsAny<Partner>()),
@@ -200,7 +201,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Arrange
             int partnerId = 1;
             var partner = PartnerTestHelpers.CreatePartnerEntity(partnerId);
-            var exceptionMessage = "Database save failed";
+            var exceptionMessage = ErrorMessages.CannotSaveChangesInDatabase;
 
             this.SetupRepositoryToReturnPartner(partner);
             this.SetupSaveChangesToThrowException(exceptionMessage);
@@ -235,7 +236,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         {
             // Arrange
             int partnerId = 1;
-            var expectedException = new InvalidOperationException("Database error");
+            var expectedException = new InvalidOperationException(ErrorMessages.DataBaseError);
 
             this.SetupRepositoryToThrowException(expectedException);
 
@@ -246,7 +247,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
-                .WithMessage("Database error");
+                .WithMessage(ErrorMessages.DataBaseError);
         }
 
         /// <summary>
@@ -278,7 +279,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            capturedPredicate.Should().NotBeNull("because predicate should be provided");
+            capturedPredicate.Should().NotBeNull(ErrorMessages.PredicateNotProvided);
 
             this.MockRepository.Verify(
                 repo => repo.PartnersRepository.GetFirstOrDefaultAsync(

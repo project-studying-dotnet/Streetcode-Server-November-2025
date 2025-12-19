@@ -316,7 +316,7 @@
     <value>Cannot find any partner with corresponding id: {0}</value>
   </data>
   <data name="PartnersNotFoundByStreetcodeId" xml:space="preserve">
-    <value>Cannot find any partners with corresponding streetcode id: {0}</value>
+    <value>Cannot find any partner with corresponding streetcode id: {0}</value>
   </data>
   <data name="PaymentAmountMustBeGreaterThanZero" xml:space="preserve">
     <value>Сума платежу має бути більше 0</value>
@@ -411,7 +411,7 @@
   <data name="RelatedTermWordTooLong" xml:space="preserve">
     <value>Слово не може перевищувати {0} символів</value>
   </data>
-  <data name="RelatedTermTermIdMustBeGreaterThanZero" xml:space="preserve">
+  <data name="RelatedTermIdMustBeGreaterThanZero" xml:space="preserve">
     <value>ID терміну має бути більше 0</value>
   </data>
   <data name="RelatedTermWordAlreadyExists" xml:space="preserve">
@@ -672,55 +672,172 @@
   <data name="UserDataRequired" xml:space="preserve">
     <value>Дані користувача є обов'язковими</value>
   </data>
-	<data name="UserNameRequired" xml:space="preserve">
-  <value>Ім'я користувача є обов'язковим</value>
-</data>
-	<data name="UserNameTooLong" xml:space="preserve">
-  <value>Ім'я не може перевищувати {0} символів</value>
-</data>
-	<data name="UserSurnameTooLong" xml:space="preserve">
-  <value>Прізвище не може перевищувати {0} символів</value>
-</data>
-	<data name="UserLoginRequired" xml:space="preserve">
-  <value>Логін є обов'язковий</value>
-</data>
-	<data name="UserLoginTooLong" xml:space="preserve">
-  <value>Логін не може перевищувати {0} символів</value>
-</data>
-	<data name="UserLoginInvalidFormat" xml:space="preserve">
-  <value>Логін може містити тільки латинські літери, цифри, крапку, дефіс і підкреслення</value>
-</data>
-	<data name="UserEmailRequired" xml:space="preserve">
-  <value>Email є обов'язковий</value>
-</data>
-	<data name="UserEmailInvalidFormat" xml:space="preserve">
-  <value>Email має не вірний формат</value>
-</data>
-	<data name="UserEmailTooLong" xml:space="preserve">
-  <value>Email не може перевищувати {0} символів</value>
-</data>
-	<data name="UserPasswordRequired" xml:space="preserve">
-  <value>Пароль є обов'язковий</value>
-</data>
-	<data name="UserPasswordTooShort" xml:space="preserve">
-  <value>Пароль має містити як мінімум {0} символів</value>
-</data>
-	<data name="UserPasswordTooLong" xml:space="preserve">
-  <value>Пароль не може перевищувати {0} символів</value>
-</data>
-	<data name="UserPasswordInvalidFormat" xml:space="preserve">
-  <value>Пароль повинен містити щонайменше одну малу, одну велику літеру і одну цифру</value>
-</data>
-	<data name="UserRoleInvalid" xml:space="preserve">
-  <value>Невірна роль користувача</value>
-</data>
-	<data name="UserPhoneNumberInvalidFormat" xml:space="preserve">
-  <value>Номер телефону повинен бути у міжнародному форматі (наприклад, +кодкраїниXXXXXXXXX)</value>
-</data>
-	<data name="UserAlreadyExists" xml:space="preserve">
-  <value>User already exists</value>
-</data>
-	<data name="UserRoleAssignmentFailed" xml:space="preserve">
-  <value>Failed to assign role: {0}</value>
-</data>
+  <data name="UserNameRequired" xml:space="preserve">
+    <value>Ім'я користувача є обов'язковим</value>
+  </data>
+  <data name="UserNameTooLong" xml:space="preserve">
+    <value>Ім'я не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserSurnameTooLong" xml:space="preserve">
+    <value>Прізвище не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserLoginRequired" xml:space="preserve">
+    <value>Логін є обов'язковий</value>
+  </data>
+  <data name="UserLoginTooLong" xml:space="preserve">
+    <value>Логін не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserLoginInvalidFormat" xml:space="preserve">
+    <value>Логін може містити тільки латинські літери, цифри, крапку, дефіс і підкреслення</value>
+  </data>
+  <data name="UserEmailRequired" xml:space="preserve">
+    <value>Email є обов'язковий</value>
+  </data>
+  <data name="UserEmailInvalidFormat" xml:space="preserve">
+    <value>Email має не вірний формат</value>
+  </data>
+  <data name="UserEmailTooLong" xml:space="preserve">
+    <value>Email не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserPasswordRequired" xml:space="preserve">
+    <value>Пароль є обов'язковий</value>
+  </data>
+  <data name="UserPasswordTooShort" xml:space="preserve">
+    <value>Пароль має містити як мінімум {0} символів</value>
+  </data>
+  <data name="UserPasswordTooLong" xml:space="preserve">
+    <value>Пароль не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserPasswordInvalidFormat" xml:space="preserve">
+    <value>Пароль повинен містити щонайменше одну малу, одну велику літеру і одну цифру</value>
+  </data>
+  <data name="UserRoleInvalid" xml:space="preserve">
+    <value>Невірна роль користувача</value>
+  </data>
+  <data name="UserPhoneNumberInvalidFormat" xml:space="preserve">
+    <value>Номер телефону повинен бути у міжнародному форматі (наприклад, +кодкраїниXXXXXXXXX)</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>User already exists</value>
+  </data>
+  <data name="UserRoleAssignmentFailed" xml:space="preserve">
+    <value>Failed to assign role: {0}</value>
+  </data>
+  <data name="CoordinateIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID координат має бути більше 0</value>
+  </data>
+  <data name="CoordinateCantBeEmpty" xml:space="preserve">
+    <value>Дані координат не можуть бути порожніми</value>
+  </data>
+  <data name="CoordinateWidthError" xml:space="preserve">
+    <value>Широта має бути в межах від {0} до {1} градусів</value>
+  </data>
+  <data name="CoordinateHeightError" xml:space="preserve">
+    <value>Довгота має бути в межах від {0} до {1} градусів</value>
+  </data>
+  <data name="TagNameIsRequired" xml:space="preserve">
+    <value>Назва тегу є обов'язковою</value>
+  </data>
+  <data name="TagNameCantExceed" xml:space="preserve">
+    <value>Назва тегу не може перевищувати {0} символів</value>
+  </data>
+  <data name="TagFormatError" xml:space="preserve">
+    <value>Назва тегу може містити лише літери, цифри, пробіли та дефіси</value>
+  </data>
+  <data name="TagDataCantBeEmpty" xml:space="preserve">
+    <value>Дані тегу не можуть бути порожніми</value>
+  </data>
+  <data name="VerifyLoggerCalledEmailSentSuccess" xml:space="preserve">
+    <value>LogError should not be called when email sent successfully</value>
+  </data>
+  <data name="VerifyEmailSentOnce" xml:space="preserve">
+    <value>SendEmailAsync should be called once</value>
+  </data>
+  <data name="VerifyLoggerCalledOnceEmailSentFail" xml:space="preserve">
+    <value>LogError method should be called exactly once when email sending fails</value>
+  </data>
+  <data name="DeleteVerificationWrongType" xml:space="preserve">
+    <value>Delete verification not implemented for type {0}</value>
+  </data>
+  <data name="DataBaseError" xml:space="preserve">
+    <value>Database error occurred</value>
+  </data>
+  <data name="VerifySaveChangesCalledTwicePartnerStreetcode" xml:space="preserve">
+    <value>because SaveChanges should be called after creating partner and after adding streetcodes</value>
+  </data>
+  <data name="NoPredicateProvidedForFilterStreetcode" xml:space="preserve">
+    <value>because predicate should be provided for filtering streetcodes</value>
+  </data>
+  <data name="StreetcodeRepositoryError" xml:space="preserve">
+    <value>Streetcode repository error</value>
+  </data>
+  <data name="PredicateNotProvided" xml:space="preserve">
+    <value>because predicate should be provided</value>
+  </data>
+  <data name="IncludeExpressionNotProvided" xml:space="preserve">
+    <value>because include expression should be provided</value>
+  </data>
+  <data name="PartnersNotFound" xml:space="preserve">
+    <value>Cannot find any partners</value>
+  </data>
+  <data name="DatabaseConntectionFailed" xml:space="preserve">
+    <value>Database connection failed</value>
+  </data>
+  <data name="VerifySaveChangesCalledPartnerStreetcode" xml:space="preserve">
+    <value>because SaveChanges should be called after updating partner and after modifying streetcode links</value>
+  </data>
+  <data name="StreetcodeTestException" xml:space="preserve">
+    <value>Exception occurred while creating streetcode: Test exception</value>
+  </data>
+  <data name="CannotSaveChangesInDbAfterStreetcodeCreated" xml:space="preserve">
+    <value>Cannot save changes in the database after related word creation!</value>
+  </data>
+  <data name="CannotCreateRelatedWordForTerm" xml:space="preserve">
+    <value>Cannot create new related word for a term!</value>
+  </data>
+  <data name="NullRequest" xml:space="preserve">
+    <value>Request is null</value>
+  </data>
+  <data name="VerifyGetAllAsyncCalledOnce" xml:space="preserve">
+    <value>GetAllAsync method should be called exactly once</value>
+  </data>
+  <data name="VerifyGetFirstOrDefaultAsyncCalledOnce" xml:space="preserve">
+    <value>GetFirstOrDefaultAsync method should be called exactly once</value>
+  </data>
+  <data name="VerifyLogCalledOnceTimelineNull" xml:space="preserve">
+    <value>LogError method should be called exactly once when timelineItems is null</value>
+  </data>
+  <data name="VerifyLogDidntCalledWhenTimelineexists" xml:space="preserve">
+    <value>LogError method should not be called when timelineItems exists</value>
+  </data>
+  <data name="VerifyMapperCalledOnce" xml:space="preserve">
+    <value>Map method should be called exactly once</value>
+  </data>
+  <data name="MapToExatct" xml:space="preserve">
+    <value>Map method to {0} should not be called at all</value>
+  </data>
+  <data name="ToponymAlreadyLinked" xml:space="preserve">
+    <value>This toponym is already linked to the streetcode.</value>
+  </data>
+  <data name="ToponymCantBeMapped" xml:space="preserve">
+    <value>Cannot map StreetcodeToponymDto to entity.</value>
+  </data>
+  <data name="ToponymStreetcodeFailedToCreate" xml:space="preserve">
+    <value>Failed to create streetcode-toponym relationship.</value>
+  </data>
+  <data name="ToponymStreetcodeRelationsDelete" xml:space="preserve">
+    <value>Cannot find relationship with StreetcodeId={0} and ToponymId={1}</value>
+  </data>
+  <data name="FailedToDeleteToponymStreetcode" xml:space="preserve">
+    <value>Failed to delete streetcode-toponym relationship.</value>
+  </data>
+  <data name="FailedToMergeToponyms" xml:space="preserve">
+    <value>Failed to merge toponyms</value>
+  </data>
+  <data name="ToponymByIdMerge" xml:space="preserve">
+    <value>Target toponym with Id={0} not found.</value>
+  </data>
+  <data name="DatabaseErrorOccured" xml:space="preserve">
+    <value>Database error occurred</value>
+  </data>
 </root>

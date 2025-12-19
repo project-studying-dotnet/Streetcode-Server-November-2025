@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.MediatR.Partners.Update;
@@ -333,7 +334,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.MockRepository.Verify(
                 repo => repo.SaveChangesAsync(),
                 Times.Exactly(2),
-                "because SaveChanges should be called after updating partner and after modifying streetcode links");
+                ErrorMessages.VerifySaveChangesCalledTwicePartnerStreetcode);
         }
 
         /// <summary>
@@ -355,7 +356,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
-            var exceptionMessage = "Database error";
+            var exceptionMessage = ErrorMessages.DataBaseError;
 
             this.SetupMapperForUpdatePartner(updatePartnerDTO, partnerEntity);
             this.SetupPartnerSourceLinkRepositoryToThrowException(new Exception(exceptionMessage));
@@ -399,7 +400,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             partnerEntity.PartnerSourceLinks = new List<PartnerSourceLink>();
             var existingLinks = new List<PartnerSourceLink>();
             var oldStreetcodes = new List<StreetcodePartner>();
-            var exceptionMessage = "Save changes failed";
+            var exceptionMessage = ErrorMessages.CannotSaveChangesInDatabase;
 
             this.SetupMapperForUpdatePartner(updatePartnerDTO, partnerEntity);
             this.SetupGetFirstOrDefaultAsync(partnerEntity);

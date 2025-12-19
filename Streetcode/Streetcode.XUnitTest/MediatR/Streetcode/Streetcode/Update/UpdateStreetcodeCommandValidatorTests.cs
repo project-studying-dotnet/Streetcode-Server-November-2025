@@ -1,8 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Streetcodes.Update
 {
-    using System.Text.Json;
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
+    using System.Text.Json;
     using Xunit;
 
     public class UpdateStreetcodeCommandValidatorTests
@@ -26,7 +27,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.id)
-                  .WithErrorMessage("Id має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.IdMustBeGreaterThan);
         }
 
         [Fact]
@@ -41,7 +42,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.id)
-                  .WithErrorMessage("Id має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.IdMustBeGreaterThan);
         }
 
         [Fact]
@@ -70,7 +71,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.rawJsonUpdateDTO)
-                  .WithErrorMessage("Дані стріткоду є обов'язковими");
+                  .WithErrorMessage(ErrorMessages.StreetcodeDataRequired);
         }
 
         [Fact]
@@ -85,7 +86,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.rawJsonUpdateDTO)
-                  .WithErrorMessage("Невірна структура JSON");
+                  .WithErrorMessage(ErrorMessages.WrongJSONStructure);
         }
 
         [Fact]
@@ -100,7 +101,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.rawJsonUpdateDTO)
-                  .WithErrorMessage("Невірна структура JSON");
+                  .WithErrorMessage(ErrorMessages.WrongJSONStructure);
         }
 
         [Fact]

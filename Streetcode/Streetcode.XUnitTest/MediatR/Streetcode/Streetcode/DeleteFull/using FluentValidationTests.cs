@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Streetcodes.DeleteFull
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull;
     using Xunit;
 
@@ -24,7 +25,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Id)
-                  .WithErrorMessage("Id має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.IdMustBeGreaterThan);
         }
 
         [Fact]
@@ -38,7 +39,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Id)
-                  .WithErrorMessage("Id має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.IdMustBeGreaterThan);
         }
 
         [Fact]

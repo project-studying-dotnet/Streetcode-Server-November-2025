@@ -3,6 +3,7 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.News;
     using Streetcode.BLL.Interfaces.BlobStorage;
     using Streetcode.BLL.Interfaces.Logging;
@@ -22,7 +23,6 @@
         private const string Url = "test-url";
         private const string BlobName = "news-image.jpg";
         private const string Base64Content = "BASE64_STRING";
-        private const string NewsNotFoundByUrlErrorMessageTemplate = $"No news by entered Url - {Url}";
 
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repoMock;
@@ -65,11 +65,11 @@
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.Message == NewsNotFoundByUrlErrorMessageTemplate);
+            result.Errors.Should().ContainSingle(e => e.Message == string.Format(ErrorMessages.NewsNotFoundByUrl, Url));
 
             // Verify
             MockMapperHelper.VerifyMap<News, NewsDto>(this.mapperMock, Times.Once());
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NewsNotFoundByUrlErrorMessageTemplate);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, string.Format(ErrorMessages.NewsNotFoundByUrl, Url));
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }
 
