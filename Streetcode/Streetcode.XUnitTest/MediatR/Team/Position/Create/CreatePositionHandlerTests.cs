@@ -65,7 +65,7 @@
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenSaveChangesThrowsException()
+        public async Task Handle_ShouldThrowException_WhenSaveChangesFails()
         {
             // Arrange
             var position = GetTestPosition();
@@ -77,22 +77,11 @@
             var query = new CreatePositionQuery(positionDTO);
 
             // Act
-            var result = await this.handler.Handle(query, CancellationToken.None);
+            Func<Task> act = async () => await this.handler.Handle(query, CancellationToken.None);
 
             // Assert
-            using (new AssertionScope())
-            {
-
-                result.IsFailed.Should().BeTrue();
-                result.Errors.Should().ContainSingle();
-                result.Errors.First().Message.Should().Be(TestExceptionMessage);
-
-                this.mockLogger.Verify(
-                    logger => logger.LogError(
-                        It.Is<CreatePositionQuery>(q => q == query),
-                        It.Is<string>(msg => msg == TestExceptionMessage)),
-                    Times.Once);
-            }
+            await act.Should().ThrowAsync<Exception>()
+                .WithMessage(TestExceptionMessage);
         }
 
         private void SetupRepositoryCreateAsync(Positions position)

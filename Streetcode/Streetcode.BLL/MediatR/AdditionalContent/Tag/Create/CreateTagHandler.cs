@@ -27,16 +27,7 @@ namespace Streetcode.BLL.MediatR.AdditionalContent.Tag.Create
                 Title = request.tag.Title
             });
 
-            try
-            {
-                await _repositoryWrapper.SaveChangesAsync();
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(request, ex.ToString());
-                return Result.Fail(ex.ToString());
-            }
-
+            await _repositoryWrapper.SaveChangesAsync();
             return Result.Ok(_mapper.Map<TagDto>(newTag));
         }
     }

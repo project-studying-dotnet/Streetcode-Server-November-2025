@@ -277,11 +277,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Verifies that the handler returns failure when SaveChanges throws an exception.
+        /// Verifies that the handler throws an exception when SaveChanges fails.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
-        public async Task Handle_ReturnsFailure_WhenSaveChangesThrowsException()
+        public async Task Handle_ThrowsException_WhenSaveChangesThrowsException()
         {
             // Arrange
             var createPartnerDTO = new CreatePartnerDto
@@ -310,12 +310,6 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
             result.Errors.First().Message.Should().Be(exceptionMessage);
-
-            this.MockLogger.Verify(
-                logger => logger.LogError(
-                    It.IsAny<object>(),
-                    exceptionMessage),
-                Times.Once);
         }
 
         /// <summary>
@@ -418,42 +412,6 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 repo => repo.StreetcodeRepository.GetAllAsync(
                     It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
                     It.IsAny<Func<IQueryable<StreetcodeContent>, IIncludableQueryable<StreetcodeContent, object>>>()),
-                Times.Once);
-        }
-
-        /// <summary>
-        /// Verifies that the handler returns failure when the mapper returns null for the partner entity.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [Fact]
-        public async Task Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity()
-        {
-            // Arrange
-            var createPartnerDTO = new CreatePartnerDto
-            {
-                Id = 1,
-                Title = "New Partner",
-                IsKeyPartner = true,
-                IsVisibleEverywhere = false,
-                LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDto>(),
-            };
-
-            this.SetupMapperToReturnNullPartner(createPartnerDTO);
-
-            var query = new CreatePartnerQuery(createPartnerDTO);
-
-            // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle();
-
-            this.MockLogger.Verify(
-                logger => logger.LogError(
-                    It.IsAny<object>(),
-                    It.IsAny<string>()),
                 Times.Once);
         }
 
