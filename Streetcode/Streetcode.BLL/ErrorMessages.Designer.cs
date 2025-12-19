@@ -376,6 +376,60 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot find a historical context with corresponding id: {0}.
+        /// </summary>
+        internal static string HistoricalContextNotFoundById {
+            get {
+                return ResourceManager.GetString("HistoricalContextNotFoundById", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Historical context with the same title already exists.
+        /// </summary>
+        internal static string HistoricalContextTitleAlreadyExists {
+            get {
+                return ResourceManager.GetString("HistoricalContextTitleAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create a historical context.
+        /// </summary>
+        internal static string HistoricalContextCreationFailed {
+            get {
+                return ResourceManager.GetString("HistoricalContextCreationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update a historical context.
+        /// </summary>
+        internal static string HistoricalContextUpdateFailed {
+            get {
+                return ResourceManager.GetString("HistoricalContextUpdateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete a historical context.
+        /// </summary>
+        internal static string HistoricalContextDeletionFailed {
+            get {
+                return ResourceManager.GetString("HistoricalContextDeletionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Historical contexts with IDs {0} do not exist.
+        /// </summary>
+        internal static string HistoricalContextsNotFoundByIds {
+            get {
+                return ResourceManager.GetString("HistoricalContextsNotFoundByIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ID має бути більше 0.
         /// </summary>
         internal static string IdMustBeGreaterThan {
@@ -1623,6 +1677,33 @@ namespace Streetcode.BLL {
         internal static string TimelineItemNotFoundByStreetcodeId {
             get {
                 return ResourceManager.GetString("TimelineItemNotFoundByStreetcodeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create a timeline item.
+        /// </summary>
+        internal static string TimelineItemCreationFailed {
+            get {
+                return ResourceManager.GetString("TimelineItemCreationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update a timeline item.
+        /// </summary>
+        internal static string TimelineItemUpdateFailed {
+            get {
+                return ResourceManager.GetString("TimelineItemUpdateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete a timeline item.
+        /// </summary>
+        internal static string TimelineItemDeletionFailed {
+            get {
+                return ResourceManager.GetString("TimelineItemDeletionFailed", resourceCulture);
             }
         }
         
