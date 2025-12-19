@@ -22,7 +22,7 @@ public class BaseTermDtoValidator : AbstractValidator<TermDto>
             .MaximumLength(ValidationConstants.Term.DescriptionMaxLength)
             .WithMessage($"Назва опису не може перевищувати {ValidationConstants.Term.DescriptionMaxLength} символів")
             .Matches(@"^[а-яА-ЯіІїЇєЄґҐa-zA-Z0-9\s\-]+$")
-            .WithMessage("Назва опису може містити лише літери, цифри, пробіли та дефіси");
+            .WithMessage("Опис може містити лише літери, цифри, пробіли та дефіси");
         RuleForEach(x => x.RelatedTerms)
             .GreaterThan(0)
             .WithMessage("ID пов'язаного терміну має бути більше 0");

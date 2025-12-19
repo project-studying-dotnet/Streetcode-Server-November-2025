@@ -26,8 +26,6 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
     {
         var newTerm = _mapper.Map<TermEntity>(request.Term);
 
-        newTerm.RelatedTerms = request.Term.RelatedTerms.Select(id => new RelatedTermEntity { Id = id }).ToList();
-
         await _wrapper.TermRepository.CreateAsync(newTerm);
 
         if (await _wrapper.SaveChangesAsync() <= 0)
