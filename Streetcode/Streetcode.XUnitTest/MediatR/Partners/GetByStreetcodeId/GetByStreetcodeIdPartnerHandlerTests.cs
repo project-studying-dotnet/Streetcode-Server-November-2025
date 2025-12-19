@@ -234,7 +234,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Contain(string.Format(ErrorMessages.PartnerNotFoundById, streetcodeId));
+            result.Errors.First().Message.Should().Contain(string.Format(ErrorMessages.PartnersNotFoundByStreetcodeId, streetcodeId));
 
             this.MockLogger.Verify(
                 logger => logger.LogError(
