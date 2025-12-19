@@ -1,4 +1,4 @@
-﻿using FluentResults;
+using FluentResults;
 using MediatR;
 using NLog.Targets;
 using Streetcode.BLL.Interfaces.Logging;
@@ -25,14 +25,14 @@ public class CreateRelatedFigureHandler : IRequestHandler<CreateRelatedFigureCom
 
         if (observerEntity is null)
         {
-            string errorMsg = $"No existing streetcode with id: {request.ObserverId}";
+            var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, request.ObserverId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
         if (targetEntity is null)
         {
-            string errorMsg = $"No existing streetcode with id: {request.TargetId}";
+            var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, request.ObserverId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -52,7 +52,7 @@ public class CreateRelatedFigureHandler : IRequestHandler<CreateRelatedFigureCom
         }
         else
         {
-            string errorMsg = "Failed to create a relation.";
+            var errorMsg = ErrorMessages.RelatedFigureCreationFailed;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

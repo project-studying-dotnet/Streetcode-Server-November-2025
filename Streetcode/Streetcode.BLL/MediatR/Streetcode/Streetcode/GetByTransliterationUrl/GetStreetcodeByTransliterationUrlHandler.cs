@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetByTransliterationUrl
 
             if (streetcode == null)
             {
-                string errorMsg = $"Cannot find streetcode by transliteration url: {request.url}";
+                var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundByTransliterationUrl, request.url);
                 _logger.LogError(request, errorMsg);
                 return new Error(errorMsg);
             }

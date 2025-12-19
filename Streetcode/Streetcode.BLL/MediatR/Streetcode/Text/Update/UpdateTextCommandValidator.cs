@@ -11,11 +11,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.Text.Update
         {
             RuleFor(x => x.Id)
                 .GreaterThan(0)
-                .WithMessage("ID тексту має бути більше 0");
+                .WithMessage(ErrorMessages.TextIdMustBeGreaterThanZero);
 
             RuleFor(x => x.Text)
                 .NotNull()
-                .WithMessage("Дані тексту не можуть бути порожніми")
+                .WithMessage(ErrorMessages.TextDataRequired)
                 .SetValidator(new TextUpdateDtoValidator());
         }
     }

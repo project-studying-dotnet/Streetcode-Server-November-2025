@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -27,7 +27,7 @@ namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.GetAll
 
             if (allCategories == null)
             {
-                const string errorMsg = $"Categories is null";
+                var errorMsg = ErrorMessages.CategoriesNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

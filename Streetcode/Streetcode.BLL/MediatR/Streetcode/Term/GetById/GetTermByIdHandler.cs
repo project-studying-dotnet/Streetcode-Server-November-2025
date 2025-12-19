@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
@@ -26,7 +26,7 @@ public class GetTermByIdHandler : IRequestHandler<GetTermByIdQuery, Result<TermD
 
         if (term is null)
         {
-            string errorMsg = $"Cannot find any term with corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.TermNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

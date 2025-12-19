@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.News;
@@ -28,7 +28,7 @@ namespace Streetcode.BLL.MediatR.Newss.Update
             var news = _mapper.Map<News>(request.news);
             if (news is null)
             {
-                const string errorMsg = $"Cannot convert null to news";
+                var errorMsg = ErrorMessages.NewsConversionFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -57,7 +57,7 @@ namespace Streetcode.BLL.MediatR.Newss.Update
             }
             else
             {
-                const string errorMsg = $"Failed to update news";
+                var errorMsg = ErrorMessages.NewsUpdateFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

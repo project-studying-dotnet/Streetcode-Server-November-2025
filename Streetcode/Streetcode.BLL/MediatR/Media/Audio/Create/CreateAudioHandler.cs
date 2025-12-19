@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Media.Audio;
@@ -50,7 +50,7 @@ public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<Aud
         }
         else
         {
-            const string errorMsg = $"Failed to create an audio";
+            var errorMsg = ErrorMessages.AudioCreationFailed;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

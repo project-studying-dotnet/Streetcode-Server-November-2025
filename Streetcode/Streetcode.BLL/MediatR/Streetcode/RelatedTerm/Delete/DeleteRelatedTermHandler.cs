@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.Logging;
@@ -27,7 +27,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
 
             if (relatedTerm is null)
             {
-                string errorMsg = $"Cannot find a related term: {request.word}";
+                var errorMsg = ErrorMessages.RelatedTermNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -42,7 +42,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
             }
             else
             {
-                const string errorMsg = "Failed to delete a related term";
+                var errorMsg = ErrorMessages.RelatedTermDeletionFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +35,7 @@ public class GetCategoriesByStreetcodeIdHandler : IRequestHandler<GetCategoriesB
 
         if (srcCategories is null)
         {
-            string errorMsg = $"Cant find any source category with the streetcode id {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.CategoryNotFoundByStreetcodeId, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

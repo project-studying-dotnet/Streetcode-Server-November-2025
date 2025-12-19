@@ -11,7 +11,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
         {
             RuleFor(x => x.RelatedTerm)
                 .NotNull()
-                .WithMessage("Дані пов'язаного терміну не можуть бути порожніми")
+                .WithMessage(ErrorMessages.RelatedTermDataRequired)
                 .SetValidator(new RelatedTermDtoValidator());
         }
     }

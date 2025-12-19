@@ -7,7 +7,7 @@ namespace Streetcode.BLL.MediatR.Users.Register
         {
             RuleFor(x => x.newUser)
                 .NotNull()
-                .WithMessage("Дані користувача є обов'язковими")
+                .WithMessage(ErrorMessages.UserDataRequired)
                 .SetValidator(new RegisterUserDtoValidator());
         }
     }

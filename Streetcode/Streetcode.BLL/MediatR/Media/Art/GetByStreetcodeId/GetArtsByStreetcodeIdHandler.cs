@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.BlobStorage;
@@ -45,7 +45,7 @@ namespace Streetcode.BLL.MediatR.Media.Art.GetByStreetcodeId
 
             if (arts is null)
             {
-                string errorMsg = $"Cannot find any art with corresponding streetcode id: {request.StreetcodeId}";
+                var errorMsg = string.Format(ErrorMessages.ArtNotFoundByStreetcodeId, request.StreetcodeId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

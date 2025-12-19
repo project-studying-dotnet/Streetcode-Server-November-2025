@@ -15,7 +15,7 @@ namespace Streetcode.BLL.MediatR.Newss.Create
         {
             RuleFor(x => x.newNews)
                 .NotNull()
-                .WithMessage("Дані новини є обов'язковими")
+                .WithMessage(ErrorMessages.NewsDataRequired)
                 .SetValidator(new NewsDtoValidator());
         }
     }
