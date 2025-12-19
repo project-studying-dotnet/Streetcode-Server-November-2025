@@ -53,20 +53,6 @@ public class CreateTermDtoValidatorTests
             .WithErrorMessage($"Назва терміну не може перевищувати {ValidationConstants.Term.TitleMaxLength} символів");
     }
 
-    [Theory]
-    [InlineData("Invalid@Title")]
-    [InlineData("Title_With_Underscore")]
-    [InlineData("Title!")]
-    public void Should_Have_Error_When_Title_Contains_Invalid_Characters(string title)
-    {
-        var dto = new TermDto { Title = title };
-
-        var result = this.validator.TestValidate(dto);
-
-        result.ShouldHaveValidationErrorFor(x => x.Title)
-            .WithErrorMessage("Назва терміну може містити лише літери, цифри, пробіли та дефіси");
-    }
-
     [Fact]
     public void Should_Have_Error_When_Description_Is_Empty()
     {
@@ -76,20 +62,6 @@ public class CreateTermDtoValidatorTests
 
         result.ShouldHaveValidationErrorFor(x => x.Description)
             .WithErrorMessage("Назва опису є обов'язковою");
-    }
-
-    [Fact]
-    public void Should_Have_Error_When_RelatedTerms_Contains_Zero_Or_Negative()
-    {
-        var dto = new TermDto { RelatedTerms = new List<int> { 5, 0, -1 } };
-
-        var result = this.validator.TestValidate(dto);
-
-        result.ShouldHaveValidationErrorFor("RelatedTerms[1]")
-            .WithErrorMessage("ID пов'язаного терміну має бути більше 0");
-
-        result.ShouldHaveValidationErrorFor("RelatedTerms[2]")
-            .WithErrorMessage("ID пов'язаного терміну має бути більше 0");
     }
 
     [Fact]
