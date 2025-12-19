@@ -648,6 +648,24 @@
   <data name="HistoricalContextNotFound" xml:space="preserve">
     <value>Cannot find any historical contexts</value>
   </data>
+  <data name="HistoricalContextNotFoundById" xml:space="preserve">
+    <value>Cannot find a historical context with corresponding id: {0}</value>
+  </data>
+  <data name="HistoricalContextTitleAlreadyExists" xml:space="preserve">
+    <value>Historical context with the same title already exists</value>
+  </data>
+  <data name="HistoricalContextCreationFailed" xml:space="preserve">
+    <value>Failed to create a historical context</value>
+  </data>
+  <data name="HistoricalContextUpdateFailed" xml:space="preserve">
+    <value>Failed to update a historical context</value>
+  </data>
+  <data name="HistoricalContextDeletionFailed" xml:space="preserve">
+    <value>Failed to delete a historical context</value>
+  </data>
+  <data name="HistoricalContextsNotFoundByIds" xml:space="preserve">
+    <value>Historical contexts with IDs {0} do not exist</value>
+  </data>
   <data name="TimelineItemNotFound" xml:space="preserve">
     <value>Cannot find any timelineItem</value>
   </data>
@@ -656,6 +674,15 @@
   </data>
   <data name="TimelineItemNotFoundById" xml:space="preserve">
     <value>Cannot find a timeline item with corresponding id: {0}</value>
+  </data>
+  <data name="TimelineItemCreationFailed" xml:space="preserve">
+    <value>Failed to create a timeline item</value>
+  </data>
+  <data name="TimelineItemUpdateFailed" xml:space="preserve">
+    <value>Failed to update a timeline item</value>
+  </data>
+  <data name="TimelineItemDeletionFailed" xml:space="preserve">
+    <value>Failed to delete a timeline item</value>
   </data>
   <data name="ToponymNotFoundById" xml:space="preserve">
     <value>Cannot find any toponym with corresponding id: {0}</value>

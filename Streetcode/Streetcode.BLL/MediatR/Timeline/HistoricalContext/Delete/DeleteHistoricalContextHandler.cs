@@ -25,7 +25,7 @@ namespace Streetcode.BLL.MediatR.Timeline.HistoricalContext.Delete
 
                 if (historicalContext is null)
                 {
-                    const string errorMsg = "Historical context was not found";
+                    var errorMsg = string.Format(ErrorMessages.HistoricalContextNotFoundById, request.Id);
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -38,7 +38,7 @@ namespace Streetcode.BLL.MediatR.Timeline.HistoricalContext.Delete
             catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                return Result.Fail(ErrorMessages.HistoricalContextDeletionFailed);
             }
         }
     }

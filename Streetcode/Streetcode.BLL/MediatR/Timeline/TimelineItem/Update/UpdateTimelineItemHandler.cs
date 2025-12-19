@@ -34,7 +34,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Update
 
                 if (existingTimelineItem is null)
                 {
-                    const string errorMsg = "Timeline item was not found";
+                    var errorMsg = string.Format(ErrorMessages.TimelineItemNotFoundById, request.TimelineItem.Id);
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -44,7 +44,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Update
 
                 if (streetcodeExists is null)
                 {
-                    const string errorMsg = "Streetcode with provided StreetcodeId does not exist";
+                    var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, request.TimelineItem.StreetcodeId);
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -61,7 +61,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Update
 
                     if (missingContextIds.Any())
                     {
-                        string errorMsg = $"Historical contexts with IDs {string.Join(", ", missingContextIds)} do not exist";
+                        var errorMsg = string.Format(ErrorMessages.HistoricalContextsNotFoundByIds, string.Join(", ", missingContextIds));
                         _logger.LogError(request, errorMsg);
                         return Result.Fail(errorMsg);
                     }
@@ -97,7 +97,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Update
             catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                return Result.Fail(ErrorMessages.TimelineItemUpdateFailed);
             }
         }
     }

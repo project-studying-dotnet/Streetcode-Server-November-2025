@@ -31,7 +31,7 @@ namespace Streetcode.BLL.MediatR.Timeline.HistoricalContext.Create
 
                 if (existingContext is not null)
                 {
-                    const string errorMsg = "Historical context with the same title already exists";
+                    var errorMsg = ErrorMessages.HistoricalContextTitleAlreadyExists;
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -45,7 +45,7 @@ namespace Streetcode.BLL.MediatR.Timeline.HistoricalContext.Create
             catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                return Result.Fail(ErrorMessages.HistoricalContextCreationFailed);
             }
         }
     }

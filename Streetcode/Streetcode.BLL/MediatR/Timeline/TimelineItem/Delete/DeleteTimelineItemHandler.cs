@@ -25,7 +25,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Delete
 
                 if (timelineItem is null)
                 {
-                    const string errorMsg = "Timeline item was not found";
+                    var errorMsg = string.Format(ErrorMessages.TimelineItemNotFoundById, request.Id);
                     _logger.LogError(request, errorMsg);
                     return Result.Fail(errorMsg);
                 }
@@ -38,7 +38,7 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Delete
             catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                return Result.Fail(ErrorMessages.TimelineItemDeletionFailed);
             }
         }
     }
