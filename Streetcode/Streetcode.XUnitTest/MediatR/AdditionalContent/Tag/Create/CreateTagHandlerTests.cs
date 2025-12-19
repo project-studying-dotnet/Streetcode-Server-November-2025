@@ -65,7 +65,6 @@
         }
 
         [Fact]
-
         public async Task Handle_ShouldReturnFail_WhenSaveChangesThrowsExeption()
         {
             // Arange
