@@ -1,4 +1,4 @@
-using System.Linq.Expressions;
+using Ardalis.Specification;
 using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Query;
@@ -6,6 +6,8 @@ using Moq;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.MediatR.Partners.GetAll;
 using Streetcode.DAL.Entities.Partners;
+using Streetcode.DAL.Specifications.Partners;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
@@ -77,14 +79,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Arrange
             var partners = new List<Partner> { PartnerTestHelpers.CreatePartnerEntity(1) };
             var partnerDTOs = new List<PartnerDto> { PartnerTestHelpers.CreatePartnerDTO(1) };
-            Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> capturedInclude = null;
+
+            ISpecification<Partner>? capturedSpec = null;
 
             this.MockRepository
-                .Setup(repo => repo.PartnersRepository.GetAllAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
-                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
-                    (predicate, include) => capturedInclude = include)
+                .Setup(repo => repo.PartnersRepository.ListAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()))
+                .Callback<ISpecification<Partner>, CancellationToken>((spec, ct) => capturedSpec = spec)
                 .ReturnsAsync(partners);
 
             this.MockMapper
@@ -98,12 +100,13 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            capturedInclude.Should().NotBeNull("because include expression should be provided");
-            
+            capturedSpec.Should().NotBeNull("because specification should be provided");
+            capturedSpec.Should().BeAssignableTo<PartnersWithDetailsSpecification>();
+
             this.MockRepository.Verify(
-                repo => repo.PartnersRepository.GetAllAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()),
+                repo => repo.PartnersRepository.ListAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()),
                 Times.Once);
         }
     }

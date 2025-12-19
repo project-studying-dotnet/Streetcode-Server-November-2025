@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.DTO.Team;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.DAL.Specifications.Team;
 
 namespace Streetcode.BLL.MediatR.Team.GetAll
 {
@@ -23,9 +24,10 @@ namespace Streetcode.BLL.MediatR.Team.GetAll
 
         public async Task<Result<IEnumerable<TeamMemberDto>>> Handle(GetAllMainTeamQuery request, CancellationToken cancellationToken)
         {
+            var spec = new MainTeamSpecification();
             var team = await _repositoryWrapper
                 .TeamRepository
-                .GetAllAsync(include: x => x.Where(x => x.IsMain).Include(x => x.Positions).Include(x => x.TeamMemberLinks));
+                .ListAsync(spec, cancellationToken);
 
             if (team is null)
             {

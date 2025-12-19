@@ -1,10 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Team.GetAll
 {
-    using System.Linq.Expressions;
     using AutoMapper;
     using FluentAssertions;
     using FluentAssertions.Execution;
-    using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
@@ -12,6 +10,7 @@
     using Streetcode.DAL.Entities.Team;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Team;
+    using Streetcode.DAL.Specifications.Team;
     using Xunit;
 
     public class GetAllTeamHandlerTests
@@ -92,9 +91,7 @@
         private void SetupRepositoryGetAllAsync(IEnumerable<TeamMember> teamMembers)
         {
             this.mockTeamRepository
-                .Setup(r => r.GetAllAsync(
-                    It.IsAny<Expression<Func<TeamMember, bool>>>(),
-                    It.IsAny<Func<IQueryable<TeamMember>, IIncludableQueryable<TeamMember, object>>>()))
+                .Setup(r => r.ListAsync(It.IsAny<AllTeamSpecification>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(teamMembers);
         }
 

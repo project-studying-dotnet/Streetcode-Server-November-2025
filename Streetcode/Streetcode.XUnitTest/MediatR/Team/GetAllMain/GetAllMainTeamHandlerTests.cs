@@ -1,10 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Team.GetAllMain
 {
-    using System.Linq.Expressions;
     using AutoMapper;
     using FluentAssertions;
     using FluentAssertions.Execution;
-    using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
@@ -12,6 +10,7 @@
     using Streetcode.DAL.Entities.Team;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Team;
+    using Streetcode.DAL.Specifications.Team;
     using Xunit;
 
     public class GetAllMainTeamHandlerTests
@@ -47,7 +46,7 @@
             var teamMembers = GetTestMainTeamMembersOnly();
             var teamMemberDTOs = GetTestMainTeamMemberDTOsOnly();
 
-            this.SetupRepositoryGetAllMainAsync(teamMembers);
+            this.SetupRepositoryListAsync(teamMembers);
             this.SetupMapper(teamMemberDTOs);
 
             var query = new GetAllMainTeamQuery();
@@ -72,7 +71,7 @@
             var mixedTeamMemberDTOs = GetTestMixedTeamMemberDTOs();
             var mainTeamMemberDTOs = mixedTeamMemberDTOs.Where(dto => dto.IsMain);
 
-            this.SetupRepositoryGetAllMainAsync(mixedTeamMembers);
+            this.SetupRepositoryListAsync(mixedTeamMembers);
             this.SetupMapper(mainTeamMemberDTOs);
 
             var query = new GetAllMainTeamQuery();
@@ -88,7 +87,7 @@
         public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenTeamIsNull()
         {
             // Arrange
-            this.SetupRepositoryGetAllMainAsync(null);
+            this.SetupRepositoryListAsync(null);
 
             var query = new GetAllMainTeamQuery();
 
@@ -110,13 +109,36 @@
             }
         }
 
-        private void SetupRepositoryGetAllMainAsync(IEnumerable<TeamMember>? teamMembers)
+        [Fact]
+        public async Task Handle_ShouldCallRepositoryWithMainTeamSpecification()
+        {
+            // Arrange
+            var teamMembers = GetTestMainTeamMembersOnly();
+            var teamMemberDTOs = GetTestMainTeamMemberDTOsOnly();
+
+            this.SetupRepositoryListAsync(teamMembers);
+            this.SetupMapper(teamMemberDTOs);
+
+            var query = new GetAllMainTeamQuery();
+
+            // Act
+            await this.handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            this.mockTeamRepository.Verify(
+                r => r.ListAsync(
+                    It.IsAny<MainTeamSpecification>(),
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
+        }
+
+        private void SetupRepositoryListAsync(IEnumerable<TeamMember>? teamMembers)
         {
             this.mockTeamRepository
-                .Setup(r => r.GetAllAsync(
-                    It.IsAny<Expression<Func<TeamMember, bool>>>(),
-                    It.IsAny<Func<IQueryable<TeamMember>, IIncludableQueryable<TeamMember, object>>>()))
-                .ReturnsAsync(teamMembers?.Where(m => m.IsMain));
+                .Setup(r => r.ListAsync(
+                    It.IsAny<MainTeamSpecification>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(teamMembers);
         }
 
         private void SetupMapper(IEnumerable<TeamMemberDto> teamMemberDTOs)
