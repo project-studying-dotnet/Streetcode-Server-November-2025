@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact.Delete
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Streetcode.Fact.Delete;
     using Xunit;
 
@@ -26,7 +27,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.id)
-                  .WithErrorMessage("ID факту має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.FactIdMustBeGreaterThanZero);
         }
 
         [Fact]

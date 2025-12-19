@@ -21,7 +21,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update
 
             RuleFor(x => x.TermId)
                 .GreaterThan(0)
-                .WithMessage(ErrorMessages.RelatedTermTermIdMustBeGreaterThanZero);
+                .WithMessage(ErrorMessages.RelatedTermIdMustBeGreaterThanZero);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Update
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.id)
-                  .WithErrorMessage("ID пов'язаного терміну має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.RelatedTermIdMustBeGreaterThanZero);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Update
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.RelatedTerm)
-                  .WithErrorMessage("Дані пов'язаного терміну не можуть бути порожніми");
+                  .WithErrorMessage(ErrorMessages.RelatedTermWordRequired);
         }
 
         [Fact]

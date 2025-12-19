@@ -2,6 +2,7 @@ namespace Streetcode.XUnitTest.MediatR.FullDelete
 {
     using AutoMapper;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.Interfaces.Cache;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull;
@@ -91,7 +92,7 @@ namespace Streetcode.XUnitTest.MediatR.FullDelete
             var result = await this.handler.Handle(new DeleteFullStreetcodeCommand(id), CancellationToken.None);
 
             Assert.True(result.IsFailed);
-            Assert.Equal(result.Errors[0].Message, $"Cannot find a streetcode with corresponding categoryId: {id}");
+            Assert.Equal(result.Errors[0].Message, string.Format(ErrorMessages.StreetcodeNotFoundByCategoryId, id));
         }
 
         [Theory]
@@ -125,7 +126,7 @@ namespace Streetcode.XUnitTest.MediatR.FullDelete
             var result = await this.handler.Handle(new DeleteFullStreetcodeCommand(id), CancellationToken.None);
 
             Assert.True(result.IsFailed);
-            Assert.Equal(result.Errors[0].Message, $"Failed to delete streetcode fully");
+            Assert.Equal(result.Errors[0].Message, ErrorMessages.StreetcodeFullDeletionFailed);
         }
     }
 }

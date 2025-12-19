@@ -3,6 +3,7 @@
     using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.DAL.Entities.Media.Images;
     using Streetcode.DAL.Entities.News;
     using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -102,7 +103,7 @@
             }
             else
             {
-                throw new InvalidOperationException($"Delete verification not implemented for type {typeof(T).Name}");
+                throw new InvalidOperationException(string.Format(ErrorMessages.DeleteVerificationWrongType, typeof(T).Name));
             }
         }
     }

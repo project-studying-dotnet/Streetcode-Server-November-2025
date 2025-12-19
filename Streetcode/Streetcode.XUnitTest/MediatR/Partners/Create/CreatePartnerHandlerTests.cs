@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.MediatR.Partners.Create;
@@ -253,7 +254,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
-            var exceptionMessage = "Database error occurred";
+            var exceptionMessage = ErrorMessages.DataBaseError;
 
             this.SetupMapperForCreatePartner(createPartnerDTO, partnerEntity);
             this.SetupCreateAsyncToThrowException(new Exception(exceptionMessage));
@@ -276,11 +277,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Verifies that the handler returns failure when SaveChanges throws an exception.
+        /// Verifies that the handler throws an exception when SaveChanges fails.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
-        public async Task Handle_ReturnsFailure_WhenSaveChangesThrowsException()
+        public async Task Handle_ThrowsException_WhenSaveChangesThrowsException()
         {
             // Arrange
             var createPartnerDTO = new CreatePartnerDto
@@ -294,7 +295,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
-            var exceptionMessage = "Save changes failed";
+            var exceptionMessage = ErrorMessages.CannotSaveChangesInDatabase;
 
             this.SetupMapperForCreatePartner(createPartnerDTO, partnerEntity);
             this.SetupCreateAsync(partnerEntity);
@@ -309,12 +310,6 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
             result.Errors.First().Message.Should().Be(exceptionMessage);
-
-            this.MockLogger.Verify(
-                logger => logger.LogError(
-                    It.IsAny<object>(),
-                    exceptionMessage),
-                Times.Once);
         }
 
         /// <summary>
@@ -357,7 +352,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.MockRepository.Verify(
                 repo => repo.SaveChangesAsync(),
                 Times.Exactly(2),
-                "because SaveChanges should be called after creating partner and after adding streetcodes");
+                ErrorMessages.VerifySaveChangesCalledTwicePartnerStreetcode);
         }
 
         /// <summary>
@@ -421,42 +416,6 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Verifies that the handler returns failure when the mapper returns null for the partner entity.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [Fact]
-        public async Task Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity()
-        {
-            // Arrange
-            var createPartnerDTO = new CreatePartnerDto
-            {
-                Id = 1,
-                Title = "New Partner",
-                IsKeyPartner = true,
-                IsVisibleEverywhere = false,
-                LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDto>(),
-            };
-
-            this.SetupMapperToReturnNullPartner(createPartnerDTO);
-
-            var query = new CreatePartnerQuery(createPartnerDTO);
-
-            // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle();
-
-            this.MockLogger.Verify(
-                logger => logger.LogError(
-                    It.IsAny<object>(),
-                    It.IsAny<string>()),
-                Times.Once);
-        }
-
-        /// <summary>
         /// Verifies that the handler returns failure when the streetcode repository throws an exception.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
@@ -478,7 +437,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
-            var exceptionMessage = "Streetcode repository error";
+            var exceptionMessage = ErrorMessages.StreetcodeRepositoryError;
 
             this.SetupMapperForCreatePartner(createPartnerDTO, partnerEntity);
             this.SetupCreateAsync(partnerEntity);

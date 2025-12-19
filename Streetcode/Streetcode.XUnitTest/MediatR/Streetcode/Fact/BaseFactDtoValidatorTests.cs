@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Streetcode.Fact;
     using Streetcode.BLL.Util.Validators;
     using Xunit;
@@ -27,7 +28,7 @@
             var result = _validator.TestValidate(dto);
 
             // Assert
-            Assert.Contains(result.Errors, e => e.ErrorMessage == "Заголовок факту є обов'язковим");
+            Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorMessages.FactTitleRequired);
         }
 
         [Fact]
@@ -38,7 +39,7 @@
 
             var result = _validator.TestValidate(dto);
 
-            Assert.Contains(result.Errors, e => e.ErrorMessage == $"Заголовок факту не може перевищувати {ValidationConstants.Fact.TitleMaxLength} символів");
+            Assert.Contains(result.Errors, e => e.ErrorMessage == string.Format(ErrorMessages.FactTitleTooLong, ValidationConstants.Fact.TitleMaxLength));
         }
 
         [Theory]
@@ -51,7 +52,7 @@
 
             var result = _validator.TestValidate(dto);
 
-            Assert.Contains(result.Errors, e => e.ErrorMessage == "Зміст факту є обов'язковим");
+            Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorMessages.FactContentRequired);
         }
 
         [Fact]
@@ -62,7 +63,7 @@
 
             var result = _validator.TestValidate(dto);
 
-            Assert.Contains(result.Errors, e => e.ErrorMessage == $"Зміст факту не може перевищувати {ValidationConstants.Fact.ContentMaxLength} символів");
+            Assert.Contains(result.Errors, e => e.ErrorMessage == string.Format(ErrorMessages.FactContentTooLong, ValidationConstants.Fact.ContentMaxLength));
         }
 
         [Theory]
@@ -75,7 +76,7 @@
 
             var result = _validator.TestValidate(dto);
 
-            Assert.Contains(result.Errors, e => e.ErrorMessage == "ID зображення має бути більше 0");
+            Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorMessages.FactImageIdMustBeGreaterThanZero);
         }
 
         [Fact]

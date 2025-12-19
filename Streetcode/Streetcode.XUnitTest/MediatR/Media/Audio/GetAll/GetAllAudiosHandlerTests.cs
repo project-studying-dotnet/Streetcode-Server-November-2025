@@ -5,6 +5,7 @@
     using FluentAssertions;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Audio;
     using Streetcode.BLL.Interfaces.BlobStorage;
     using Streetcode.BLL.Interfaces.Logging;
@@ -57,7 +58,6 @@
         {
             // Arrange.
             var (audioEntities, audioDtos) = CreateNullAudioEntitiesAndDTOs();
-            const string errorMsg = "Cannot find any audios";
             this.SetupMock(audioEntities!, audioDtos!);
 
             // Act.
@@ -65,7 +65,7 @@
 
             // Assert.
             result.IsFailed.Should().BeTrue();
-            this.VerifyLoggerErrorCalledOnce(errorMsg);
+            this.VerifyLoggerErrorCalledOnce(ErrorMessages.AudiosNotFound);
         }
 
         private static (IEnumerable<Audio> AudioEntities, IEnumerable<AudioDto> AudioDtos) CreateValidAudioEntitiesAndDTOs()

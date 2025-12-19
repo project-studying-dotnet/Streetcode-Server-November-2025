@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact.Update
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.BLL.MediatR.Streetcode.Fact.Update;
     using Xunit;
@@ -28,7 +29,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Id)
-                  .WithErrorMessage("ID факту має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.FactIdMustBeGreaterThanZero);
         }
 
         [Fact]

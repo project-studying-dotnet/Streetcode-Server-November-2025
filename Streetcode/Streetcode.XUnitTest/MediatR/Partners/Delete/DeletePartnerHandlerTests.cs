@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.MediatR.Partners.Delete;
 using Streetcode.DAL.Entities.Partners;
@@ -119,7 +120,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Be("No partner with such id");
+            result.Errors.First().Message.Should().Be(ErrorMessages.PartnerNotFound);
 
             this.MockRepository.Verify(
                 repo => repo.PartnersRepository.Delete(It.IsAny<Partner>()),
@@ -191,16 +192,16 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Verifies that the handler returns failure when SaveChanges throws an exception.
+        /// Verifies that the handler throws an exception when SaveChanges fails.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
-        public async Task Handle_ReturnsFailure_WhenSaveChangesThrowsException()
+        public async Task Handle_ThrowsException_WhenSaveChangesThrowsException()
         {
             // Arrange
             int partnerId = 1;
             var partner = PartnerTestHelpers.CreatePartnerEntity(partnerId);
-            var exceptionMessage = "Database save failed";
+            var exceptionMessage = ErrorMessages.CannotSaveChangesInDatabase;
 
             this.SetupRepositoryToReturnPartner(partner);
             this.SetupSaveChangesToThrowException(exceptionMessage);
@@ -208,21 +209,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var query = new DeletePartnerQuery(partnerId);
 
             // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
+            Func<Task> act = async () => await this._handler.Handle(query, CancellationToken.None);
 
             // Assert
-            result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Be(exceptionMessage);
+            await act.Should().ThrowAsync<Exception>()
+                .WithMessage(exceptionMessage);
 
             this.MockRepository.Verify(
                 repo => repo.PartnersRepository.Delete(partner),
-                Times.Once);
-
-            this.MockLogger.Verify(
-                logger => logger.LogError(
-                    It.IsAny<object>(),
-                    exceptionMessage),
                 Times.Once);
         }
 
@@ -235,7 +229,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         {
             // Arrange
             int partnerId = 1;
-            var expectedException = new InvalidOperationException("Database error");
+            var expectedException = new InvalidOperationException(ErrorMessages.DataBaseError);
 
             this.SetupRepositoryToThrowException(expectedException);
 
@@ -246,7 +240,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
-                .WithMessage("Database error");
+                .WithMessage(ErrorMessages.DataBaseError);
         }
 
         /// <summary>
@@ -278,7 +272,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            capturedPredicate.Should().NotBeNull("because predicate should be provided");
+            capturedPredicate.Should().NotBeNull(ErrorMessages.PredicateNotProvided);
 
             this.MockRepository.Verify(
                 repo => repo.PartnersRepository.GetFirstOrDefaultAsync(

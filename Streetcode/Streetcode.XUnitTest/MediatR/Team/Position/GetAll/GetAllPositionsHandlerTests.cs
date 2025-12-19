@@ -5,6 +5,7 @@
     using FluentAssertions.Execution;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Team.Position.GetAll;
@@ -16,7 +17,7 @@
 
     public class GetAllPositionsHandlerTests
     {
-        private const string ErrorMsg = "Cannot find any positions";
+        private readonly string ErrorMsg = ErrorMessages.PositionsNotFound;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<IPositionRepository> mockPositionRepository;
         private readonly Mock<ILoggerService> mockLogger;

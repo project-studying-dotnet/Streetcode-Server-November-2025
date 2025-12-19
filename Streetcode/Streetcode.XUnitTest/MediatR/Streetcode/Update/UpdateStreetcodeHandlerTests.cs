@@ -4,6 +4,7 @@ namespace Streetcode.XUnitTest.MediatR.Update
     using System.Threading.Tasks;
     using AutoMapper;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode;
     using Streetcode.BLL.Interfaces.Cache;
     using Streetcode.BLL.Interfaces.Logging;
@@ -104,7 +105,7 @@ namespace Streetcode.XUnitTest.MediatR.Update
             var result = await this.handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsFailed);
-            Assert.Equal("Streetcode not found", result.Errors[0].Message);
+            Assert.Equal(ErrorMessages.StreetcodeNotFound, result.Errors[0].Message);
         }
 
         [Fact]
@@ -121,12 +122,11 @@ namespace Streetcode.XUnitTest.MediatR.Update
             var result = await handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsFailed);
-            Assert.Equal("StreetcodeType value can't be changed", result.Errors[0].Message);
+            Assert.Equal(ErrorMessages.StreetcodeTypeCannotBeChanged, result.Errors[0].Message);
         }
 
         [Theory]
-        [InlineData(-1, "invalid audio Id")]
-        [InlineData(14, "Audio doesn't exist")]
+        [MemberData(nameof(InvalidAudioIdCases))]
         public async Task Handle_ShouldReturnFail_When_WrongAudio(int audioId, string error)
         {
             var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest(
@@ -173,15 +173,22 @@ namespace Streetcode.XUnitTest.MediatR.Update
         public static IList<object[]> ImagesTestData() =>
             new List<object[]>
             {
-            new object[] { new int?[] { 1, 5 }, "Image 1 not found; Image 5 not found" },
-            new object[] { new int?[] { 1 }, "Image 1 not found" },
+            new object[] { new int?[] { 1, 5 }, $"{string.Format(ErrorMessages.StreetcodeImageNotFoundById, 1)}; {string.Format(ErrorMessages.StreetcodeImageNotFoundById, 5)}" },
+            new object[] { new int?[] { 1 }, string.Format(ErrorMessages.StreetcodeImageNotFoundById, 1) },
             };
 
         public static IList<object[]> TagsTestData() =>
             new List<object[]>
             {
-            new object[] { new int?[] { 5, 10 }, "Tag 5 not found; Tag 10 not found" },
-            new object[] { new int?[] { 5 }, "Tag 5 not found" },
+            new object[] { new int?[] { 5, 10 }, $"{string.Format(ErrorMessages.StreetcodeTagNotFoundById, 5)}; {string.Format(ErrorMessages.StreetcodeTagNotFoundById, 10)}" },
+            new object[] { new int?[] { 5 }, string.Format(ErrorMessages.StreetcodeTagNotFoundById, 5) },
+            };
+
+        public static IEnumerable<object[]> InvalidAudioIdCases =>
+            new[]
+            {
+                new object[] { -1, ErrorMessages.StreetcodeAudioIdInvalid },
+                new object[] { 14, ErrorMessages.StreetcodeAudioNotFound }
             };
 
         public static IList<object[]> TagsImagesTestData() =>

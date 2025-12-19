@@ -4,18 +4,19 @@
 
 namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetAll
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Sources;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Sources.SourceLinkCategory.GetAll;
     using Streetcode.DAL.Entities.Sources;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Xunit;
 
     /// <summary>
@@ -65,7 +66,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetAll
         public async Task Handle_ShouldReturnFail_WhenRepositoryReturnsNull()
         {
             // Arrange
-            const string ErrorMsg = "Categories is null";
+            string ErrorMsg = ErrorMessages.CategoriesNotFound;
 
             this.mockRepoWrapper.Setup(r => r.SourceCategoryRepository.GetAllAsync(null, null))
                 .ReturnsAsync((IEnumerable<SourceLinkCategory>?)null);

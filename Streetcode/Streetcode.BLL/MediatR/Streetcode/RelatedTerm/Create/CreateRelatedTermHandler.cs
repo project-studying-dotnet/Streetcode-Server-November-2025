@@ -50,7 +50,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
 
             if(!isSuccessResult)
             {
-                const string errorMsg = "Cannot save changes in the database after related word creation!";
+                string errorMsg = ErrorMessages.CannotSaveChangesInDbAfterStreetcodeCreated;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
