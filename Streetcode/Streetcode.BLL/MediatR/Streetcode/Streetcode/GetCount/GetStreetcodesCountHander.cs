@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +34,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetCount
                 return Result.Ok(streetcodes.Count());
             }
 
-            const string errorMsg = "No streetcodes exist now";
+            var errorMsg = ErrorMessages.StreetcodeNotFound;
             _logger.LogError(request, errorMsg);
             return Result.Fail(errorMsg);
         }

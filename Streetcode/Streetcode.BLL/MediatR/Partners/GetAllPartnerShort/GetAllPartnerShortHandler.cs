@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -27,7 +27,7 @@ namespace Streetcode.BLL.MediatR.Partners.GetAllPartnerShort
 
             if (partners is null)
             {
-                const string errorMsg = $"Cannot find any partners";
+                var errorMsg = ErrorMessages.PartnerNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

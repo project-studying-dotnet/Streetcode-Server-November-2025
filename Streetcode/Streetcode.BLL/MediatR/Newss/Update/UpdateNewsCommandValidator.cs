@@ -16,11 +16,11 @@ namespace Streetcode.BLL.MediatR.Newss.Update
         {
             RuleFor(x => x.news)
                 .NotNull()
-                .WithMessage("Дані новини є обов'язковими")
+                .WithMessage(ErrorMessages.NewsDataRequired)
                 .SetValidator(new Create.NewsDtoValidator());
 
             RuleFor(x => x.news.Id)
-                .MustBeValidId("Id новини має бути більше 0")
+                .MustBeValidId(ErrorMessages.NewsIdMustBeGreaterThanZero)
                 .When(x => x.news != null);
         }
     }

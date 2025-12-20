@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId
 
             if (relatedTerms is null)
             {
-                const string errorMsg = "Cannot get words by term id";
+                var errorMsg = ErrorMessages.RelatedTermsNotFoundByTermId;
                 _logger.LogError(request, errorMsg);
                 return new Error(errorMsg);
             }
@@ -39,7 +39,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId
 
             if (relatedTermsDTO is null)
             {
-                const string errorMsg = "Cannot create DTOs for related words!";
+                var errorMsg = ErrorMessages.RelatedTermsMappingFailed;
                 _logger.LogError(request, errorMsg);
                 return new Error(errorMsg);
             }

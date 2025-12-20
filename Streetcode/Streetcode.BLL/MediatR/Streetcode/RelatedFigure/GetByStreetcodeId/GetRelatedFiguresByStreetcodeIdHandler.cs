@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,7 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
 
         if (relatedFigureIds is null)
         {
-            string errorMsg = $"Cannot find any related figures by a streetcode id: {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.RelatedFigureNotFound, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -42,7 +42,7 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
 
         if (relatedFigures is null)
         {
-            string errorMsg = $"Cannot find any related figures by a streetcode id: {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.RelatedFigureNotFound, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -60,19 +60,12 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
 
     private IQueryable<int> GetRelatedFigureIdsByStreetcodeId(int StreetcodeId)
     {
-        try
-        {
-            var observerIds = _repositoryWrapper.RelatedFigureRepository
-            .FindAll(f => f.TargetId == StreetcodeId).Select(o => o.ObserverId);
+        var observerIds = _repositoryWrapper.RelatedFigureRepository
+        .FindAll(f => f.TargetId == StreetcodeId).Select(o => o.ObserverId);
 
-            var targetIds = _repositoryWrapper.RelatedFigureRepository
-                .FindAll(f => f.ObserverId == StreetcodeId).Select(t => t.TargetId);
+        var targetIds = _repositoryWrapper.RelatedFigureRepository
+            .FindAll(f => f.ObserverId == StreetcodeId).Select(t => t.TargetId);
 
-            return observerIds.Union(targetIds).Distinct();
-        }
-        catch (ArgumentNullException)
-        {
-            return null;
-        }
+        return observerIds.Union(targetIds).Distinct();
     }
 }

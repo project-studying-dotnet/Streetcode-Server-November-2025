@@ -14,7 +14,7 @@ namespace Streetcode.BLL.MediatR.Partners.Create
         {
             RuleFor(x => x.newPartner)
                 .NotNull()
-                .WithMessage("Дані партнера є обов'язковими")
+                .WithMessage(ErrorMessages.PartnerDataRequired)
                 .SetValidator(new CreatePartnerDtoValidator());
         }
     }

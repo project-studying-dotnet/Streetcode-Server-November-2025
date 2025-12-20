@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -25,13 +25,13 @@ namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.GetAll
             _logger = logger;
         }
 
-        public async Task<Result<IEnumerable<SourceLinkCategoryDto>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationtoken)
+        public async Task<Result<IEnumerable<SourceLinkCategoryDto>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
             var allCategories = await _repositoryWrapper.SourceCategoryRepository.GetAllAsync(
                 include: cat => cat.Include(img => img.Image) !);
             if (allCategories == null)
             {
-                const string errorMsg = $"Categories is null";
+                var errorMsg = ErrorMessages.CategoriesNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

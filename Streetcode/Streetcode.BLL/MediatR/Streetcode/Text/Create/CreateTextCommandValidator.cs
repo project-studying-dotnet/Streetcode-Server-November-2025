@@ -11,7 +11,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Text.Create
         {
             RuleFor(x => x.Text)
                 .NotNull()
-                .WithMessage("Дані тексту не можуть бути порожніми")
+                .WithMessage(ErrorMessages.TextDataRequired)
                 .SetValidator(new TextCreateDtoValidator());
         }
     }

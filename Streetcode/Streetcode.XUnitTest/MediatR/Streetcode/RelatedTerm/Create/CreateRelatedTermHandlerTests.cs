@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Streetcode.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create;
@@ -80,7 +81,7 @@ public class CreateRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-        Assert.Equal("Слово з цим визначенням уже існує", result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermWordRequired, result.Errors.First().Message);
 
         this.mockRepository.VerifyGetAllAsyncCalledOnce();
         this.mockRepository.VerifyCreateCalledNever();
@@ -103,7 +104,7 @@ public class CreateRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-        Assert.Equal("Cannot save changes in the database after related word creation!", result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.CannotSaveChangesInDbAfterStreetcodeCreated, result.Errors.First().Message);
 
         this.mockRepository.VerifyGetAllAsyncCalledOnce();
         this.mockRepository.VerifyCreateCalledOnce(this.validRelatedTermEntity);
@@ -124,7 +125,7 @@ public class CreateRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-        Assert.Equal("Cannot create new related word for a term!", result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermWordRequired, result.Errors.First().Message);
 
         this.mockRepository.VerifyGetAllAsyncCalledNever();
         this.mockRepository.VerifyCreateCalledNever();

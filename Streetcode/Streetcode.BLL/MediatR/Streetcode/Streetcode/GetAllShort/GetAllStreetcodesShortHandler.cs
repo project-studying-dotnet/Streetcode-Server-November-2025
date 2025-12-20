@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode;
@@ -29,7 +29,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetAllShort
                 return Result.Ok(_mapper.Map<IEnumerable<StreetcodeShortDto>>(streetcodes));
             }
 
-            const string errorMsg = "No streetcodes exist now";
+            var errorMsg = ErrorMessages.StreetcodeNotFound;
             _logger.LogError(request, errorMsg);
             return Result.Fail(errorMsg);
         }

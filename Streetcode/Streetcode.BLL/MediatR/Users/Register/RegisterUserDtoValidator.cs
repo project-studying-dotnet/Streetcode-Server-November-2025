@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Util.Validators;
+
 namespace Streetcode.BLL.MediatR.Users.Register
 {
     /// <summary>
@@ -16,54 +17,66 @@ namespace Streetcode.BLL.MediatR.Users.Register
             // Name - required, field-specific length
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .WithMessage("Ім'я користувача є обов'язковим")
+                .WithMessage(ErrorMessages.UserNameRequired)
                 .MaximumLength(ValidationConstants.User.NameMaxLength)
-                .WithMessage($"Ім'я не може перевищувати {ValidationConstants.User.NameMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.UserNameTooLong,
+                    ValidationConstants.User.NameMaxLength));
 
             // Surname - allow optional, if present, check field-specific length
             RuleFor(x => x.Surname)
                 .MaximumLength(ValidationConstants.User.SurnameMaxLength)
-                .WithMessage($"Прізвище не може перевищувати {ValidationConstants.User.SurnameMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.UserSurnameTooLong,
+                    ValidationConstants.User.SurnameMaxLength));
 
             // UserName - required, field-specific length, and allowed format
             RuleFor(x => x.UserName)
                 .NotEmpty()
-                .WithMessage("Логін є обов'язковий")
+                .WithMessage(ErrorMessages.UserLoginRequired)
                 .MaximumLength(ValidationConstants.User.UserNameMaxLength)
-                .WithMessage($"Логін не може перевищувати {ValidationConstants.User.UserNameMaxLength} символів")
+                .WithMessage(string.Format(
+                    ErrorMessages.UserLoginTooLong,
+                    ValidationConstants.User.UserNameMaxLength))
                 .Matches(ValidationConstants.RegexPatterns.UserName)
-                .WithMessage("Логін може містити тільки латинські літери, цифри, крапку, дефіс і підкреслення");
+                .WithMessage(ErrorMessages.UserLoginInvalidFormat);
 
             // Email - required, robust format (standard regex), and max length
             RuleFor(x => x.Email)
                 .NotEmpty()
-                .WithMessage("Email є обов'язковий")
+                .WithMessage(ErrorMessages.UserEmailRequired)
                 .EmailAddress()
-                .WithMessage("Email має не вірний формат")
+                .WithMessage(ErrorMessages.UserEmailInvalidFormat)
                 .MaximumLength(ValidationConstants.User.EmailMaxLength)
-                .WithMessage($"Email не може перевищувати {ValidationConstants.User.EmailMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.UserEmailTooLong,
+                    ValidationConstants.User.EmailMaxLength));
 
             // Password - required, min/max, Identity-like composition
             RuleFor(x => x.Password)
                 .NotEmpty()
-                .WithMessage("Пароль є обов'язковий")
+                .WithMessage(ErrorMessages.UserPasswordRequired)
                 .MinimumLength(ValidationConstants.User.PasswordMinLength)
-                .WithMessage($"Пароль має містити як мінімум {ValidationConstants.User.PasswordMinLength} символів")
+                .WithMessage(string.Format(
+                    ErrorMessages.UserPasswordTooShort,
+                    ValidationConstants.User.PasswordMinLength))
                 .MaximumLength(ValidationConstants.User.PasswordMaxLength)
-                .WithMessage($"Пароль не може перевищувати {ValidationConstants.User.PasswordMaxLength} символів")
+                .WithMessage(string.Format(
+                    ErrorMessages.UserPasswordTooLong,
+                    ValidationConstants.User.PasswordMaxLength))
                 .Matches(ValidationConstants.RegexPatterns.Password)
-                .WithMessage("Пароль повинен містити щонайменше одну малу, одну велику літеру і одну цифру");
+                .WithMessage(ErrorMessages.UserPasswordInvalidFormat);
 
             // Role - must be defined enum
             RuleFor(x => x.Role)
                 .IsInEnum()
-                .WithMessage("Невірна роль користувача");
+                .WithMessage(ErrorMessages.UserRoleInvalid);
 
             // PhoneNumber - optional, but must match international format if given
             RuleFor(x => x.PhoneNumber)
                 .Matches(ValidationConstants.RegexPatterns.PhoneNumber)
                 .When(x => !string.IsNullOrWhiteSpace(x.PhoneNumber))
-                .WithMessage("Номер телефону повинен бути у міжнародному форматі (наприклад, +кодкраїниXXXXXXXXX)");
+                .WithMessage(ErrorMessages.UserPhoneNumberInvalidFormat);
         }
     }
 }

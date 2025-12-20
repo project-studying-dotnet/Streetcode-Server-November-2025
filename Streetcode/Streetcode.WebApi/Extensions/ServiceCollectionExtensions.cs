@@ -14,20 +14,21 @@ using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Interfaces.Cache;
 using Streetcode.BLL.Interfaces.Email;
 using Streetcode.BLL.Interfaces.Instagram;
+using Streetcode.BLL.Interfaces.Jwt;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.Interfaces.Payment;
 using Streetcode.BLL.Interfaces.Text;
-using Streetcode.BLL.Interfaces.Users;
 using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.BLL.Services.Cache;
 using Streetcode.BLL.Services.Email;
 using Streetcode.BLL.Services.Instagram;
+using Streetcode.BLL.Services.Jwt;
 using Streetcode.BLL.Services.Logging;
 using Streetcode.BLL.Services.Payment;
 using Streetcode.BLL.Services.Text;
 using Streetcode.DAL.Entities.AdditionalContent.Email;
-using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Entities.Users;
+using Streetcode.DAL.Persistence;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using Streetcode.DAL.Repositories.Realizations.Base;
 
@@ -82,6 +83,53 @@ public static class ServiceCollectionExtensions
         services.AddIdentity<User, IdentityRole<int>>()
                 .AddEntityFrameworkStores<StreetcodeDbContext>()
                 .AddUserManager<UserManager<User>>();
+
+        // JWT Authentication
+        var jwtSettings = configuration.GetSection("JwtSettings");
+        var secretKey = jwtSettings["SecretKey"];
+        var issuer = jwtSettings["Issuer"];
+        var audience = jwtSettings["Audience"];
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.SaveToken = true;
+            options.RequireHttpsMetadata = configuration.GetValue<bool>("JwtSettings:RequireHttpsMetadata", true);
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = issuer,
+                ValidAudience = audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey)),
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+
+        services.AddAuthorization();
+
+        // Register JwtService
+        services.AddScoped<IJwtService>(provider =>
+        {
+            var repository = provider.GetRequiredService<IRepositoryWrapper>();
+            var userManager = provider.GetRequiredService<UserManager<User>>();
+
+            return new JwtService(
+                secretKey: secretKey,
+                issuer: issuer,
+                audience: audience,
+                repository: repository,
+                userManager: userManager,
+                accessTokenExpirationMinutes: int.TryParse(jwtSettings["AccessTokenExpirationMinutes"], out var accessExpiration) ? accessExpiration : 15,
+                refreshTokenExpirationMinutes: int.TryParse(jwtSettings["RefreshTokenExpirationMinutes"], out var refreshExpiration) ? refreshExpiration : 600);
+        });
 
         services.AddHangfire(config =>
         {
