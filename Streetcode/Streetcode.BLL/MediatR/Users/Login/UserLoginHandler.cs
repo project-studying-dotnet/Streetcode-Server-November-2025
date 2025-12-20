@@ -1,31 +1,29 @@
-using AutoMapper;
 using FluentResults;
 using Microsoft.AspNetCore.Identity;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Entities.Users;
 using MediatR;
-using Streetcode.BLL.Interfaces.Users;
+using Streetcode.BLL.Interfaces.Jwt;
 
 namespace Streetcode.BLL.MediatR.Users.Login
 {
     public class UserLoginHandler : IRequestHandler<UserLoginCommand, Result<LoginResultDto>>
     {
-        private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly ITokenService _tokenService;
+        private readonly IJwtService _jwtService;
         private readonly ILoggerService _logger;
 
         public UserLoginHandler(
-            IMapper mapper,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
+            IJwtService jwtService,
             ILoggerService logger)
         {
-            _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
+            _jwtService = jwtService;
             _logger = logger;
         }
 
@@ -45,16 +43,16 @@ namespace Streetcode.BLL.MediatR.Users.Login
                     return Result.Fail(ErrorMessages.UserEmailOrPasswordInvalid);
                 }
 
-                var accessToken = _tokenService.GenerateJWTToken(user);
-                var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user);
+                var accessToken = await _jwtService.GenerateAccessTokenAsync(user);
+                var refreshToken = await _jwtService.GenerateRefreshTokenAsync(user);
 
                 var result = new LoginResultDto
                 {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken,
                     UserId = user.Id,
-                    AccessTokenExpiresAt = accessToken.ValidTo,
-                    RefreshTokenExpiresAt = DateTime.Now, // TODO: change on right time
+                    AccessToken = accessToken.Token,
+                    RefreshToken = refreshToken.Token,
+                    AccessTokenExpiresAt = accessToken.ExpiresAt,
+                    RefreshTokenExpiresAt = refreshToken.ExpiresAt,
                 };
 
                 return Result.Ok(result);
