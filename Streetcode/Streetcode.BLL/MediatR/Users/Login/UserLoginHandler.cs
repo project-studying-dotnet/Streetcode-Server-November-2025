@@ -59,8 +59,8 @@ namespace Streetcode.BLL.MediatR.Users.Login
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred during user login"); // TODO: Use constant from resx
-                return Result.Fail<LoginResultDto>("An error occurred during login"); // TODO: Use constant from resx
+                _logger.LogError(ex, ErrorMessages.LoginFailure);
+                return Result.Fail<LoginResultDto>(ErrorMessages.LoginFailure);
             }
         }
     }

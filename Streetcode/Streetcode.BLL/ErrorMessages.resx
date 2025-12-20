@@ -843,4 +843,7 @@
   <data name="UserEmailOrPasswordInvalid" xml:space="preserve">
     <value>Не вірний email або пароль</value>
   </data>
+  <data name="LoginFailure" xml:space="preserve">
+    <value>An error occurred during login</value>
+  </data>
 </root>
