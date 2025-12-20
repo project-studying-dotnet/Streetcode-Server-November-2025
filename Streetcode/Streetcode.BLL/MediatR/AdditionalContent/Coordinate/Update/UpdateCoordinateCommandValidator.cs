@@ -11,7 +11,7 @@ namespace Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Update
         {
             RuleFor(x => x.StreetcodeCoordinate)
                 .NotNull()
-                .WithMessage("Дані координат не можуть бути порожніми")
+                .WithMessage(ErrorMessages.CoordinateCantBeEmpty)
                 .SetValidator(new UpdateStreetcodeCoordinateDtoValidator());
         }
     }

@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Newss.Delete
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Newss.Delete;
     using Xunit;
 
@@ -21,7 +22,7 @@
             var command = new DeleteNewsCommand(id);
             var result = _validator.TestValidate(command);
             result.ShouldHaveValidationErrorFor(x => x.id)
-                  .WithErrorMessage("Id новини має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.NewsIdMustBeGreaterThanZero);
         }
 
         [Fact]

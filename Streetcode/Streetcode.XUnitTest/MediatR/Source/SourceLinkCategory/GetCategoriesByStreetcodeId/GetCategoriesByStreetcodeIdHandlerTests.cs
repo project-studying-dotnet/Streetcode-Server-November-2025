@@ -4,16 +4,11 @@
 
 namespace Streetcode.XUnitTest.MediatR.Sources.SourceLink.GetCategoriesByStreetcodeId
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading;
-    using System.Threading.Tasks;
     using AutoMapper;
     using FluentAssertions;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.Sources;
     using Streetcode.BLL.Interfaces.BlobStorage;
@@ -21,6 +16,12 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLink.GetCategoriesByStreetc
     using Streetcode.BLL.MediatR.Sources.SourceLink.GetCategoriesByStreetcodeId;
     using Streetcode.DAL.Entities.Sources;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Xunit;
 
     /// <summary>
@@ -88,7 +89,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLink.GetCategoriesByStreetc
         public async Task Handle_ShouldReturnFail_WhenCategoriesIsNull(int streetcodeId)
         {
             // Arrange
-            string errorMsg = $"Cant find any source category with the streetcode id {streetcodeId}";
+            string errorMsg = string.Format(ErrorMessages.CategoryNotFoundByStreetcodeId, streetcodeId);
 
             this.mockRepoWrapper.Setup(r => r.SourceCategoryRepository.GetAllAsync(
                 It.IsAny<Expression<Func<SourceLinkCategory, bool>>>(),

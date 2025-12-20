@@ -4,6 +4,7 @@
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Timeline;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.DAL.Entities.Timeline;
@@ -29,7 +30,7 @@
                     It.IsAny<Expression<Func<TimelineItem, bool>>>(),
                     It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<TimelineItem, object>>>()),
                 Times.Once(),
-                "GetAllAsync method should be called exactly once");
+                ErrorMessages.VerifyGetAllAsyncCalledOnce);
         }
 
         /// <summary>
@@ -44,7 +45,7 @@
                     It.IsAny<Expression<Func<TimelineItem, bool>>>(),
                     It.IsAny<Func<IQueryable<TimelineItem>, IIncludableQueryable<TimelineItem, object>>>()),
                 Times.Once(),
-                "GetFirstOrDefaultAsync method should be called exactly once");
+                ErrorMessages.VerifyGetFirstOrDefaultAsyncCalledOnce);
         }
 
         // -------------------------- Verify Logger -------------------------------
@@ -61,7 +62,7 @@
                     It.IsAny<object>(),
                     It.IsAny<string>()),
                 Times.Once(),
-                "LogError method should be called exactly once when timelineItems is null");
+                ErrorMessages.VerifyLogCalledOnceTimelineNull);
         }
 
         /// <summary>
@@ -76,7 +77,7 @@
                     It.IsAny<object>(),
                     It.IsAny<string>()),
                 Times.Never,
-                "LogError method should not be called when timelineItems exists");
+                ErrorMessages.VerifyLogDidntCalledWhenTimelineexists);
         }
 
         // -------------------------- Verify Mapper -------------------------------
@@ -92,7 +93,7 @@
             mapperMock.Verify(
                 m => m.Map<IEnumerable<TimelineItemDto>>(entities),
                 Times.Once,
-                "Map method should be called exactly once with the retrieved timeline items");
+                ErrorMessages.VerifyMapperCalledOnce);
         }
 
         /// <summary>
@@ -106,7 +107,7 @@
             mapperMock.Verify(
                 m => m.Map<TimelineItemDto>(entity),
                 Times.Once,
-                "Map method should be called exactly once with the retrieved timeline item");
+                ErrorMessages.VerifyMapperCalledOnce);
         }
 
         /// <summary>
@@ -118,7 +119,7 @@
             mapperMock.Verify(
                 m => m.Map<TDestination>(It.IsAny<object>()),
                 Times.Never,
-                $"Map method to {typeof(TDestination).Name} should not be called at all");
+                string.Format(ErrorMessages.MapToExatct, typeof(TDestination).Name));
         }
     }
 }

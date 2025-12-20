@@ -11,7 +11,7 @@ namespace Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Delete
         {
             RuleFor(x => x.Id)
                 .GreaterThan(0)
-                .WithMessage("ID координат має бути більше 0");
+                .WithMessage(ErrorMessages.CoordinateIdMustBeGreaterThanZero);
         }
     }
 }

@@ -6,6 +6,7 @@
     using FluentAssertions.Execution;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Team.GetAll;
@@ -16,7 +17,7 @@
 
     public class GetAllTeamHandlerTests
     {
-        private const string ErrorMsg = "Cannot find any team";
+        private readonly string ErrorMsg = ErrorMessages.TeamNotFound;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<ITeamRepository> mockTeamRepository;
         private readonly Mock<IMapper> mockMapper;

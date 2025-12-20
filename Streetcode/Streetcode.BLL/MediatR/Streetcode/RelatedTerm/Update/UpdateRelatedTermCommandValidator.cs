@@ -12,7 +12,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update
         {
             RuleFor(x => x.id)
                 .GreaterThan(0)
-                .WithMessage(ErrorMessages.RelatedTermTermIdMustBeGreaterThanZero);
+                .WithMessage(ErrorMessages.RelatedTermIdMustBeGreaterThanZero);
 
             RuleFor(x => x.RelatedTerm)
                 .NotNull()

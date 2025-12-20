@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Payment
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Payment;
     using Streetcode.BLL.MediatR.Payment;
     using Streetcode.BLL.Util.Validators;
@@ -23,7 +24,7 @@
             var dto = new PaymentDto { Amount = amount };
             var result = _validator.TestValidate(dto);
             result.ShouldHaveValidationErrorFor(x => x.Amount)
-                  .WithErrorMessage("Сума платежу має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.PaymentAmountMustBeGreaterThanZero);
         }
 
         [Fact]
@@ -32,7 +33,7 @@
             var dto = new PaymentDto { Amount = ValidationConstants.Payment.MaxAmount + 1 };
             var result = _validator.TestValidate(dto);
             result.ShouldHaveValidationErrorFor(x => x.Amount)
-                  .WithErrorMessage($"Сума платежу не може перевищувати {ValidationConstants.Payment.MaxAmount:N0}");
+                  .WithErrorMessage(string.Format(ErrorMessages.PaymentAmountExceeded, ValidationConstants.Payment.MaxAmount));
         }
 
         [Fact]
@@ -52,7 +53,7 @@
             };
             var result = _validator.TestValidate(dto);
             result.ShouldHaveValidationErrorFor(x => x.RedirectUrl)
-                  .WithErrorMessage($"URL перенаправлення не може перевищувати {ValidationConstants.Payment.RedirectUrlMaxLength} символів");
+                  .WithErrorMessage(string.Format(ErrorMessages.PaymentRedirectUrlTooLong, ValidationConstants.Payment.RedirectUrlMaxLength));
         }
 
         [Fact]
@@ -61,7 +62,7 @@
             var dto = new PaymentDto { RedirectUrl = "not-a-valid-url" };
             var result = _validator.TestValidate(dto);
             result.ShouldHaveValidationErrorFor(x => x.RedirectUrl)
-                  .WithErrorMessage("URL перенаправлення має бути правильним");
+                  .WithErrorMessage(ErrorMessages.PaymentRedirectUrlInvalid);
         }
 
         [Theory]

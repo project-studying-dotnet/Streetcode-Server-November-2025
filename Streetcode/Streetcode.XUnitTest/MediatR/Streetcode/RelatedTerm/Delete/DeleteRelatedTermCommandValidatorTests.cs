@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Delete
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
     using Streetcode.BLL.Util.Validators;
     using Xunit;
@@ -22,7 +23,7 @@
             var command = new DeleteRelatedTermCommand(word);
             var result = _validator.TestValidate(command);
             result.ShouldHaveValidationErrorFor(x => x.word)
-                  .WithErrorMessage("Слово для видалення є обов'язковим");
+                  .WithErrorMessage(ErrorMessages.RelatedTermWordForDeletionRequired);
         }
 
         [Fact]
@@ -34,7 +35,7 @@
             var result = _validator.TestValidate(command);
 
             result.ShouldHaveValidationErrorFor(x => x.word)
-                  .WithErrorMessage($"Слово не може перевищувати {ValidationConstants.RelatedTerm.WordMaxLength} символів");
+                  .WithErrorMessage(string.Format(ErrorMessages.RelatedTermWordTooLong, ValidationConstants.RelatedTerm.WordMaxLength));
         }
 
         [Fact]
