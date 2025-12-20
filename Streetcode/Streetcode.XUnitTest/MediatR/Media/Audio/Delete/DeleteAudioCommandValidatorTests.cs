@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.Delete
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Media.Audio.Delete;
     using Xunit;
 
@@ -27,7 +28,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Id)
-                  .WithErrorMessage("ID аудіо має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.IdMustBeGreaterThan);
         }
 
         [Theory]

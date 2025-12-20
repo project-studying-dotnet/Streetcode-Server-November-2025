@@ -39,7 +39,7 @@ public class GetPartnersByStreetcodeIdHandler : IRequestHandler<GetPartnersByStr
                 predicate: p => p.Streetcodes.Any(sc => sc.Id == streetcode.Id) || p.IsVisibleEverywhere,
                 include: p => p.Include(pl => pl.PartnerSourceLinks));
 
-        if (!partners.Any())
+        if (partners is null)
         {
             var errorMsg = string.Format(ErrorMessages.PartnersNotFoundByStreetcodeId, request.StreetcodeId);
             _logger.LogError(request, errorMsg);

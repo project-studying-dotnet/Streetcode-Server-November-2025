@@ -11,7 +11,7 @@ namespace Streetcode.BLL.MediatR.AdditionalContent.Tag.Create
         {
             RuleFor(x => x.tag)
                 .NotNull()
-                .WithMessage("Дані тегу не можуть бути порожніми")
+                .WithMessage(ErrorMessages.TagDataCantBeEmpty)
                 .SetValidator(new CreateTagDtoValidator());
         }
     }

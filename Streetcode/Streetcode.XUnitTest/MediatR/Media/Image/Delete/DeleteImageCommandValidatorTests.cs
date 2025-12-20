@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Image.Delete
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Media.Image.Delete;
     using Xunit;
 
@@ -27,7 +28,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Id)
-                  .WithErrorMessage("ID зображення має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.ImageIdMustBeGreaterThanZero);
         }
 
         [Theory]

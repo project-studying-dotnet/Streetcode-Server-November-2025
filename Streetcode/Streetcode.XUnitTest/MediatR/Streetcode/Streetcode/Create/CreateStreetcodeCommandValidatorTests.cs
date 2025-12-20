@@ -1,8 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Streetcodes.Create
 {
-    using System.Text.Json;
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.Create;
+    using System.Text.Json;
     using Xunit;
 
     public class CreateStreetcodeCommandValidatorTests
@@ -26,7 +27,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.rawJsonCreateDTO)
-                  .WithErrorMessage("Дані стріткоду є обов'язковими");
+                  .WithErrorMessage(ErrorMessages.StreetcodeDataRequired);
         }
 
         [Fact]
@@ -41,7 +42,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.rawJsonCreateDTO)
-                  .WithErrorMessage("Невірна структура JSON");
+                  .WithErrorMessage(ErrorMessages.WrongJSONStructure);
         }
 
         [Fact]
@@ -56,7 +57,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.rawJsonCreateDTO)
-                  .WithErrorMessage("Невірна структура JSON");
+                  .WithErrorMessage(ErrorMessages.WrongJSONStructure);
         }
 
         [Fact]

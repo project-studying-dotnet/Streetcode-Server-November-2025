@@ -1,22 +1,23 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Team.GetAllMain
 {
-    using System.Linq.Expressions;
     using AutoMapper;
     using FluentAssertions;
     using FluentAssertions.Execution;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Team.GetAll;
     using Streetcode.DAL.Entities.Team;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Team;
+    using System.Linq.Expressions;
     using Xunit;
 
     public class GetAllMainTeamHandlerTests
     {
-        private const string ErrorMsg = "Cannot find any team";
+        private readonly string ErrorMsg = ErrorMessages.TeamNotFound;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<ITeamRepository> mockTeamRepository;
         private readonly Mock<IMapper> mockMapper;

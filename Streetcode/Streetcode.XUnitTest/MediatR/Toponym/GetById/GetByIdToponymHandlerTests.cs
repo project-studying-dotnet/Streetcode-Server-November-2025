@@ -3,6 +3,7 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetById
     using System.Linq;
     using AutoMapper;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Toponyms;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Toponyms.GetById;
@@ -101,7 +102,7 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetById
             Assert.NotNull(result);
             Assert.True(result.IsFailed);
             Assert.NotEmpty(result.Errors);
-            Assert.Contains($"Cannot find any toponym with corresponding id: {toponymId}", result.Errors.First().Message);
+            Assert.Contains(string.Format(ErrorMessages.ToponymNotFoundById, toponymId), result.Errors.First().Message);
 
             toponymRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IToponymRepository, Toponym>();
             this.mapperMock.VerifyMapCalledNever<ToponymDto>();

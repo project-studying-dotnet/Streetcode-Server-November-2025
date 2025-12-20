@@ -2,6 +2,7 @@
 {
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Toponyms.Delete;
     using Streetcode.DAL.Repositories.Interfaces.Toponyms;
     using Streetcode.XUnitTest.Helpers;
@@ -66,7 +67,7 @@
             int streetcodeId = 1;
             int toponymId = 99;
             string expectedError =
-                $"Cannot find relationship with StreetcodeId={streetcodeId} and ToponymId={toponymId}";
+                string.Format(ErrorMessages.ToponymStreetcodeRelationsDelete, streetcodeId, toponymId);
             var command = new DeleteStreetcodeToponymCommand(streetcodeId, toponymId);
 
             this.MockRepository.SetupRepositoryWrapper(this.streetcodeToponymRepositoryMock);
@@ -98,7 +99,7 @@
         public async Task Handle_WhenSaveChangesFails_ShouldReturnFailure()
         {
             // Arrange.
-            const string expectedError = "Failed to delete streetcode-toponym relationship.";
+            string expectedError = ErrorMessages.FailedToDeleteToponymStreetcode;
             int streetcodeId = 1;
             int toponymId = 1;
             var entity = StreetcodeToponymTestData.CreateStreetcodeToponym(streetcodeId, toponymId);

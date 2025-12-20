@@ -6,6 +6,7 @@
     using global::MediatR;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.Streetcode;
     using Streetcode.BLL.Interfaces.Logging;
@@ -126,7 +127,7 @@
 
             Assert.True(result.IsFailed);
 
-            Assert.Equal($"Streetcode with Index {1} already exists", result.Errors[0].Message);
+            Assert.Equal(string.Format(ErrorMessages.StreetcodeWithIndexAlreadyExists, 1), result.Errors[0].Message);
         }
 
         [Fact]
@@ -162,7 +163,7 @@
 
             Assert.True(result.IsFailed);
 
-            Assert.Equal($"Exception occurred while creating streetcode: Test exception", result.Errors[0].Message);
+            Assert.Equal(ErrorMessages.StreetcodeTestException, result.Errors[0].Message);
         }
 
         [Fact]
@@ -393,23 +394,19 @@
             Assert.Equal(errorMessage, result.Errors[0].Message);
         }
 
-        public static IList<object[]> ImagesTestData()
-        {
-            return new List<object[]>
+        public static IList<object[]> ImagesTestData() =>
+            new List<object[]>
             {
-                new object[] { new int?[] { 1, 5 }, "Image 1 not found; Image 5 not found" },
-                new object[] { new int?[] { 1 }, "Image 1 not found" },
+            new object[] { new int?[] { 1, 5 }, $"{string.Format(ErrorMessages.StreetcodeImageNotFoundById, 1)}; {string.Format(ErrorMessages.StreetcodeImageNotFoundById, 5)}" },
+            new object[] { new int?[] { 1 }, string.Format(ErrorMessages.StreetcodeImageNotFoundById, 1) },
             };
-        }
 
-        public static IList<object[]> TagsTestData()
-        {
-            return new List<object[]>
+        public static IList<object[]> TagsTestData() =>
+            new List<object[]>
             {
-                new object[] { new int?[] { 5, 10 }, "Tag 5 not found; Tag 10 not found" },
-                new object[] { new int?[] { 5 }, "Tag 5 not found" },
+            new object[] { new int?[] { 5, 10 }, $"{string.Format(ErrorMessages.StreetcodeTagNotFoundById, 5)}; {string.Format(ErrorMessages.StreetcodeTagNotFoundById, 10)}" },
+            new object[] { new int?[] { 5 }, string.Format(ErrorMessages.StreetcodeTagNotFoundById, 5) },
             };
-        }
 
         public static IList<object[]> NullOrEmptyArrayData()
         {

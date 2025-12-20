@@ -3,6 +3,7 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.News;
     using Streetcode.BLL.Interfaces.BlobStorage;
@@ -21,8 +22,6 @@
     /// </summary>
     public class UpdateNewsHandlerTests
     {
-        private const string MappingNullErrorMessage = "Cannot convert null to news";
-        private const string SaveFailErrorMessage = "Failed to update news";
         private const int NewsId = 1;
         private const string Base64Data = "BASE64_DATA";
         private const string BlobNameFile = "file.jpg";
@@ -71,7 +70,7 @@
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle(e => e.Message.Contains(MappingNullErrorMessage));
+            result.Errors.Should().ContainSingle(e => e.Message.Contains(ErrorMessages.NewsConversionFailed));
 
             // Verify
             MockMapperHelper.VerifyMap<NewsDto, News>(this.mapperMock, Times.Once());
@@ -104,7 +103,7 @@
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle(e => e.Message.Contains(SaveFailErrorMessage));
+            result.Errors.Should().ContainSingle(e => e.Message.Contains(ErrorMessages.NewsUpdateFailed));
 
             // Verify
             MockRepoHelper.VerifyNewsUpdateOnce(this.repoMock);

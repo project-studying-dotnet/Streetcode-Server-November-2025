@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact.Create
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.BLL.MediatR.Streetcode.Fact.Create;
     using Streetcode.BLL.Util.Validators;
@@ -26,7 +27,7 @@
             var result = _validator.TestValidate(dto);
 
             result.ShouldHaveValidationErrorFor(x => x.StreetcodeId)
-                  .WithErrorMessage("ID стріткоду має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.StreetcodeIdMustBeGreaterThanZero);
         }
 
         [Fact]
@@ -37,7 +38,7 @@
 
             var result = _validator.TestValidate(dto);
 
-            Assert.Contains(result.Errors, e => e.ErrorMessage == "Заголовок факту є обов'язковим");
+            Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorMessages.FactTitleRequired);
         }
 
         [Fact]
@@ -48,7 +49,7 @@
 
             var result = _validator.TestValidate(dto);
 
-            Assert.Contains(result.Errors, e => e.ErrorMessage == "Зміст факту є обов'язковим");
+            Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorMessages.FactContentRequired);
         }
 
         [Fact]
@@ -59,7 +60,7 @@
 
             var result = _validator.TestValidate(dto);
 
-            Assert.Contains(result.Errors, e => e.ErrorMessage == "ID зображення має бути більше 0");
+            Assert.Contains(result.Errors, e => e.ErrorMessage == ErrorMessages.FactImageIdMustBeGreaterThanZero);
         }
 
         [Fact]

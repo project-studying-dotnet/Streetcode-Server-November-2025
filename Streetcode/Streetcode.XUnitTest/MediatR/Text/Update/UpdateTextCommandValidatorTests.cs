@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Text.Update
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
     using Streetcode.BLL.MediatR.Streetcode.Text.Update;
     using Xunit;
@@ -27,7 +28,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Id)
-                  .WithErrorMessage("ID тексту має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.TextIdMustBeGreaterThanZero);
         }
 
         [Fact]
@@ -41,7 +42,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Text)
-                  .WithErrorMessage("Дані тексту не можуть бути порожніми");
+                  .WithErrorMessage(ErrorMessages.TextDataRequired);
         }
 
         [Fact]

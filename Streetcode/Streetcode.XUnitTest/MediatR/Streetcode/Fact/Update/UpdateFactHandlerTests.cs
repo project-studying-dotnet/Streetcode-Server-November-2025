@@ -21,6 +21,7 @@
     using Streetcode.BLL.MediatR.Streetcode.Fact.Update;
     using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore.Query;
+    using Streetcode.BLL;
 
     public class UpdateFactHandlerTests
     {
@@ -44,7 +45,7 @@
         public async Task Handle_WhenFactDoesNotExist_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Fact was not found";
+            string errorMsg = ErrorMessages.FactNotFound;
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
             var updateFactDto = FactTestData.CreateUpdateFactDto(id: 1);
             var command = new UpdateFactCommand(updateFactDto);
@@ -71,7 +72,7 @@
         public async Task Handle_WhenImageIdChangedAndImageDoesNotExist_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Image was not found";
+            string errorMsg = ErrorMessages.ImageNotFound;
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
             var imageRepositoryMock = new Mock<IImageRepository>(MockBehavior.Strict);
             var existingFact = FactTestData.CreateFact(id: 1, imageId: 1);
@@ -102,7 +103,7 @@
         public async Task Handle_WhenTitleChangedAndDuplicateTitleExists_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Title already exists";
+            string errorMsg = ErrorMessages.FactTitleAlreadyExists;
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
             var existingFact = FactTestData.CreateFact(id: 1, imageId: 1);
             existingFact.Title = "Original Title";
@@ -266,7 +267,7 @@
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
             var updateFactDto = FactTestData.CreateUpdateFactDto(id: 1);
             var command = new UpdateFactCommand(updateFactDto);
-            var exceptionMessage = "Database connection failed";
+            var exceptionMessage = ErrorMessages.DatabaseConntectionFailed;
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(factRepositoryMock);
 

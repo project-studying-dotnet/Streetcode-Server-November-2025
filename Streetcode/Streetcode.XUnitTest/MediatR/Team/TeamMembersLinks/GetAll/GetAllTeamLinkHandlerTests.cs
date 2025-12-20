@@ -6,6 +6,7 @@
     using FluentAssertions.Execution;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Partners;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
@@ -18,7 +19,7 @@
 
     public class GetAllTeamLinkHandlerTests
     {
-        private const string ErrorMsg = "Cannot find any team links";
+        private readonly string ErrorMsg = ErrorMessages.TeamMemberLinkNotFound;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<ITeamLinkRepository> mockTeamLinkRepository;
         private readonly Mock<IMapper> mockMapper;

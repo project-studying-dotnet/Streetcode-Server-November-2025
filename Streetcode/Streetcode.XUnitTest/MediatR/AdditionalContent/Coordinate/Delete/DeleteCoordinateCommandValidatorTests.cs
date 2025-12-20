@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Coordinate.Delete
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Delete;
     using Xunit;
 
@@ -43,7 +44,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Id)
-                  .WithErrorMessage("ID координат має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.CoordinateIdMustBeGreaterThanZero);
         }
     }
 }
