@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Fact.GetById;
@@ -36,7 +37,7 @@
         {
             // Arrange
             var factId = 1;
-            string errorMsg = $"Cannot find any fact with corresponding id: {factId}";
+            string errorMsg = string.Format(ErrorMessages.FactNotFoundById, factId);
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
             var query = new GetFactByIdQuery(factId);
 

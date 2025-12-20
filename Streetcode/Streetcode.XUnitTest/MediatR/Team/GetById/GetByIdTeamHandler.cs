@@ -4,6 +4,7 @@
     using FluentAssertions;
     using FluentAssertions.Execution;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Team.GetById;
@@ -16,7 +17,7 @@
     public class GetByIdTeamHandlerTests
     {
         private const int TestMemberId = 1;
-        private const string ErrorMsgTemplate = "Cannot find any team with corresponding id: {0}";
+        private readonly string ErrorMsgTemplate = ErrorMessages.TeamNotFoundById;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<ITeamRepository> mockTeamRepository;
         private readonly Mock<IMapper> mockMapper;

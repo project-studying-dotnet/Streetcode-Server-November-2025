@@ -30,7 +30,7 @@ namespace Streetcode.BLL.MediatR.Toponyms.Delete
 
             if (streetcodeToponym is null)
             {
-                string errorMsg = $"Cannot find relationship with StreetcodeId={request.StreetcodeId} and ToponymId={request.ToponymId}";
+                string errorMsg = string.Format(ErrorMessages.ToponymStreetcodeRelationsDelete, request.StreetcodeId, request.ToponymId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -41,7 +41,7 @@ namespace Streetcode.BLL.MediatR.Toponyms.Delete
 
             if (!resultIsSuccess)
             {
-                const string errorMsg = "Failed to delete streetcode-toponym relationship.";
+                string errorMsg = ErrorMessages.FailedToDeleteToponymStreetcode;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

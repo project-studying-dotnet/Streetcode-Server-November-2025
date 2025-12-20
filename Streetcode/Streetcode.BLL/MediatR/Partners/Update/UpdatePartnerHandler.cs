@@ -23,10 +23,10 @@ namespace Streetcode.BLL.MediatR.Partners.Update
 
         public async Task<Result<PartnerDto>> Handle(UpdatePartnerQuery request, CancellationToken cancellationToken)
         {
-            var partner = _mapper.Map<Partner>(request.Partner);
-
             try
             {
+                var partner = _mapper.Map<Partner>(request.Partner);
+
                 var links = await _repositoryWrapper.PartnerSourceLinkRepository
                    .GetAllAsync(predicate: l => l.PartnerId == partner.Id);
 
@@ -72,7 +72,7 @@ namespace Streetcode.BLL.MediatR.Partners.Update
             catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                return Result.Fail(new Error(ex.Message));
             }
         }
     }

@@ -1,6 +1,7 @@
 using Ardalis.Specification;
 using FluentAssertions;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.MediatR.Partners.GetById;
 using Streetcode.DAL.Entities.Partners;
@@ -118,7 +119,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Assert
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
-            result.Errors.First().Message.Should().Contain($"Cannot find any partner with corresponding id: {partnerId}");
+            result.Errors.First().Message.Should().Contain(string.Format(ErrorMessages.PartnerNotFoundById, partnerId));
 
             this.MockLogger.Verify(
                 logger => logger.LogError(
@@ -163,7 +164,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         {
             // Arrange
             int partnerId = 1;
-            var expectedException = new InvalidOperationException("Database error");
+            var expectedException = new InvalidOperationException(ErrorMessages.DataBaseError);
 
             this.SetupRepositoryToThrowException(expectedException);
 
@@ -174,7 +175,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()
-                .WithMessage("Database error");
+                .WithMessage(ErrorMessages.DataBaseError);
         }
 
         /// <summary>

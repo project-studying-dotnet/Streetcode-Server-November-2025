@@ -3,6 +3,7 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.News;
     using Streetcode.BLL.Interfaces.BlobStorage;
     using Streetcode.BLL.Interfaces.Logging;
@@ -54,7 +55,7 @@
         public async Task Handle_ShouldReturnFailure_WhenNewsNotFound(int newsId)
         {
             // Arrange
-            string expectedErrorMessage = $"No news by entered Id - {newsId}";
+            string expectedErrorMessage = string.Format(ErrorMessages.NewsNotFoundById, newsId);
 
             MockRepoHelper.SetupGetNewsById(this.repoMock, null);
 

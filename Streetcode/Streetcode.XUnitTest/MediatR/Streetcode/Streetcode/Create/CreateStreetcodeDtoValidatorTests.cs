@@ -2,6 +2,7 @@
 {
     using System.Text.Json;
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.Create;
     using Xunit;
 
@@ -30,7 +31,7 @@
             var result = _validator.TestValidate(json, options => options.IncludeRuleSets("RequiredFields"));
 
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("Index є обов'язковим");
+                  .WithErrorMessage(ErrorMessages.StreetcodeIndexRequired);
         }
 
         [Fact]
@@ -46,7 +47,7 @@
             var result = _validator.TestValidate(json, options => options.IncludeRuleSets("RequiredFields"));
 
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("Назва є обов'язковою");
+                  .WithErrorMessage(ErrorMessages.StreetcodeTitleRequired);
         }
 
         [Fact]
@@ -63,7 +64,7 @@
             var result = _validator.TestValidate(json, options => options.IncludeRuleSets("DataTypes"));
 
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("Index має бути цілим числом");
+                  .WithErrorMessage(ErrorMessages.StreetcodeIndexMustBeInteger);
         }
 
         [Fact]
@@ -97,7 +98,7 @@
             var result = _validator.TestValidate(json, options => options.IncludeRuleSets("StringContent"));
 
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("Назва не може бути порожньою");
+                  .WithErrorMessage(ErrorMessages.StreetcodeTitleCannotBeEmpty);
         }
 
         [Fact]
@@ -114,7 +115,7 @@
             var result = _validator.TestValidate(json, options => options.IncludeRuleSets("StringContent"));
 
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("TransliterationUrl не може бути порожнім");
+                  .WithErrorMessage(ErrorMessages.StreetcodeTransliterationUrlCannotBeEmpty);
         }
 
         [Fact]
@@ -150,7 +151,7 @@
             var result = _validator.TestValidate(json, options => options.IncludeRuleSets("BusinessRules"));
 
             result.ShouldHaveValidationErrorFor(x => x)
-                  .WithErrorMessage("EventEndOrPersonDeathDate має бути пізніше ніж EventStartOrPersonBirthDate");
+                  .WithErrorMessage(ErrorMessages.StreetcodeDateRangeInvalid);
         }
 
         [Fact]

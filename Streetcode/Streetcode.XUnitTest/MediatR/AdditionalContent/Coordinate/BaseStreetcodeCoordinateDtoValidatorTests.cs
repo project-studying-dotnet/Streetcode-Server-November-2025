@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Coordinate
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
     using Streetcode.BLL.MediatR.AdditionalContent.Coordinate;
     using Streetcode.BLL.Util.Validators;
@@ -44,7 +45,10 @@
             var result = _validator.TestValidate(dto);
 
             result.ShouldHaveValidationErrorFor(x => x.Latitude)
-                  .WithErrorMessage($"Широта має бути в межах від {ValidationConstants.Coordinate.MinLatitude} до {ValidationConstants.Coordinate.MaxLatitude} градусів");
+                  .WithErrorMessage(string.Format(
+                      ErrorMessages.CoordinateWidthError,
+                      ValidationConstants.Coordinate.MinLatitude,
+                      ValidationConstants.Coordinate.MaxLatitude));
         }
 
         // 2. Тести для Longtitude (Довгота)
@@ -79,7 +83,10 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Longtitude)
-                  .WithErrorMessage($"Довгота має бути в межах від {ValidationConstants.Coordinate.MinLongitude} до {ValidationConstants.Coordinate.MaxLongitude} градусів");
+                  .WithErrorMessage(string.Format(
+                      ErrorMessages.CoordinateHeightError,
+                      ValidationConstants.Coordinate.MinLongitude,
+                      ValidationConstants.Coordinate.MaxLongitude));
         }
 
         [Theory]
@@ -110,7 +117,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.StreetcodeId)
-                  .WithErrorMessage("ID стріткоду має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.StreetcodeIdMustBeGreaterThanZero);
         }
 
         /// <summary>

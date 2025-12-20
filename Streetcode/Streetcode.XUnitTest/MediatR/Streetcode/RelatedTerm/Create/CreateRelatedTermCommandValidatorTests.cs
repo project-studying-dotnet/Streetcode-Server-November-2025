@@ -1,8 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent;
+    using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create;
     using Xunit;
 
     public class CreateRelatedTermCommandValidatorTests
@@ -25,7 +26,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.RelatedTerm)
-                  .WithErrorMessage("Дані пов'язаного терміну не можуть бути порожніми");
+                  .WithErrorMessage(ErrorMessages.RelatedTermDataRequired);
         }
 
         [Fact]

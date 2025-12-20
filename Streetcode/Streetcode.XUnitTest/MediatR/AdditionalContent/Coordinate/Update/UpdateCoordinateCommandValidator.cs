@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Coordinate.Update
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
     using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Update;
     using Xunit;
@@ -25,7 +26,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.StreetcodeCoordinate)
-                  .WithErrorMessage("Дані координат не можуть бути порожніми");
+                  .WithErrorMessage(ErrorMessages.CoordinateCantBeEmpty);
         }
 
         [Fact]
@@ -54,7 +55,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.StreetcodeCoordinate.Id)
-                  .WithErrorMessage("ID координат має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.CoordinateIdMustBeGreaterThanZero);
         }
     }
 }

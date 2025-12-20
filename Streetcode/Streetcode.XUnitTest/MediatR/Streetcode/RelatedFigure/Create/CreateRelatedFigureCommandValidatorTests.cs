@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.RelatedFigure.Create
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.MediatR.Streetcode.RelatedFigure.Create;
     using Xunit;
 
@@ -26,7 +27,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.ObserverId)
-                  .WithErrorMessage("ID стріткоду-спостерігача має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.RelatedFigureObserverIdMustBeGreaterThanZero);
         }
 
         [Fact]
@@ -41,7 +42,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.ObserverId)
-                  .WithErrorMessage("Стріткод не може бути пов'язаний сам з собою");
+                  .WithErrorMessage(ErrorMessages.RelatedFigureSelfReferenceNotAllowed);
         }
 
         [Theory]
@@ -57,7 +58,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.TargetId)
-                  .WithErrorMessage("ID цільового стріткоду має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.RelatedFigureTargetIdMustBeGreaterThanZero);
         }
 
         [Fact]

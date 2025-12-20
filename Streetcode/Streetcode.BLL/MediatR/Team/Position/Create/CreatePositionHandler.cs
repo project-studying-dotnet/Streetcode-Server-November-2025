@@ -28,16 +28,7 @@ namespace Streetcode.BLL.MediatR.Team.Create
                 Position = request.position.Position
             });
 
-            try
-            {
-                await _repository.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
-            }
-
+            await _repository.SaveChangesAsync();
             return Result.Ok(_mapper.Map<PositionDto>(newPosition));
         }
     }
