@@ -18,7 +18,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
 
             RuleFor(x => x.termId)
                 .GreaterThan(0)
-                .WithMessage("Ідентифікатор терміну повинен бути більше 0");
+                .WithMessage("Ідентифікатор терміну повинен бути більше 0")
                 .WithMessage(string.Format(
                     ErrorMessages.RelatedTermWordTooLong,
                     ValidationConstants.RelatedTerm.WordMaxLength));
