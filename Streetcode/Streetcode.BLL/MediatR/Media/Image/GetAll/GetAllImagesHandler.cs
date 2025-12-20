@@ -1,7 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
 using Streetcode.BLL.DTO.Media.Images;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Interfaces.Logging;
@@ -30,7 +29,7 @@ public class GetAllImagesHandler : IRequestHandler<GetAllImagesQuery, Result<IEn
 
         if (images is null)
         {
-            const string errorMsg = $"Cannot find any image";
+            var errorMsg = ErrorMessages.ImageNotFound;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
@@ -35,7 +35,7 @@ public class GetTextByStreetcodeIdHandler : IRequestHandler<GetTextByStreetcodeI
             if (await _repositoryWrapper.StreetcodeRepository
                  .GetFirstOrDefaultAsync(s => s.Id == request.StreetcodeId) == null)
             {
-                string errorMsg = $"Cannot find a transaction link by a streetcode id: {request.StreetcodeId}, because such streetcode doesn`t exist";
+                var errorMsg = string.Format(ErrorMessages.TransactionLinkNotFoundByStreetcodeId, request.StreetcodeId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

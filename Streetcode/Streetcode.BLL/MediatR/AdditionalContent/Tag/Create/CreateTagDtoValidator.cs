@@ -13,11 +13,11 @@ namespace Streetcode.BLL.MediatR.AdditionalContent.Tag.Create
         {
             RuleFor(x => x.Title)
                 .NotEmpty()
-                .WithMessage("Назва тегу є обов'язковою")
+                .WithMessage(ErrorMessages.TagNameIsRequired)
                 .MaximumLength(ValidationConstants.Tag.TitleMaxLength)
-                .WithMessage($"Назва тегу не може перевищувати {ValidationConstants.Tag.TitleMaxLength} символів")
+                .WithMessage(string.Format(ErrorMessages.TagNameCantExceed, ValidationConstants.Tag.TitleMaxLength))
                 .Matches(@"^[а-яА-ЯіІїЇєЄґҐa-zA-Z0-9\s\-]+$")
-                .WithMessage("Назва тегу може містити лише літери, цифри, пробіли та дефіси");
+                .WithMessage(ErrorMessages.TagFormatError);
         }
     }
 }

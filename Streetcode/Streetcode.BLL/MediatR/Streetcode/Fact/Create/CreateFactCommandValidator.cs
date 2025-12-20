@@ -11,7 +11,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Create
         {
             RuleFor(x => x.newFact)
                 .NotNull()
-                .WithMessage("Дані факту не можуть бути порожніми")
+                .WithMessage(ErrorMessages.FactDataRequired)
                 .SetValidator(new CreateFactDtoValidator());
         }
     }

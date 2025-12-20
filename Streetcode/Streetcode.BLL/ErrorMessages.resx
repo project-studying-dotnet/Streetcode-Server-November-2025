@@ -1,0 +1,843 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="NewsNotFoundByUrl" xml:space="preserve">
+    <value>No news by entered Url - {0}</value>
+  </data>
+  <data name="StreetcodeCreationFailed" xml:space="preserve">
+    <value>Failed to create a streetcode</value>
+  </data>
+  <data name="ValidationException" xml:space="preserve">
+    <value>One or more validation failures have occurred.</value>
+  </data>
+  <data name="IdMustBeGreaterThan" xml:space="preserve">
+    <value>Id має бути більше 0</value>
+  </data>
+  <data name="ArtsNotFound" xml:space="preserve">
+    <value>Cannot find any arts</value>
+  </data>
+  <data name="ArtNotFoundById" xml:space="preserve">
+    <value>Cannot find an art with corresponding id: {0}</value>
+  </data>
+  <data name="ArtNotFoundByStreetcodeId" xml:space="preserve">
+    <value>Cannot find any art with corresponding streetcode id: {0}</value>
+  </data>
+  <data name="AudioBase64Required" xml:space="preserve">
+    <value>Дані аудіо в Base64 є обов'язковими</value>
+  </data>
+  <data name="AudioBase64Invalid" xml:space="preserve">
+    <value>BaseFormat має бути дійсним рядком Base64</value>
+  </data>
+  <data name="AudioSizeExceeded" xml:space="preserve">
+    <value>Розмір аудіо не може перевищувати {0}МБ після декодування</value>
+  </data>
+  <data name="AudioExtensionRequired" xml:space="preserve">
+    <value>Розширення аудіо є обов'язковим</value>
+  </data>
+  <data name="AudioExtensionInvalid" xml:space="preserve">
+    <value>Розширення аудіо має бути одним з: {0}</value>
+  </data>
+  <data name="MimeTypeTooLong" xml:space="preserve">
+    <value>MimeType не може перевищувати {0} символів</value>
+  </data>
+  <data name="TitleTooLong" xml:space="preserve">
+    <value>Назва не може перевищувати {0} символів</value>
+  </data>
+  <data name="DescriptionTooLong" xml:space="preserve">
+    <value>Опис не може перевищувати {0} символів</value>
+  </data>
+  <data name="AudioDataRequired" xml:space="preserve">
+    <value>Дані аудіо є обов'язковими</value>
+  </data>
+  <data name="AudioCreationFailed" xml:space="preserve">
+    <value>Failed to create an audio</value>
+  </data>
+  <data name="AudioDeletionFailed" xml:space="preserve">
+    <value>Failed to delete an audio</value>
+  </data>
+  <data name="AudioNotFoundById" xml:space="preserve">
+    <value>Cannot find an audio with corresponding audioId: {0}</value>
+  </data>
+  <data name="AudiosNotFound" xml:space="preserve">
+    <value>Cannot find any audios</value>
+  </data>
+  <data name="AudioNotFoundByStreetcodeId" xml:space="preserve">
+    <value>Cannot find an audio with the corresponding streetcode id: {0}</value>
+  </data>
+  <data name="ImageDataRequired" xml:space="preserve">
+    <value>Дані зображення є обов'язковими</value>
+  </data>
+  <data name="ImageBase64Required" xml:space="preserve">
+    <value>Дані зображення в Base64 є обов'язковими</value>
+  </data>
+  <data name="ImageBase64Invalid" xml:space="preserve">
+    <value>BaseFormat має бути дійсним рядком Base64</value>
+  </data>
+  <data name="ImageSizeExceeded" xml:space="preserve">
+    <value>Розмір зображення не може перевищувати {0}МБ після декодування</value>
+  </data>
+  <data name="ImageExtensionRequired" xml:space="preserve">
+    <value>Розширення зображення є обов'язковим</value>
+  </data>
+  <data name="ImageExtensionInvalid" xml:space="preserve">
+    <value>Розширення зображення має бути одним з: {0}</value>
+  </data>
+  <data name="AltTextTooLong" xml:space="preserve">
+    <value>Alt текст не може перевищувати {0} символів</value>
+  </data>
+  <data name="InvalidImageFormat" xml:space="preserve">
+    <value>Invalid image format. Allowed formats: .png, .jpg, .jpeg, .webp</value>
+  </data>
+  <data name="ImageCreationFailed" xml:space="preserve">
+    <value>Failed to create an image</value>
+  </data>
+  <data name="ImageIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID зображення має бути більше 0</value>
+  </data>
+  <data name="ImageNotFoundByCategoryId" xml:space="preserve">
+    <value>Cannot find an image with corresponding categoryId: {0}</value>
+  </data>
+  <data name="ImageDeletionFailed" xml:space="preserve">
+    <value>Failed to delete an image</value>
+  </data>
+  <data name="ImageNotFound" xml:space="preserve">
+    <value>Cannot find any image</value>
+  </data>
+  <data name="ImageNotFoundById" xml:space="preserve">
+    <value>Cannot find an image with corresponding id: {0}</value>
+  </data>
+  <data name="ImageNotFoundByStreetcodeId" xml:space="preserve">
+    <value>Cannot find an image with the corresponding streetcode id:</value>
+  </data>
+  <data name="VideosNotFound" xml:space="preserve">
+    <value>Cannot find any videos</value>
+  </data>
+  <data name="StreetcodeNotFoundById" xml:space="preserve">
+    <value>Streetcode with id: {0} doesn't exist</value>
+  </data>
+  <data name="VideoNotFoundById" xml:space="preserve">
+    <value>Cannot find a video with corresponding id: {0}</value>
+  </data>
+  <data name="NewsTitleRequired" xml:space="preserve">
+    <value>Назва новини є обов'язковою</value>
+  </data>
+  <data name="NewsTitleTooLong" xml:space="preserve">
+    <value>Назва новини не може перевищувати {0} символів</value>
+  </data>
+  <data name="NewsTextRequired" xml:space="preserve">
+    <value>Текст новини є обов'язковим</value>
+  </data>
+  <data name="NewsUrlRequired" xml:space="preserve">
+    <value>URL новини є обов'язковим</value>
+  </data>
+  <data name="NewsUrlTooLong" xml:space="preserve">
+    <value>URL новини не може перевищувати {0} символів</value>
+  </data>
+  <data name="NewsCreationDateRequired" xml:space="preserve">
+    <value>Дата створення є обов'язковою</value>
+  </data>
+  <data name="NewsCreationDateInFuture" xml:space="preserve">
+    <value>Дата створення не може бути в майбутньому</value>
+  </data>
+  <data name="NewsDataRequired" xml:space="preserve">
+    <value>Дані новини є обов'язковими</value>
+  </data>
+  <data name="NewsCreationFailed" xml:space="preserve">
+    <value>Failed to create a news</value>
+  </data>
+  <data name="NewsConversionFailed" xml:space="preserve">
+    <value>Cannot convert null to news</value>
+  </data>
+  <data name="NewsIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>Id новини має бути більше 0</value>
+  </data>
+  <data name="NewsNotFoundById" xml:space="preserve">
+    <value>No news found by entered Id - {0}</value>
+  </data>
+  <data name="NewsDeletionFailed" xml:space="preserve">
+    <value>Failed to delete news</value>
+  </data>
+  <data name="NewsNotFound" xml:space="preserve">
+    <value>There are no news in the database</value>
+  </data>
+  <data name="NewsUpdateFailed" xml:space="preserve">
+    <value>Failed to update news</value>
+  </data>
+  <data name="PartnerDataRequired" xml:space="preserve">
+    <value>Дані партнера є обов'язковими</value>
+  </data>
+  <data name="PartnerTitleRequired" xml:space="preserve">
+    <value>Назва партнера є обов'язковою</value>
+  </data>
+  <data name="PartnerLogoIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>LogoId має бути більше 0</value>
+  </data>
+  <data name="PartnerStreetcodesRequired" xml:space="preserve">
+    <value>Список стріткодів є обов'язковим</value>
+  </data>
+  <data name="PartnerTitleTooLong" xml:space="preserve">
+    <value>Назва партнера не може перевищувати {0} символів</value>
+  </data>
+  <data name="PartnerDescriptionTooLong" xml:space="preserve">
+    <value>Опис не може перевищувати {0} символів</value>
+  </data>
+  <data name="PartnerUrlTitleTooLong" xml:space="preserve">
+    <value>UrlTitle не може перевищувати {0} символів</value>
+  </data>
+  <data name="PartnerTargetUrlInvalid" xml:space="preserve">
+    <value>TargetUrl має бути дійсною абсолютною URL-адресою</value>
+  </data>
+  <data name="PartnerTitleAlreadyExists" xml:space="preserve">
+    <value>Партнер з такою назвою вже існує</value>
+  </data>
+  <data name="PartnerIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID партнера має бути більше 0</value>
+  </data>
+  <data name="PartnerNotFound" xml:space="preserve">
+    <value>No partner with such id</value>
+  </data>
+  <data name="PartnerNotFoundById" xml:space="preserve">
+    <value>Cannot find any partner with corresponding id: {0}</value>
+  </data>
+  <data name="PartnersNotFoundByStreetcodeId" xml:space="preserve">
+    <value>Cannot find any partner with corresponding streetcode id: {0}</value>
+  </data>
+  <data name="PaymentAmountMustBeGreaterThanZero" xml:space="preserve">
+    <value>Сума платежу має бути більше 0</value>
+  </data>
+  <data name="PaymentAmountExceeded" xml:space="preserve">
+    <value>Сума платежу не може перевищувати {0:N0}</value>
+  </data>
+  <data name="PaymentRedirectUrlTooLong" xml:space="preserve">
+    <value>URL перенаправлення не може перевищувати {0} символів</value>
+  </data>
+  <data name="PaymentRedirectUrlInvalid" xml:space="preserve">
+    <value>URL перенаправлення має бути правильним</value>
+  </data>
+  <data name="PaymentDataRequired" xml:space="preserve">
+    <value>Дані платежу не можуть бути порожніми</value>
+  </data>
+  <data name="StreetcodeDataRequired" xml:space="preserve">
+    <value>Дані стріткоду є обов'язковими</value>
+  </data>
+  <data name="CategoryNotFoundById" xml:space="preserve">
+    <value>Cannot find any srcCategory by the corresponding id: {0}</value>
+  </data>
+  <data name="CategoryNotFoundByStreetcodeId" xml:space="preserve">
+    <value>Cant find any source category with the streetcode id {0}</value>
+  </data>
+  <data name="CategoriesNotFound" xml:space="preserve">
+    <value>Categories is null</value>
+  </data>
+  <data name="FactTitleAlreadyExists" xml:space="preserve">
+    <value>Fact with the same title already exists for this Streetcode</value>
+  </data>
+  <data name="FactMappingFailed" xml:space="preserve">
+    <value>Failed to map CreateFactDTO to Fact entity</value>
+  </data>
+  <data name="StreetcodeIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID стріткоду має бути більше 0</value>
+  </data>
+  <data name="FactDataRequired" xml:space="preserve">
+    <value>Дані факту не можуть бути порожніми</value>
+  </data>
+  <data name="FactNotFound" xml:space="preserve">
+    <value>Fact was not found</value>
+  </data>
+  <data name="FactIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID факту має бути більше 0</value>
+  </data>
+  <data name="FactNotFoundById" xml:space="preserve">
+    <value>Cannot find any fact with corresponding id: {0}</value>
+  </data>
+  <data name="FactNotFoundByStreetcodeId" xml:space="preserve">
+    <value>Cannot find any fact by the streetcode id:</value>
+  </data>
+  <data name="FactTitleRequired" xml:space="preserve">
+    <value>Заголовок факту є обов'язковим</value>
+  </data>
+  <data name="FactTitleTooLong" xml:space="preserve">
+    <value>Заголовок факту не може перевищувати {0} символів</value>
+  </data>
+  <data name="FactContentRequired" xml:space="preserve">
+    <value>Зміст факту є обов'язковим</value>
+  </data>
+  <data name="FactContentTooLong" xml:space="preserve">
+    <value>Зміст факту не може перевищувати {0} символів</value>
+  </data>
+  <data name="FactImageIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID зображення має бути більше 0</value>
+  </data>
+  <data name="RelatedFigureCreationFailed" xml:space="preserve">
+    <value>Failed to create a relation</value>
+  </data>
+  <data name="RelatedFigureObserverIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID стріткоду-спостерігача має бути більше 0</value>
+  </data>
+  <data name="RelatedFigureTargetIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID цільового стріткоду має бути більше 0</value>
+  </data>
+  <data name="RelatedFigureSelfReferenceNotAllowed" xml:space="preserve">
+    <value>Стріткод не може бути пов'язаний сам з собою</value>
+  </data>
+  <data name="RelatedFigureNotFound" xml:space="preserve">
+    <value>Cannot find a relation between streetcodes with corresponding ids: {0} &amp; '{1}'</value>
+  </data>
+  <data name="RelatedFigureDeletionFailed" xml:space="preserve">
+    <value>Failed to delete a relation</value>
+  </data>
+  <data name="StreetcodeNotFoundByTagId" xml:space="preserve">
+    <value>Cannot find any streetcode with corresponding tagid: {0}</value>
+  </data>
+  <data name="RelatedTermWordRequired" xml:space="preserve">
+    <value>Слово є обов'язковим</value>
+  </data>
+  <data name="RelatedTermWordTooLong" xml:space="preserve">
+    <value>Слово не може перевищувати {0} символів</value>
+  </data>
+  <data name="RelatedTermIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID терміну має бути більше 0</value>
+  </data>
+  <data name="RelatedTermWordAlreadyExists" xml:space="preserve">
+    <value>Слово з цим визначенням уже існує</value>
+  </data>
+  <data name="CannotMapEntity" xml:space="preserve">
+    <value>Cannot map entity</value>
+  </data>
+  <data name="RelatedTermDataRequired" xml:space="preserve">
+    <value>Дані пов'язаного терміну не можуть бути порожніми</value>
+  </data>
+  <data name="RelatedTermWordForDeletionRequired" xml:space="preserve">
+    <value>Слово для видалення є обов'язковим</value>
+  </data>
+  <data name="RelatedTermDeletionFailed" xml:space="preserve">
+    <value>Failed to delete a related term</value>
+  </data>
+  <data name="RelatedTermNotFound" xml:space="preserve">
+    <value>Cannot find a related term: {0}</value>
+  </data>
+  <data name="RelatedTermsNotFoundByTermId" xml:space="preserve">
+    <value>Cannot get words by term id</value>
+  </data>
+  <data name="RelatedTermsMappingFailed" xml:space="preserve">
+    <value>Cannot create DTOs for related words</value>
+  </data>
+  <data name="WrongJSONStructure" xml:space="preserve">
+    <value>Невірна структура JSON</value>
+  </data>
+  <data name="StreetcodeIndexRequired" xml:space="preserve">
+    <value>Index є обов'язковим</value>
+  </data>
+  <data name="StreetcodeTypeRequired" xml:space="preserve">
+    <value>StreetcodeType є обов'язковим</value>
+  </data>
+  <data name="StreetcodeTitleRequired" xml:space="preserve">
+    <value>Назва є обов'язковою</value>
+  </data>
+  <data name="StreetcodeEventStartOrPersonBirthDateRequired" xml:space="preserve">
+    <value>EventStartOrPersonBirthDate є обов'язковим</value>
+  </data>
+  <data name="StreetcodeTransliterationUrlRequired" xml:space="preserve">
+    <value>TransliterationUrl є обов'язковим</value>
+  </data>
+  <data name="StreetcodeIndexMustBeInteger" xml:space="preserve">
+    <value>Index має бути цілим числом</value>
+  </data>
+  <data name="StreetcodeTypeInvalid" xml:space="preserve">
+    <value>StreetcodeType має бути одним з: {0}</value>
+  </data>
+  <data name="StreetcodeEventStartOrPersonBirthDateInvalid" xml:space="preserve">
+    <value>EventStartOrPersonBirthDate має бути дійсною датою</value>
+  </data>
+  <data name="StreetcodeEventEndOrPersonDeathDateInvalid" xml:space="preserve">
+    <value>EventEndOrPersonDeathDate має бути дійсною датою</value>
+  </data>
+  <data name="StreetcodeAudioIdMustBeInteger" xml:space="preserve">
+    <value>AudioId має бути цілим числом</value>
+  </data>
+  <data name="StreetcodeTitleCannotBeEmpty" xml:space="preserve">
+    <value>Назва не може бути порожньою</value>
+  </data>
+  <data name="StreetcodeTransliterationUrlCannotBeEmpty" xml:space="preserve">
+    <value>TransliterationUrl не може бути порожнім</value>
+  </data>
+  <data name="StreetcodeTitleTooLong" xml:space="preserve">
+    <value>Назва не може перевищувати {0} символів</value>
+  </data>
+  <data name="StreetcodeAliasTooLong" xml:space="preserve">
+    <value>Alias не може перевищувати {0} символів</value>
+  </data>
+  <data name="StreetcodeShortDescriptionTooLong" xml:space="preserve">
+    <value>ShortDescription не може перевищувати {0} символів</value>
+  </data>
+  <data name="StreetcodeDateStringTooLong" xml:space="preserve">
+    <value>DateString не може перевищувати {0} символів</value>
+  </data>
+  <data name="StreetcodeTeaserTooLong" xml:space="preserve">
+    <value>Teaser не може перевищувати {0} символів</value>
+  </data>
+  <data name="StreetcodeTransliterationUrlTooLong" xml:space="preserve">
+    <value>TransliterationUrl не може перевищувати {0} символів</value>
+  </data>
+  <data name="StreetcodeDateRangeInvalid" xml:space="preserve">
+    <value>EventEndOrPersonDeathDate має бути пізніше ніж EventStartOrPersonBirthDate</value>
+  </data>
+  <data name="StreetcodeAudioIdMustBePositive" xml:space="preserve">
+    <value>AudioId має бути більше {0}</value>
+  </data>
+  <data name="AudioNotFound" xml:space="preserve">
+    <value>Audio not found</value>
+  </data>
+  <data name="TagNotFoundById" xml:space="preserve">
+    <value>Tag {0} not found</value>
+  </data>
+  <data name="StreetcodeWithIndexAlreadyExists" xml:space="preserve">
+    <value>Streetcode with Index {0} already exists</value>
+  </data>
+  <data name="StreetcodeNotFoundByCategoryId" xml:space="preserve">
+    <value>Cannot find a streetcode with corresponding categoryId: {0}</value>
+  </data>
+  <data name="StreetcodeFullDeletionFailed" xml:space="preserve">
+    <value>Failed to delete streetcode fully</value>
+  </data>
+  <data name="StreetcodeSoftDeletionFailed" xml:space="preserve">
+    <value>Failed to change status of streetcode to deleted</value>
+  </data>
+  <data name="SubtitlesNotFound" xml:space="preserve">
+    <value>Cannot find any subtitles</value>
+  </data>
+  <data name="StreetcodeNotFound" xml:space="preserve">
+    <value>No such streetcode exists</value>
+  </data>
+  <data name="StreetcodeNotFoundByIndex" xml:space="preserve">
+    <value>Streetcode with index: {0} doesn't exist</value>
+  </data>
+  <data name="StreetcodeNotFoundByTransliterationUrl" xml:space="preserve">
+    <value>Cannot find streetcode by transliteration url: {0}</value>
+  </data>
+  <data name="StreetcodeMappingToShortDtoFailed" xml:space="preserve">
+    <value>Cannot map streetcode to shortDTO</value>
+  </data>
+  <data name="StreetcodeIdRequired" xml:space="preserve">
+    <value>Id є обов'язковим</value>
+  </data>
+  <data name="StreetcodeIdMustBeInteger" xml:space="preserve">
+    <value>Id має бути цілим числом</value>
+  </data>
+  <data name="StreetcodeTypeCannotBeChanged" xml:space="preserve">
+    <value>StreetcodeType value can't be changed</value>
+  </data>
+  <data name="StreetcodeUpdateExceptionOccurred" xml:space="preserve">
+    <value>Exception occurred while updating streetcode: {0}</value>
+  </data>
+  <data name="StreetcodeAudioIdInvalid" xml:space="preserve">
+    <value>Invalid audio Id</value>
+  </data>
+  <data name="StreetcodeAudioNotFound" xml:space="preserve">
+    <value>Audio doesn't exist</value>
+  </data>
+  <data name="StreetcodeImageNotFoundById" xml:space="preserve">
+    <value>Image {0} not found</value>
+  </data>
+  <data name="StreetcodeTagNotFoundById" xml:space="preserve">
+    <value>Tag {0} not found</value>
+  </data>
+  <data name="TermNotFound" xml:space="preserve">
+    <value>Cannot find any term</value>
+  </data>
+  <data name="TermNotFoundById" xml:space="preserve">
+    <value>Cannot find any term with corresponding id: {0}</value>
+  </data>
+  <data name="TextDataRequired" xml:space="preserve">
+    <value>Дані тексту не можуть бути порожніми</value>
+  </data>
+  <data name="CannotSaveChangesInDatabase" xml:space="preserve">
+    <value>Cannot save changes in the database.</value>
+  </data>
+  <data name="TextIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID тексту має бути більше 0</value>
+  </data>
+  <data name="TextNotFoundById" xml:space="preserve">
+    <value>Cannot find text with corresponding id: {0}</value>
+  </data>
+  <data name="TextNotFound" xml:space="preserve">
+    <value>Cannot find any text</value>
+  </data>
+  <data name="TextParsingFailed" xml:space="preserve">
+    <value>Text was not parsed successfully</value>
+  </data>
+  <data name="TransactionLinkNotFoundByStreetcodeId" xml:space="preserve">
+    <value>Cannot find a transaction link by streetcode id: {0}, because such streetcode doesn't exist</value>
+  </data>
+  <data name="TextTitleRequired" xml:space="preserve">
+    <value>Заголовок тексту є обов'язковим</value>
+  </data>
+  <data name="TextTitleTooLong" xml:space="preserve">
+    <value>Заголовок тексту не може перевищувати {0} символів</value>
+  </data>
+  <data name="TextContentRequired" xml:space="preserve">
+    <value>Зміст тексту є обов'язковим</value>
+  </data>
+  <data name="TextContentTooLong" xml:space="preserve">
+    <value>Зміст тексту не може перевищувати {0} символів</value>
+  </data>
+  <data name="TextAdditionalTextTooLong" xml:space="preserve">
+    <value>Додатковий текст не може перевищувати {0} символів</value>
+  </data>
+  <data name="TextVideoMustBeYouTube" xml:space="preserve">
+    <value>Відео повинно бути з YouTube</value>
+  </data>
+  <data name="TeamNotFound" xml:space="preserve">
+    <value>Cannot find any team</value>
+  </data>
+  <data name="TeamNotFoundById" xml:space="preserve">
+    <value>Cannot find any team with corresponding id: {0}</value>
+  </data>
+  <data name="PositionNameRequired" xml:space="preserve">
+    <value>Назва посади є обов'язковою</value>
+  </data>
+  <data name="PositionNameTooLong" xml:space="preserve">
+    <value>Назва посади не може перевищувати {0} символів</value>
+  </data>
+  <data name="PositionsNotFound" xml:space="preserve">
+    <value>Cannot find any positions</value>
+  </data>
+  <data name="TeamMemberLinkDataRequired" xml:space="preserve">
+    <value>Посилання на члена команди є обов'язковим</value>
+  </data>
+  <data name="TeamCreationFailed" xml:space="preserve">
+    <value>Failed to create a team</value>
+  </data>
+  <data name="TeamLinkCreationFailed" xml:space="preserve">
+    <value>Cannot create team link</value>
+  </data>
+  <data name="TeamMemberLinkConversionFailed" xml:space="preserve">
+    <value>Cannot convert null to team link</value>
+  </data>
+  <data name="TeamMemberLinkLogoTypeRequired" xml:space="preserve">
+    <value>LogoType є обов'язковим</value>
+  </data>
+  <data name="TeamMemberLinkTargetUrlRequired" xml:space="preserve">
+    <value>TargetUrl є обов'язковим</value>
+  </data>
+  <data name="TeamMemberLinkTargetUrlInvalid" xml:space="preserve">
+    <value>TargetUrl має бути дійсною URL-адресою</value>
+  </data>
+  <data name="TeamMemberIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>TeamMemberId має бути більше 0</value>
+  </data>
+  <data name="TeamMemberLinkNotFound" xml:space="preserve">
+    <value>Cannot find any team links</value>
+  </data>
+  <data name="HistoricalContextNotFound" xml:space="preserve">
+    <value>Cannot find any historical contexts</value>
+  </data>
+  <data name="TimelineItemNotFound" xml:space="preserve">
+    <value>Cannot find any timelineItem</value>
+  </data>
+  <data name="TimelineItemNotFoundByStreetcodeId" xml:space="preserve">
+    <value>Cannot find any timeline item by the streetcode id: {0}</value>
+  </data>
+  <data name="TimelineItemNotFoundById" xml:space="preserve">
+    <value>Cannot find a timeline item with corresponding id: {0}</value>
+  </data>
+  <data name="ToponymNotFoundById" xml:space="preserve">
+    <value>Cannot find any toponym with corresponding id: {0}</value>
+  </data>
+  <data name="ToponymNotFoundByStreetcodeId" xml:space="preserve">
+    <value>Cannot find any toponym by the streetcode id: {0}</value>
+  </data>
+  <data name="TransactionLinkNotFound" xml:space="preserve">
+    <value>Cannot find any transaction link</value>
+  </data>
+  <data name="TransactionLinkNotFoundById" xml:space="preserve">
+    <value>Cannot find any transaction link with corresponding id: {0}</value>
+  </data>
+  <data name="UserDataRequired" xml:space="preserve">
+    <value>Дані користувача є обов'язковими</value>
+  </data>
+  <data name="UserNameRequired" xml:space="preserve">
+    <value>Ім'я користувача є обов'язковим</value>
+  </data>
+  <data name="UserNameTooLong" xml:space="preserve">
+    <value>Ім'я не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserSurnameTooLong" xml:space="preserve">
+    <value>Прізвище не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserLoginRequired" xml:space="preserve">
+    <value>Логін є обов'язковий</value>
+  </data>
+  <data name="UserLoginTooLong" xml:space="preserve">
+    <value>Логін не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserLoginInvalidFormat" xml:space="preserve">
+    <value>Логін може містити тільки латинські літери, цифри, крапку, дефіс і підкреслення</value>
+  </data>
+  <data name="UserEmailRequired" xml:space="preserve">
+    <value>Email є обов'язковий</value>
+  </data>
+  <data name="UserEmailInvalidFormat" xml:space="preserve">
+    <value>Email має не вірний формат</value>
+  </data>
+  <data name="UserEmailTooLong" xml:space="preserve">
+    <value>Email не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserPasswordRequired" xml:space="preserve">
+    <value>Пароль є обов'язковий</value>
+  </data>
+  <data name="UserPasswordTooShort" xml:space="preserve">
+    <value>Пароль має містити як мінімум {0} символів</value>
+  </data>
+  <data name="UserPasswordTooLong" xml:space="preserve">
+    <value>Пароль не може перевищувати {0} символів</value>
+  </data>
+  <data name="UserPasswordInvalidFormat" xml:space="preserve">
+    <value>Пароль повинен містити щонайменше одну малу, одну велику літеру і одну цифру</value>
+  </data>
+  <data name="UserRoleInvalid" xml:space="preserve">
+    <value>Невірна роль користувача</value>
+  </data>
+  <data name="UserPhoneNumberInvalidFormat" xml:space="preserve">
+    <value>Номер телефону повинен бути у міжнародному форматі (наприклад, +кодкраїниXXXXXXXXX)</value>
+  </data>
+  <data name="UserAlreadyExists" xml:space="preserve">
+    <value>User already exists</value>
+  </data>
+  <data name="UserRoleAssignmentFailed" xml:space="preserve">
+    <value>Failed to assign role: {0}</value>
+  </data>
+  <data name="CoordinateIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID координат має бути більше 0</value>
+  </data>
+  <data name="CoordinateCantBeEmpty" xml:space="preserve">
+    <value>Дані координат не можуть бути порожніми</value>
+  </data>
+  <data name="CoordinateWidthError" xml:space="preserve">
+    <value>Широта має бути в межах від {0} до {1} градусів</value>
+  </data>
+  <data name="CoordinateHeightError" xml:space="preserve">
+    <value>Довгота має бути в межах від {0} до {1} градусів</value>
+  </data>
+  <data name="TagNameIsRequired" xml:space="preserve">
+    <value>Назва тегу є обов'язковою</value>
+  </data>
+  <data name="TagNameCantExceed" xml:space="preserve">
+    <value>Назва тегу не може перевищувати {0} символів</value>
+  </data>
+  <data name="TagFormatError" xml:space="preserve">
+    <value>Назва тегу може містити лише літери, цифри, пробіли та дефіси</value>
+  </data>
+  <data name="TagDataCantBeEmpty" xml:space="preserve">
+    <value>Дані тегу не можуть бути порожніми</value>
+  </data>
+  <data name="VerifyLoggerCalledEmailSentSuccess" xml:space="preserve">
+    <value>LogError should not be called when email sent successfully</value>
+  </data>
+  <data name="VerifyEmailSentOnce" xml:space="preserve">
+    <value>SendEmailAsync should be called once</value>
+  </data>
+  <data name="VerifyLoggerCalledOnceEmailSentFail" xml:space="preserve">
+    <value>LogError method should be called exactly once when email sending fails</value>
+  </data>
+  <data name="DeleteVerificationWrongType" xml:space="preserve">
+    <value>Delete verification not implemented for type {0}</value>
+  </data>
+  <data name="DataBaseError" xml:space="preserve">
+    <value>Database error occurred</value>
+  </data>
+  <data name="VerifySaveChangesCalledTwicePartnerStreetcode" xml:space="preserve">
+    <value>because SaveChanges should be called after creating partner and after adding streetcodes</value>
+  </data>
+  <data name="NoPredicateProvidedForFilterStreetcode" xml:space="preserve">
+    <value>because predicate should be provided for filtering streetcodes</value>
+  </data>
+  <data name="StreetcodeRepositoryError" xml:space="preserve">
+    <value>Streetcode repository error</value>
+  </data>
+  <data name="PredicateNotProvided" xml:space="preserve">
+    <value>because predicate should be provided</value>
+  </data>
+  <data name="IncludeExpressionNotProvided" xml:space="preserve">
+    <value>because include expression should be provided</value>
+  </data>
+  <data name="PartnersNotFound" xml:space="preserve">
+    <value>Cannot find any partners</value>
+  </data>
+  <data name="DatabaseConntectionFailed" xml:space="preserve">
+    <value>Database connection failed</value>
+  </data>
+  <data name="VerifySaveChangesCalledPartnerStreetcode" xml:space="preserve">
+    <value>because SaveChanges should be called after updating partner and after modifying streetcode links</value>
+  </data>
+  <data name="StreetcodeTestException" xml:space="preserve">
+    <value>Exception occurred while creating streetcode: Test exception</value>
+  </data>
+  <data name="CannotSaveChangesInDbAfterStreetcodeCreated" xml:space="preserve">
+    <value>Cannot save changes in the database after related word creation!</value>
+  </data>
+  <data name="CannotCreateRelatedWordForTerm" xml:space="preserve">
+    <value>Cannot create new related word for a term!</value>
+  </data>
+  <data name="NullRequest" xml:space="preserve">
+    <value>Request is null</value>
+  </data>
+  <data name="VerifyGetAllAsyncCalledOnce" xml:space="preserve">
+    <value>GetAllAsync method should be called exactly once</value>
+  </data>
+  <data name="VerifyGetFirstOrDefaultAsyncCalledOnce" xml:space="preserve">
+    <value>GetFirstOrDefaultAsync method should be called exactly once</value>
+  </data>
+  <data name="VerifyLogCalledOnceTimelineNull" xml:space="preserve">
+    <value>LogError method should be called exactly once when timelineItems is null</value>
+  </data>
+  <data name="VerifyLogDidntCalledWhenTimelineexists" xml:space="preserve">
+    <value>LogError method should not be called when timelineItems exists</value>
+  </data>
+  <data name="VerifyMapperCalledOnce" xml:space="preserve">
+    <value>Map method should be called exactly once</value>
+  </data>
+  <data name="MapToExatct" xml:space="preserve">
+    <value>Map method to {0} should not be called at all</value>
+  </data>
+  <data name="ToponymAlreadyLinked" xml:space="preserve">
+    <value>This toponym is already linked to the streetcode.</value>
+  </data>
+  <data name="ToponymCantBeMapped" xml:space="preserve">
+    <value>Cannot map StreetcodeToponymDto to entity.</value>
+  </data>
+  <data name="ToponymStreetcodeFailedToCreate" xml:space="preserve">
+    <value>Failed to create streetcode-toponym relationship.</value>
+  </data>
+  <data name="ToponymStreetcodeRelationsDelete" xml:space="preserve">
+    <value>Cannot find relationship with StreetcodeId={0} and ToponymId={1}</value>
+  </data>
+  <data name="FailedToDeleteToponymStreetcode" xml:space="preserve">
+    <value>Failed to delete streetcode-toponym relationship.</value>
+  </data>
+  <data name="FailedToMergeToponyms" xml:space="preserve">
+    <value>Failed to merge toponyms</value>
+  </data>
+  <data name="ToponymByIdMerge" xml:space="preserve">
+    <value>Target toponym with Id={0} not found.</value>
+  </data>
+  <data name="DatabaseErrorOccured" xml:space="preserve">
+    <value>Database error occurred</value>
+  </data>
+</root>

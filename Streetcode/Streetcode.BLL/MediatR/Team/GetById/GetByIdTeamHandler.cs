@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +34,7 @@ namespace Streetcode.BLL.MediatR.Team.GetById
 
             if (team is null)
             {
-                string errorMsg = $"Cannot find any team with corresponding id: {request.Id}";
+                var errorMsg = string.Format(ErrorMessages.TeamNotFoundById, request.Id);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

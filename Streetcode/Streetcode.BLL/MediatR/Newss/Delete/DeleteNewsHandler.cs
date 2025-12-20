@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.Logging;
@@ -23,7 +23,7 @@ namespace Streetcode.BLL.MediatR.Newss.Delete
             var news = await _repositoryWrapper.NewsRepository.GetFirstOrDefaultAsync(n => n.Id == id);
             if (news == null)
             {
-                string errorMsg = $"No news found by entered Id - {id}";
+                var errorMsg = string.Format(ErrorMessages.NewsNotFoundById, id);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
@@ -41,7 +41,7 @@ namespace Streetcode.BLL.MediatR.Newss.Delete
             }
             else
             {
-                string errorMsg = "Failed to delete news";
+                var errorMsg = ErrorMessages.NewsDeletionFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

@@ -13,6 +13,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetAll
     using FluentAssertions;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.Sources;
     using Streetcode.BLL.Interfaces.BlobStorage;
@@ -93,7 +94,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetAll
         public async Task Handle_ShouldReturnFail_WhenRepositoryReturnsNull()
         {
             // Arrange
-            const string ErrorMsg = "Categories is null";
+             string ErrorMsg = ErrorMessages.CategoriesNotFound;
 
             this.mockRepoWrapper.Setup(r => r.SourceCategoryRepository.GetAllAsync(
                 null,

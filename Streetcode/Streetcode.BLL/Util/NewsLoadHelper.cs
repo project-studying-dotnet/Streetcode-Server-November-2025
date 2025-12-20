@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.DTO.News;
@@ -24,7 +24,7 @@ namespace Streetcode.BLL.Helpers
 
             if (newsDto is null)
             {
-                string errorMsg = $"No news by entered Url - {url}";
+                var errorMsg = string.Format(ErrorMessages.NewsNotFoundByUrl, url);
                 logger.LogError(url, errorMsg);
                 return Result.Fail(errorMsg);
             }

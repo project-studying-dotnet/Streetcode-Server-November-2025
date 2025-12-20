@@ -42,65 +42,49 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
 
         public async Task<Result<JsonElement>> Handle(UpdateStreetcodeCommand request, CancellationToken cancellationToken)
         {
-            // try catch block is temporary solution until validation would be implemented.
-            try
+            var rawJson = request.rawJsonUpdateDTO;
+
+            var streetcodeType = rawJson.GetProperty("StreetcodeType").GetString();
+
+            UpdateStreetcodeDto updateStreetcodeDTO = _streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
+
+            var existingStreetcode = await GetExistingStreetcode(updateStreetcodeDTO.Id, request);
+            if (existingStreetcode is null)
             {
-                var rawJson = request.rawJsonUpdateDTO;
-
-                var streetcodeType = rawJson.GetProperty("StreetcodeType").GetString();
-
-                UpdateStreetcodeDto updateStreetcodeDTO = _streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
-
-                var existingStreetcode = await GetExistingStreetcode(updateStreetcodeDTO.Id, request);
-                if (existingStreetcode is null)
-                {
-                    return Result.Fail(new Error("Streetcode not found"));
-                }
-
-                if (!TryMapStreetcode(updateStreetcodeDTO, existingStreetcode))
-                {
-                    return Result.Fail<JsonElement>(new Error("StreetcodeType value can't be changed"));
-                }
-
-                var audioResult = await HandleAudioUpdate(updateStreetcodeDTO, existingStreetcode, request);
-                if (audioResult.IsFailed)
-                {
-                    return audioResult;
-                }
-
-                var imagesResult = await HandleImagesUpdate(updateStreetcodeDTO, existingStreetcode, request);
-                if (imagesResult.IsFailed)
-                {
-                    return imagesResult;
-                }
-
-                var tagsResult = await HandleTagsUpdate(updateStreetcodeDTO, existingStreetcode, request);
-                if (tagsResult.IsFailed)
-                {
-                    return tagsResult;
-                }
-
-                _repository.StreetcodeRepository.Update(existingStreetcode);
-
-                var resultIsSuccess = await _repository.SaveChangesAsync() > 0;
-
-                if (resultIsSuccess)
-                {
-                    await _cacheService.RemoveAsync($"Streetcode_{updateStreetcodeDTO.Id}");
-
-                    var streetcodeDTO = _mapper.Map<UpdateStreetcodeDto>(existingStreetcode);
-                    var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
-                    return Result.Ok(jsonResult);
-                }
-            }
-            catch(Exception ex)
-            {
-                string errorMsg = $"Exception occurred while updating streetcode: {ex.Message}";
-                _logger.LogError(request, errorMsg);
-                return Result.Fail<JsonElement>(new Error(errorMsg));
+                return Result.Fail(new Error(ErrorMessages.StreetcodeNotFound));
             }
 
-            return await Task.FromResult(Result.Ok());
+            if (!TryMapStreetcode(updateStreetcodeDTO, existingStreetcode))
+            {
+                return Result.Fail<JsonElement>(new Error(ErrorMessages.StreetcodeTypeCannotBeChanged));
+            }
+
+            var audioResult = await HandleAudioUpdate(updateStreetcodeDTO, existingStreetcode, request);
+            if (audioResult.IsFailed)
+            {
+                return audioResult;
+            }
+
+            var imagesResult = await HandleImagesUpdate(updateStreetcodeDTO, existingStreetcode, request);
+            if (imagesResult.IsFailed)
+            {
+                return imagesResult;
+            }
+
+            var tagsResult = await HandleTagsUpdate(updateStreetcodeDTO, existingStreetcode, request);
+            if (tagsResult.IsFailed)
+            {
+                return tagsResult;
+            }
+
+            _repository.StreetcodeRepository.Update(existingStreetcode);
+            await _repository.SaveChangesAsync();
+
+            await _cacheService.RemoveAsync($"Streetcode_{updateStreetcodeDTO.Id}");
+
+            var streetcodeDTO = _mapper.Map<UpdateStreetcodeDto>(existingStreetcode);
+            var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
+            return Result.Ok(jsonResult);
         }
 
         private async Task<StreetcodeContent> GetExistingStreetcode(int id, UpdateStreetcodeCommand request)
@@ -108,7 +92,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
             var sc = await _repository.StreetcodeRepository.GetFirstOrDefaultAsync(s => s.Id == id);
             if (sc is null)
             {
-                _logger.LogError(request, "Streetcode not found");
+                _logger.LogError(request, ErrorMessages.StreetcodeNotFound);
             }
 
             return sc;
@@ -137,15 +121,15 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
 
             if (dto.AudioId < 0)
             {
-                _logger.LogError(request, "invalid audio Id");
-                return Result.Fail("invalid audio Id");
+                _logger.LogError(request, ErrorMessages.StreetcodeAudioIdInvalid);
+                return Result.Fail(ErrorMessages.StreetcodeAudioIdInvalid);
             }
 
             var audio = await _repository.AudioRepository.GetFirstOrDefaultAsync(a => a.Id == dto.AudioId);
             if (audio is null)
             {
-                _logger.LogError(request, "Audio doesn't exist");
-                return Result.Fail("Audio doesn't exist");
+                _logger.LogError(request, ErrorMessages.StreetcodeAudioNotFound);
+                return Result.Fail(ErrorMessages.StreetcodeAudioNotFound);
             }
 
             entity.AudioId = audio.Id;
@@ -173,7 +157,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 var image = await _repository.ImageRepository.GetFirstOrDefaultAsync(x => x.Id == img.ImageId);
                 if (image is null)
                 {
-                    string errorMsg = $"Image {img.ImageId} not found";
+                    var errorMsg = string.Format(ErrorMessages.StreetcodeImageNotFoundById, img.ImageId);
                     _logger.LogError(request, errorMsg);
                     imageErrors.Add(errorMsg);
                     continue;
@@ -215,7 +199,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Update
                 var thisTag = await _repository.TagRepository.GetFirstOrDefaultAsync(x => x.Id == tag.Id);
                 if (thisTag is null)
                 {
-                    string errorMsg = $"Tag {tag.Id} not found";
+                    var errorMsg = string.Format(ErrorMessages.StreetcodeTagNotFoundById, tag.Id);
                     _logger.LogError(request, errorMsg);
                     tagsErrors.Add(errorMsg);
                     continue;

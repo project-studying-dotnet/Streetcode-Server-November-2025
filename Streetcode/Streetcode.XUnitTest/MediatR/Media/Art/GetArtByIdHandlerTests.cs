@@ -1,23 +1,23 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Art
 {
-    using System;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Repositories.Interfaces;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Art;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Media.Art.GetById;
     using Streetcode.DAL.Entities.Media.Images;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using System;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Threading.Tasks;
     using Xunit;
 
     public class GetArtByIdHandlerTests
     {
-        private const string ERRORMESSAGE = "Cannot find an art with corresponding id: {0}";
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
         private readonly Mock<ILoggerService> loggerMock;
@@ -75,7 +75,7 @@
             var result = await this.handler
                 .Handle(new GetArtByIdQuery(requestedId), CancellationToken.None);
 
-            Assert.Equal(string.Format(ERRORMESSAGE, $"{requestedId}"), result.Errors[0].Message);
+            Assert.Equal(string.Format(ErrorMessages.ArtNotFoundById, requestedId), result.Errors[0].Message);
             this.verifyMockersHandler.VerifyMockersNegativeFlowGetFirst();
             this.verifyMockersHandler.VerifyWrapperMock();
             this.verifyMockersHandler.VerifyLoggerMock();

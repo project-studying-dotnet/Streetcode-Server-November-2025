@@ -4,19 +4,20 @@
 
 namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetCategoryContentByStreetcodeId
 {
-    using System;
-    using System.Linq.Expressions;
-    using System.Threading;
-    using System.Threading.Tasks;
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Sources;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Sources.SourceLinkCategory.GetCategoryContentByStreetcodeId;
     using Streetcode.DAL.Entities.Sources;
     using Streetcode.DAL.Entities.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using System;
+    using System.Linq.Expressions;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Xunit;
 
     /// <summary>
@@ -77,7 +78,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetCategoryCon
         public async Task Handle_ShouldReturnFail_WhenStreetcodeDoesNotExist(int streetcodeId, int categoryId)
         {
             // Arrange
-            string errorMsg = $"No such streetcode with id = {streetcodeId}";
+            string errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, streetcodeId);
             var query = new GetCategoryContentByStreetcodeIdQuery(streetcodeId, categoryId);
 
             this.mockRepoWrapper.Setup(r => r.StreetcodeRepository.GetFirstOrDefaultAsync(
@@ -99,7 +100,7 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetCategoryCon
         public async Task Handle_ShouldReturnFail_WhenStreetcodeExistsButContentDoesNot(int streetcodeId, int categoryId)
         {
             // Arrange
-            const string ErrorMsg = "The streetcode content is null";
+            string ErrorMsg = ErrorMessages.StreetcodeDataRequired;
             var query = new GetCategoryContentByStreetcodeIdQuery(streetcodeId, categoryId);
 
             // Streetcode exists

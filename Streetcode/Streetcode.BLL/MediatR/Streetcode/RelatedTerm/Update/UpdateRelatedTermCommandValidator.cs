@@ -12,11 +12,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update
         {
             RuleFor(x => x.id)
                 .GreaterThan(0)
-                .WithMessage("ID пов'язаного терміну має бути більше 0");
+                .WithMessage(ErrorMessages.RelatedTermIdMustBeGreaterThanZero);
 
             RuleFor(x => x.RelatedTerm)
                 .NotNull()
-                .WithMessage("Дані пов'язаного терміну не можуть бути порожніми")
+                .WithMessage(ErrorMessages.RelatedTermWordRequired)
                 .SetValidator(new UpdateRelatedTermDtoValidator());
         }
     }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -49,7 +49,7 @@ namespace Streetcode.BLL.MediatR.Media.StreetcodeArt.GetByStreetcodeId
 
             if (art is null)
             {
-                string errorMsg = $"Cannot find an art with corresponding streetcode id: {request.StreetcodeId}";
+                var errorMsg = string.Format(ErrorMessages.ImageNotFoundByStreetcodeId, request.StreetcodeId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

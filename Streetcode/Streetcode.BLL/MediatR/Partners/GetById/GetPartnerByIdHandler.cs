@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +32,7 @@ public class GetPartnerByIdHandler : IRequestHandler<GetPartnerByIdQuery, Result
 
         if (partner is null)
         {
-            string errorMsg = $"Cannot find any partner with corresponding id: {request.Id}";
+            string errorMsg = string.Format(ErrorMessages.PartnerNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -34,7 +34,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.GetAllCatalog
                 return Result.Ok(_mapper.Map<IEnumerable<RelatedFigureDto>>(skipped));
             }
 
-            const string errorMsg = $"Cannot find any subtitles";
+            var errorMsg = ErrorMessages.SubtitlesNotFound;
             _logger.LogError(request, errorMsg);
             return Result.Fail(errorMsg);
         }

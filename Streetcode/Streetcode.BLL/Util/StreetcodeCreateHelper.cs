@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,7 +31,7 @@ namespace Streetcode.BLL.Util
                     return JsonSerializer
                         .Deserialize<CreateEventStreetcodeDto>(request.rawJsonCreateDTO.GetRawText());
                 default:
-                    const string errorMsg = "Failed to create a streetcode";
+                    var errorMsg = ErrorMessages.StreetcodeCreationFailed;
                     _logger.LogError(request, errorMsg);
                     throw new InvalidOperationException(errorMsg);
             }
@@ -48,7 +48,7 @@ namespace Streetcode.BLL.Util
                     return JsonSerializer
                         .Deserialize<UpdateEventStreetcodeDto>(request.rawJsonUpdateDTO.GetRawText());
                 default:
-                    const string errorMsg = "Failed to create a streetcode";
+                    var errorMsg = ErrorMessages.StreetcodeCreationFailed;
                     _logger.LogError(request, errorMsg);
                     throw new InvalidOperationException(errorMsg);
             }
