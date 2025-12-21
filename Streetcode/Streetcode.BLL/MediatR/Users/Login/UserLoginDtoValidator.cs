@@ -10,19 +10,17 @@ namespace Streetcode.BLL.MediatR.Users.Login
     {
         public UserLoginDtoValidator()
         {
-            RuleFor(x => x.Login)
+            // Email - required, robust format (standard regex), and max length
+            RuleFor(x => x.Email)
                 .NotEmpty()
-                .WithMessage("Login is required")
-                .MaximumLength(20)
-                .WithMessage("Login cannot exceed 20 characters");
+                .WithMessage(ErrorMessages.UserEmailRequired)
+                .EmailAddress()
+                .WithMessage(ErrorMessages.UserEmailInvalidFormat);
 
+            // Password - required, min/max, Identity-like composition
             RuleFor(x => x.Password)
                 .NotEmpty()
-                .WithMessage("Password is required")
-                .MaximumLength(20)
-                .WithMessage("Password cannot exceed 20 characters")
-                .MinimumLength(3)
-                .WithMessage("Password must be at least 3 characters");
+                .WithMessage(ErrorMessages.UserPasswordRequired);
         }
     }
 }
