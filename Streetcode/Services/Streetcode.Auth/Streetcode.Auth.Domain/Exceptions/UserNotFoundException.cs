@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Streetcode.Auth.Domain.Exceptions;
 
-namespace Streetcode.Auth.Domain.Exceptions
+/// <summary>
+/// Exception thrown when a user is not found.
+/// </summary>
+public class UserNotFoundException : DomainException
 {
-    internal class UserNotFoundException
-    {
-    }
+    public UserNotFoundException(int userId)
+        : base($"User with ID '{userId}' was not found.") { }
+
+    public UserNotFoundException(string email)
+        : base($"User with email '{email}' was not found.") { }
 }

@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Streetcode.Auth.Domain.Events;
 
-namespace Streetcode.Auth.Domain.Events
-{
-    internal class UserRegisteredEvent
-    {
-    }
-}
+/// <summary>
+/// Event raised when a new user is registered.
+/// </summary>
+public record UserRegisteredEvent(
+    int UserId,
+    string Email,
+    string Name,
+    string Surname,
+    DateTime RegisteredAt);

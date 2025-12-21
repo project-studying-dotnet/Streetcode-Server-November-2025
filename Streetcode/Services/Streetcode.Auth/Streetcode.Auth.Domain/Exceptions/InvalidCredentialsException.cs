@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Streetcode.Auth.Domain.Exceptions;
 
-namespace Streetcode.Auth.Domain.Exceptions
+/// <summary>
+/// Exception thrown when login credentials are invalid.
+/// </summary>
+public class InvalidCredentialsException : DomainException
 {
-    internal class InvalidCredentialsException
-    {
-    }
+    public InvalidCredentialsException()
+        : base("Invalid email or password.") { }
+
+    public InvalidCredentialsException(string message)
+        : base(message) { }
 }

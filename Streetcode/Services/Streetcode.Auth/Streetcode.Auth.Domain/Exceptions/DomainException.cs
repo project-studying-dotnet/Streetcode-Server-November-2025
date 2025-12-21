@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Streetcode.Auth.Domain.Exceptions;
 
-namespace Streetcode.Auth.Domain.Exceptions
+/// <summary>
+/// Base exception for domain-specific errors.
+/// </summary>
+public class DomainException : Exception
 {
-    internal class DomainException
-    {
-    }
+    public DomainException(string message) : base(message) { }
+
+    public DomainException(string message, Exception innerException)
+        : base(message, innerException) { }
 }

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Streetcode.Auth.Domain.Events;
 
-namespace Streetcode.Auth.Domain.Events
-{
-    internal class UserLoggedInEvent
-    {
-    }
-}
+/// <summary>
+/// Event raised when a user successfully logs in.
+/// </summary>
+public record UserLoggedInEvent(
+    int UserId,
+    string Email,
+    DateTime LoggedInAt);

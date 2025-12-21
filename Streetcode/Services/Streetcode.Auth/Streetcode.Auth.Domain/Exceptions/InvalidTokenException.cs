@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Streetcode.Auth.Domain.Exceptions;
 
-namespace Streetcode.Auth.Domain.Exceptions
+/// <summary>
+/// Exception thrown when a token is invalid, expired, or revoked.
+/// </summary>
+public class InvalidTokenException : DomainException
 {
-    internal class InvalidTokenException
-    {
-    }
+    public InvalidTokenException()
+        : base("The provided token is invalid.") { }
+
+    public InvalidTokenException(string message)
+        : base(message) { }
 }
