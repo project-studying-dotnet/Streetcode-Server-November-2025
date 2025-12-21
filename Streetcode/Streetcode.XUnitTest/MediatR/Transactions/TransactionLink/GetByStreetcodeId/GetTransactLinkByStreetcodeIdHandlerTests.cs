@@ -3,6 +3,7 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Transactions.TransactionLink.GetByStreetcodeId;
     using Streetcode.DAL.Entities.Streetcode;
@@ -109,7 +110,7 @@
         public async Task Handle_ShouldReturnFailure_WhenStreetcodeNotFound()
         {
             // Arrange.
-            string expectedError = $"Cannot find a transaction link by streetcode id: {StreetcodeId}, because such streetcode doesn't exist";
+            string expectedError = string.Format(ErrorMessages.TransactionLinkNotFoundByStreetcodeId, StreetcodeId);
 
             this.repositoryMock.SetupGetFirstOrDefaultAsync((DAL.Entities.Transactions.TransactionLink?)null);
             this.repositoryMock.SetupGetStreetcodeAsync(null);

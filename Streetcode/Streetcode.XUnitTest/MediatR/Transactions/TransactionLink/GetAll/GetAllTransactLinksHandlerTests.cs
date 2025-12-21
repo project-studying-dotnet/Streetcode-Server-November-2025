@@ -3,6 +3,7 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Transactions.TransactionLink.GetAll;
     using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -74,7 +75,7 @@
         public async Task Handle_ShouldReturnFailure_WhenTransactLinksNotFound()
         {
             // Arrange.
-            const string expectedError = "Cannot find any transaction link";
+            string expectedError = ErrorMessages.TransactionLinkNotFound;
 
             this.repositoryMock.SetupGetAllAsync(null);
             CommonRepositorySetups.SetupLogger(this.loggerMock);
@@ -100,13 +101,10 @@
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous test operation.</returns>
         [Fact]
-        public async Task Handle_ShouldReturnFailure_WhenTransactLinksEmpty()
+        public async Task Handle_ShouldReturnSuccess_WhenTransactLinksEmpty()
         {
             // Arrange.
-            const string expectedError = "Cannot find any transaction link";
-
             this.repositoryMock.SetupGetAllAsync(Enumerable.Empty<DAL.Entities.Transactions.TransactionLink>());
-            CommonRepositorySetups.SetupLogger(this.loggerMock);
 
             var query = new GetAllTransactLinksQuery();
 
@@ -115,12 +113,11 @@
 
             // Assert.
             result.Should().NotBeNull();
-            result.IsFailed.Should().BeTrue();
-            result.Errors.First().Message.Should().Be(expectedError);
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Should().BeEmpty();
 
             // Verify.
             this.repositoryMock.VerifyGetAllAsyncCalledOnce();
-            TransactionLinkVerifications.VerifyLogErrorCalledOnce(this.loggerMock);
         }
     }
 }
