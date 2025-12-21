@@ -8,7 +8,7 @@
     /// Provides helper methods for creating mocked instances of Identity-related classes
     /// for unit testing purposes.
     /// </summary>
-    public static class UsersHelpers
+    public static class UsersHelper
     {
         /// <summary>
         /// Creates a mocked instance of <see cref="UserManager{TUser}"/> with default null parameters.
