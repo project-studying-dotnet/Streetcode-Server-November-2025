@@ -10,6 +10,33 @@
         private readonly UserLoginDtoValidator validator = new UserLoginDtoValidator();
 
         [Theory]
+        [InlineData("john.doe@gmail.com", true)]
+        [InlineData("invalid-email", false)]
+        [InlineData("", false)]
+        public void Validator_ShouldValidateEmail(string email, bool isValid)
+        {
+            // Arrange
+            var dto = new UserLoginDto
+            {
+                Email = email,
+                Password = "Password123@",
+            };
+
+            // Act
+            var result = this.validator.TestValidate(dto);
+
+            // Assert
+            if (isValid)
+            {
+                result.ShouldNotHaveValidationErrorFor(x => x.Email);
+            }
+            else
+            {
+                result.ShouldHaveValidationErrorFor(x => x.Email);
+            }
+        }
+
+        [Theory]
         [InlineData("Password123@", true)]
         [InlineData("", false)]
         public void Validator_ShouldValidatePassword(string password, bool isValid)
