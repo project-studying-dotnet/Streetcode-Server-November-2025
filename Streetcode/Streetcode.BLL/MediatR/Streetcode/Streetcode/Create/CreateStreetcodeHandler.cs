@@ -79,7 +79,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
             catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail(new Error(ex.Message));
+                return Result.Fail(new Error(ErrorMessages.StreetcodeCreationFailed));
             }
         }
 

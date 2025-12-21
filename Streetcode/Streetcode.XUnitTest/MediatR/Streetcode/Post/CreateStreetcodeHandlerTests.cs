@@ -163,7 +163,7 @@
 
             Assert.True(result.IsFailed);
 
-            Assert.Equal(ErrorMessages.StreetcodeTestException, result.Errors[0].Message);
+            Assert.Equal(ErrorMessages.StreetcodeCreationFailed, result.Errors[0].Message);
         }
 
         [Fact]
