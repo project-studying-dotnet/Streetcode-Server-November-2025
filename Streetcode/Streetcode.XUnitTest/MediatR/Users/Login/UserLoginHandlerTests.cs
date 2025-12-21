@@ -38,15 +38,15 @@
         public async Task Handle_WhenUserIsNotFound_ReturnsFailureResult()
         {
             // Arrange
-            var user = new UserLoginDto
+            var userDto = new UserLoginDto
             {
                 Email = "john.doe@gmail.com",
                 Password = "Password123@",
             };
-            var userLoginCommand = new UserLoginCommand(user);
+            var userLoginCommand = new UserLoginCommand(userDto);
 
             this.userManagerMock
-                .Setup(u => u.FindByEmailAsync(user.Email))
+                .Setup(u => u.FindByEmailAsync(userDto.Email))
                 .ReturnsAsync((User)null!);
             this.loggerMock.SetupLogger();
 
@@ -58,8 +58,109 @@
             Assert.Equal(ErrorMessages.UserEmailOrPasswordInvalid, result.Errors[0].Message);
 
             // Verify
-            this.userManagerMock.Verify(u => u.FindByEmailAsync(user.Email), Times.Once);
+            this.userManagerMock.Verify(u => u.FindByEmailAsync(userDto.Email), Times.Once);
             this.loggerMock.VerifyLogErrorCalledOnce();
+        }
+
+        [Fact]
+        public async Task Handle_WhenPasswordIsInvalid_ReturnsFailureResult()
+        {
+            // Arrange
+            var userDto = new UserLoginDto
+            {
+                Email = "john.doe@gmail.com",
+                Password = "Password123@",
+            };
+
+            var existingUser = new User
+            {
+                Name = "John",
+                Surname = "Doe",
+            };
+
+            var userLoginCommand = new UserLoginCommand(userDto);
+
+            this.userManagerMock
+                .Setup(u => u.FindByEmailAsync(userDto.Email))
+                .ReturnsAsync(existingUser);
+            this.signInManagerMock
+                .Setup(s => s.CheckPasswordSignInAsync(existingUser, userDto.Password, false))
+                .ReturnsAsync(SignInResult.Failed);
+            this.loggerMock.SetupLogger();
+
+            // Act
+            var result = await this.handler.Handle(userLoginCommand, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsFailed);
+            Assert.Equal(ErrorMessages.UserEmailOrPasswordInvalid, result.Errors[0].Message);
+
+            // Verify
+            this.userManagerMock.Verify(u => u.FindByEmailAsync(userDto.Email), Times.Once);
+            this.signInManagerMock.Verify(s => s.CheckPasswordSignInAsync(existingUser, userDto.Password, false), Times.Once);
+            this.loggerMock.VerifyLogErrorCalledOnce();
+        }
+
+        [Fact]
+        public async Task Handle_WhenCredentialsAreValid_ReturnsSuccessResult()
+        {
+            // Arrange
+            var userDto = new UserLoginDto
+            {
+                Email = "john.doe@gmail.com",
+                Password = "Password123@",
+            };
+
+            var existingUser = new User
+            {
+                Name = "John",
+                Surname = "Doe",
+            };
+
+            var accessTokenDto = new TokenResultDto
+            {
+                Token = "access-token",
+                ExpiresAt = DateTime.UtcNow.AddMinutes(15),
+            };
+
+            var refreshTokenDto = new TokenResultDto
+            {
+                Token = "refresh-token",
+                ExpiresAt = DateTime.UtcNow.AddDays(7),
+            };
+
+            var userLoginCommand = new UserLoginCommand(userDto);
+
+            this.userManagerMock
+                .Setup(u => u.FindByEmailAsync(userDto.Email))
+                .ReturnsAsync(existingUser);
+            this.signInManagerMock
+                .Setup(s => s.CheckPasswordSignInAsync(existingUser, userDto.Password, false))
+                .ReturnsAsync(SignInResult.Success);
+            this.jwtServiceMock
+                .Setup(j => j.GenerateAccessTokenAsync(existingUser))
+                .ReturnsAsync(accessTokenDto);
+            this.jwtServiceMock
+                .Setup(j => j.GenerateRefreshTokenAsync(existingUser))
+                .ReturnsAsync(refreshTokenDto);
+
+            // Act
+            var result = await this.handler.Handle(userLoginCommand, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsSuccess);
+            Assert.Equal(existingUser.Id, result.Value.UserId);
+            Assert.Equal(accessTokenDto.Token, result.Value.AccessToken);
+            Assert.Equal(refreshTokenDto.Token, result.Value.RefreshToken);
+            Assert.Equal(accessTokenDto.ExpiresAt, result.Value.AccessTokenExpiresAt);
+            Assert.Equal(refreshTokenDto.ExpiresAt, result.Value.RefreshTokenExpiresAt);
+
+            // Verify
+            this.userManagerMock.Verify(u => u.FindByEmailAsync(userDto.Email), Times.Once);
+            this.signInManagerMock.Verify(s => s.CheckPasswordSignInAsync(existingUser, userDto.Password, false), Times.Once);
+            this.jwtServiceMock.Verify(j => j.GenerateAccessTokenAsync(existingUser), Times.Once);
+            this.jwtServiceMock.Verify(j => j.GenerateRefreshTokenAsync(existingUser), Times.Once);
+            this.loggerMock.VerifyLogErrorCalledNever();
         }
     }
 }
