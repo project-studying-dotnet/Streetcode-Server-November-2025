@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Streetcode.DAL.Entities.Streetcode
 {
     [Table("comments", Schema = "streetcode")]
-
     public class Comment
     {
         public Comment()

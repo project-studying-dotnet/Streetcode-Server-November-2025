@@ -6,10 +6,10 @@ public class CommentDto
     public string Content { get; set; }
     public string AuthorName { get; set; } = "Гість";
     public int StreetcodeId { get; set; }
-    
+
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
-    
+
     public int? ParentCommentId { get; set; }
     public List<CommentDto> Replies { get; set; } = new();
 }
