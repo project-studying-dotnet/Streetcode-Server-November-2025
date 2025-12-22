@@ -18,4 +18,9 @@
     <Folder Include="Extensions\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Streetcode.Auth.Application\Streetcode.Auth.Application.csproj" />
+    <ProjectReference Include="..\Streetcode.Auth.Infrastructure\Streetcode.Auth.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

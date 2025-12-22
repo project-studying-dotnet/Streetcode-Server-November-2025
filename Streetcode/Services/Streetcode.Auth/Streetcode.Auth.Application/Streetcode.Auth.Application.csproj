@@ -10,4 +10,9 @@
     <Folder Include="Common\Behaviors\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\Streetcode.Messaging\Streetcode.Messaging.csproj" />
+    <ProjectReference Include="..\Streetcode.Auth.Domain\Streetcode.Auth.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

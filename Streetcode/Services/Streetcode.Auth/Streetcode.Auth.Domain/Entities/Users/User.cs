@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Streetcode.Auth.Domain.Entities.Auth;
 
 namespace Streetcode.Auth.Domain.Entities.Users
