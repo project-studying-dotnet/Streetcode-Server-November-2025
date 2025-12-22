@@ -131,40 +131,37 @@
         }
 
         [Fact]
-        public async Task Handler_ThrowsException_When_CreateAsyncFails()
+        public async Task Handler_ReturnsFailureResult_When_CreateAsyncFails()
         {
-            // Arrange
-            StreetcodeCreateHelper streetcodeCreateHelper = new StreetcodeCreateHelper(this.loggerMock.Object);
-
-            string json = StreetcodeTestData.CreatePersonStreetcode();
+            var streetcodeCreateHelper = new StreetcodeCreateHelper(this.loggerMock.Object);
+            var json = StreetcodeTestData.CreatePersonStreetcode();
             using var doc = JsonDocument.Parse(json);
-            JsonElement createStreetcodeDtoRaw = doc.RootElement.Clone();
+            var rawDto = doc.RootElement.Clone();
+            string streetcodeType = rawDto.GetProperty("StreetcodeType").GetString();
 
-            string streetcodeType = createStreetcodeDtoRaw.GetProperty("StreetcodeType").GetString();
-            CreateStreetcodeCommand request = new CreateStreetcodeCommand(createStreetcodeDtoRaw);
+            var request = new CreateStreetcodeCommand(rawDto);
+            var createDto = streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
 
-            CreateStreetcodeDto createStreetcodeDto =
-                streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
-
-            var streetcodeEntity = new StreetcodeContent
+            var entity = new StreetcodeContent
             {
                 Id = 1,
-                Index = createStreetcodeDto.Index,
-                Title = createStreetcodeDto.Title,
-                TransliterationUrl = createStreetcodeDto.TransliterationUrl,
+                Index = createDto.Index,
+                Title = createDto.Title,
+                TransliterationUrl = createDto.TransliterationUrl
             };
 
-            this.streetcodeHandlersTestsHelper.SetupMappers(createStreetcodeDto, streetcodeEntity);
+            this.streetcodeHandlersTestsHelper.SetupMappers(createDto, entity);
 
             this.repositoryMock
                 .Setup(r => r.StreetcodeRepository.CreateAsync(It.IsAny<StreetcodeContent>()))
                 .ThrowsAsync(new InvalidOperationException("Test exception"));
 
-            // Act & Assert
-            var ex = await Assert.ThrowsAsync<InvalidOperationException>(
-                () => this.handler.Handle(request, CancellationToken.None));
+            var result = await this.handler.Handle(request, CancellationToken.None);
 
-            Assert.Equal("Test exception", ex.Message);
+            Assert.True(result.IsFailed);
+            Assert.Contains(result.Errors, e => e.Message == ErrorMessages.StreetcodeCreationFailed);
+
+            this.loggerMock.Verify(l => l.LogError(request, It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
