@@ -28,6 +28,11 @@ namespace Streetcode.DAL.Entities.Streetcode
         public int StreetcodeId { get; set; }
         public StreetcodeContent? Streetcode { get; set; }
 
+        public int? ParentCommentId { get; set; }
+        public Comment? ParentComment { get; set; }
+
+        public ICollection<Comment> Replies { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
