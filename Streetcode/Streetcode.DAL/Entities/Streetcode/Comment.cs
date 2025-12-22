@@ -27,7 +27,7 @@ namespace Streetcode.DAL.Entities.Streetcode
         public DateTime CreatedAt { get; set; }
 
         [Required]
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime? EditedAt { get; set; }
 
         [Required]
         public bool IsDeleted { get; set; } = false;
