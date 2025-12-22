@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using Streetcode.DAL.Entities.Users;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Streetcode.DAL.Entities.Streetcode
 {
@@ -7,14 +7,29 @@ namespace Streetcode.DAL.Entities.Streetcode
 
     public class Comment
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Text { get; set; } = null!;
-        public string UserId { get; set; } = null!;
-        public User User { get; set; } = null!;
+
+        [Required]
+        [MaxLength(500)]
+        public string Content { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string AuthorName { get; set; } = "Гість";
+
+        [Required]
         public int StreetcodeId { get; set; }
-        public StreetcodeContent Streetcode { get; set; } = null!;
+        public StreetcodeContent? Streetcode { get; set; }
+
+        [Required]
         public DateTime CreatedAt { get; set; }
+
+        [Required]
         public DateTime? UpdatedAt { get; set; }
-        public bool IsDeleted { get; set; }
+
+        [Required]
+        public bool IsDeleted { get; set; } = false;
     }
 }
