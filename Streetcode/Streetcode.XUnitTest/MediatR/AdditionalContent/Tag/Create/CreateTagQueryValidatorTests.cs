@@ -18,7 +18,7 @@
         public void Should_Have_Error_When_TagDto_Is_Null()
         {
             // Arrange
-            var query = new CreateTagQuery(null);
+            var query = new CreateTagCommand(null);
 
             // Act
             var result = _validator.TestValidate(query);
@@ -33,7 +33,7 @@
         {
             // Arrange
             var validDto = new CreateTagDto { Title = "Valid Title" };
-            var query = new CreateTagQuery(validDto);
+            var query = new CreateTagCommand(validDto);
 
             // Act
             var result = _validator.TestValidate(query);
@@ -47,7 +47,7 @@
         {
             // Arrange
             var invalidDto = new CreateTagDto { Title = string.Empty };
-            var query = new CreateTagQuery(invalidDto);
+            var query = new CreateTagCommand(invalidDto);
 
             // Act
             var result = _validator.TestValidate(query);
