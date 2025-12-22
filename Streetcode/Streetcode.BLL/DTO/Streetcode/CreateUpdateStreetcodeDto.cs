@@ -7,6 +7,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Streetcode.BLL.DTO.AdditionalContent.Tag;
 using Streetcode.BLL.DTO.Media.Images;
+using Streetcode.DAL.Entities.Streetcode;
 using Streetcode.DAL.Enums;
 
 namespace Streetcode.BLL.DTO.Streetcode
@@ -33,6 +34,7 @@ namespace Streetcode.BLL.DTO.Streetcode
         public string? DateString { get; set; }
 
         public IEnumerable<StreetcodeTagDto>? Tags { get; set; }
+        public IEnumerable<Comment>? Comments { get; set; }
 
         [MaxLength(520)]
         public string? Teaser { get; set; }
