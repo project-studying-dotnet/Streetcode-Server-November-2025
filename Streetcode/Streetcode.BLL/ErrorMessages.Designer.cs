@@ -19,7 +19,7 @@ namespace Streetcode.BLL {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class ErrorMessages {
@@ -205,6 +205,15 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot create new related word for a term!.
+        /// </summary>
+        internal static string CannotCreateRelatedWordForTerm {
+            get {
+                return ResourceManager.GetString("CannotCreateRelatedWordForTerm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot map entity.
         /// </summary>
         internal static string CannotMapEntity {
@@ -219,6 +228,15 @@ namespace Streetcode.BLL {
         internal static string CannotSaveChangesInDatabase {
             get {
                 return ResourceManager.GetString("CannotSaveChangesInDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot save changes in the database after related word creation!.
+        /// </summary>
+        internal static string CannotSaveChangesInDbAfterStreetcodeCreated {
+            get {
+                return ResourceManager.GetString("CannotSaveChangesInDbAfterStreetcodeCreated", resourceCulture);
             }
         }
         
@@ -246,6 +264,78 @@ namespace Streetcode.BLL {
         internal static string CategoryNotFoundByStreetcodeId {
             get {
                 return ResourceManager.GetString("CategoryNotFoundByStreetcodeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Дані координат не можуть бути порожніми.
+        /// </summary>
+        internal static string CoordinateCantBeEmpty {
+            get {
+                return ResourceManager.GetString("CoordinateCantBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Довгота має бути в межах від {0} до {1} градусів.
+        /// </summary>
+        internal static string CoordinateHeightError {
+            get {
+                return ResourceManager.GetString("CoordinateHeightError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID координат має бути більше 0.
+        /// </summary>
+        internal static string CoordinateIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("CoordinateIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Широта має бути в межах від {0} до {1} градусів.
+        /// </summary>
+        internal static string CoordinateWidthError {
+            get {
+                return ResourceManager.GetString("CoordinateWidthError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database connection failed.
+        /// </summary>
+        internal static string DatabaseConntectionFailed {
+            get {
+                return ResourceManager.GetString("DatabaseConntectionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database error occurred.
+        /// </summary>
+        internal static string DataBaseError {
+            get {
+                return ResourceManager.GetString("DataBaseError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database error occurred.
+        /// </summary>
+        internal static string DatabaseErrorOccured {
+            get {
+                return ResourceManager.GetString("DatabaseErrorOccured", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete verification not implemented for type {0}.
+        /// </summary>
+        internal static string DeleteVerificationWrongType {
+            get {
+                return ResourceManager.GetString("DeleteVerificationWrongType", resourceCulture);
             }
         }
         
@@ -363,6 +453,24 @@ namespace Streetcode.BLL {
         internal static string FactTitleTooLong {
             get {
                 return ResourceManager.GetString("FactTitleTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete streetcode-toponym relationship..
+        /// </summary>
+        internal static string FailedToDeleteToponymStreetcode {
+            get {
+                return ResourceManager.GetString("FailedToDeleteToponymStreetcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to merge toponyms.
+        /// </summary>
+        internal static string FailedToMergeToponyms {
+            get {
+                return ResourceManager.GetString("FailedToMergeToponyms", resourceCulture);
             }
         }
         
@@ -502,11 +610,29 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to because include expression should be provided.
+        /// </summary>
+        internal static string IncludeExpressionNotProvided {
+            get {
+                return ResourceManager.GetString("IncludeExpressionNotProvided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid image format. Allowed formats: .png, .jpg, .jpeg, .webp.
         /// </summary>
         internal static string InvalidImageFormat {
             get {
                 return ResourceManager.GetString("InvalidImageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map method to {0} should not be called at all.
+        /// </summary>
+        internal static string MapToExatct {
+            get {
+                return ResourceManager.GetString("MapToExatct", resourceCulture);
             }
         }
         
@@ -664,6 +790,24 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to because predicate should be provided for filtering streetcodes.
+        /// </summary>
+        internal static string NoPredicateProvidedForFilterStreetcode {
+            get {
+                return ResourceManager.GetString("NoPredicateProvidedForFilterStreetcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request is null.
+        /// </summary>
+        internal static string NullRequest {
+            get {
+                return ResourceManager.GetString("NullRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Дані партнера є обов&apos;язковими.
         /// </summary>
         internal static string PartnerDataRequired {
@@ -718,7 +862,16 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot find any partners with corresponding streetcode id: {0}.
+        ///   Looks up a localized string similar to Cannot find any partners.
+        /// </summary>
+        internal static string PartnersNotFound {
+            get {
+                return ResourceManager.GetString("PartnersNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find any partner with corresponding streetcode id: {0}.
         /// </summary>
         internal static string PartnersNotFoundByStreetcodeId {
             get {
@@ -853,6 +1006,15 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to because predicate should be provided.
+        /// </summary>
+        internal static string PredicateNotProvided {
+            get {
+                return ResourceManager.GetString("PredicateNotProvided", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to create a relation.
         /// </summary>
         internal static string RelatedFigureCreationFailed {
@@ -925,6 +1087,15 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ID терміну має бути більше 0.
+        /// </summary>
+        internal static string RelatedTermIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("RelatedTermIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot find a related term: {0}.
         /// </summary>
         internal static string RelatedTermNotFound {
@@ -948,15 +1119,6 @@ namespace Streetcode.BLL {
         internal static string RelatedTermsNotFoundByTermId {
             get {
                 return ResourceManager.GetString("RelatedTermsNotFoundByTermId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to ID терміну має бути більше 0.
-        /// </summary>
-        internal static string RelatedTermTermIdMustBeGreaterThanZero {
-            get {
-                return ResourceManager.GetString("RelatedTermTermIdMustBeGreaterThanZero", resourceCulture);
             }
         }
         
@@ -1231,6 +1393,15 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Streetcode repository error.
+        /// </summary>
+        internal static string StreetcodeRepositoryError {
+            get {
+                return ResourceManager.GetString("StreetcodeRepositoryError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ShortDescription не може перевищувати {0} символів.
         /// </summary>
         internal static string StreetcodeShortDescriptionTooLong {
@@ -1263,6 +1434,15 @@ namespace Streetcode.BLL {
         internal static string StreetcodeTeaserTooLong {
             get {
                 return ResourceManager.GetString("StreetcodeTeaserTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exception occurred while creating streetcode: Test exception.
+        /// </summary>
+        internal static string StreetcodeTestException {
+            get {
+                return ResourceManager.GetString("StreetcodeTestException", resourceCulture);
             }
         }
         
@@ -1371,6 +1551,42 @@ namespace Streetcode.BLL {
         internal static string SubtitlesNotFound {
             get {
                 return ResourceManager.GetString("SubtitlesNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Дані тегу не можуть бути порожніми.
+        /// </summary>
+        internal static string TagDataCantBeEmpty {
+            get {
+                return ResourceManager.GetString("TagDataCantBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Назва тегу може містити лише літери, цифри, пробіли та дефіси.
+        /// </summary>
+        internal static string TagFormatError {
+            get {
+                return ResourceManager.GetString("TagFormatError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Назва тегу не може перевищувати {0} символів.
+        /// </summary>
+        internal static string TagNameCantExceed {
+            get {
+                return ResourceManager.GetString("TagNameCantExceed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Назва тегу є обов&apos;язковою.
+        /// </summary>
+        internal static string TagNameIsRequired {
+            get {
+                return ResourceManager.GetString("TagNameIsRequired", resourceCulture);
             }
         }
         
@@ -1636,6 +1852,33 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This toponym is already linked to the streetcode..
+        /// </summary>
+        internal static string ToponymAlreadyLinked {
+            get {
+                return ResourceManager.GetString("ToponymAlreadyLinked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target toponym with Id={0} not found..
+        /// </summary>
+        internal static string ToponymByIdMerge {
+            get {
+                return ResourceManager.GetString("ToponymByIdMerge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot map StreetcodeToponymDto to entity..
+        /// </summary>
+        internal static string ToponymCantBeMapped {
+            get {
+                return ResourceManager.GetString("ToponymCantBeMapped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot find any toponym with corresponding id: {0}.
         /// </summary>
         internal static string ToponymNotFoundById {
@@ -1650,6 +1893,24 @@ namespace Streetcode.BLL {
         internal static string ToponymNotFoundByStreetcodeId {
             get {
                 return ResourceManager.GetString("ToponymNotFoundByStreetcodeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to create streetcode-toponym relationship..
+        /// </summary>
+        internal static string ToponymStreetcodeFailedToCreate {
+            get {
+                return ResourceManager.GetString("ToponymStreetcodeFailedToCreate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find relationship with StreetcodeId={0} and ToponymId={1}.
+        /// </summary>
+        internal static string ToponymStreetcodeRelationsDelete {
+            get {
+                return ResourceManager.GetString("ToponymStreetcodeRelationsDelete", resourceCulture);
             }
         }
         
@@ -1848,6 +2109,96 @@ namespace Streetcode.BLL {
         internal static string ValidationException {
             get {
                 return ResourceManager.GetString("ValidationException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SendEmailAsync should be called once.
+        /// </summary>
+        internal static string VerifyEmailSentOnce {
+            get {
+                return ResourceManager.GetString("VerifyEmailSentOnce", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetAllAsync method should be called exactly once.
+        /// </summary>
+        internal static string VerifyGetAllAsyncCalledOnce {
+            get {
+                return ResourceManager.GetString("VerifyGetAllAsyncCalledOnce", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GetFirstOrDefaultAsync method should be called exactly once.
+        /// </summary>
+        internal static string VerifyGetFirstOrDefaultAsyncCalledOnce {
+            get {
+                return ResourceManager.GetString("VerifyGetFirstOrDefaultAsyncCalledOnce", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LogError method should be called exactly once when timelineItems is null.
+        /// </summary>
+        internal static string VerifyLogCalledOnceTimelineNull {
+            get {
+                return ResourceManager.GetString("VerifyLogCalledOnceTimelineNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LogError method should not be called when timelineItems exists.
+        /// </summary>
+        internal static string VerifyLogDidntCalledWhenTimelineexists {
+            get {
+                return ResourceManager.GetString("VerifyLogDidntCalledWhenTimelineexists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LogError should not be called when email sent successfully.
+        /// </summary>
+        internal static string VerifyLoggerCalledEmailSentSuccess {
+            get {
+                return ResourceManager.GetString("VerifyLoggerCalledEmailSentSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to LogError method should be called exactly once when email sending fails.
+        /// </summary>
+        internal static string VerifyLoggerCalledOnceEmailSentFail {
+            get {
+                return ResourceManager.GetString("VerifyLoggerCalledOnceEmailSentFail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map method should be called exactly once.
+        /// </summary>
+        internal static string VerifyMapperCalledOnce {
+            get {
+                return ResourceManager.GetString("VerifyMapperCalledOnce", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to because SaveChanges should be called after updating partner and after modifying streetcode links.
+        /// </summary>
+        internal static string VerifySaveChangesCalledPartnerStreetcode {
+            get {
+                return ResourceManager.GetString("VerifySaveChangesCalledPartnerStreetcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to because SaveChanges should be called after creating partner and after adding streetcodes.
+        /// </summary>
+        internal static string VerifySaveChangesCalledTwicePartnerStreetcode {
+            get {
+                return ResourceManager.GetString("VerifySaveChangesCalledTwicePartnerStreetcode", resourceCulture);
             }
         }
         

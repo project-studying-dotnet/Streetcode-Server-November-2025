@@ -1,11 +1,9 @@
 namespace Streetcode.XUnitTest.MediatR.Toponyms.GetByStreetcodeId
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Toponyms;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Toponyms.GetByStreetcodeId;
@@ -17,6 +15,9 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetByStreetcodeId
     using Streetcode.XUnitTest.Helpers;
     using Streetcode.XUnitTest.MediatR.Toponyms.Fixtures;
     using Streetcode.XUnitTest.MediatR.Toponyms.Helpers;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using Xunit;
 
     /// <summary>
@@ -120,7 +121,7 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetByStreetcodeId
             Assert.NotNull(result);
             Assert.True(result.IsFailed);
             Assert.NotEmpty(result.Errors);
-            Assert.Contains($"Cannot find any toponym by the streetcode id: {streetcodeId}", result.Errors.First().Message);
+            Assert.Contains(string.Format(ErrorMessages.ToponymNotFoundByStreetcodeId, streetcodeId), result.Errors.First().Message);
 
             toponymRepositoryMock.VerifyGetAllAsyncCalledOnce<IToponymRepository, Toponym>();
             this.mapperMock.Verify(m => m.Map<ToponymDto>(It.IsAny<Toponym>()), Times.Never);
@@ -151,7 +152,7 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetByStreetcodeId
             Assert.NotNull(result);
             Assert.True(result.IsFailed);
             Assert.NotEmpty(result.Errors);
-            Assert.Contains($"Cannot find any toponym by the streetcode id: {streetcodeId}", result.Errors.First().Message);
+            Assert.Contains(string.Format(ErrorMessages.ToponymNotFoundByStreetcodeId, streetcodeId), result.Errors.First().Message);
 
             toponymRepositoryMock.VerifyGetAllAsyncCalledOnce<IToponymRepository, Toponym>();
             this.mapperMock.Verify(m => m.Map<ToponymDto>(It.IsAny<Toponym>()), Times.Never);

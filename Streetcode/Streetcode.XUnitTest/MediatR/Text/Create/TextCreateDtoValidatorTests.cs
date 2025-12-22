@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Text.Create
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
     using Streetcode.BLL.MediatR.Streetcode.Text.Create;
     using Xunit;
@@ -36,7 +37,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.StreetcodeId)
-                  .WithErrorMessage("ID стріткоду має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.StreetcodeIdMustBeGreaterThanZero);
         }
 
         [Fact]
@@ -51,7 +52,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.StreetcodeId)
-                  .WithErrorMessage("ID стріткоду має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.StreetcodeIdMustBeGreaterThanZero);
         }
 
         [Fact]
@@ -67,7 +68,7 @@
             // Assert
             Assert.Contains(
                 result.Errors,
-                e => e.ErrorMessage == "Заголовок тексту є обов'язковим");
+                e => e.ErrorMessage == ErrorMessages.TextTitleRequired);
         }
 
         [Fact]

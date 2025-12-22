@@ -4,6 +4,7 @@
     using FluentAssertions;
     using FluentAssertions.Execution;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Partners;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
@@ -16,10 +17,10 @@
 
     public class CreateTeamLinkHandlerTests
     {
-        private const string ErrorMsgCannotConvertNull = "Cannot convert null to team link";
-        private const string ErrorMsgCannotCreateTeamLink = "Cannot create team link";
-        private const string ErrorMsgFailedToCreate = "Failed to create a team";
-        private const string ErrorMsgFailedToMap = "Failed to map created team link";
+        private readonly string ErrorMsgCannotConvertNull = ErrorMessages.TeamMemberLinkConversionFailed;
+        private readonly string ErrorMsgCannotCreateTeamLink = ErrorMessages.TeamLinkCreationFailed;
+        private readonly string ErrorMsgFailedToCreate = ErrorMessages.TeamCreationFailed;
+        private readonly string ErrorMsgFailedToMap = ErrorMessages.CannotMapEntity;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<ITeamLinkRepository> mockTeamLinkRepository;
         private readonly Mock<ILoggerService> mockLogger;

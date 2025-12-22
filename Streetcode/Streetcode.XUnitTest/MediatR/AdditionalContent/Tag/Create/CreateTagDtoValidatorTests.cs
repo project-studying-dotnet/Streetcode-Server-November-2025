@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Tag.Create
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.AdditionalContent.Tag;
     using Streetcode.BLL.MediatR.AdditionalContent.Tag.Create;
     using Streetcode.BLL.Util.Validators;
@@ -46,7 +47,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Title)
-                  .WithErrorMessage("Назва тегу є обов'язковою");
+                  .WithErrorMessage(ErrorMessages.TagNameIsRequired);
         }
 
         [Fact]
@@ -63,7 +64,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Title)
-                  .WithErrorMessage($"Назва тегу не може перевищувати {maxLength} символів");
+                  .WithErrorMessage(string.Format(ErrorMessages.TagNameCantExceed, ValidationConstants.Tag.TitleMaxLength));
         }
 
         [Theory]
@@ -81,7 +82,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Title)
-                  .WithErrorMessage("Назва тегу може містити лише літери, цифри, пробіли та дефіси");
+                  .WithErrorMessage(ErrorMessages.TagFormatError);
         }
     }
 }

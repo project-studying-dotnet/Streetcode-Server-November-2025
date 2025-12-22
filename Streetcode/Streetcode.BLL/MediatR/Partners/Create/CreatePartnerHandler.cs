@@ -23,9 +23,9 @@ namespace Streetcode.BLL.MediatR.Partners.Create
 
         public async Task<Result<PartnerDto>> Handle(CreatePartnerCommand request, CancellationToken cancellationToken)
         {
-            var newPartner = _mapper.Map<Partner>(request.newPartner);
             try
             {
+                var newPartner = _mapper.Map<Partner>(request.newPartner);
                 newPartner.Streetcodes.Clear();
                 newPartner = await _repositoryWrapper.PartnersRepository.CreateAsync(newPartner);
 
@@ -39,10 +39,10 @@ namespace Streetcode.BLL.MediatR.Partners.Create
                 await _repositoryWrapper.SaveChangesAsync();
                 return Result.Ok(_mapper.Map<PartnerDto>(newPartner));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                return Result.Fail(new Error(ex.Message));
             }
         }
     }

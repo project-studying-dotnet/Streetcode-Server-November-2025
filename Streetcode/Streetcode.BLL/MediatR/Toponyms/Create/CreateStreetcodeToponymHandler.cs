@@ -36,7 +36,7 @@ namespace Streetcode.BLL.MediatR.Toponyms.Create
 
             if (existing is not null)
             {
-                const string errorMsg = "This toponym is already linked to the streetcode.";
+                string errorMsg = ErrorMessages.ToponymAlreadyLinked;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -45,7 +45,7 @@ namespace Streetcode.BLL.MediatR.Toponyms.Create
 
             if (streetcodeToponym is null)
             {
-                const string errorMsg = "Cannot map StreetcodeToponymDto to entity.";
+                string errorMsg = ErrorMessages.ToponymCantBeMapped;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -56,7 +56,7 @@ namespace Streetcode.BLL.MediatR.Toponyms.Create
 
             if (!resultIsSuccess)
             {
-                const string errorMsg = "Failed to create streetcode-toponym relationship.";
+                string errorMsg = ErrorMessages.ToponymStreetcodeFailedToCreate;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

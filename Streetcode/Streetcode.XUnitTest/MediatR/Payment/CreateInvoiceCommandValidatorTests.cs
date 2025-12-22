@@ -2,6 +2,7 @@
 using Xunit;
 using Streetcode.BLL.MediatR.Payment;
 using Streetcode.BLL.DTO.Payment;
+using Streetcode.BLL;
 
 namespace Streetcode.XUnitTest.MediatR.Payment
 {
@@ -20,7 +21,7 @@ namespace Streetcode.XUnitTest.MediatR.Payment
             var command = new CreateInvoiceCommand(null);
             var result = _validator.TestValidate(command);
             result.ShouldHaveValidationErrorFor(x => x.Payment)
-                  .WithErrorMessage("Дані платежу не можуть бути порожніми");
+                  .WithErrorMessage(ErrorMessages.PaymentDataRequired);
         }
 
         [Fact]

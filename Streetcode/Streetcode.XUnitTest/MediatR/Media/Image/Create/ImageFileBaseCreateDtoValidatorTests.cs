@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Image.Create
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.MediatR.Media.Image.Create;
     using Streetcode.BLL.Util.Validators;
@@ -41,7 +42,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.BaseFormat)
-                  .WithErrorMessage("BaseFormat має бути дійсним рядком Base64");
+                  .WithErrorMessage(ErrorMessages.ImageBase64Invalid);
         }
 
         [Fact]
@@ -61,7 +62,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.BaseFormat)
-                  .WithErrorMessage($"Розмір зображення не може перевищувати {ValidationConstants.Media.MaxImageSizeInBytes / 1024 / 1024}МБ після декодування");
+                  .WithErrorMessage(string.Format(ErrorMessages.ImageSizeExceeded, ValidationConstants.Media.MaxImageSizeInBytes / 1024 / 1024));
         }
 
         [Theory]

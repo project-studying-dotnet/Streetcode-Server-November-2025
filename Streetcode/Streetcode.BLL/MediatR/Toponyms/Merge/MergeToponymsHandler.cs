@@ -32,7 +32,7 @@ namespace Streetcode.BLL.MediatR.Toponyms.Merge
 
             if (targetToponym is null)
             {
-                string errorMsg = $"Target toponym with Id={request.MergeRequest.TargetToponymId} not found.";
+                string errorMsg = string.Format(ErrorMessages.ToponymByIdMerge, request.MergeRequest.TargetToponymId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
