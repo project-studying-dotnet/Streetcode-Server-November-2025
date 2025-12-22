@@ -26,7 +26,7 @@
         [Fact]
         public void Should_Have_Error_When_Partner_Is_Null()
         {
-            var query = new UpdatePartnerQuery(null);
+            var query = new UpdatePartnerCommand(null);
             var result = _validator.TestValidate(query);
             result.ShouldHaveValidationErrorFor(x => x.Partner);
         }
@@ -35,7 +35,7 @@
         public void Should_Have_Error_When_Partner_Id_Is_Invalid()
         {
             var dto = new CreatePartnerDto { Id = 0, Title = "Valid" };
-            var query = new UpdatePartnerQuery(dto);
+            var query = new UpdatePartnerCommand(dto);
 
             var result = _validator.TestValidate(query);
 
@@ -51,7 +51,7 @@
             var title = "Taken Title";
 
             var dto = new CreatePartnerDto { Id = myId, Title = title };
-            var query = new UpdatePartnerQuery(dto);
+            var query = new UpdatePartnerCommand(dto);
 
             _mockRepo.Setup(r => r.PartnersRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Partner, bool>>>(),
@@ -83,7 +83,7 @@
                 LogoId = 1,
                 Streetcodes = new List<StreetcodeShortDto>(),
             };
-            var query = new UpdatePartnerQuery(dto);
+            var query = new UpdatePartnerCommand(dto);
 
             _mockRepo.Setup(r => r.PartnersRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Partner, bool>>>(),

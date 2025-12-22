@@ -6,7 +6,7 @@ namespace Streetcode.BLL.MediatR.Team.TeamMembersLinks.Create
     /// <summary>
     /// Validator for CreateTeamLinkQuery.
     /// </summary>
-    public class CreateTeamLinkQueryValidator : AbstractValidator<CreateTeamLinkQuery>
+    public class CreateTeamLinkQueryValidator : AbstractValidator<CreateTeamLinkCommand>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateTeamLinkQueryValidator"/> class.
