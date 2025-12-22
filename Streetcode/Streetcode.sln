@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.3.11312.210 d18.3
+VisualStudioVersion = 18.3.11312.210
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Streetcode.WebApi", "Streetcode.WebApi\Streetcode.WebApi.csproj", "{CAA32FB4-F481-4748-BFCE-33B0DBF433E8}"
 EndProject
@@ -39,6 +39,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streetcode.Auth.Infrastructure", "Services\Streetcode.Auth\Streetcode.Auth.Infrastructure\Streetcode.Auth.Infrastructure.csproj", "{DDACB8A4-1470-4C59-9B30-7CA8186DED20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streetcode.Auth.XUnitTest", "Services\Streetcode.Auth\Streetcode.Auth.XUnitTest\Streetcode.Auth.XUnitTest.csproj", "{12B47E30-F962-4BE6-A90C-81D620EC4282}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Streetcode.Messaging", "Streetcode.Messaging", "{52955BF6-108E-449A-89C0-5F07165ED5A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streetcode.Messaging", "Services\BuildingBlocks\Streetcode.Messaging\Streetcode.Messaging.csproj", "{43ACA6F1-F32B-4D77-9E18-E6C77EF61970}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +96,10 @@ Global
 		{12B47E30-F962-4BE6-A90C-81D620EC4282}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12B47E30-F962-4BE6-A90C-81D620EC4282}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12B47E30-F962-4BE6-A90C-81D620EC4282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43ACA6F1-F32B-4D77-9E18-E6C77EF61970}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43ACA6F1-F32B-4D77-9E18-E6C77EF61970}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43ACA6F1-F32B-4D77-9E18-E6C77EF61970}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43ACA6F1-F32B-4D77-9E18-E6C77EF61970}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,6 +113,8 @@ Global
 		{E616672B-4023-4E96-8D83-A26C4CBB3036} = {6451182E-42D8-446E-8562-0EF721973BFD}
 		{DDACB8A4-1470-4C59-9B30-7CA8186DED20} = {6451182E-42D8-446E-8562-0EF721973BFD}
 		{12B47E30-F962-4BE6-A90C-81D620EC4282} = {6451182E-42D8-446E-8562-0EF721973BFD}
+		{52955BF6-108E-449A-89C0-5F07165ED5A0} = {EF5F4490-7083-41B3-B954-2C4AB04B5549}
+		{43ACA6F1-F32B-4D77-9E18-E6C77EF61970} = {52955BF6-108E-449A-89C0-5F07165ED5A0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D3D1FEF-DB8F-4A51-AD6E-0EE327AB534A}
