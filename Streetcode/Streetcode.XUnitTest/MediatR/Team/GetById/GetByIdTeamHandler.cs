@@ -1,10 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Team.GetById
 {
-    using System.Linq.Expressions;
     using AutoMapper;
     using FluentAssertions;
     using FluentAssertions.Execution;
-    using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Streetcode.BLL;
     using Streetcode.BLL.DTO.Team;
@@ -13,6 +11,7 @@
     using Streetcode.DAL.Entities.Team;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Team;
+    using Streetcode.DAL.Specifications.Team;
     using Xunit;
 
     public class GetByIdTeamHandlerTests
@@ -49,7 +48,7 @@
             var teamMember = new TeamMember { Id = TestMemberId };
             var teamMemberDTO = new TeamMemberDto { Id = TestMemberId };
 
-            this.SetupRepositoryGetByIdAsync(teamMember);
+            this.SetupRepositoryGetItemBySpecAsync(teamMember);
             this.SetupMapper(teamMemberDTO);
 
             var query = new GetByIdTeamQuery(TestMemberId);
@@ -69,7 +68,7 @@
         public async Task Handle_ShouldReturnFailResultWithErrorMessage_WhenMemberIsNull()
         {
             // Arrange
-            this.SetupRepositoryGetByIdAsync(null!);
+            this.SetupRepositoryGetItemBySpecAsync(null!);
 
             var query = new GetByIdTeamQuery(TestMemberId);
             var expectedErrorMessage = string.Format(ErrorMsgTemplate, TestMemberId);
@@ -92,12 +91,12 @@
             }
         }
 
-        private void SetupRepositoryGetByIdAsync(TeamMember teamMember)
+        private void SetupRepositoryGetItemBySpecAsync(TeamMember? teamMember)
         {
             this.mockTeamRepository
-                .Setup(r => r.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<TeamMember, bool>>>(),
-                    It.IsAny<Func<IQueryable<TeamMember>, IIncludableQueryable<TeamMember, object>>>()))
+                .Setup(r => r.GetBySpecAsync(
+                    It.IsAny<TeamMemberByIdSpecification>(),
+                    It.IsAny<CancellationToken>()))
                 .ReturnsAsync(teamMember);
         }
 
