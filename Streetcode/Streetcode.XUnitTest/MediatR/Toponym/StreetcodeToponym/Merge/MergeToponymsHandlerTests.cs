@@ -3,6 +3,7 @@
     using System.Transactions;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Toponyms;
     using Streetcode.BLL.MediatR.Toponyms.Merge;
     using Streetcode.DAL.Entities.Toponyms;
@@ -40,7 +41,7 @@
         {
             // Arrange.
             int targetToponymId = 999;
-            string expectedError = $"Target toponym with Id={targetToponymId} not found.";
+            string expectedError = string.Format(ErrorMessages.ToponymByIdMerge, targetToponymId);
             var mergeDto = StreetcodeToponymTestData.CreateMergeToponymsDto(targetToponymId);
             var command = new MergeToponymsCommand(mergeDto);
 
@@ -141,7 +142,7 @@
                         System.Func<DAL.Entities.Toponyms.StreetcodeToponym, bool>>>(),
                     It.IsAny<System.Func<System.Linq.IQueryable<DAL.Entities.Toponyms.StreetcodeToponym>,
                         Microsoft.EntityFrameworkCore.Query.IIncludableQueryable<DAL.Entities.Toponyms.StreetcodeToponym, object>>>()))
-                .ThrowsAsync(new System.Exception("Database error"));
+                .ThrowsAsync(new System.Exception(ErrorMessages.DataBaseError));
 
             this.SetupLogger();
 
@@ -151,8 +152,8 @@
             // Assert.
             result.Should().NotBeNull();
             result.IsFailed.Should().BeTrue();
-            result.Errors.First().Message.Should().Contain("Failed to merge toponyms");
-            result.Errors.First().Message.Should().Contain("Database error");
+            result.Errors.First().Message.Should().Contain(ErrorMessages.FailedToMergeToponyms);
+            result.Errors.First().Message.Should().Contain(ErrorMessages.DataBaseError);
 
             // Verify.
             this.MockLogger.VerifyLogErrorCalledOnce();
@@ -195,7 +196,7 @@
 
             this.MockRepository
                 .Setup(repo => repo.SaveChangesAsync())
-                .ThrowsAsync(new System.Exception("SaveChanges failed"));
+                .ThrowsAsync(new System.Exception(ErrorMessages.CannotSaveChangesInDatabase));
 
             this.SetupLogger();
 
@@ -205,8 +206,8 @@
             // Assert.
             result.Should().NotBeNull();
             result.IsFailed.Should().BeTrue();
-            result.Errors.First().Message.Should().Contain("Failed to merge toponyms");
-            result.Errors.First().Message.Should().Contain("SaveChanges failed");
+            result.Errors.First().Message.Should().Contain(ErrorMessages.FailedToMergeToponyms);
+            result.Errors.First().Message.Should().Contain(ErrorMessages.CannotSaveChangesInDatabase);
 
             // Verify.
             this.MockLogger.VerifyLogErrorCalledOnce();

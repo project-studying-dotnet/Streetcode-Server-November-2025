@@ -4,6 +4,7 @@
     using FluentAssertions;
     using FluentAssertions.Execution;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Partners;
     using Streetcode.BLL.DTO.Team;
     using Streetcode.BLL.Interfaces.Logging;
@@ -16,10 +17,10 @@
 
     public class CreateTeamLinkHandlerTests
     {
-        private const string ErrorMsgCannotConvertNull = "Cannot convert null to team link";
-        private const string ErrorMsgCannotCreateTeamLink = "Cannot create team link";
-        private const string ErrorMsgFailedToCreate = "Failed to create a team";
-        private const string ErrorMsgFailedToMap = "Failed to map created team link";
+        private readonly string ErrorMsgCannotConvertNull = ErrorMessages.TeamMemberLinkConversionFailed;
+        private readonly string ErrorMsgCannotCreateTeamLink = ErrorMessages.TeamLinkCreationFailed;
+        private readonly string ErrorMsgFailedToCreate = ErrorMessages.TeamCreationFailed;
+        private readonly string ErrorMsgFailedToMap = ErrorMessages.CannotMapEntity;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<ITeamLinkRepository> mockTeamLinkRepository;
         private readonly Mock<ILoggerService> mockLogger;
@@ -55,7 +56,7 @@
             this.SetupRepositorySaveChangesSuccess();
             this.SetupMapperToTeamLinkDTO(teamLinkDTO);
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -76,7 +77,7 @@
 
             this.SetupMapperToTeamLink(null!);
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -90,7 +91,7 @@
 
                 this.mockLogger.Verify(
                     logger => logger.LogError(
-                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<CreateTeamLinkCommand>(q => q == query),
                         It.Is<string>(msg => msg == ErrorMsgCannotConvertNull)),
                     Times.Once);
             }
@@ -106,7 +107,7 @@
             this.SetupMapperToTeamLink(teamLink);
             this.SetupRepositoryCreate(null!);
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -120,7 +121,7 @@
 
                 this.mockLogger.Verify(
                     logger => logger.LogError(
-                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<CreateTeamLinkCommand>(q => q == query),
                         It.Is<string>(msg => msg == ErrorMsgCannotCreateTeamLink)),
                     Times.Once);
             }
@@ -137,7 +138,7 @@
             this.SetupRepositoryCreate(teamLink);
             this.SetupRepositorySaveChangesFailure();
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -151,7 +152,7 @@
 
                 this.mockLogger.Verify(
                     logger => logger.LogError(
-                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<CreateTeamLinkCommand>(q => q == query),
                         It.Is<string>(msg => msg == ErrorMsgFailedToCreate)),
                     Times.Once);
             }
@@ -169,7 +170,7 @@
             this.SetupRepositorySaveChangesSuccess();
             this.SetupMapperToTeamLinkDTO(null!);
 
-            var query = new CreateTeamLinkQuery(teamLinkDTO);
+            var query = new CreateTeamLinkCommand(teamLinkDTO);
 
             // Act
             var result = await this.handler.Handle(query, CancellationToken.None);
@@ -183,7 +184,7 @@
 
                 this.mockLogger.Verify(
                     logger => logger.LogError(
-                        It.Is<CreateTeamLinkQuery>(q => q == query),
+                        It.Is<CreateTeamLinkCommand>(q => q == query),
                         It.Is<string>(msg => msg == ErrorMsgFailedToMap)),
                     Times.Once);
             }

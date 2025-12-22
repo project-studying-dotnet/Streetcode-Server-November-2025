@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Update
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent;
     using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update;
     using Streetcode.BLL.Util.Validators;
@@ -23,7 +24,7 @@
             var dto = new RelatedTermDto { Word = word };
             var result = _validator.TestValidate(dto);
             result.ShouldHaveValidationErrorFor(x => x.Word)
-                  .WithErrorMessage("Слово є обов'язковим");
+                  .WithErrorMessage(ErrorMessages.RelatedTermWordRequired);
         }
 
         [Fact]
@@ -35,7 +36,7 @@
             };
             var result = _validator.TestValidate(dto);
             result.ShouldHaveValidationErrorFor(x => x.Word)
-                  .WithErrorMessage($"Слово не може перевищувати {ValidationConstants.RelatedTerm.WordMaxLength} символів");
+                  .WithErrorMessage(string.Format(ErrorMessages.RelatedTermWordTooLong, ValidationConstants.RelatedTerm.WordMaxLength));
         }
 
         [Theory]
@@ -46,7 +47,7 @@
             var dto = new RelatedTermDto { TermId = termId };
             var result = _validator.TestValidate(dto);
             result.ShouldHaveValidationErrorFor(x => x.TermId)
-                  .WithErrorMessage("ID терміну має бути більше 0");
+                  .WithErrorMessage(ErrorMessages.RelatedTermIdMustBeGreaterThanZero);
         }
 
         [Fact]

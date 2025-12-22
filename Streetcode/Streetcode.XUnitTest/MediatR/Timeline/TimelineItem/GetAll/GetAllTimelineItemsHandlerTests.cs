@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Timeline;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetAll;
@@ -72,7 +73,7 @@
             Assert.NotNull(result);
             Assert.True(result.IsFailed);
             Assert.NotEmpty(result.Errors);
-            Assert.Equal("Cannot find any timelineItem", result.Errors.FirstOrDefault()?.Message);
+            Assert.Equal(ErrorMessages.TimelineItemNotFound, result.Errors.FirstOrDefault()?.Message);
 
             // Verify
             timelineRepositoryMock.VerifyGetAllAsyncCalledOnce();

@@ -3,6 +3,7 @@
     using AutoMapper;
     using global::MediatR;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Fact.Delete;
     using Streetcode.DAL.Entities.Streetcode.TextContent;
@@ -32,7 +33,7 @@
         public async Task Handle_WhenFactDoesNotExist_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Fact was not found";
+            string errorMsg = ErrorMessages.FactNotFound;
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
             var factId = 1;
             var command = new DeleteFactCommand(factId);

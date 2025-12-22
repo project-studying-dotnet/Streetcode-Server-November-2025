@@ -1,24 +1,24 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Art
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-    using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Repositories.Interfaces;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Media.Art;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Media.Art.GetAll;
     using Streetcode.DAL.Entities.Media.Images;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Threading.Tasks;
     using Xunit;
 
     public class GetAllArtsHandlerTests
     {
-        private const string ERRORMESSAGE = "Cannot find any arts";
         private readonly Mock<IMapper> mapperMock;
         private readonly Mock<IRepositoryWrapper> repositoryWrapperMock;
         private readonly Mock<ILoggerService> loggerMock;
@@ -135,7 +135,7 @@
             var result = await this.handler
                 .Handle(new GetAllArtsQuery(), CancellationToken.None);
 
-            Assert.Equal(ERRORMESSAGE, result.Errors[0].Message);
+            Assert.Equal(ErrorMessages.ArtsNotFound, result.Errors[0].Message);
             this.verifyMockersHandler.VerifyMockersNegativeFlowGetAll();
             this.verifyMockersHandler.VerifyWrapperMock();
             this.verifyMockersHandler.VerifyLoggerMock();

@@ -11,6 +11,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetAll
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Text.GetAll;
@@ -102,7 +103,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetAll
         public async Task Handle_ShouldReturnFail_WhenRepositoryReturnsNull()
         {
             // Arrange
-            const string ErrorMsg = "Cannot find any text";
+            string ErrorMsg = ErrorMessages.TextNotFound;
             mockRepoWrapper.Setup(r => r.TextRepository.GetAllAsync(null, null))
                     .ReturnsAsync((IEnumerable<Text>?)null);
 

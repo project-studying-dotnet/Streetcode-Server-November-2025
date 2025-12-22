@@ -7,7 +7,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Partners.Delete
 {
-    public class DeletePartnerHandler : IRequestHandler<DeletePartnerQuery, Result<PartnerDto>>
+    public class DeletePartnerHandler : IRequestHandler<DeletePartnerCommand, Result<PartnerDto>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -20,7 +20,7 @@ namespace Streetcode.BLL.MediatR.Partners.Delete
             _logger = logger;
         }
 
-        public async Task<Result<PartnerDto>> Handle(DeletePartnerQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PartnerDto>> Handle(DeletePartnerCommand request, CancellationToken cancellationToken)
         {
             var partner = await _repositoryWrapper.PartnersRepository.GetFirstOrDefaultAsync(p => p.Id == request.id);
             if (partner == null)
@@ -29,20 +29,10 @@ namespace Streetcode.BLL.MediatR.Partners.Delete
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
-            else
-            {
-                _repositoryWrapper.PartnersRepository.Delete(partner);
-                try
-                {
-                    await _repositoryWrapper.SaveChangesAsync();
-                    return Result.Ok(_mapper.Map<PartnerDto>(partner));
-                }
-                catch(Exception ex)
-                {
-                    _logger.LogError(request, ex.Message);
-                    return Result.Fail(ex.Message);
-                }
-            }
+
+            _repositoryWrapper.PartnersRepository.Delete(partner);
+            await _repositoryWrapper.SaveChangesAsync();
+            return Result.Ok(_mapper.Map<PartnerDto>(partner));
         }
     }
 }

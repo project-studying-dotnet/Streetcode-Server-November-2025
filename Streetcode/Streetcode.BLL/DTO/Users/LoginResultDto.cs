@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Streetcode.BLL.DTO.Users
+﻿namespace Streetcode.BLL.DTO.Users
 {
     public class LoginResultDto
     {
-        public UserDto User { get; set; }
-        public string Token { get; set; }
-        public DateTime ExpireAt { get; set; }
+        public int UserId { get; set; }
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+        public DateTime AccessTokenExpiresAt { get; set; }
+        public DateTime RefreshTokenExpiresAt { get; set; }
     }
 }

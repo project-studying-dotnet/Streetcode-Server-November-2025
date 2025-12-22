@@ -8,6 +8,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetById
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Text.GetById;
@@ -72,7 +73,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetById
         {
             // Arrange
             var query = new GetTextByIdQuery(id);
-            string errorMsg = $"Cannot find any text with corresponding id: {id}";
+            string errorMsg = string.Format(ErrorMessages.TextNotFoundById, id);
 
             mockRepoWrapper.Setup(r => r.TextRepository.GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Text, bool>>>(), null))

@@ -43,8 +43,7 @@ else
 await app.ApplyMigrations();
 
 // await app.SeedDataAsync(); // uncomment for seeding data in local
-
-app.UseMiddleware<ValidationExceptionMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseRouting();

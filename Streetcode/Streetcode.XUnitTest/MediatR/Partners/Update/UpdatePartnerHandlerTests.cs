@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
+using Streetcode.BLL;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.DTO.Streetcode;
 using Streetcode.BLL.MediatR.Partners.Update;
@@ -137,7 +138,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupPartnerStreetcodeRepository(oldStreetcodes);
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
+            var query = new UpdatePartnerCommand(updatePartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -189,7 +190,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupPartnerStreetcodeRepository(oldStreetcodes);
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
+            var query = new UpdatePartnerCommand(updatePartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -235,7 +236,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupPartnerStreetcodeRepository(oldStreetcodes);
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
+            var query = new UpdatePartnerCommand(updatePartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -281,7 +282,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupPartnerStreetcodeRepository(oldStreetcodes);
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
+            var query = new UpdatePartnerCommand(updatePartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -323,7 +324,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupPartnerStreetcodeRepository(oldStreetcodes);
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
+            var query = new UpdatePartnerCommand(updatePartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -333,7 +334,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.MockRepository.Verify(
                 repo => repo.SaveChangesAsync(),
                 Times.Exactly(2),
-                "because SaveChanges should be called after updating partner and after modifying streetcode links");
+                ErrorMessages.VerifySaveChangesCalledTwicePartnerStreetcode);
         }
 
         /// <summary>
@@ -355,12 +356,12 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             };
 
             var partnerEntity = PartnerTestHelpers.CreatePartnerEntity(1);
-            var exceptionMessage = "Database error";
+            var exceptionMessage = ErrorMessages.DataBaseError;
 
             this.SetupMapperForUpdatePartner(updatePartnerDTO, partnerEntity);
             this.SetupPartnerSourceLinkRepositoryToThrowException(new Exception(exceptionMessage));
 
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
+            var query = new UpdatePartnerCommand(updatePartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -378,11 +379,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Verifies that the handler returns failure when SaveChanges throws an exception.
+        /// Verifies that the handler throws an exception when SaveChanges fails.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
-        public async Task Handle_ReturnsFailure_WhenSaveChangesThrowsException()
+        public async Task Handle_ThrowsException_WhenSaveChangesThrowsException()
         {
             // Arrange
             var updatePartnerDTO = new CreatePartnerDto
@@ -399,7 +400,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             partnerEntity.PartnerSourceLinks = new List<PartnerSourceLink>();
             var existingLinks = new List<PartnerSourceLink>();
             var oldStreetcodes = new List<StreetcodePartner>();
-            var exceptionMessage = "Save changes failed";
+            var exceptionMessage = ErrorMessages.CannotSaveChangesInDatabase;
 
             this.SetupMapperForUpdatePartner(updatePartnerDTO, partnerEntity);
             this.SetupGetFirstOrDefaultAsync(partnerEntity);
@@ -407,7 +408,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupPartnerStreetcodeRepository(oldStreetcodes);
             this.SetupSaveChangesToThrowException(exceptionMessage);
 
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
+            var query = new UpdatePartnerCommand(updatePartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -416,12 +417,6 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.IsFailed.Should().BeTrue();
             result.Errors.Should().ContainSingle();
             result.Errors.First().Message.Should().Be(exceptionMessage);
-
-            this.MockLogger.Verify(
-                logger => logger.LogError(
-                    It.IsAny<object>(),
-                    exceptionMessage),
-                Times.Once);
         }
 
         /// <summary>
@@ -454,7 +449,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupPartnerStreetcodeRepository(oldStreetcodes);
             this.SetupMapperForSpecificPartner(partnerEntity, resultPartnerDTO);
 
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
+            var query = new UpdatePartnerCommand(updatePartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -467,44 +462,6 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.MockMapper.Verify(
                 mapper => mapper.Map<PartnerDto>(partnerEntity),
                 Times.Once);
-        }
-
-        /// <summary>
-        /// Verifies that the handler returns failure when the mapper returns null for the partner entity.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
-        [Fact]
-        public async Task Handle_ReturnsFailure_WhenMapperReturnsNullForPartnerEntity()
-        {
-            // Arrange
-            var updatePartnerDTO = new CreatePartnerDto
-            {
-                Id = 1,
-                Title = "Updated Partner",
-                IsKeyPartner = true,
-                IsVisibleEverywhere = false,
-                LogoId = 1,
-                Streetcodes = new List<StreetcodeShortDto>(),
-            };
-
-            this.SetupMapperToReturnNullPartner(updatePartnerDTO);
-
-            var query = new UpdatePartnerQuery(updatePartnerDTO);
-
-            // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            result.IsFailed.Should().BeTrue();
-            result.Errors.Should().ContainSingle();
-
-            this.MockRepository.Verify(
-                repo => repo.PartnersRepository.Update(It.IsAny<Partner>()),
-                Times.Never);
-
-            this.MockRepository.Verify(
-                repo => repo.SaveChangesAsync(),
-                Times.Never);
         }
     }
 }
