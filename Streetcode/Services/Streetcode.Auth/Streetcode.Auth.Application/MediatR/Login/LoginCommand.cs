@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using Streetcode.Auth.Application.Dtos.Auth;
+using MediatR;
 
 namespace Streetcode.Auth.Application.MediatR.Login
 {
-    internal class LoginCommand
-    {
-    }
+    public record LoginCommand(LoginRequestDto loginRequestDto) : IRequest<Result<TokenResponseDto>>;
 }
