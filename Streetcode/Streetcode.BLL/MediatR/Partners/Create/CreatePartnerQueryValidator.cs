@@ -5,7 +5,7 @@ namespace Streetcode.BLL.MediatR.Partners.Create
     /// <summary>
     /// Validator for CreatePartnerQuery.
     /// </summary>
-    public class CreatePartnerQueryValidator : AbstractValidator<CreatePartnerQuery>
+    public class CreatePartnerQueryValidator : AbstractValidator<CreatePartnerCommand>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CreatePartnerQueryValidator"/> class.

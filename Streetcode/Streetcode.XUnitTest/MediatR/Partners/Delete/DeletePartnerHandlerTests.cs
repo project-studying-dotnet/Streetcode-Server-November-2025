@@ -81,7 +81,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupRepositoryToReturnPartner(partner);
             this.SetupMapperForPartnerDTO(partnerDTO);
 
-            var query = new DeletePartnerQuery(partnerId);
+            var query = new DeletePartnerCommand(partnerId);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -112,7 +112,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         {
             // Arrange
             this.SetupRepositoryToReturnNull();
-            var query = new DeletePartnerQuery(partnerId);
+            var query = new DeletePartnerCommand(partnerId);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -152,7 +152,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupRepositoryToReturnPartner(partner);
             this.SetupMapperForSpecificPartner(partner, partnerDTO);
 
-            var query = new DeletePartnerQuery(partnerId);
+            var query = new DeletePartnerCommand(partnerId);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -179,7 +179,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupRepositoryToReturnPartner(partner);
             this.SetupMapperForSpecificPartner(partner, partnerDTO);
 
-            var query = new DeletePartnerQuery(partnerId);
+            var query = new DeletePartnerCommand(partnerId);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -206,7 +206,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupRepositoryToReturnPartner(partner);
             this.SetupSaveChangesToThrowException(exceptionMessage);
 
-            var query = new DeletePartnerQuery(partnerId);
+            var query = new DeletePartnerCommand(partnerId);
 
             // Act
             Func<Task> act = async () => await this._handler.Handle(query, CancellationToken.None);
@@ -233,7 +233,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             this.SetupRepositoryToThrowException(expectedException);
 
-            var query = new DeletePartnerQuery(partnerId);
+            var query = new DeletePartnerCommand(partnerId);
 
             // Act
             Func<Task> act = async () => await this._handler.Handle(query, CancellationToken.None);
@@ -265,7 +265,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .ReturnsAsync(partner);
             this.SetupMapperForPartnerDTO(partnerDTO);
 
-            var query = new DeletePartnerQuery(partnerId);
+            var query = new DeletePartnerCommand(partnerId);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);

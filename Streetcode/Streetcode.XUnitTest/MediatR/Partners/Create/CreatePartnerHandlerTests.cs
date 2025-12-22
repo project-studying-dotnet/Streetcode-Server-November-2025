@@ -137,7 +137,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupStreetcodeRepository(streetcodes);
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
-            var query = new CreatePartnerQuery(createPartnerDTO);
+            var query = new CreatePartnerCommand(createPartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -183,7 +183,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupStreetcodeRepository(new List<StreetcodeContent>());
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
-            var query = new CreatePartnerQuery(createPartnerDTO);
+            var query = new CreatePartnerCommand(createPartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -220,7 +220,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupStreetcodeRepository(new List<StreetcodeContent>());
             this.SetupMapperForSpecificPartner(partnerEntity, resultPartnerDTO);
 
-            var query = new CreatePartnerQuery(createPartnerDTO);
+            var query = new CreatePartnerCommand(createPartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -259,7 +259,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupMapperForCreatePartner(createPartnerDTO, partnerEntity);
             this.SetupCreateAsyncToThrowException(new Exception(exceptionMessage));
 
-            var query = new CreatePartnerQuery(createPartnerDTO);
+            var query = new CreatePartnerCommand(createPartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -301,7 +301,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupCreateAsync(partnerEntity);
             this.SetupSaveChangesToThrowException(exceptionMessage);
 
-            var query = new CreatePartnerQuery(createPartnerDTO);
+            var query = new CreatePartnerCommand(createPartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -342,7 +342,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupStreetcodeRepository(streetcodes);
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
-            var query = new CreatePartnerQuery(createPartnerDTO);
+            var query = new CreatePartnerCommand(createPartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -399,7 +399,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             this.SetupMapperForPartnerDTO(resultPartnerDTO);
 
-            var query = new CreatePartnerQuery(createPartnerDTO);
+            var query = new CreatePartnerCommand(createPartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
@@ -443,7 +443,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             this.SetupCreateAsync(partnerEntity);
             this.SetupStreetcodeRepositoryToThrowException(new Exception(exceptionMessage));
 
-            var query = new CreatePartnerQuery(createPartnerDTO);
+            var query = new CreatePartnerCommand(createPartnerDTO);
 
             // Act
             var result = await this._handler.Handle(query, CancellationToken.None);
