@@ -13,6 +13,12 @@
     using Streetcode.XUnitTest.MediatR.AdditionalContent.Helpers;
     using Xunit;
 
+    /// <summary>
+    /// Unit tests for <see cref="GetTagByStreetcodeIdHandler"/>.
+    /// Covers scenarios for retrieving tags associated with a specific streetcode,
+    /// including successful retrieval with ordering, handling null repository responses,
+    /// and cases where no tags are found.
+    /// </summary>
     public class GetTagByStreetcodeIdHandlerTests
     {
         private const int StreetcodeId = 1;
@@ -23,6 +29,10 @@
         private readonly Mock<ILoggerService> loggerMock;
         private readonly GetTagByStreetcodeIdHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetTagByStreetcodeIdHandlerTests"/> class,
+        /// setting up the mock dependencies and the handler instance.
+        /// </summary>
         public GetTagByStreetcodeIdHandlerTests()
         {
             this.repoWrapperMock = new Mock<IRepositoryWrapper>();
@@ -35,6 +45,11 @@
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        /// Tests that the handler returns a successful result with an ordered list of tag DTOs
+        /// when tags exist for the given Streetcode ID.
+        /// </summary>
+        /// <returns>A successful <see cref="Task"/> with a strictly ordered list of tag DTOs.</returns>
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenTagsExist()
         {
@@ -66,6 +81,11 @@
             this.mapperMock.VerifyMapCalledOnce<IEnumerable<StreetcodeTagDto>>();
         }
 
+        /// <summary>
+        /// Tests that the handler returns a failure result and logs an error when the repository
+        /// returns null for tag indices.
+        /// </summary>
+        /// <returns>A failed <see cref="Task"/> with the "Tags not found" error message.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFail_WhenRepositoryReturnsNull()
         {
@@ -92,6 +112,11 @@
                 .VerifyGetAllAsyncCalledOnce<IStreetcodeTagIndexRepository, StreetcodeTagIndex>();
         }
 
+        /// <summary>
+        /// Tests that the handler returns a successful result with an empty list
+        /// when the repository returns an empty collection for the specified Streetcode ID.
+        /// </summary>
+        /// <returns>A successful <see cref="Task"/> with an empty list of tag DTOs.</returns>
         [Fact]
         public async Task Handle_ShouldReturnEmptyList_WhenNoTagsFound()
         {

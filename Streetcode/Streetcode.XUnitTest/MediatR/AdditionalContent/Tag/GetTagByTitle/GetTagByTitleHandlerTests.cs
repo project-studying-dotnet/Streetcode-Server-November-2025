@@ -14,6 +14,11 @@
     using Streetcode.XUnitTest.MediatR.AdditionalContent.Helpers;
     using Xunit;
 
+    /// <summary>
+    /// Unit tests for <see cref="GetTagByTitleHandler"/>.
+    /// Covers scenarios for retrieving a tag by its title, including successful retrieval
+    /// and cases where the tag is not found in the database.
+    /// </summary>
     public class GetTagByTitleHandlerTests
     {
         private const string TestTag = "TestTag";
@@ -23,6 +28,10 @@
         private readonly Mock<ILoggerService> loggerMock;
         private readonly GetTagByTitleHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetTagByTitleHandlerTests"/> class,
+        /// setting up the mock dependencies and the handler instance.
+        /// </summary>
         public GetTagByTitleHandlerTests()
         {
             this.repoWrapperMock = new Mock<IRepositoryWrapper>();
@@ -35,6 +44,11 @@
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        /// Tests that the handler returns a successful result with the tag DTO when a tag
+        /// with the specified title exists in the database.
+        /// </summary>
+        /// <returns>A successful <see cref="Task"/> containing the found tag DTO.</returns>
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenTagExists()
         {
@@ -64,6 +78,11 @@
             this.mapperMock.VerifyMapCalledOnce<TagDto>();
         }
 
+        /// <summary>
+        /// Tests that the handler returns a failure result and logs an error when a tag
+        /// with the specified title does not exist.
+        /// </summary>
+        /// <returns>A failed <see cref="Task"/> with the "Tag not found" error message.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFail_WhenTagDoesNotExist()
         {

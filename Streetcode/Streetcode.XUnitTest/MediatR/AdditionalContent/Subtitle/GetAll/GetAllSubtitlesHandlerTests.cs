@@ -13,6 +13,11 @@
     using Streetcode.XUnitTest.MediatR.AdditionalContent.Helpers;
     using Xunit;
 
+    /// <summary>
+    /// Unit tests for <see cref="GetAllSubtitlesHandler"/>.
+    /// Covers scenarios for retrieving all subtitles,
+    /// including cases where no subtitles exist and successful retrieval.
+    /// </summary>
     public class GetAllSubtitlesHandlerTests
     {
         private const string ErrorMsg = "Cannot find any subtitles";
@@ -22,6 +27,10 @@
         private readonly Mock<ILoggerService> loggerMock;
         private readonly GetAllSubtitlesHandler handler;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetAllSubtitlesHandlerTests"/> class,
+        /// setting up the mock dependencies and the handler instance.
+        /// </summary>
         public GetAllSubtitlesHandlerTests()
         {
             this.repoWrapperMock = new Mock<IRepositoryWrapper>();
@@ -33,6 +42,10 @@
                 this.loggerMock.Object);
         }
 
+        /// <summary>
+        /// Tests that the handler returns failure and logs an error when the repository returns null for subtitles.
+        /// </summary>
+        /// <returns>A failed <see cref="Task"/> with the "Cannot find any subtitles" error message.</returns>
         [Fact]
         public async Task Handle_ShouldReturnFail_WhenSubtitlesIsNull()
         {
@@ -48,7 +61,7 @@
             var query = new GetAllSubtitlesQuery();
 
             // Act
-            var result = await handler.Handle(query, default);
+            var result = await this.handler.Handle(query, default);
 
             // Assert
             result.IsFailed.Should().BeTrue();
@@ -59,6 +72,10 @@
             this.loggerMock.VerifyLogErrorCalledOnce();
         }
 
+        /// <summary>
+        /// Tests that the handler successfully retrieves all subtitles and maps them to DTOs when subtitles exist.
+        /// </summary>
+        /// <returns>A successful <see cref="Task"/> containing an enumerable of subtitle DTOs.</returns>
         [Fact]
         public async Task Handle_ShouldReturnSuccess_WhenSubtitlesExist()
         {
