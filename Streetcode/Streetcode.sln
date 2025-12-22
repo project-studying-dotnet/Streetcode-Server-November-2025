@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streetcode.Messaging", "Ser
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingBlocks", "{6BFE1576-C6B9-44B5-9A59-8528329B2716}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streetcode.BuildingBlocks", "Services\BuildingBlocks\Streetcode.BuildingBlocks\Streetcode.BuildingBlocks.csproj", "{8F606124-20C7-4973-868B-F88C0D5A382F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{43ACA6F1-F32B-4D77-9E18-E6C77EF61970}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43ACA6F1-F32B-4D77-9E18-E6C77EF61970}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43ACA6F1-F32B-4D77-9E18-E6C77EF61970}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F606124-20C7-4973-868B-F88C0D5A382F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F606124-20C7-4973-868B-F88C0D5A382F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F606124-20C7-4973-868B-F88C0D5A382F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F606124-20C7-4973-868B-F88C0D5A382F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +120,8 @@ Global
 		{DDACB8A4-1470-4C59-9B30-7CA8186DED20} = {6451182E-42D8-446E-8562-0EF721973BFD}
 		{12B47E30-F962-4BE6-A90C-81D620EC4282} = {6451182E-42D8-446E-8562-0EF721973BFD}
 		{43ACA6F1-F32B-4D77-9E18-E6C77EF61970} = {6BFE1576-C6B9-44B5-9A59-8528329B2716}
+		{6BFE1576-C6B9-44B5-9A59-8528329B2716} = {EF5F4490-7083-41B3-B954-2C4AB04B5549}
+		{8F606124-20C7-4973-868B-F88C0D5A382F} = {6BFE1576-C6B9-44B5-9A59-8528329B2716}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D3D1FEF-DB8F-4A51-AD6E-0EE327AB534A}
