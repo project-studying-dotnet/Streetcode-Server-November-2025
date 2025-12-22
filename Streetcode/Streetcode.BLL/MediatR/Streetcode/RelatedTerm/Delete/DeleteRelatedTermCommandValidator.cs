@@ -14,14 +14,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
                 .NotEmpty()
                 .WithMessage(ErrorMessages.RelatedTermWordForDeletionRequired)
                 .MaximumLength(ValidationConstants.RelatedTerm.WordMaxLength)
-                .WithMessage($"Слово не може перевищувати {ValidationConstants.RelatedTerm.WordMaxLength} символів");
+                .WithMessage(string.Format(ErrorMessages.RelatedTermWordTooLong, ValidationConstants.RelatedTerm.WordMaxLength));
 
             RuleFor(x => x.termId)
                 .GreaterThan(0)
-                .WithMessage("Ідентифікатор терміну повинен бути більше 0")
-                .WithMessage(string.Format(
-                    ErrorMessages.RelatedTermWordTooLong,
-                    ValidationConstants.RelatedTerm.WordMaxLength));
+                .WithMessage(ErrorMessages.RelatedTermIdMustBeGreaterThanZero);
         }
     }
 }

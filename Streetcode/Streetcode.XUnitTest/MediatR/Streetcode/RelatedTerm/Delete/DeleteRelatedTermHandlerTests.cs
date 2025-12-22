@@ -81,7 +81,7 @@ public class DeleteRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-        Assert.Equal($"Cannot find a related term: {NonExistentWord}", result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermNotFound, result.Errors.First().Message);
 
         this.mockRepository.VerifyGetFirstOrDefaultAsyncCalledOnce();
 
@@ -106,7 +106,7 @@ public class DeleteRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-        Assert.Equal($"Cannot find a related term: {ExistedWord}", result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermNotFound, result.Errors.First().Message);
 
         this.mockRepository.VerifyGetFirstOrDefaultAsyncCalledOnce();
 
@@ -137,7 +137,7 @@ public class DeleteRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-        Assert.Equal("Failed to delete a related term", result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermDeletionFailed, result.Errors.First().Message);
 
         this.mockRepository.VerifyGetFirstOrDefaultAsyncCalledOnce();
 
@@ -168,7 +168,7 @@ public class DeleteRelatedTermHandlerTests
         var result = await this.handler.Handle(command, CancellationToken.None);
 
         Assert.True(result.IsFailed);
-        Assert.Equal("Failed to delete a related term", result.Errors.First().Message);
+        Assert.Equal(ErrorMessages.RelatedTermDeletionFailed, result.Errors.First().Message);
 
         this.mockRepository.VerifyGetFirstOrDefaultAsyncCalledOnce();
 
