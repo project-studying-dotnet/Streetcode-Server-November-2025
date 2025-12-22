@@ -22,7 +22,7 @@ public class DeleteTextHandler : IRequestHandler<DeleteTextCommand, Result<Unit>
 
         if (text is null)
         {
-            const string errorMsg = "Cannot find text with corresponding id.";
+            var errorMsg = string.Format(ErrorMessages.TextNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -32,7 +32,7 @@ public class DeleteTextHandler : IRequestHandler<DeleteTextCommand, Result<Unit>
 
         if (!isSuccessResult)
         {
-            const string errorMsg = "Cannot save changes in the database.";
+            var errorMsg = ErrorMessages.CannotSaveChangesInDatabase;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

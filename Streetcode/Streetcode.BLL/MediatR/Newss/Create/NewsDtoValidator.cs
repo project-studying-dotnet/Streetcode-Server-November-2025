@@ -17,29 +17,33 @@ namespace Streetcode.BLL.MediatR.Newss.Create
         {
             RuleFor(x => x.Title)
                 .NotEmpty()
-                .WithMessage("Назва новини є обов'язковою")
+                .WithMessage(ErrorMessages.NewsTitleRequired)
                 .MaximumLength(ValidationConstants.News.TitleMaxLength)
-                .WithMessage($"Назва новини не може перевищувати {ValidationConstants.News.TitleMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.NewsTitleTooLong,
+                    ValidationConstants.News.TitleMaxLength));
 
             RuleFor(x => x.Text)
                 .NotEmpty()
-                .WithMessage("Текст новини є обов'язковим");
+                .WithMessage(ErrorMessages.NewsTextRequired);
 
             RuleFor(x => x.URL)
                 .NotEmpty()
-                .WithMessage("URL новини є обов'язковим")
+                .WithMessage(ErrorMessages.NewsUrlRequired)
                 .MaximumLength(ValidationConstants.News.UrlMaxLength)
-                .WithMessage($"URL новини не може перевищувати {ValidationConstants.News.UrlMaxLength} символів");
+                .WithMessage(string.Format(
+                    ErrorMessages.NewsUrlTooLong,
+                    ValidationConstants.News.UrlMaxLength));
 
             RuleFor(x => x.ImageId)
-                .MustBeValidId("ImageId має бути більше 0")
+                .MustBeValidId(ErrorMessages.ImageIdMustBeGreaterThanZero)
                 .When(x => x.ImageId.HasValue);
 
             RuleFor(x => x.CreationDate)
                 .NotEmpty()
-                .WithMessage("Дата створення є обов'язковою")
+                .WithMessage(ErrorMessages.NewsCreationDateRequired)
                 .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("Дата створення не може бути в майбутньому");
+                .WithMessage(ErrorMessages.NewsCreationDateInFuture);
         }
     }
 }

@@ -1,0 +1,39 @@
+name: UnitTestsWorkflow
+
+on:
+  push:
+    branches:
+    - main 
+    - dev
+  pull_request:
+    branches:
+    - main 
+    - dev
+    types: [opened, synchronize, reopened]
+
+jobs:
+  unit_tests_branch:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Run dotnet restore
+      working-directory: Streetcode
+      run: dotnet restore Streetcode.sln
+
+    - name: Build
+      working-directory: Streetcode
+      run: dotnet build Streetcode.sln --configuration Release --no-restore
+
+    - name: Run Unit Tests
+      working-directory: Streetcode
+      run: dotnet test Streetcode.XUnitTest/Streetcode.XUnitTest.csproj --configuration Release --no-build

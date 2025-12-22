@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +26,7 @@ namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.GetCategoryContentBy
             if((await _repositoryWrapper.StreetcodeRepository
                 .GetFirstOrDefaultAsync(s => s.Id == request.streetcodeId)) == null)
             {
-                string errorMsg = $"No such streetcode with id = {request.streetcodeId}";
+                var errorMsg = string.Format(ErrorMessages.StreetcodeNotFoundById, request.streetcodeId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -37,7 +37,7 @@ namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.GetCategoryContentBy
 
             if (streetcodeContent == null)
             {
-                string errorMsg = "The streetcode content is null";
+                var errorMsg = ErrorMessages.StreetcodeDataRequired;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

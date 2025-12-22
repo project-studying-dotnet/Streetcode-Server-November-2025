@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -29,7 +29,7 @@ namespace Streetcode.BLL.MediatR.Team.TeamMembersLinks.GetAll
 
             if (teamLinks is null)
             {
-                const string errorMsg = $"Cannot find any team links";
+                var errorMsg = ErrorMessages.TeamMemberLinkNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

@@ -28,7 +28,7 @@ namespace Streetcode.BLL.MediatR.Email
             }
             else
             {
-                const string errorMsg = $"Failed to send email message";
+                var errorMsg = ErrorMessages.CannotSaveChangesInDatabase;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

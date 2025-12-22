@@ -34,7 +34,7 @@ public class GetToponymsByStreetcodeIdHandler : IRequestHandler<GetToponymsByStr
 
         if (!toponyms.Any())
         {
-            string errorMsg = $"Cannot find any toponym by the streetcode id: {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.ToponymNotFoundByStreetcodeId, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

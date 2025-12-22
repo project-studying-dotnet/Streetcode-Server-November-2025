@@ -11,7 +11,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Fact.Delete
         {
             RuleFor(x => x.id)
                 .GreaterThan(0)
-                .WithMessage("ID факту має бути більше 0");
+                .WithMessage(ErrorMessages.FactIdMustBeGreaterThanZero);
         }
     }
 }

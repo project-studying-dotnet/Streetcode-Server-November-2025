@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -28,7 +28,7 @@ public class GetAllTextsHandler : IRequestHandler<GetAllTextsQuery, Result<IEnum
 
         if (texts is null)
         {
-            const string errorMsg = $"Cannot find any text";
+            var errorMsg = ErrorMessages.TextNotFound;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

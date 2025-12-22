@@ -6,5 +6,6 @@
         public int ImageId { get; set; }
         public int StreetcodeId { get; set; }
         public string FactContent { get; set; }
+        public string? ImageDescription { get; set; }
     }
 }
