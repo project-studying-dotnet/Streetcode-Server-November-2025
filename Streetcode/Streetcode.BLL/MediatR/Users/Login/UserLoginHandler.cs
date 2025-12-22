@@ -34,12 +34,14 @@ namespace Streetcode.BLL.MediatR.Users.Login
                 var user = await _userManager.FindByEmailAsync(request.userLoginDto.Email);
                 if (user is null)
                 {
+                    _logger.LogError(request, ErrorMessages.UserEmailOrPasswordInvalid);
                     return Result.Fail(ErrorMessages.UserEmailOrPasswordInvalid);
                 }
 
                 var passwordValid = await _signInManager.CheckPasswordSignInAsync(user, request.userLoginDto.Password, false);
                 if (!passwordValid.Succeeded)
                 {
+                    _logger.LogError(request, ErrorMessages.UserEmailOrPasswordInvalid);
                     return Result.Fail(ErrorMessages.UserEmailOrPasswordInvalid);
                 }
 

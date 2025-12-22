@@ -31,7 +31,7 @@
         public JwtServiceTests()
         {
             this.repositoryWrapperMock = new Mock<IRepositoryWrapper>();
-            this.mockUserManager = UserManagerMockHelper.CreateMock();
+            this.mockUserManager = UsersHelper.MockUserManager<User>();
 
             this.jwtService = new JwtService(
                 secretKey: SecretKey,
