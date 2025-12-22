@@ -1,10 +1,9 @@
-﻿using Streetcode.Auth.Domain.Entities.Users;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Streetcode.Auth.Domain.Entities.Users;
 
 namespace Streetcode.Auth.Domain.Entities.Auth;
 
-/// <summary>
-/// Refresh token entity for JWT token rotation.
-/// </summary>
+[Table("RefreshTokens", Schema = "RefreshTokens")]
 public class RefreshToken
 {
     public int Id { get; set; }
