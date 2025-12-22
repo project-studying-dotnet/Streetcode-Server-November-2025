@@ -1,4 +1,6 @@
-﻿namespace Streetcode.Auth.Domain.Entities;
+﻿using Streetcode.Auth.Domain.Entities.Users;
+
+namespace Streetcode.Auth.Domain.Entities.Auth;
 
 /// <summary>
 /// Refresh token entity for JWT token rotation.

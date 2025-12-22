@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
+using Streetcode.Auth.Domain.Entities.Auth;
 
-namespace Streetcode.Auth.Domain.Entities
+namespace Streetcode.Auth.Domain.Entities.Users
 {
-    [Table("Users", Schema = "Users")]
     public class User : IdentityUser<int>
     {
         /// <summary>
