@@ -7,5 +7,5 @@ public class CommentDto
     public string AuthorName { get; set; } = "Гість";
     public int StreetcodeId { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime? EditedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

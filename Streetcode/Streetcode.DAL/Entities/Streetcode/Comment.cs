@@ -7,6 +7,11 @@ namespace Streetcode.DAL.Entities.Streetcode
 
     public class Comment
     {
+        public Comment()
+        {
+            CreatedAt = DateTime.UtcNow;
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -25,9 +30,7 @@ namespace Streetcode.DAL.Entities.Streetcode
 
         [Required]
         public DateTime CreatedAt { get; set; }
-
-        [Required]
-        public DateTime? EditedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         [Required]
         public bool IsDeleted { get; set; } = false;
