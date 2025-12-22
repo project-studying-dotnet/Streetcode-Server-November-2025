@@ -21,7 +21,7 @@ namespace Streetcode.Auth.Infrastructure.Data.Configurations
                 .IsUnique();
 
             builder
-                .Property(r => r.ExpiresAt)
+                .Property(r => r.ExpiresOn)
                 .IsRequired();
 
             builder
