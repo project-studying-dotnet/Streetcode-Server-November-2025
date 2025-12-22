@@ -1,24 +1,14 @@
 using Hangfire;
 using DotNetEnv;
-using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.WebApi.Extensions;
 using Streetcode.WebApi.Middleware;
-using Streetcode.WebApi.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load("../../.env");
 
-var dbServer = Environment.GetEnvironmentVariable("DB_SERVER");
-var dbPassword = Environment.GetEnvironmentVariable("DB_USER_PASSWORD");
-var dbUser = Environment.GetEnvironmentVariable("DB_USER");
-var dbName = Environment.GetEnvironmentVariable("DB_NAME");
-
-var connectionString =
-   $"Server={dbServer};Database={dbName};User Id={dbUser};Password={dbPassword};MultipleActiveResultSets=true;TrustServerCertificate=True;";
-
 builder.Configuration.AddEnvironmentVariables();
-builder.Configuration["ConnectionStrings:DefaultConnection"] = connectionString;
+builder.Configuration.LoadEnvironmentVariables();
 
 builder.Host.ConfigureApplication();
 builder.Services.AddApplicationServices(builder.Configuration);
@@ -43,8 +33,7 @@ else
 await app.ApplyMigrations();
 
 // await app.SeedDataAsync(); // uncomment for seeding data in local
-
-app.UseMiddleware<ValidationExceptionMiddleware>();
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseRouting();

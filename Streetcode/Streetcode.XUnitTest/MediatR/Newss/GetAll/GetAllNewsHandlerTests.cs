@@ -3,6 +3,7 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.News;
     using Streetcode.BLL.Interfaces.BlobStorage;
     using Streetcode.BLL.Interfaces.Logging;
@@ -20,7 +21,6 @@
     public class GetAllNewsHandlerTests
     {
         private const string Base64Content = "base64content";
-        private const string NoNewsInDatabaseErrorMessage = "There are no news in the database";
         private const int NewsCount = 3;
 
         private readonly Mock<IMapper> mapperMock;
@@ -63,10 +63,10 @@
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.Errors.Should().ContainSingle(e => e.Message == NoNewsInDatabaseErrorMessage);
+            result.Errors.Should().ContainSingle(e => e.Message == ErrorMessages.NewsNotFound);
 
             // Verify
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NoNewsInDatabaseErrorMessage);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMessages.NewsNotFound);
             MockMapperHelper.VerifyMapCollection<News, NewsDto>(this.mapperMock, Times.Never());
             MockBlobServiceHelper.VerifyNever(this.blobServiceMock);
         }

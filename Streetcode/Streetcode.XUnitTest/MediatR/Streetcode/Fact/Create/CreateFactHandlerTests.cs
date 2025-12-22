@@ -4,6 +4,7 @@
     using MockQueryable;
     using Moq;
     using Repositories.Interfaces;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Fact.Create;
@@ -94,7 +95,6 @@
         public async Task Handle_WhenImageDoesNotExist_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Image with provided ImageId does not exist";
             var imageRepositoryMock = new Mock<IImageRepository>(MockBehavior.Strict);
             var createFactDto = FactTestData.CreateCreateFactDto();
             var command = new CreateFactCommand(createFactDto);
@@ -110,7 +110,7 @@
             Assert.NotNull(result);
             Assert.True(result.IsFailed);
             Assert.NotEmpty(result.Errors);
-            Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
+            Assert.Equal(string.Format(ErrorMessages.ImageNotFoundById, createFactDto.ImageId), result.Errors.FirstOrDefault()?.Message);
 
             // Verify
             imageRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IImageRepository, Image>();
@@ -121,7 +121,6 @@
         public async Task Handle_WhenStreetcodeDoesNotExist_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Streetcode with provided StreetcodeId does not exist";
             var imageRepositoryMock = new Mock<IImageRepository>(MockBehavior.Strict);
             var streetcodeRepositoryMock = new Mock<IStreetcodeRepository>(MockBehavior.Strict);
             var createFactDto = FactTestData.CreateCreateFactDto();
@@ -142,7 +141,7 @@
             Assert.NotNull(result);
             Assert.True(result.IsFailed);
             Assert.NotEmpty(result.Errors);
-            Assert.Equal(errorMsg, result.Errors.FirstOrDefault()?.Message);
+            Assert.Equal(string.Format(ErrorMessages.StreetcodeNotFoundById, createFactDto.StreetcodeId), result.Errors.FirstOrDefault()?.Message);
 
             // Verify
             imageRepositoryMock.VerifyGetFirstOrDefaultCalledOnce<IImageRepository, Image>();
@@ -154,7 +153,7 @@
         public async Task Handle_WhenFactExists_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Fact with the same title already exists for this Streetcode";
+            string errorMsg = ErrorMessages.FactTitleAlreadyExists;
             var imageRepositoryMock = new Mock<IImageRepository>(MockBehavior.Strict);
             var streetcodeRepositoryMock = new Mock<IStreetcodeRepository>(MockBehavior.Strict);
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);
@@ -193,7 +192,7 @@
         public async Task Handle_WhenCreateFactDtoMappingFails_ShouldReturnFailureResult()
         {
             // Arrange
-            const string errorMsg = "Failed to map CreateFactDTO to Fact entity";
+            string errorMsg = ErrorMessages.FactMappingFailed;
             var imageRepositoryMock = new Mock<IImageRepository>(MockBehavior.Strict);
             var streetcodeRepositoryMock = new Mock<IStreetcodeRepository>(MockBehavior.Strict);
             var factRepositoryMock = new Mock<IFactRepository>(MockBehavior.Strict);

@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Partners.Update
 {
-    public class UpdatePartnerHandler : IRequestHandler<UpdatePartnerQuery, Result<PartnerDto>>
+    public class UpdatePartnerHandler : IRequestHandler<UpdatePartnerCommand, Result<PartnerDto>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -21,12 +21,12 @@ namespace Streetcode.BLL.MediatR.Partners.Update
             _logger = logger;
         }
 
-        public async Task<Result<PartnerDto>> Handle(UpdatePartnerQuery request, CancellationToken cancellationToken)
+        public async Task<Result<PartnerDto>> Handle(UpdatePartnerCommand request, CancellationToken cancellationToken)
         {
-            var partner = _mapper.Map<Partner>(request.Partner);
-
             try
             {
+                var partner = _mapper.Map<Partner>(request.Partner);
+
                 var links = await _repositoryWrapper.PartnerSourceLinkRepository
                    .GetAllAsync(predicate: l => l.PartnerId == partner.Id);
 
@@ -72,7 +72,7 @@ namespace Streetcode.BLL.MediatR.Partners.Update
             catch (Exception ex)
             {
                 _logger.LogError(request, ex.Message);
-                return Result.Fail(ex.Message);
+                return Result.Fail(new Error(ex.Message));
             }
         }
     }

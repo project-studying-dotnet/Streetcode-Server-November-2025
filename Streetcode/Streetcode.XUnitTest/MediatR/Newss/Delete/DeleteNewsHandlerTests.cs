@@ -4,6 +4,7 @@
     using global::MediatR;
     using Moq;
     using Repositories.Interfaces;
+    using Streetcode.BLL;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Newss.Delete;
     using Streetcode.DAL.Entities.Media.Images;
@@ -21,8 +22,6 @@
     public class DeleteNewsHandlerTests
     {
         private const int NewsId = 1;
-        private const string NewsNotFoundErrorMessage = "No news found by entered Id - 1";
-        private const string SaveErrorMessage = "Failed to delete news";
 
         private readonly Mock<IRepositoryWrapper> repoMock;
         private readonly Mock<ILoggerService> loggerMock;
@@ -57,10 +56,10 @@
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors[0].Message.Should().Contain(NewsNotFoundErrorMessage);
+            result.Errors[0].Message.Should().Contain(string.Format(ErrorMessages.NewsNotFoundById, NewsId));
 
             // Verify
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, NewsNotFoundErrorMessage);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, string.Format(ErrorMessages.NewsNotFoundById, NewsId));
             MockRepoHelper.VerifyDelete<News>(this.repoMock, Times.Never());
         }
 
@@ -150,10 +149,10 @@
 
             // Assert
             result.IsFailed.Should().BeTrue();
-            result.Errors[0].Message.Should().Be(SaveErrorMessage);
+            result.Errors[0].Message.Should().Be(ErrorMessages.NewsDeletionFailed);
 
             // Verify
-            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, SaveErrorMessage);
+            MockLoggerHelper.VerifyLogErrorOnceWithMessage(this.loggerMock, ErrorMessages.NewsDeletionFailed);
         }
     }
 }

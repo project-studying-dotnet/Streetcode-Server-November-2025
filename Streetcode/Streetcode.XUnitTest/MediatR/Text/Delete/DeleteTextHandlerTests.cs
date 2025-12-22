@@ -8,6 +8,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Delete
     using FluentResults;
     using global::MediatR;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Streetcode.Text.Delete;
     using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -46,7 +47,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Delete
         public async Task Handle_WhenTextNotFound_ShouldReturnFailure()
         {
             // Arrange
-            const string errorMsg = "Cannot find text with corresponding id.";
+            string errorMsg = string.Format(ErrorMessages.TextNotFoundById, 99);
             var textRepoMock = new Mock<ITextRepository>(MockBehavior.Strict);
 
             this.repositoryWrapperMock
@@ -115,7 +116,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.Delete
         public async Task Handle_WhenSaveChangesFails_ShouldReturnFailure()
         {
             // Arrange
-            const string errorMsg = "Cannot save changes in the database.";
+            string errorMsg = ErrorMessages.CannotSaveChangesInDatabase;
             var textEntity = new TextEntity { Id = 1, TextContent = "Sample content" };
 
             var textRepoMock = new Mock<ITextRepository>(MockBehavior.Strict);

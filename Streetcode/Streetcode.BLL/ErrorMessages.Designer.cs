@@ -147,6 +147,12 @@ namespace Streetcode.BLL {
             }
         }
         
+        internal static string CannotCreateRelatedWordForTerm {
+            get {
+                return ResourceManager.GetString("CannotCreateRelatedWordForTerm", resourceCulture);
+            }
+        }
+        
         internal static string CannotMapEntity {
             get {
                 return ResourceManager.GetString("CannotMapEntity", resourceCulture);
@@ -156,6 +162,12 @@ namespace Streetcode.BLL {
         internal static string CannotSaveChangesInDatabase {
             get {
                 return ResourceManager.GetString("CannotSaveChangesInDatabase", resourceCulture);
+            }
+        }
+        
+        internal static string CannotSaveChangesInDbAfterStreetcodeCreated {
+            get {
+                return ResourceManager.GetString("CannotSaveChangesInDbAfterStreetcodeCreated", resourceCulture);
             }
         }
         
@@ -180,6 +192,54 @@ namespace Streetcode.BLL {
         internal static string Color1 {
             get {
                 return ResourceManager.GetString("Color1", resourceCulture);
+            }
+        }
+        
+        internal static string CoordinateCantBeEmpty {
+            get {
+                return ResourceManager.GetString("CoordinateCantBeEmpty", resourceCulture);
+            }
+        }
+        
+        internal static string CoordinateHeightError {
+            get {
+                return ResourceManager.GetString("CoordinateHeightError", resourceCulture);
+            }
+        }
+        
+        internal static string CoordinateIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("CoordinateIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        internal static string CoordinateWidthError {
+            get {
+                return ResourceManager.GetString("CoordinateWidthError", resourceCulture);
+            }
+        }
+        
+        internal static string DatabaseConntectionFailed {
+            get {
+                return ResourceManager.GetString("DatabaseConntectionFailed", resourceCulture);
+            }
+        }
+        
+        internal static string DataBaseError {
+            get {
+                return ResourceManager.GetString("DataBaseError", resourceCulture);
+            }
+        }
+        
+        internal static string DatabaseErrorOccured {
+            get {
+                return ResourceManager.GetString("DatabaseErrorOccured", resourceCulture);
+            }
+        }
+        
+        internal static string DeleteVerificationWrongType {
+            get {
+                return ResourceManager.GetString("DeleteVerificationWrongType", resourceCulture);
             }
         }
         
@@ -258,6 +318,18 @@ namespace Streetcode.BLL {
         internal static string FactTitleTooLong {
             get {
                 return ResourceManager.GetString("FactTitleTooLong", resourceCulture);
+            }
+        }
+        
+        internal static string FailedToDeleteToponymStreetcode {
+            get {
+                return ResourceManager.GetString("FailedToDeleteToponymStreetcode", resourceCulture);
+            }
+        }
+        
+        internal static string FailedToMergeToponyms {
+            get {
+                return ResourceManager.GetString("FailedToMergeToponyms", resourceCulture);
             }
         }
         
@@ -417,9 +489,27 @@ namespace Streetcode.BLL {
             }
         }
         
+        internal static string IncludeExpressionNotProvided {
+            get {
+                return ResourceManager.GetString("IncludeExpressionNotProvided", resourceCulture);
+            }
+        }
+        
         internal static string InvalidImageFormat {
             get {
                 return ResourceManager.GetString("InvalidImageFormat", resourceCulture);
+            }
+        }
+        
+        internal static string LoginFailure {
+            get {
+                return ResourceManager.GetString("LoginFailure", resourceCulture);
+            }
+        }
+        
+        internal static string MapToExatct {
+            get {
+                return ResourceManager.GetString("MapToExatct", resourceCulture);
             }
         }
         
@@ -531,6 +621,18 @@ namespace Streetcode.BLL {
             }
         }
         
+        internal static string NoPredicateProvidedForFilterStreetcode {
+            get {
+                return ResourceManager.GetString("NoPredicateProvidedForFilterStreetcode", resourceCulture);
+            }
+        }
+        
+        internal static string NullRequest {
+            get {
+                return ResourceManager.GetString("NullRequest", resourceCulture);
+            }
+        }
+        
         internal static string PartnerDataRequired {
             get {
                 return ResourceManager.GetString("PartnerDataRequired", resourceCulture);
@@ -564,6 +666,12 @@ namespace Streetcode.BLL {
         internal static string PartnerNotFoundById {
             get {
                 return ResourceManager.GetString("PartnerNotFoundById", resourceCulture);
+            }
+        }
+        
+        internal static string PartnersNotFound {
+            get {
+                return ResourceManager.GetString("PartnersNotFound", resourceCulture);
             }
         }
         
@@ -657,6 +765,12 @@ namespace Streetcode.BLL {
             }
         }
         
+        internal static string PredicateNotProvided {
+            get {
+                return ResourceManager.GetString("PredicateNotProvided", resourceCulture);
+            }
+        }
+        
         internal static string RelatedFigureCreationFailed {
             get {
                 return ResourceManager.GetString("RelatedFigureCreationFailed", resourceCulture);
@@ -705,6 +819,12 @@ namespace Streetcode.BLL {
             }
         }
         
+        internal static string RelatedTermIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("RelatedTermIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
         internal static string RelatedTermNotFound {
             get {
                 return ResourceManager.GetString("RelatedTermNotFound", resourceCulture);
@@ -720,12 +840,6 @@ namespace Streetcode.BLL {
         internal static string RelatedTermsNotFoundByTermId {
             get {
                 return ResourceManager.GetString("RelatedTermsNotFoundByTermId", resourceCulture);
-            }
-        }
-        
-        internal static string RelatedTermTermIdMustBeGreaterThanZero {
-            get {
-                return ResourceManager.GetString("RelatedTermTermIdMustBeGreaterThanZero", resourceCulture);
             }
         }
         
@@ -909,6 +1023,12 @@ namespace Streetcode.BLL {
             }
         }
         
+        internal static string StreetcodeRepositoryError {
+            get {
+                return ResourceManager.GetString("StreetcodeRepositoryError", resourceCulture);
+            }
+        }
+        
         internal static string StreetcodeShortDescriptionTooLong {
             get {
                 return ResourceManager.GetString("StreetcodeShortDescriptionTooLong", resourceCulture);
@@ -930,6 +1050,12 @@ namespace Streetcode.BLL {
         internal static string StreetcodeTeaserTooLong {
             get {
                 return ResourceManager.GetString("StreetcodeTeaserTooLong", resourceCulture);
+            }
+        }
+        
+        internal static string StreetcodeTestException {
+            get {
+                return ResourceManager.GetString("StreetcodeTestException", resourceCulture);
             }
         }
         
@@ -1002,6 +1128,30 @@ namespace Streetcode.BLL {
         internal static string SubtitlesNotFound {
             get {
                 return ResourceManager.GetString("SubtitlesNotFound", resourceCulture);
+            }
+        }
+        
+        internal static string TagDataCantBeEmpty {
+            get {
+                return ResourceManager.GetString("TagDataCantBeEmpty", resourceCulture);
+            }
+        }
+        
+        internal static string TagFormatError {
+            get {
+                return ResourceManager.GetString("TagFormatError", resourceCulture);
+            }
+        }
+        
+        internal static string TagNameCantExceed {
+            get {
+                return ResourceManager.GetString("TagNameCantExceed", resourceCulture);
+            }
+        }
+        
+        internal static string TagNameIsRequired {
+            get {
+                return ResourceManager.GetString("TagNameIsRequired", resourceCulture);
             }
         }
         
@@ -1251,6 +1401,24 @@ namespace Streetcode.BLL {
             }
         }
         
+        internal static string ToponymAlreadyLinked {
+            get {
+                return ResourceManager.GetString("ToponymAlreadyLinked", resourceCulture);
+            }
+        }
+        
+        internal static string ToponymByIdMerge {
+            get {
+                return ResourceManager.GetString("ToponymByIdMerge", resourceCulture);
+            }
+        }
+        
+        internal static string ToponymCantBeMapped {
+            get {
+                return ResourceManager.GetString("ToponymCantBeMapped", resourceCulture);
+            }
+        }
+        
         internal static string ToponymNotFoundById {
             get {
                 return ResourceManager.GetString("ToponymNotFoundById", resourceCulture);
@@ -1260,6 +1428,18 @@ namespace Streetcode.BLL {
         internal static string ToponymNotFoundByStreetcodeId {
             get {
                 return ResourceManager.GetString("ToponymNotFoundByStreetcodeId", resourceCulture);
+            }
+        }
+        
+        internal static string ToponymStreetcodeFailedToCreate {
+            get {
+                return ResourceManager.GetString("ToponymStreetcodeFailedToCreate", resourceCulture);
+            }
+        }
+        
+        internal static string ToponymStreetcodeRelationsDelete {
+            get {
+                return ResourceManager.GetString("ToponymStreetcodeRelationsDelete", resourceCulture);
             }
         }
         
@@ -1296,6 +1476,12 @@ namespace Streetcode.BLL {
         internal static string UserEmailInvalidFormat {
             get {
                 return ResourceManager.GetString("UserEmailInvalidFormat", resourceCulture);
+            }
+        }
+        
+        internal static string UserEmailOrPasswordInvalid {
+            get {
+                return ResourceManager.GetString("UserEmailOrPasswordInvalid", resourceCulture);
             }
         }
         
@@ -1392,6 +1578,66 @@ namespace Streetcode.BLL {
         internal static string ValidationException {
             get {
                 return ResourceManager.GetString("ValidationException", resourceCulture);
+            }
+        }
+        
+        internal static string VerifyEmailSentOnce {
+            get {
+                return ResourceManager.GetString("VerifyEmailSentOnce", resourceCulture);
+            }
+        }
+        
+        internal static string VerifyGetAllAsyncCalledOnce {
+            get {
+                return ResourceManager.GetString("VerifyGetAllAsyncCalledOnce", resourceCulture);
+            }
+        }
+        
+        internal static string VerifyGetFirstOrDefaultAsyncCalledOnce {
+            get {
+                return ResourceManager.GetString("VerifyGetFirstOrDefaultAsyncCalledOnce", resourceCulture);
+            }
+        }
+        
+        internal static string VerifyLogCalledOnceTimelineNull {
+            get {
+                return ResourceManager.GetString("VerifyLogCalledOnceTimelineNull", resourceCulture);
+            }
+        }
+        
+        internal static string VerifyLogDidntCalledWhenTimelineexists {
+            get {
+                return ResourceManager.GetString("VerifyLogDidntCalledWhenTimelineexists", resourceCulture);
+            }
+        }
+        
+        internal static string VerifyLoggerCalledEmailSentSuccess {
+            get {
+                return ResourceManager.GetString("VerifyLoggerCalledEmailSentSuccess", resourceCulture);
+            }
+        }
+        
+        internal static string VerifyLoggerCalledOnceEmailSentFail {
+            get {
+                return ResourceManager.GetString("VerifyLoggerCalledOnceEmailSentFail", resourceCulture);
+            }
+        }
+        
+        internal static string VerifyMapperCalledOnce {
+            get {
+                return ResourceManager.GetString("VerifyMapperCalledOnce", resourceCulture);
+            }
+        }
+        
+        internal static string VerifySaveChangesCalledPartnerStreetcode {
+            get {
+                return ResourceManager.GetString("VerifySaveChangesCalledPartnerStreetcode", resourceCulture);
+            }
+        }
+        
+        internal static string VerifySaveChangesCalledTwicePartnerStreetcode {
+            get {
+                return ResourceManager.GetString("VerifySaveChangesCalledTwicePartnerStreetcode", resourceCulture);
             }
         }
         

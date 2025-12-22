@@ -1,6 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Text.Create
 {
     using FluentValidation.TestHelper;
+    using Streetcode.BLL;
     using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
     using Streetcode.BLL.MediatR.Streetcode.Text.Create;
     using Xunit;
@@ -25,7 +26,7 @@
 
             // Assert
             result.ShouldHaveValidationErrorFor(x => x.Text)
-                  .WithErrorMessage("Дані тексту не можуть бути порожніми");
+                  .WithErrorMessage(ErrorMessages.TextDataRequired);
         }
 
         [Fact]

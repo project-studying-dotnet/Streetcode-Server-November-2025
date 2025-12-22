@@ -8,6 +8,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetParsed
     using System.Threading.Tasks;
     using FluentAssertions;
     using Moq;
+    using Streetcode.BLL;
     using Streetcode.BLL.Interfaces.Text;
     using Streetcode.BLL.MediatR.Streetcode.Text.GetParsed;
     using Xunit;
@@ -58,7 +59,7 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetParsed
         {
             // Arrange
             const string InputRawText = "bad text";
-            const string ErrorMsg = "text was not parsed successfully";
+            string ErrorMsg = ErrorMessages.TextParsingFailed;
             var command = new GetParsedTextForAdminPreviewCommand(InputRawText);
 
             mockTextService.Setup(s => s.AddTermsTag(InputRawText))

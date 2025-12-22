@@ -31,10 +31,6 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
         public async Task<Result<JsonElement>> Handle(CreateStreetcodeCommand request, CancellationToken cancellationToken)
         {
-            using var transaction = new TransactionScope(
-                TransactionScopeAsyncFlowOption.Enabled);
-
-            // try catch block is temporary solution until validation would be implemented.
             try
             {
                 var rawJson = request.rawJsonCreateDTO;
@@ -48,7 +44,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
                 string streetcodeType = rawJson.GetProperty("StreetcodeType").GetString();
 
-                CreateStreetcodeDto сreateStreetcodeDTO = _streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
+                CreateStreetcodeDto сreateStreetcodeDTO =
+                    _streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
 
                 var streetcodeContent = _mapper.Map<StreetcodeContent>(сreateStreetcodeDTO);
 
@@ -73,26 +70,17 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                     return tagsResult;
                 }
 
-                var resultIsSuccess = await _repository.SaveChangesAsync() > 0;
+                await _repository.SaveChangesAsync();
 
-                transaction.Complete();
-
-                if (resultIsSuccess)
-                {
-                    var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(streetcodeContent);
-                    var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
-                    return await Task.FromResult(Result.Ok(jsonResult));
-                }
+                var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(streetcodeContent);
+                var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
+                return Result.Ok(jsonResult);
             }
             catch (Exception ex)
             {
-                var errorMsg = $"Exception occurred while creating streetcode: {ex.Message}";
-                _logger.LogError(request, errorMsg);
-
-                return Result.Fail<JsonElement>(new Error(errorMsg));
+                _logger.LogError(request, ex.Message);
+                return Result.Fail(new Error(ErrorMessages.StreetcodeCreationFailed));
             }
-
-            return await Task.FromResult(Result.Ok());
         }
 
         private async Task<bool> StreetcodeIndexExists(int index)
@@ -133,7 +121,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 var image = await _repository.ImageRepository.GetFirstOrDefaultAsync(x => x.Id == img.ImageId);
                 if (image is null)
                 {
-                    var errorMsg = string.Format(ErrorMessages.ImageNotFoundById, img.ImageId);
+                    var errorMsg = string.Format(ErrorMessages.StreetcodeImageNotFoundById, img.ImageId);
                     _logger.LogError(request, errorMsg);
                     imageErrors.Add(errorMsg);
                     continue;
@@ -172,7 +160,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                 var thisTag = await _repository.TagRepository.GetFirstOrDefaultAsync(x => x.Id == tag.Id);
                 if (thisTag is null)
                 {
-                    var errorMsg = ErrorMessages.TagNotFoundById;
+                    var errorMsg = string.Format(ErrorMessages.TagNotFoundById, tag.Id);
                     _logger.LogError(request, errorMsg);
                     tagErrors.Add(errorMsg);
                     continue;
