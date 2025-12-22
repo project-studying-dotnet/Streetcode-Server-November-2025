@@ -11,6 +11,6 @@ public class CommentsProfile : Profile
         CreateMap<Comment, CommentDto>()
             .ForMember(
                 dest => dest.Replies,
-                opt => opt.MapFrom(src => src.Replies.Where(r => !r.IsDeleted)));
+                opt => opt.MapFrom(src => src.Replies));
     }
 }

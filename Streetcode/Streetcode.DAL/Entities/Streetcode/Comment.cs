@@ -35,8 +35,5 @@ namespace Streetcode.DAL.Entities.Streetcode
         [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
-
-        [Required]
-        public bool IsDeleted { get; set; } = false;
     }
 }
