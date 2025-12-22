@@ -131,8 +131,9 @@
         }
 
         [Fact]
-        public async Task HandlerReturnsExceptionMessageWhenExceprionTrown()
+        public async Task Handler_ThrowsException_When_CreateAsyncFails()
         {
+            // Arrange
             StreetcodeCreateHelper streetcodeCreateHelper = new StreetcodeCreateHelper(this.loggerMock.Object);
 
             string json = StreetcodeTestData.CreatePersonStreetcode();
@@ -140,7 +141,6 @@
             JsonElement createStreetcodeDtoRaw = doc.RootElement.Clone();
 
             string streetcodeType = createStreetcodeDtoRaw.GetProperty("StreetcodeType").GetString();
-
             CreateStreetcodeCommand request = new CreateStreetcodeCommand(createStreetcodeDtoRaw);
 
             CreateStreetcodeDto createStreetcodeDto =
@@ -156,14 +156,15 @@
 
             this.streetcodeHandlersTestsHelper.SetupMappers(createStreetcodeDto, streetcodeEntity);
 
-            this.repositoryMock.Setup(r => r.StreetcodeRepository.CreateAsync(It.IsAny<StreetcodeContent>()))
+            this.repositoryMock
+                .Setup(r => r.StreetcodeRepository.CreateAsync(It.IsAny<StreetcodeContent>()))
                 .ThrowsAsync(new InvalidOperationException("Test exception"));
 
-            var result = await this.handler.Handle(request, CancellationToken.None);
+            // Act & Assert
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => this.handler.Handle(request, CancellationToken.None));
 
-            Assert.True(result.IsFailed);
-
-            Assert.Equal(ErrorMessages.StreetcodeTestException, result.Errors[0].Message);
+            Assert.Equal("Test exception", ex.Message);
         }
 
         [Fact]

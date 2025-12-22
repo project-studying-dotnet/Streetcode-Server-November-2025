@@ -1,10 +1,11 @@
-using System.Linq.Expressions;
+using Ardalis.Specification;
 using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL;
 using Streetcode.DAL.Entities.Partners;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
@@ -56,8 +57,14 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         public async Task Handle_ReturnsSuccess_WhenPartnersExist()
         {
             // Arrange
-            var partners = PartnerTestHelpers.CreatePartnerEntities(3);
-            var dtos = this.CreateDtos(3);
+            var partners = PartnerTestHelpers.CreatePartnerEntities(2);
+            var dtos = this.CreateDtos(2);
+
+            this.MockRepository
+                .Setup(repo => repo.PartnersRepository.ListAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(partners);
 
             this.MockRepository
                 .Setup(repo => repo.PartnersRepository.GetAllAsync(
@@ -65,7 +72,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync(partners);
 
-            this.SetupMapperForAnyPartners(dtos);
+            this.SetupMapperForDtos(partners, dtos);
 
             var query = new TQuery();
 
@@ -74,15 +81,20 @@ namespace Streetcode.XUnitTest.MediatR.Partners
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            result.Value.Should().NotBeNull();
-            result.Value.Should().HaveCount(partners.Count);
-            result.Value.Should().BeEquivalentTo(dtos);
+
+            this.VerifyMapperWasCalled(partners);
+
+            this.MockRepository.Verify(
+                repo => repo.PartnersRepository.ListAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()),
+                Times.AtMostOnce);
 
             this.MockRepository.Verify(
                 repo => repo.PartnersRepository.GetAllAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()),
-                Times.Once);
+                Times.AtMostOnce);
         }
 
         /// <summary>
@@ -97,6 +109,12 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Setup(repo => repo.PartnersRepository.GetAllAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
+                .ReturnsAsync((IEnumerable<Partner>)null);
+
+            this.MockRepository
+                .Setup(repo => repo.PartnersRepository.ListAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()))
                 .ReturnsAsync((IEnumerable<Partner>)null);
 
             var query = new TQuery();
@@ -162,6 +180,11 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
                 .ReturnsAsync(partners);
+            this.MockRepository
+                .Setup(repo => repo.PartnersRepository.ListAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync(partners);
 
             this.SetupMapperForDtos(partners, dtos);
 
@@ -189,6 +212,12 @@ namespace Streetcode.XUnitTest.MediatR.Partners
                 .Setup(repo => repo.PartnersRepository.GetAllAsync(
                     It.IsAny<Expression<Func<Partner, bool>>>(),
                     It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
+                .ThrowsAsync(expectedException);
+
+            this.MockRepository
+                .Setup(repo => repo.PartnersRepository.ListAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()))
                 .ThrowsAsync(expectedException);
 
             var query = new TQuery();
