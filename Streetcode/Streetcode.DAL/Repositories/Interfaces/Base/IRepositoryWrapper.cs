@@ -31,6 +31,7 @@ public interface IRepositoryWrapper
     IStreetcodeCategoryContentRepository StreetcodeCategoryContentRepository { get; }
     IRelatedFigureRepository RelatedFigureRepository { get; }
     IStreetcodeRepository StreetcodeRepository { get; }
+    ICommentsRepository CommentsRepository { get; }
     ISubtitleRepository SubtitleRepository { get; }
     IStatisticRecordRepository StatisticRecordRepository { get; }
     ITagRepository TagRepository { get; }
