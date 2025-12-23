@@ -12,5 +12,7 @@ public class CommentsProfile : Profile
             .ForMember(
                 dest => dest.Replies,
                 opt => opt.MapFrom(src => src.Replies));
+
+        CreateMap<CreateCommentDto, Comment>();
     }
 }
