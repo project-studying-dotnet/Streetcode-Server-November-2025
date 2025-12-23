@@ -927,4 +927,25 @@
   <data name="MergeToponymDataRequired" xml:space="preserve">
     <value>Необхідно надати дані для обʼєднання топонімів.</value>
   </data>
+  <data name="CreateCommentMappingFailed" xml:space="preserve">
+    <value>Failed to map CreateCommentDto to Comment entity</value>
+  </data>
+  <data name="AuthorNameTooLong" xml:space="preserve">
+    <value>Ім'я автора не може перевищувати {0} символів</value>
+  </data>
+  <data name="CommentContentTooLong" xml:space="preserve">
+    <value>Зміст коментаря не може перевищувати {0} символів</value>
+  </data>
+  <data name="CommentContentRequired" xml:space="preserve">
+    <value>Відсутній контент коментаря</value>
+  </data>
+  <data name="AuthorNameRequired" xml:space="preserve">
+    <value>Ім'я автора є обов'язковим</value>
+  </data>
+  <data name="ParentCommentIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID батьківського коментаря має бути більше 0</value>
+  </data>
+  <data name="CommentDataRequired" xml:space="preserve">
+    <value>Дані коментаря є обов'язковими</value>
+  </data>
 </root>

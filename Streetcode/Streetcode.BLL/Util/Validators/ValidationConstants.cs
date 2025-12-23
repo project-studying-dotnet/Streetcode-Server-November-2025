@@ -295,5 +295,14 @@ namespace Streetcode.BLL.Util.Validators
             public const int PasswordMinLength = 6;
             public const int PasswordMaxLength = 20;
         }
+
+        /// <summary>
+        /// Comment-specific validation constants.
+        /// </summary>
+        public static class Comment
+        {
+            public const int ContentMaxLength = 500;
+            public const int AuthorNameMaxLength = 50;
+        }
     }
 }
