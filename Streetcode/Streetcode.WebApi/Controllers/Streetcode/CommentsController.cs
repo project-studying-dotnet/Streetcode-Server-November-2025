@@ -5,7 +5,7 @@ namespace Streetcode.WebApi.Controllers.Streetcode
 {
     public class CommentsController : BaseApiController
     {
-        [HttpGet("{id:int}")]
+        [HttpGet("{streetcodeId:int}")]
         public async Task<IActionResult> GetByStreetcodeId(int streetcodeId)
         {
             return HandleResult(await Mediator.Send(new GetCommentsByStreetcodeIdQuery(streetcodeId)));

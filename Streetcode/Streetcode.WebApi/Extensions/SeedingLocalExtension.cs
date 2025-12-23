@@ -413,7 +413,26 @@ namespace Streetcode.WebApi.Extensions
                                     Title = "Тарас Шевченко",
                                     Alias = "Кобзар",
                                     AudioId = 1,
-                                    Status = StreetcodeStatus.Published
+                                    Status = StreetcodeStatus.Published,
+                                    Comments = new List<Comment>
+                                    {
+                                        new Comment
+                                        {
+                                            AuthorName = "Іван",
+                                            Content = "Чудова інформація про Тараса Шевченка! Дякую за цей пост",
+                                        },
+                                        new Comment
+                                        {
+                                            AuthorName = "Олена",
+                                            Content = "Цікаво дізнатися більше про життя і творчість Шевченка. Чекаю на нові пости!",
+                                        },
+                                        new Comment
+                                        {
+                                            AuthorName = "Микола",
+                                            Content = "Дуже корисна інформація для студентів, які вивчають українську літературу.",
+                                            ParentCommentId = 1,
+                                        }
+                                    }
                                 },
                                 new PersonStreetcode
                                 {
