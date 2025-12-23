@@ -51,7 +51,7 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
 
         var createdImage = _mapper.Map<ImageDto>(image);
 
-        createdImage.Base64 = _blobService.FindFileInStorageAsBase64(createdImage.BlobName);
+        createdImage.Base64 = request.Image.BaseFormat;
 
         if(resultIsSuccess)
         {
