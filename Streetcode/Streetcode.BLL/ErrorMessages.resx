@@ -351,9 +351,6 @@
   <data name="FactMappingFailed" xml:space="preserve">
     <value>Failed to map CreateFactDTO to Fact entity</value>
   </data>
-  <data name="StreetcodeIdMustBeGreaterThanZero" xml:space="preserve">
-    <value>ID стріткоду має бути більше 0</value>
-  </data>
   <data name="FactDataRequired" xml:space="preserve">
     <value>Дані факту не можуть бути порожніми</value>
   </data>
@@ -911,5 +908,23 @@
   </data>
   <data name="LoginFailure" xml:space="preserve">
     <value>An error occurred during login</value>
+  </data>
+  <data name="StreetcodeIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID стріткоду має бути більше 0</value>
+  </data>
+  <data name="CreateToponymDataRequired" xml:space="preserve">
+    <value>Відсутні необхідні дані для створення топоніму.</value>
+  </data>
+  <data name="ToponymIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>ID топоніму має бути більше 0</value>
+  </data>
+  <data name="SourceToponymIdsRequired" xml:space="preserve">
+    <value>Необхідно вказати хоча б один source-топонім.</value>
+  </data>
+  <data name="TargetToponymCannotBeInSourceList" xml:space="preserve">
+    <value>Цільовий топонім не може бути серед source-топонімів.</value>
+  </data>
+  <data name="MergeToponymDataRequired" xml:space="preserve">
+    <value>Необхідно надати дані для обʼєднання топонімів.</value>
   </data>
 </root>
