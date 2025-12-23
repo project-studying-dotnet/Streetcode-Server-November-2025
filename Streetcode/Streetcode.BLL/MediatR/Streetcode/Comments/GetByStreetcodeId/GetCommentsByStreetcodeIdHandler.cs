@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
+using Microsoft.IdentityModel.Tokens;
 using Streetcode.BLL.DTO.Streetcode.Comments;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
 using Streetcode.BLL.Interfaces.Logging;
@@ -27,6 +28,12 @@ namespace Streetcode.BLL.MediatR.Streetcode.Comments.GetByStreetcodeId
         {
             var allComments = await _repositoryWrapper.CommentsRepository
                 .GetAllAsync(c => c.StreetcodeId == request.streetcodeId);
+
+            if (!allComments.Any())
+            {
+                _logger.LogDebug(string.Format(ErrorMessages.CommentsNotFoundByStreetcodeId, request.streetcodeId));
+                return Result.Ok(Enumerable.Empty<CommentDto>());
+            }
 
             var commentsByParentId = allComments.ToLookup(c => c.ParentCommentId);
 
