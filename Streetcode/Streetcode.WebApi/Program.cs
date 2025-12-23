@@ -11,6 +11,7 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Configuration.LoadEnvironmentVariables();
 
 builder.Host.ConfigureApplication();
+builder.Services.AddHostedService<BackgroundWorker>();
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddSwaggerServices();
 builder.Services.AddCustomServices();
