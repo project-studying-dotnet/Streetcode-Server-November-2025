@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text;
 using FluentValidation;
 using Hangfire;
+using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -76,6 +77,7 @@ public static class ServiceCollectionExtensions
             {
                 opt.MigrationsAssembly(typeof(StreetcodeDbContext).Assembly.GetName().Name);
                 opt.MigrationsHistoryTable("__EFMigrationsHistory", schema: "entity_framework");
+                opt.CommandTimeout(180);
             });
         });
 
@@ -133,10 +135,22 @@ public static class ServiceCollectionExtensions
 
         services.AddHangfire(config =>
         {
-            config.UseSqlServerStorage(connectionString);
+            config.UseSqlServerStorage(
+                connectionString,
+                new SqlServerStorageOptions()
+            {
+                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                QueuePollInterval = TimeSpan.FromSeconds(15),
+                UseRecommendedIsolationLevel = true,
+                DisableGlobalLocks = true
+            });
         });
 
-        services.AddHangfireServer();
+        services.AddHangfireServer(options =>
+        {
+            options.WorkerCount = 5;
+        });
 
         var corsConfig = configuration.GetSection("CORS").Get<CorsConfiguration>();
         services.AddCors(opt =>
