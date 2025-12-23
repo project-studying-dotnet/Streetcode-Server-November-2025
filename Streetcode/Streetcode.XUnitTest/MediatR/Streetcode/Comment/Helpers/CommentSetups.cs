@@ -44,5 +44,20 @@ namespace Streetcode.XUnitTest.MediatR.Comments.Helpers
                 .Setup(rw => rw.StreetcodeRepository)
                 .Returns(streetcodeRepositoryMock.Object);
         }
+
+        /// <summary>
+        /// Sets up the mocked <see cref="IRepositoryWrapper"/> to return the provided mocked
+        /// <see cref="IStreetcodeRepository"/> instance when accessing the CommentsRepository property.
+        /// </summary>
+        /// <param name="repositoryWrapperMock">The mocked repository wrapper.</param>
+        /// <param name="commentsRepositoryMock">The mocked comments repository to be returned.</param>
+        public static void SetupRepositoryWrapper(
+            this Mock<IRepositoryWrapper> repositoryWrapperMock,
+            Mock<ICommentsRepository> commentsRepositoryMock)
+        {
+            repositoryWrapperMock
+                .Setup(rw => rw.CommentsRepository)
+                .Returns(commentsRepositoryMock.Object);
+        }
     }
 }
