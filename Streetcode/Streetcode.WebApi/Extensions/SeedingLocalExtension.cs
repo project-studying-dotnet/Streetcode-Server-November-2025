@@ -416,6 +416,7 @@ namespace Streetcode.WebApi.Extensions
                                     Status = StreetcodeStatus.Published,
                                     Comments = new List<Comment>
                                     {
+                                        // ===== Root comments =====
                                         new Comment
                                         {
                                             AuthorName = "Іван",
@@ -426,11 +427,49 @@ namespace Streetcode.WebApi.Extensions
                                             AuthorName = "Олена",
                                             Content = "Цікаво дізнатися більше про життя і творчість Шевченка. Чекаю на нові пости!",
                                         },
+
+                                        // ===== Level 1 replies =====
                                         new Comment
                                         {
                                             AuthorName = "Микола",
                                             Content = "Дуже корисна інформація для студентів, які вивчають українську літературу.",
                                             ParentCommentId = 1,
+                                        },
+                                        new Comment
+                                        {
+                                            AuthorName = "Андрій",
+                                            Content = "Повністю згоден! Шевченко — основа української культури.",
+                                            ParentCommentId = 1,
+                                        },
+
+                                        // ===== Level 2 replies =====
+                                        new Comment
+                                        {
+                                            AuthorName = "Марія",
+                                            Content = "Особливо важливо читати його твори в оригіналі, без скорочень.",
+                                            ParentCommentId = 3,
+                                        },
+                                        new Comment
+                                        {
+                                            AuthorName = "Світлана",
+                                            Content = "Так, переклади часто втрачають глибину сенсу.",
+                                            ParentCommentId = 3,
+                                        },
+
+                                        // ===== Level 3 replies =====
+                                        new Comment
+                                        {
+                                            AuthorName = "Олексій",
+                                            Content = "Згоден. Деякі образи неможливо передати іншою мовою.",
+                                            ParentCommentId = 5,
+                                        },
+
+                                        // ===== Level 4 replies =====
+                                        new Comment
+                                        {
+                                            AuthorName = "Юрій",
+                                            Content = "Саме тому Шевченко актуальний і сьогодні — його мова жива.",
+                                            ParentCommentId = 7,
                                         }
                                     }
                                 },
@@ -449,7 +488,65 @@ namespace Streetcode.WebApi.Extensions
                                     Title = "Роман Ратушний (Сенека)",
                                     Alias = "Сенека",
                                     AudioId = 2,
-                                    Status = StreetcodeStatus.Published
+                                    Status = StreetcodeStatus.Published,
+                                    Comments = new List<Comment>
+                                    {
+                                        // ===== Root comments =====
+                                        new Comment
+                                        {
+                                            AuthorName = "Дмитро",
+                                            Content = "Сильна і дуже болюча історія. Світла памʼять Роману.",
+                                        },
+                                        new Comment
+                                        {
+                                            AuthorName = "Наталія",
+                                            Content = "Такі люди формують нову Україну. Дуже важливо про них писати.",
+                                        },
+
+                                        // ===== Level 1 replies =====
+                                        new Comment
+                                        {
+                                            AuthorName = "Ірина",
+                                            Content = "Погоджуюсь. Його боротьба за Протасів Яр — приклад для багатьох.",
+                                            ParentCommentId = 10,
+                                        },
+                                        new Comment
+                                        {
+                                            AuthorName = "Олександр",
+                                            Content = "Особливо вражає, що він був таким молодим.",
+                                            ParentCommentId = 10,
+                                        },
+
+                                        // ===== Level 2 replies =====
+                                        new Comment
+                                        {
+                                            AuthorName = "Катерина",
+                                            Content = "Вік не має значення, коли є принципи та відповідальність.",
+                                            ParentCommentId = 13,
+                                        },
+                                        new Comment
+                                        {
+                                            AuthorName = "Богдан",
+                                            Content = "Роман показав, що громадянська позиція — це не просто слова.",
+                                            ParentCommentId = 12,
+                                        },
+
+                                        // ===== Level 3 replies =====
+                                        new Comment
+                                        {
+                                            AuthorName = "Тарас",
+                                            Content = "Саме таких людей боїться корумпована система.",
+                                            ParentCommentId = 15,
+                                        },
+
+                                        // ===== Level 4 replies =====
+                                        new Comment
+                                        {
+                                            AuthorName = "Леся",
+                                            Content = "І водночас саме завдяки таким людям вона рано чи пізно падає.",
+                                            ParentCommentId = 16,
+                                        }
+                                    }
                                 });
 
                             await dbContext.SaveChangesAsync();
