@@ -218,7 +218,14 @@ namespace Streetcode.BLL {
                 return ResourceManager.GetString("CoordinateWidthError", resourceCulture);
             }
         }
-        
+
+        internal static string CreateToponymDataRequired {
+            get
+            {
+                return ResourceManager.GetString("CreateToponymDataRequired", resourceCulture);
+            }
+        }
+
         internal static string DatabaseConntectionFailed {
             get {
                 return ResourceManager.GetString("DatabaseConntectionFailed", resourceCulture);
@@ -512,7 +519,14 @@ namespace Streetcode.BLL {
                 return ResourceManager.GetString("MapToExatct", resourceCulture);
             }
         }
-        
+
+        internal static string MergeToponymDataRequired {
+            get
+            {
+                return ResourceManager.GetString("MergeToponymDataRequired", resourceCulture);
+            }
+        }
+
         internal static string MimeTypeTooLong {
             get {
                 return ResourceManager.GetString("MimeTypeTooLong", resourceCulture);
@@ -866,7 +880,14 @@ namespace Streetcode.BLL {
                 return ResourceManager.GetString("RelatedTermWordTooLong", resourceCulture);
             }
         }
-        
+
+        internal static string SourceToponymIdsRequired {
+            get
+            {
+                return ResourceManager.GetString("SourceToponymIdsRequired", resourceCulture);
+            }
+        }
+
         internal static string StreetcodeAliasTooLong {
             get {
                 return ResourceManager.GetString("StreetcodeAliasTooLong", resourceCulture);
@@ -1160,7 +1181,15 @@ namespace Streetcode.BLL {
                 return ResourceManager.GetString("TagNotFoundById", resourceCulture);
             }
         }
-        
+
+        internal static string TargetToponymCannotBeInSourceList
+        {
+            get
+            {
+                return ResourceManager.GetString("TargetToponymCannotBeInSourceList", resourceCulture);
+            }
+        }
+
         internal static string TeamCreationFailed {
             get {
                 return ResourceManager.GetString("TeamCreationFailed", resourceCulture);
@@ -1418,7 +1447,14 @@ namespace Streetcode.BLL {
                 return ResourceManager.GetString("ToponymCantBeMapped", resourceCulture);
             }
         }
-        
+
+        internal static string ToponymIdMustBeGreaterThanZero {
+            get
+            {
+                return ResourceManager.GetString("ToponymIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+
         internal static string ToponymNotFoundById {
             get {
                 return ResourceManager.GetString("ToponymNotFoundById", resourceCulture);
