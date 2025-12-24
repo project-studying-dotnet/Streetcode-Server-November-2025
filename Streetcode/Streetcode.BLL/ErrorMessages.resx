@@ -948,4 +948,7 @@
   <data name="CommentDataRequired" xml:space="preserve">
     <value>Дані коментаря є обов'язковими</value>
   </data>
+  <data name="CommentsNotFoundByStreetcodeId" xml:space="preserve">
+    <value>No comments found by StreetcodeId</value>
+  </data>
 </root>
