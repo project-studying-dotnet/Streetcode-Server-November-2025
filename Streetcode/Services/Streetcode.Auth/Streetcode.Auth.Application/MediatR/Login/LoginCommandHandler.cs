@@ -26,6 +26,7 @@ namespace Streetcode.Auth.Application.MediatR.Login
             _jwtService = jwtService;
             _logger = logger;
         }
+
         public async Task<Result<TokenResponseDto>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             try
@@ -38,21 +39,23 @@ namespace Streetcode.Auth.Application.MediatR.Login
                     return Result.Fail("ErrorMessages.UserEmailOrPasswordInvalid");
                 }
 
-                var passwordValid = await _signInManager.CheckPasswordSignInAsync(user, request.loginRequestDto.Password, false);
+                var passwordValid = await _signInManager.CheckPasswordSignInAsync(
+                    user,
+                    request.loginRequestDto.Password,
+                    lockoutOnFailure: false);
+
                 if (!passwordValid.Succeeded)
                 {
                     _logger.LogError(request, "ErrorMessages.UserEmailOrPasswordInvalid");
                     return Result.Fail("ErrorMessages.UserEmailOrPasswordInvalid");
                 }
 
-                var result = await _jwtService.GenerateTokensAsync(user, default);
-
-                return result;
+                return await _jwtService.GenerateTokensAsync(user, cancellationToken);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "ErrorMessages.LoginFailure");
-                return Result.Fail<TokenResponseDto>("ErrorMessages.LoginFailure");
+                _logger.LogError(ex, $"Login failed. Email: {request.loginRequestDto.Email}");
+                return Result.Fail<TokenResponseDto>(ex.InnerException?.Message ?? ex.Message);
             }
         }
     }

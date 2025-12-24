@@ -30,7 +30,6 @@ namespace Streetcode.Auth.Infrastructure.Data.Configurations
 
             builder
                 .Property(r => r.UserId)
-                .HasMaxLength(450)
                 .IsRequired();
 
             builder

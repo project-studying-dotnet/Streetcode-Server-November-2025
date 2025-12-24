@@ -52,7 +52,6 @@ namespace Streetcode.Auth.Infrastructure.Services.Token
                 ExpiresOn = refreshTokenExpiry,
                 UserId = user.Id,
                 IsRevoked = false,
-                //Created = utcNow
             };
 
             await _refreshTokenRepository.AddAsync(refreshTokenEntity, cancellationToken);
@@ -77,7 +76,6 @@ namespace Streetcode.Auth.Infrastructure.Services.Token
             }
         }
 
-
         public async Task<Result<TokenResponseDto>> RefreshAccessTokenAsync(string refreshToken, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(refreshToken))
@@ -86,7 +84,7 @@ namespace Streetcode.Auth.Infrastructure.Services.Token
             }
 
             var existingRefreshToken = await _refreshTokenRepository.GetByTokenAsync(refreshToken, cancellationToken);
-           
+
             if (existingRefreshToken == null)
             {
                 return Result.Fail<TokenResponseDto>("Invalid refresh token.");
@@ -99,8 +97,7 @@ namespace Streetcode.Auth.Infrastructure.Services.Token
 
             if (existingRefreshToken.ExpiresOn < DateTime.UtcNow)
             {
-                await RevokeRefreshTokenAsync(existingRefreshToken.Token, cancellationToken);
-
+                await RevokeRefreshTokenAsync(existingRefreshToken.Token, existingRefreshToken.UserId, cancellationToken);
                 return Result.Fail<TokenResponseDto>("Refresh token has expired.");
             }
 
@@ -123,7 +120,7 @@ namespace Streetcode.Auth.Infrastructure.Services.Token
             return Result.Ok(tokenResponseDto);
         }
 
-        public async Task<Result<bool>> RevokeRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken)
+        public async Task<Result<bool>> RevokeRefreshTokenAsync(string refreshToken, int expectedUserId, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(refreshToken))
             {
@@ -131,28 +128,30 @@ namespace Streetcode.Auth.Infrastructure.Services.Token
             }
 
             var refreshTokenEntity = await _refreshTokenRepository.GetByTokenAsync(refreshToken, cancellationToken);
+
+            // Idempotent logout: token absent => already logged out
             if (refreshTokenEntity == null)
             {
-                return Result.Fail<bool>("Refresh token not found.");
+                return Result.Ok(true);
             }
 
+            // Ownership check: do not revoke other user's token
+            if (refreshTokenEntity.UserId != expectedUserId)
+            {
+                return Result.Ok(true);
+            }
+
+            // Idempotent: already revoked => ok
             if (refreshTokenEntity.IsRevoked)
             {
-                return Result.Fail<bool>("Refresh token is already revoked.");
+                return Result.Ok(true);
             }
 
             refreshTokenEntity.IsRevoked = true;
             await _refreshTokenRepository.UpdateAsync(refreshTokenEntity, cancellationToken);
 
             var changesSaved = await _refreshTokenRepository.SaveChangesAsync(cancellationToken) > 0;
-            if (changesSaved)
-            {
-                return Result.Ok(true);
-            }
-            else
-            {
-                return Result.Fail<bool>("Failed to save revoke RefreshToken.");
-            }
+            return changesSaved ? Result.Ok(true) : Result.Fail<bool>("Failed to save revoke RefreshToken.");
         }
 
         public async Task<Result<int>> RevokeExpiredRefreshTokensAsync(CancellationToken cancellationToken)
@@ -200,6 +199,7 @@ namespace Streetcode.Auth.Infrastructure.Services.Token
             var tokenClaims = new List<Claim>
             {
                 new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new (ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new (JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new (ClaimTypes.Name, user.UserName ?? string.Empty)

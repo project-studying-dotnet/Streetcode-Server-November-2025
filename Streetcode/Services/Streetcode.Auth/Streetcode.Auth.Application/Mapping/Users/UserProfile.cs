@@ -7,5 +7,10 @@ namespace Streetcode.Auth.Application.Mapping.Users
 {
     public class UserProfile : Profile
     {
+        public UserProfile()
+        {
+            CreateMap<RegisterUserDto, User>();
+            CreateMap<User, RegisterUserResponseDto>();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Streetcode.Auth.Application.Dtos.Auth;
 using Streetcode.Auth.Application.Dtos.Users;
 using Streetcode.Auth.Application.MediatR.Login;
@@ -9,19 +10,20 @@ namespace Streetcode.Auth.Api.Controllers.Users
 {
     public class UsersController : BaseApiController
     {
-        [HttpPost("register")]
+        [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterUserDto user)
         {
             return HandleResult(await Mediator.Send(new RegisterCommand(user)));
         }
 
-        [HttpPost("login")]
+        [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
             return HandleResult(await Mediator.Send(new LoginCommand(request)));
         }
 
-        [HttpPost("logout")]
+        [Authorize]
+        [HttpPost]
         public async Task<IActionResult> Logout([FromBody] LogoutRequestDto request)
         {
             return HandleResult(await Mediator.Send(new LogoutCommand(request)));
