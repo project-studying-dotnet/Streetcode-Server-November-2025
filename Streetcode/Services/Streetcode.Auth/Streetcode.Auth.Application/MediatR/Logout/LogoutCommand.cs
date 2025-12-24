@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
+using Streetcode.Auth.Application.Dtos.Auth;
 
 namespace Streetcode.Auth.Application.MediatR.Logout
 {
-    internal class LogoutCommand
-    {
-    }
+    public record LogoutCommand(LogoutRequestDto LogoutRequestDto) : IRequest<Result<Unit>>; 
 }
