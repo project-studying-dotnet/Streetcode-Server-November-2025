@@ -44,4 +44,7 @@ RUN dotnet publish "Streetcode.Auth.Api.csproj" -c $BUILD_CONFIGURATION -o /app/
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+USER appuser
+
 ENTRYPOINT ["dotnet", "Streetcode.Auth.Api.dll"]
