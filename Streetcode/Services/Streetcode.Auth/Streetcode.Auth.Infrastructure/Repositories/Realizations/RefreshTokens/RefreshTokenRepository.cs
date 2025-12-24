@@ -1,6 +1,6 @@
-﻿using Streetcode.Auth.Domain.Entities.Auth;
+﻿using Streetcode.Auth.Application.Repositories.Interfaces.ResfreshTokens;
+using Streetcode.Auth.Domain.Entities.Auth;
 using Streetcode.Auth.Infrastructure.Data;
-using Streetcode.Auth.Infrastructure.Repositories.Interfaces.ResfreshTokens;
 using Streetcode.BuildingBlocks.Repositories.Realizations.Base;
 
 namespace Streetcode.Auth.Infrastructure.Repositories.Realizations.RefreshTokens
