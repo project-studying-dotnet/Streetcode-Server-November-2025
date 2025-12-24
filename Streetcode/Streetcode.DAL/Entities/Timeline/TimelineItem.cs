@@ -20,10 +20,10 @@ public class TimelineItem
     public DateViewPattern DateViewPattern { get; set; }
 
     [Required]
-    [MaxLength(100)]
+    [MaxLength(28)]
     public string? Title { get; set; }
 
-    [MaxLength(600)]
+    [MaxLength(400)]
     public string? Description { get; set; }
 
     public int StreetcodeId { get; set; }

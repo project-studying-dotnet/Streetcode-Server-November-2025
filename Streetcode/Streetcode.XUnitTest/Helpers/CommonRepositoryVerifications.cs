@@ -223,6 +223,30 @@ namespace Streetcode.XUnitTest.Helpers
                 "LogError method should not be called");
         }
 
+        /// <summary>
+        /// Verifies that <c>LogDebug</c> was called exactly once on the mocked.
+        /// </summary>
+        /// <param name="loggerMock">The mocked logger service.</param>
+        public static void VerifyLogDebugCalledOnce(this Mock<ILoggerService> loggerMock)
+        {
+            loggerMock.Verify(
+                l => l.LogDebug(It.IsAny<string>()),
+                Times.Once,
+                "LogDebug method should be called exactly once");
+        }
+
+        /// <summary>
+        /// Verifies that <c>LogDebug</c> was never called on the mocked.
+        /// </summary>
+        /// <param name="loggerMock">The mocked logger service.</param>
+        public static void VerifyLogDebugCalledNever(this Mock<ILoggerService> loggerMock)
+        {
+            loggerMock.Verify(
+                l => l.LogDebug(It.IsAny<string>()),
+                Times.Never,
+                "LogDebug method should not be called");
+        }
+
         // -------------------------- Verify Mapper -------------------------------
 
         /// <summary>

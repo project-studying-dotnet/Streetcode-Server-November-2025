@@ -205,6 +205,24 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ім&apos;я автора є обов&apos;язковим.
+        /// </summary>
+        internal static string AuthorNameRequired {
+            get {
+                return ResourceManager.GetString("AuthorNameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ім&apos;я автора не може перевищувати {0} символів.
+        /// </summary>
+        internal static string AuthorNameTooLong {
+            get {
+                return ResourceManager.GetString("AuthorNameTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Blob with name &apos;{0}&apos; was not found.
         /// </summary>
         internal static string BlobNotFoundByName {
@@ -277,6 +295,42 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Відсутній контент коментаря.
+        /// </summary>
+        internal static string CommentContentRequired {
+            get {
+                return ResourceManager.GetString("CommentContentRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Зміст коментаря не може перевищувати {0} символів.
+        /// </summary>
+        internal static string CommentContentTooLong {
+            get {
+                return ResourceManager.GetString("CommentContentTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Дані коментаря є обов&apos;язковими.
+        /// </summary>
+        internal static string CommentDataRequired {
+            get {
+                return ResourceManager.GetString("CommentDataRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No comments found by StreetcodeId.
+        /// </summary>
+        internal static string CommentsNotFoundByStreetcodeId {
+            get {
+                return ResourceManager.GetString("CommentsNotFoundByStreetcodeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Дані координат не можуть бути порожніми.
         /// </summary>
         internal static string CoordinateCantBeEmpty {
@@ -309,6 +363,24 @@ namespace Streetcode.BLL {
         internal static string CoordinateWidthError {
             get {
                 return ResourceManager.GetString("CoordinateWidthError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to map CreateCommentDto to Comment entity.
+        /// </summary>
+        internal static string CreateCommentMappingFailed {
+            get {
+                return ResourceManager.GetString("CreateCommentMappingFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Відсутні необхідні дані для створення топоніму..
+        /// </summary>
+        internal static string CreateToponymDataRequired {
+            get {
+                return ResourceManager.GetString("CreateToponymDataRequired", resourceCulture);
             }
         }
         
@@ -484,11 +556,101 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create a historical context.
+        /// </summary>
+        internal static string HistoricalContextCreationFailed {
+            get {
+                return ResourceManager.GetString("HistoricalContextCreationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete a historical context.
+        /// </summary>
+        internal static string HistoricalContextDeletionFailed {
+            get {
+                return ResourceManager.GetString("HistoricalContextDeletionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id must be greater than 0.
+        /// </summary>
+        internal static string HistoricalContextIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("HistoricalContextIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot find any historical contexts.
         /// </summary>
         internal static string HistoricalContextNotFound {
             get {
                 return ResourceManager.GetString("HistoricalContextNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find a historical context with corresponding id: {0}.
+        /// </summary>
+        internal static string HistoricalContextNotFoundById {
+            get {
+                return ResourceManager.GetString("HistoricalContextNotFoundById", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Historical contexts with IDs {0} do not exist.
+        /// </summary>
+        internal static string HistoricalContextsNotFoundByIds {
+            get {
+                return ResourceManager.GetString("HistoricalContextsNotFoundByIds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Historical context with the same title already exists.
+        /// </summary>
+        internal static string HistoricalContextTitleAlreadyExists {
+            get {
+                return ResourceManager.GetString("HistoricalContextTitleAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title can only contain letters and spaces.
+        /// </summary>
+        internal static string HistoricalContextTitleInvalidFormat {
+            get {
+                return ResourceManager.GetString("HistoricalContextTitleInvalidFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title is required.
+        /// </summary>
+        internal static string HistoricalContextTitleRequired {
+            get {
+                return ResourceManager.GetString("HistoricalContextTitleRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title cannot exceed {0} characters.
+        /// </summary>
+        internal static string HistoricalContextTitleTooLong {
+            get {
+                return ResourceManager.GetString("HistoricalContextTitleTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update a historical context.
+        /// </summary>
+        internal static string HistoricalContextUpdateFailed {
+            get {
+                return ResourceManager.GetString("HistoricalContextUpdateFailed", resourceCulture);
             }
         }
         
@@ -651,6 +813,15 @@ namespace Streetcode.BLL {
         internal static string MapToExatct {
             get {
                 return ResourceManager.GetString("MapToExatct", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Необхідно надати дані для обʼєднання топонімів..
+        /// </summary>
+        internal static string MergeToponymDataRequired {
+            get {
+                return ResourceManager.GetString("MergeToponymDataRequired", resourceCulture);
             }
         }
         
@@ -831,6 +1002,15 @@ namespace Streetcode.BLL {
         internal static string NullRequest {
             get {
                 return ResourceManager.GetString("NullRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID батьківського коментаря має бути більше 0.
+        /// </summary>
+        internal static string ParentCommentIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("ParentCommentIdMustBeGreaterThanZero", resourceCulture);
             }
         }
         
@@ -1182,6 +1362,15 @@ namespace Streetcode.BLL {
         internal static string RelatedTermWordTooLong {
             get {
                 return ResourceManager.GetString("RelatedTermWordTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Необхідно вказати хоча б один source-топонім..
+        /// </summary>
+        internal static string SourceToponymIdsRequired {
+            get {
+                return ResourceManager.GetString("SourceToponymIdsRequired", resourceCulture);
             }
         }
         
@@ -1627,6 +1816,15 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Цільовий топонім не може бути серед source-топонімів..
+        /// </summary>
+        internal static string TargetToponymCannotBeInSourceList {
+            get {
+                return ResourceManager.GetString("TargetToponymCannotBeInSourceList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to create a team.
         /// </summary>
         internal static string TeamCreationFailed {
@@ -1843,6 +2041,78 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to create a timeline item.
+        /// </summary>
+        internal static string TimelineItemCreationFailed {
+            get {
+                return ResourceManager.GetString("TimelineItemCreationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date is required.
+        /// </summary>
+        internal static string TimelineItemDateRequired {
+            get {
+                return ResourceManager.GetString("TimelineItemDateRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid DateViewPattern value.
+        /// </summary>
+        internal static string TimelineItemDateViewPatternInvalid {
+            get {
+                return ResourceManager.GetString("TimelineItemDateViewPatternInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to delete a timeline item.
+        /// </summary>
+        internal static string TimelineItemDeletionFailed {
+            get {
+                return ResourceManager.GetString("TimelineItemDeletionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description is required.
+        /// </summary>
+        internal static string TimelineItemDescriptionRequired {
+            get {
+                return ResourceManager.GetString("TimelineItemDescriptionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description cannot exceed {0} characters.
+        /// </summary>
+        internal static string TimelineItemDescriptionTooLong {
+            get {
+                return ResourceManager.GetString("TimelineItemDescriptionTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HistoricalContextId must be greater than 0.
+        /// </summary>
+        internal static string TimelineItemHistoricalContextIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("TimelineItemHistoricalContextIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id must be greater than 0.
+        /// </summary>
+        internal static string TimelineItemIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("TimelineItemIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot find any timelineItem.
         /// </summary>
         internal static string TimelineItemNotFound {
@@ -1866,6 +2136,42 @@ namespace Streetcode.BLL {
         internal static string TimelineItemNotFoundByStreetcodeId {
             get {
                 return ResourceManager.GetString("TimelineItemNotFoundByStreetcodeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to StreetcodeId must be greater than 0.
+        /// </summary>
+        internal static string TimelineItemStreetcodeIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("TimelineItemStreetcodeIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title is required.
+        /// </summary>
+        internal static string TimelineItemTitleRequired {
+            get {
+                return ResourceManager.GetString("TimelineItemTitleRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title cannot exceed {0} characters.
+        /// </summary>
+        internal static string TimelineItemTitleTooLong {
+            get {
+                return ResourceManager.GetString("TimelineItemTitleTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to update a timeline item.
+        /// </summary>
+        internal static string TimelineItemUpdateFailed {
+            get {
+                return ResourceManager.GetString("TimelineItemUpdateFailed", resourceCulture);
             }
         }
         
@@ -1902,6 +2208,15 @@ namespace Streetcode.BLL {
         internal static string ToponymCantBeMapped {
             get {
                 return ResourceManager.GetString("ToponymCantBeMapped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID топоніму має бути більше 0.
+        /// </summary>
+        internal static string ToponymIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("ToponymIdMustBeGreaterThanZero", resourceCulture);
             }
         }
         

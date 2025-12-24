@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\Analytics\" />
-    <Folder Include="Controllers\Newss\" />
   </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 </Project>

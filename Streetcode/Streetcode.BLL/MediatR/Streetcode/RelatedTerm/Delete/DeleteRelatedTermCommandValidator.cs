@@ -14,9 +14,11 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
                 .NotEmpty()
                 .WithMessage(ErrorMessages.RelatedTermWordForDeletionRequired)
                 .MaximumLength(ValidationConstants.RelatedTerm.WordMaxLength)
-                .WithMessage(string.Format(
-                    ErrorMessages.RelatedTermWordTooLong,
-                    ValidationConstants.RelatedTerm.WordMaxLength));
+                .WithMessage(string.Format(ErrorMessages.RelatedTermWordTooLong, ValidationConstants.RelatedTerm.WordMaxLength));
+
+            RuleFor(x => x.termId)
+                .GreaterThan(0)
+                .WithMessage(ErrorMessages.RelatedTermIdMustBeGreaterThanZero);
         }
     }
 }
