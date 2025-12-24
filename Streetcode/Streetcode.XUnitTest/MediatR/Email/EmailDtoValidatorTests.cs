@@ -9,10 +9,6 @@ namespace Streetcode.XUnitTest.MediatR.Email
     {
         private readonly EmailDtoValidator validator;
 
-        public static string ValidContent => new string('A', 500);
-
-        private static string InvalidContent => new string('A', 501);
-
         public EmailDtoValidatorTests()
         {
             this.validator = new EmailDtoValidator();
