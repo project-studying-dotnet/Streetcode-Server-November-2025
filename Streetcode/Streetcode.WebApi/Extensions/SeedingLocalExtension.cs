@@ -1,8 +1,9 @@
-﻿using System.Text;
+using System.Text;
 using DotNetEnv;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Services.BlobStorageService;
 using Streetcode.DAL.Entities.AdditionalContent;
 using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
@@ -30,41 +31,64 @@ namespace Streetcode.WebApi.Extensions
         {
             using (var scope = app.Services.CreateScope())
             {
-                Directory.CreateDirectory(app.Configuration.GetValue<string>("Blob:BlobStorePath"));
                 var dbContext = scope.ServiceProvider.GetRequiredService<StreetcodeDbContext>();
-                var blobOptions = app.Services.GetRequiredService<IOptions<BlobEnvironmentVariables>>();
-                string blobPath = app.Configuration.GetValue<string>("Blob:BlobStorePath");
+                var blobService = scope.ServiceProvider.GetRequiredService<IBlobService>();
+                var blobOptions = scope.ServiceProvider.GetRequiredService<IOptions<BlobEnvironmentVariables>>();
+                var config = blobOptions.Value;
+
+                if (config.BlobStorageType == BlobStorageType.Local)
+                {
+                    Directory.CreateDirectory(config.BlobStorePath);
+                }
+
                 var repo = new RepositoryWrapper(dbContext);
-                var blobService = new BlobService(blobOptions, repo);
+
                 string initialDataImagePath = "../Streetcode.DAL/InitialData/images.json";
                 string initialDataAudioPath = "../Streetcode.DAL/InitialData/audios.json";
+
                 if (!dbContext.Images.Any())
                 {
                     string imageJson = await File.ReadAllTextAsync(initialDataImagePath, Encoding.UTF8);
                     string audiosJson = await File.ReadAllTextAsync(initialDataAudioPath, Encoding.UTF8);
+
                     var imgfromJson = JsonConvert.DeserializeObject<List<Image>>(imageJson);
                     var audiosfromJson = JsonConvert.DeserializeObject<List<Audio>>(audiosJson);
 
                     foreach (var img in imgfromJson)
                     {
-                        string filePath = Path.Combine(blobPath, img.BlobName);
-                        if (!File.Exists(filePath))
+                        if (!blobService.BlobExists(img.BlobName))
                         {
-                            blobService.SaveFileInStorageBase64(img.Base64, img.BlobName.Split('.')[0], img.BlobName.Split('.')[1]);
+                            var mimeType = img.MimeType ?? "image/png";
+
+                            var blobName = blobService.SaveFileInStorage(
+                                img.Base64,
+                                img.BlobName ?? "seed-image",
+                                mimeType);
+
+                            img.BlobName = blobName;
                         }
+
+                        img.Base64 = null;
                     }
 
                     foreach (var audio in audiosfromJson)
                     {
-                        string filePath = Path.Combine(blobPath, audio.BlobName);
-                        if (!File.Exists(filePath))
+                        if (!blobService.BlobExists(audio.BlobName))
                         {
-                            blobService.SaveFileInStorageBase64(audio.Base64, audio.BlobName.Split('.')[0], audio.BlobName.Split('.')[1]);
+                            var mimeType = audio.MimeType ?? "audio/mpeg";
+
+                            var blobName = blobService.SaveFileInStorage(
+                                audio.Base64,
+                                audio.Title ?? "seed-audio",
+                                mimeType);
+
+                            audio.BlobName = blobName;
                         }
+
+                        audio.Base64 = null;
                     }
 
                     dbContext.Images.AddRange(imgfromJson);
-
                     await dbContext.SaveChangesAsync();
 
                     if (!dbContext.Responses.Any())

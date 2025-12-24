@@ -17,7 +17,7 @@ public static class ConfigureBackgroundJobsExtention
             wp => wp.ParseZipFileFromWebAsync(),
             Cron.Monthly);
 
-        RecurringJob.AddOrUpdate<BlobService>(
+        RecurringJob.AddOrUpdate<LocalBlobService>(
             "clean-blob-storage-monthly",
             b => b.CleanBlobStorage(),
             Cron.Monthly);
