@@ -58,7 +58,7 @@ namespace Streetcode.BLL.Services.BlobStorageService
             }
             catch (FileNotFoundException ex)
             {
-                throw new FileNotFoundException($"Blob with name '{name}' was not found in storage", ex);
+                throw new FileNotFoundException(string.Format(ErrorMessages.BlobNotFoundByName, name), ex);
             }
         }
 
@@ -69,7 +69,7 @@ namespace Streetcode.BLL.Services.BlobStorageService
 
             if (!blobClient.Exists())
             {
-                throw new FileNotFoundException($"Blob with name '{name}' was not found");
+                throw new FileNotFoundException(string.Format(ErrorMessages.BlobNotFoundByName, name));
             }
 
             var memoryStream = new MemoryStream();
@@ -96,7 +96,7 @@ namespace Streetcode.BLL.Services.BlobStorageService
 
             if (!blobClient.DeleteIfExists())
             {
-                throw new FileNotFoundException($"Blob with name '{name}' was not found");
+                throw new FileNotFoundException(string.Format(ErrorMessages.BlobNotFoundByName, name));
             }
         }
 
@@ -124,7 +124,7 @@ namespace Streetcode.BLL.Services.BlobStorageService
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                throw new ArgumentException("MIME type cannot be null or empty");
+                throw new ArgumentException(ErrorMessages.MimeRequired);
             }
 
             if (input.Contains('/'))
@@ -136,7 +136,7 @@ namespace Streetcode.BLL.Services.BlobStorageService
 
             if (!BlobHelper.MimeToExtension.TryGetValue(ext.ToLower(), out var mime))
             {
-                throw new InvalidOperationException($"Unsupported file extension: {input}");
+                throw new InvalidOperationException(string.Format(ErrorMessages.UnsupportedFileExtension, input));
             }
 
             return mime;

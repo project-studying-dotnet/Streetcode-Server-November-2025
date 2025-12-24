@@ -846,4 +846,13 @@
   <data name="LoginFailure" xml:space="preserve">
     <value>An error occurred during login</value>
   </data>
+  <data name="BlobNotFoundByName" xml:space="preserve">
+    <value>Blob with name '{0}' was not found</value>
+  </data>
+  <data name="UnsupportedFileExtension" xml:space="preserve">
+    <value>Unsupported file extension: {0}</value>
+  </data>
+  <data name="MimeRequired" xml:space="preserve">
+    <value>MIME type cannot be null or empty</value>
+  </data>
 </root>
