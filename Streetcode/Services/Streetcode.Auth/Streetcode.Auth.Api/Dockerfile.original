@@ -13,12 +13,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/Streetcode.Auth/Streetcode.Auth.Api/Streetcode.Auth.Api.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Api/"]
-COPY ["Services/Streetcode.Auth/Streetcode.Auth.Application/Streetcode.Auth.Application.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Application/"]
-COPY ["Services/BuildingBlocks/Streetcode.BuildingBlocks/Streetcode.BuildingBlocks.csproj", "Services/BuildingBlocks/Streetcode.BuildingBlocks/"]
-COPY ["Services/BuildingBlocks/Streetcode.Messaging/Streetcode.Messaging.csproj", "Services/BuildingBlocks/Streetcode.Messaging/"]
-COPY ["Services/Streetcode.Auth/Streetcode.Auth.Common/Streetcode.Auth.Common.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Common/"]
-COPY ["Services/Streetcode.Auth/Streetcode.Auth.Domain/Streetcode.Auth.Domain.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Domain/"]
-COPY ["Services/Streetcode.Auth/Streetcode.Auth.Infrastructure/Streetcode.Auth.Infrastructure.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Infrastructure/"]
 RUN dotnet restore "./Services/Streetcode.Auth/Streetcode.Auth.Api/Streetcode.Auth.Api.csproj"
 COPY . .
 WORKDIR "/src/Services/Streetcode.Auth/Streetcode.Auth.Api"
