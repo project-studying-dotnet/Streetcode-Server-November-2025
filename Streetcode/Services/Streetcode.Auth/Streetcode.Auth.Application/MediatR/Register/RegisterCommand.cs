@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentResults;
+using MediatR;
+using Streetcode.Auth.Application.Dtos.Users;
 
 namespace Streetcode.Auth.Application.MediatR.Register
 {
-    internal class RegisterCommand
-    {
-    }
+    public record RegisterCommand(RegisterUserDto newUser) : IRequest<Result<RegisterUserResponseDto>>;
 }
