@@ -40,7 +40,7 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
         string hashBlobStorageName = _blobService.SaveFileInStorage(
             request.Image.BaseFormat,
             request.Image.Title,
-            request.Image.Extension);
+            request.Image.MimeType);
 
         var image = _mapper.Map<DAL.Entities.Media.Images.Image>(request.Image);
 

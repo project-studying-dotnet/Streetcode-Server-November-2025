@@ -32,11 +32,11 @@ public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<Aud
         string hashBlobStorageName = _blobService.SaveFileInStorage(
             request.Audio.BaseFormat,
             request.Audio.Title,
-            request.Audio.Extension);
+            request.Audio.MimeType);
 
         var audio = _mapper.Map<DAL.Entities.Media.Audio>(request.Audio);
 
-        audio.BlobName = $"{hashBlobStorageName}.{request.Audio.Extension}";
+        audio.BlobName = hashBlobStorageName;
 
         await _repositoryWrapper.AudioRepository.CreateAsync(audio);
 
