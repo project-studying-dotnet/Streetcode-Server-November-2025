@@ -1,4 +1,4 @@
-﻿namespace Streetcode.BLL.Interfaces.BlobStorage;
+namespace Streetcode.BLL.Interfaces.BlobStorage;
 
 public interface IBlobService
 {
@@ -11,4 +11,5 @@ public interface IBlobService
         string extension);
     public string FindFileInStorageAsBase64(string name);
     public void DeleteFileInStorage(string name);
+    public bool BlobExists(string blobName);
 }
