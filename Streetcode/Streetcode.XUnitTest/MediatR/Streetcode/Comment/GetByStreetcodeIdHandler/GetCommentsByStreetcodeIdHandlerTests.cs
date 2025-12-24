@@ -58,14 +58,18 @@ namespace Streetcode.XUnitTest.MediatR.Comment.GetByStreetcodeIdHandler
         {
             // Arrange
             var commentsRepositoryMock = new Mock<ICommentsRepository>(MockBehavior.Strict);
-            var streetcodeId = 1;
+            var streetcodeId = 101;
             var comments = CommentTestData.CreateCommentsHierarchy();
+            var rootComments = comments.Where(c => c.ParentCommentId == null).ToList();
             var commentsDtos = CommentTestData.CreateCommentsDtosHierarchy();
             var query = new GetCommentsByStreetcodeIdQuery(streetcodeId);
 
             this.repositoryWrapperMock.SetupRepositoryWrapper(commentsRepositoryMock);
-            commentsRepositoryMock.SetupGetAllAsync(comments);
-            this.mapperMock.SetupMapper(comments, commentsDtos);
+            commentsRepositoryMock.SetupGetAllAsync(rootComments);
+            this.mapperMock
+                .Setup(m => m.Map<IEnumerable<CommentDto>>(
+                    It.IsAny<IEnumerable<Comment>>()))
+                .Returns(commentsDtos);
             this.loggerMock.SetupLogger();
 
             // Act
@@ -74,7 +78,8 @@ namespace Streetcode.XUnitTest.MediatR.Comment.GetByStreetcodeIdHandler
             // Assert
             Assert.True(result.IsSuccess);
             Assert.NotNull(result.Value);
-            Assert.Empty(result.Value);
+            Assert.NotEmpty(result.Value);
+            Assert.Equal(commentsDtos.Count, result.Value.Count());
 
             // Verify
             commentsRepositoryMock.VerifyGetAllAsyncCalledOnce<ICommentsRepository, Comment>();
