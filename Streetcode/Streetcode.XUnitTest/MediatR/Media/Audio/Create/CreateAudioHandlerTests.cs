@@ -1,4 +1,4 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.Create
+namespace Streetcode.XUnitTest.MediatR.Media.Audio.Create
 {
     using AutoMapper;
     using FluentAssertions;
@@ -58,8 +58,6 @@
 
             const string hashBlobStorageName = "sha256";
 
-            var expectedBlobName = $"{hashBlobStorageName}.{audioFileBaseCreateDTO.Extension}";
-
             var createAudioCommand = new CreateAudioCommand(audioFileBaseCreateDTO);
 
             this.mockBlob
@@ -72,7 +70,6 @@
                  {
                      Title = audioFileBaseCreateDTO.Title,
                      MimeType = audioFileBaseCreateDTO.MimeType,
-                     BlobName = expectedBlobName,
                      Base64 = audioFileBaseCreateDTO.Description,
                  });
 
@@ -100,7 +97,7 @@
 
             result.Value.Should().BeEquivalentTo(expectedAudioDTO);
 
-            this.mockRepo.Verify(r => r.AudioRepository.CreateAsync(It.Is<Audio>(a => a.BlobName == expectedBlobName)), Times.Once);
+            this.mockRepo.Verify(r => r.AudioRepository.CreateAsync(It.Is<Audio>(a => a.BlobName == hashBlobStorageName)), Times.Once);
         }
 
         [Fact]
@@ -126,8 +123,6 @@
 
             const string hashBlobStorageName = "sha256";
 
-            var expectedBlobName = $"{hashBlobStorageName}.{audioFileBaseCreateDTO.Extension}";
-
             var createAudioCommand = new CreateAudioCommand(audioFileBaseCreateDTO);
 
             this.mockBlob
@@ -140,7 +135,6 @@
                  {
                      Title = audioFileBaseCreateDTO.Title,
                      MimeType = audioFileBaseCreateDTO.MimeType,
-                     BlobName = expectedBlobName,
                      Base64 = audioFileBaseCreateDTO.Description,
                  });
 
