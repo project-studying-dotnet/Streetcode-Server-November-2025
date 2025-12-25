@@ -21,8 +21,10 @@ public class UsersController : BaseApiController
     }
 
     [HttpPost("logout")]
-    public async Task<IActionResult> Logout([FromBody] LogoutRequestDto token)
+    public async Task<IActionResult> Logout([FromBody] LogoutRequestDto logoutRequest)
 	{
-		return HandleResult(await Mediator.Send(new LogoutCommand(token)));
+		int userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+		return HandleResult(await Mediator.Send(new LogoutCommand(logoutRequest, userId)));
 	}
 }

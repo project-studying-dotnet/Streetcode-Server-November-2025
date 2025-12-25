@@ -6,9 +6,13 @@ namespace Streetcode.BLL.MediatR.Users.Logout
 	{
 		public LogoutValidator()
 		{
-			RuleFor(x => x.LogoutRequestDto.RefreshToken)
+			RuleFor(x => x.LogoutRequest.RefreshToken)
 				.NotEmpty()
-				.WithMessage("Refresh token is required");
+				.WithMessage("Refresh token is required.");
+
+			RuleFor(x => x.UserId)
+				.GreaterThan(0)
+				.WithMessage("Invalid User ID.");
 		}
 	}
 }

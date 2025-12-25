@@ -16,21 +16,18 @@ namespace Streetcode.BLL.MediatR.Users.Logout
 		public async Task<Result<Unit>> Handle(LogoutCommand request, CancellationToken cancellationToken)
 		{
 			var refreshToken = await _repositoryWrapper.RefreshTokenRepository
-				.GetFirstOrDefaultAsync(rt => rt.Token == request.LogoutRequestDto.RefreshToken);
+				.GetFirstOrDefaultAsync(rt =>
+					rt.Token == request.LogoutRequest.RefreshToken &&
+				    rt.UserId == request.UserId);
 
-			if (refreshToken == null)
+			if (refreshToken is null)
 			{
-				return Result.Fail("Refresh token not found or already invalid.");
+				return Result.Ok(Unit.Value);
 			}
 
 			_repositoryWrapper.RefreshTokenRepository.Delete(refreshToken);
 
-			var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
-
-			if (!resultIsSuccess)
-			{
-				return Result.Fail("Failed to logout user.");
-			}
+			await _repositoryWrapper.SaveChangesAsync();
 
 			return Result.Ok(Unit.Value);
 		}
