@@ -4,6 +4,7 @@ using Serilog;
 using Streetcode.Auth.Application.Interfaces.Token;
 using Streetcode.Auth.Application.Mapping.Users;
 using Streetcode.Auth.Application.Repositories.Interfaces.ResfreshTokens;
+using Streetcode.Auth.Common.Configurations;
 using Streetcode.Auth.Domain.Entities.Users;
 using Streetcode.Auth.Infrastructure.Data;
 using Streetcode.Auth.Infrastructure.Repositories.Realizations.RefreshTokens;
@@ -27,6 +28,24 @@ namespace Streetcode.Auth.Api.Extensions
                 .AddDefaultTokenProviders();
 
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+            var corsConfig = configuration.GetSection("CORS").Get<CorsConfigurations>();
+            services.AddCors(opt =>
+            {
+                opt.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyOrigin()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
+            services.AddHsts(opt =>
+            {
+                opt.Preload = true;
+                opt.IncludeSubDomains = true;
+                opt.MaxAge = TimeSpan.FromDays(30);
+            });
 
             return services;
         }

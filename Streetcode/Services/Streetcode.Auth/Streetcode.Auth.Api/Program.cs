@@ -28,6 +28,12 @@ if (app.Environment.EnvironmentName == "Development")
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
 }
+else
+{
+    app.UseHsts();
+}
+
+app.UseCors();
 
 //await app.Services.SeedIdentityAsync(); // uncomment for seeding data
 
