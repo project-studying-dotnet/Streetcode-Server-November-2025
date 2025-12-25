@@ -103,17 +103,17 @@ public abstract class RepositoryBase<T> : Interfaces.Base.IRepositoryBase<T>
         return await ApplySpecification(specification).ToListAsync(cancellationToken);
     }
 
-    public async Task<T?> GetBySpecAsync(ISpecification<T> specification, CancellationToken cancellationToken)
+    public async Task<T?> GetBySpecAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
     {
         return await ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public async Task<int> CountAsync(ISpecification<T> specification, CancellationToken cancellationToken)
+    public async Task<int> CountAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
     {
         return await ApplySpecification(specification).CountAsync(cancellationToken);
     }
 
-    public async Task<bool> AnyAsync(ISpecification<T> specification, CancellationToken cancellationToken)
+    public async Task<bool> AnyAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
     {
         return await ApplySpecification(specification).AnyAsync(cancellationToken);
     }
