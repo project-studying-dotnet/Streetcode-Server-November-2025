@@ -1,7 +1,5 @@
 namespace Streetcode.XUnitTest.MediatR.Update
 {
-    using System;
-    using System.Threading.Tasks;
     using AutoMapper;
     using Moq;
     using Streetcode.BLL;
@@ -11,8 +9,11 @@ namespace Streetcode.XUnitTest.MediatR.Update
     using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
     using Streetcode.DAL.Entities.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Base;
+    using Streetcode.XUnitTest.Helpers;
     using Streetcode.XUnitTest.MediatR.Base;
     using Streetcode.XUnitTest.MediatR.Fixture;
+    using System;
+    using System.Threading.Tasks;
     using Xunit;
 
     public class UpdateStreetcodeHandlerTests
@@ -41,19 +42,7 @@ namespace Streetcode.XUnitTest.MediatR.Update
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnSuccess_When_ProperInput()
-        {
-            var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest();
-
-            this.streetcodeHandlersTestsHelper.SetupSuccessfulUpdate(request);
-
-            var result = await handler.Handle(request, CancellationToken.None);
-
-            Assert.True(result.IsSuccess);
-        }
-
-        [Fact]
-        public async Task Handle_ShouldReturnSuccess_When_ImgAndTagsAreNull()
+        public async Task Handle_ShouldReturnSuccess_When_ImgAndTagsAreNullProperInput()
         {
             var request = this.streetcodeHandlersTestsHelper.PrepareValidRequest(
                 StreetcodeTestData.CreateNullValuesStreetcode());
@@ -63,6 +52,7 @@ namespace Streetcode.XUnitTest.MediatR.Update
             var result = await this.handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsSuccess);
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeUpdatedSuccesfully();
         }
 
         [Theory]
@@ -78,6 +68,7 @@ namespace Streetcode.XUnitTest.MediatR.Update
             var result = await this.handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsSuccess);
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeUpdatedSuccesfully();
         }
 
         [Theory]
@@ -93,6 +84,11 @@ namespace Streetcode.XUnitTest.MediatR.Update
             var result = await this.handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsSuccess);
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeUpdatedSuccesfully(
+                tagsIncluded: true,
+                imagesIncluded: true,
+                timesImages: images.Count(),
+                timesTags: tags.Count());
         }
 
         [Fact]
@@ -106,6 +102,8 @@ namespace Streetcode.XUnitTest.MediatR.Update
 
             Assert.True(result.IsFailed);
             Assert.Equal(ErrorMessages.StreetcodeNotFound, result.Errors[0].Message);
+
+            this.repositoryMock.VerifySaveChangesAsyncCalledNever();
         }
 
         [Fact]
@@ -123,6 +121,8 @@ namespace Streetcode.XUnitTest.MediatR.Update
 
             Assert.True(result.IsFailed);
             Assert.Equal(ErrorMessages.StreetcodeTypeCannotBeChanged, result.Errors[0].Message);
+
+            this.repositoryMock.VerifySaveChangesAsyncCalledNever();
         }
 
         [Theory]
@@ -138,6 +138,8 @@ namespace Streetcode.XUnitTest.MediatR.Update
 
             Assert.True(result.IsFailed);
             Assert.Equal(error, result.Errors[0].Message);
+
+            this.repositoryMock.VerifySaveChangesAsyncCalledNever();
         }
 
         [Theory]
@@ -153,6 +155,8 @@ namespace Streetcode.XUnitTest.MediatR.Update
 
             Assert.True(result.IsFailed);
             Assert.Equal(error, result.Errors[0].Message);
+
+            this.repositoryMock.VerifySaveChangesAsyncCalledNever();
         }
 
         [Theory]
@@ -168,6 +172,8 @@ namespace Streetcode.XUnitTest.MediatR.Update
 
             Assert.True(result.IsFailed);
             Assert.Equal(error, result.Errors[0].Message);
+
+            this.repositoryMock.VerifySaveChangesAsyncCalledNever();
         }
 
         public static IList<object[]> ImagesTestData() =>
