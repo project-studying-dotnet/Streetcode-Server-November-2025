@@ -4,7 +4,6 @@
     using FluentAssertions;
     using Moq;
     using Streetcode.BLL.DTO.AdditionalContent;
-    using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.AdditionalContent.Tag.Create;
     using Streetcode.DAL.Entities.AdditionalContent;
     using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
@@ -22,7 +21,6 @@
         private const string ExceptionText = "DB error";
         private readonly Mock<IRepositoryWrapper> repoWrapperMock;
         private readonly Mock<IMapper> mapperMock;
-        private readonly Mock<ILoggerService> loggerMock;
         private readonly CreateTagHandler handler;
 
         /// <summary>
@@ -32,11 +30,9 @@
         {
             this.repoWrapperMock = new Mock<IRepositoryWrapper>();
             this.mapperMock = new Mock<IMapper>();
-            this.loggerMock = new Mock<ILoggerService>();
             this.handler = new CreateTagHandler(
                 this.repoWrapperMock.Object,
-                this.mapperMock.Object,
-                this.loggerMock.Object);
+                this.mapperMock.Object);
         }
 
         /// <summary>
