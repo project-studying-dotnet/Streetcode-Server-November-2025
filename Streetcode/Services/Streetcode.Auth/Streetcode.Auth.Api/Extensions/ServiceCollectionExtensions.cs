@@ -29,12 +29,16 @@ namespace Streetcode.Auth.Api.Extensions
 
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 
-            var corsConfig = configuration.GetSection("CORS").Get<CorsConfigurations>();
+            var corsConfig = configuration
+                                 .GetSection("CORS")
+                                 .Get<CorsConfigurations>()
+                             ?? throw new InvalidOperationException("CORS configuration is missing");
+
             services.AddCors(opt =>
             {
                 opt.AddDefaultPolicy(policy =>
                 {
-                    policy.AllowAnyOrigin()
+                    policy.WithOrigins(corsConfig.AllowedOrigins.ToArray())
                         .AllowAnyHeader()
                         .AllowAnyMethod();
                 });
