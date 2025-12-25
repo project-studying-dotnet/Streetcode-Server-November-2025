@@ -56,11 +56,11 @@ namespace Streetcode.WebApi.Extensions
 
                     foreach (var img in imgfromJson)
                     {
-                        if (!blobService.BlobExists(img.BlobName))
+                        if (!await blobService.BlobExistsAsync(img.BlobName))
                         {
                             var mimeType = img.MimeType ?? "image/png";
 
-                            var blobName = blobService.SaveFileInStorage(
+                            var blobName = await blobService.SaveFileInStorageAsync(
                                 img.Base64,
                                 img.BlobName ?? "seed-image",
                                 mimeType);
@@ -73,11 +73,11 @@ namespace Streetcode.WebApi.Extensions
 
                     foreach (var audio in audiosfromJson)
                     {
-                        if (!blobService.BlobExists(audio.BlobName))
+                        if (!await blobService.BlobExistsAsync(audio.BlobName))
                         {
                             var mimeType = audio.MimeType ?? "audio/mpeg";
 
-                            var blobName = blobService.SaveFileInStorage(
+                            var blobName = await blobService.SaveFileInStorageAsync(
                                 audio.Base64,
                                 audio.Title ?? "seed-audio",
                                 mimeType);

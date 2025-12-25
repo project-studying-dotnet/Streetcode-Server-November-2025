@@ -37,7 +37,7 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
             return Result.Fail(new Error(errorMsg));
         }
 
-        string hashBlobStorageName = _blobService.SaveFileInStorage(
+        string hashBlobStorageName = await _blobService.SaveFileInStorageAsync(
             request.Image.BaseFormat,
             request.Image.Title,
             request.Image.MimeType);

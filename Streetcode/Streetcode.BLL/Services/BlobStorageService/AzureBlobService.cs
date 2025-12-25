@@ -20,12 +20,12 @@ namespace Streetcode.BLL.Services.BlobStorageService
             _containerName = config.AzureContainerName;
         }
 
-        public string SaveFileInStorage(
+        public async Task<string> SaveFileInStorageAsync(
             string base64,
             string name,
             string mimeType)
         {
-            var container = GetContainer();
+            var container = await GetContainerAsync();
 
             var hashName = GenerateHashName(base64);
 
@@ -40,7 +40,7 @@ namespace Streetcode.BLL.Services.BlobStorageService
 
             var contentType = NormalizeMimeType(mimeType);
 
-            blobClient.Upload(
+            await blobClient.UploadAsync(
                 stream,
                 new BlobHttpHeaders { ContentType = contentType },
                 conditions: null);
@@ -48,11 +48,11 @@ namespace Streetcode.BLL.Services.BlobStorageService
             return fullBlobName;
         }
 
-        public string FindFileInStorageAsBase64(string name)
+        public async Task<string> FindFileInStorageAsBase64Async(string name)
         {
             try
             {
-                using var memoryStream = FindFileInStorageAsMemoryStream(name);
+                using var memoryStream = await FindFileInStorageAsMemoryStreamAsync(name);
                 var imageArray = memoryStream.ToArray();
                 return Convert.ToBase64String(imageArray);
             }
@@ -62,9 +62,9 @@ namespace Streetcode.BLL.Services.BlobStorageService
             }
         }
 
-        public MemoryStream FindFileInStorageAsMemoryStream(string name)
+        public async Task<MemoryStream> FindFileInStorageAsMemoryStreamAsync(string name)
         {
-            var container = GetContainer();
+            var container = await GetContainerAsync();
             var blobClient = container.GetBlobClient(name);
 
             if (!blobClient.Exists())
@@ -73,25 +73,28 @@ namespace Streetcode.BLL.Services.BlobStorageService
             }
 
             var memoryStream = new MemoryStream();
-            blobClient.DownloadTo(memoryStream);
+            await blobClient.DownloadToAsync(memoryStream);
             memoryStream.Position = 0;
 
             return memoryStream;
         }
 
-        public string UpdateFileInStorage(
+        public async Task<string> UpdateFileInStorageAsync(
            string previousBlobName,
            string base64Format,
            string newBlobName,
            string mimeType)
         {
-            DeleteFileInStorage(previousBlobName);
-            return SaveFileInStorage(base64Format, newBlobName, mimeType);
+            var newBlobNameInStorage = await SaveFileInStorageAsync(base64Format, newBlobName, mimeType);
+
+            DeleteFileInStorageAsync(previousBlobName);
+
+            return newBlobNameInStorage;
         }
 
-        public void DeleteFileInStorage(string name)
+        public async Task DeleteFileInStorageAsync(string name)
         {
-            var container = GetContainer();
+            var container = await GetContainerAsync();
             var blobClient = container.GetBlobClient(name);
 
             if (!blobClient.DeleteIfExists())
@@ -100,16 +103,16 @@ namespace Streetcode.BLL.Services.BlobStorageService
             }
         }
 
-        public bool BlobExists(string blobName)
+        public async Task<bool> BlobExistsAsync(string blobName)
         {
-            var container = GetContainer();
+            var container = await GetContainerAsync();
             return container.GetBlobClient(blobName).Exists();
         }
 
-        private BlobContainerClient GetContainer()
+        private async Task<BlobContainerClient> GetContainerAsync()
         {
             var container = _blobServiceClient.GetBlobContainerClient(_containerName);
-            container.CreateIfNotExists(PublicAccessType.Blob);
+            await container.CreateIfNotExistsAsync(PublicAccessType.Blob);
             return container;
         }
 

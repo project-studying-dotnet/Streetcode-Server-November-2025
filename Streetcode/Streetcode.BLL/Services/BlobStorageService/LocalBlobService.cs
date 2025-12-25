@@ -22,25 +22,25 @@ public class LocalBlobService : IBlobService
         _repositoryWrapper = repositoryWrapper;
     }
 
-    public MemoryStream FindFileInStorageAsMemoryStream(string name)
+    public async Task<MemoryStream> FindFileInStorageAsMemoryStreamAsync(string name)
     {
-        byte[] decodedBytes = DecryptFile(name);
+        byte[] decodedBytes = await DecryptFileAsync(name);
 
         var image = new MemoryStream(decodedBytes);
 
         return image;
     }
 
-    public string FindFileInStorageAsBase64(string name)
+    public async Task<string> FindFileInStorageAsBase64Async(string name)
     {
-        byte[] decodedBytes = DecryptFile(name);
+        byte[] decodedBytes = await DecryptFileAsync(name);
 
         string base64 = Convert.ToBase64String(decodedBytes);
 
         return base64;
     }
 
-    public string SaveFileInStorage(string base64, string name, string mimeType)
+    public async Task<string> SaveFileInStorageAsync(string base64, string name, string mimeType)
     {
         byte[] fileBytes = Convert.FromBase64String(base64);
 
@@ -50,40 +50,41 @@ public class LocalBlobService : IBlobService
         var fullName = $"{hashName}{extension}";
 
         Directory.CreateDirectory(_blobPath);
-        EncryptFile(fileBytes, extension.TrimStart('.'), hashName);
+        await EncryptFileAsync(fileBytes, extension.TrimStart('.'), hashName);
 
         return fullName;
     }
 
-    public void SaveFileInStorageBase64(string base64, string name, string mimeType)
+    public async Task SaveFileInStorageBase64Async(string base64, string name, string mimeType)
     {
         byte[] imageBytes = Convert.FromBase64String(base64);
         Directory.CreateDirectory(_blobPath);
-        EncryptFile(imageBytes, mimeType, name);
+        await EncryptFileAsync(imageBytes, mimeType, name);
     }
 
-    public void DeleteFileInStorage(string name)
+    public Task DeleteFileInStorageAsync(string name)
     {
         File.Delete($"{_blobPath}{name}");
+        return Task.CompletedTask;
     }
 
-    public string UpdateFileInStorage(
+    public async Task<string> UpdateFileInStorageAsync(
         string previousBlobName,
         string base64Format,
         string newBlobName,
         string extension)
     {
-        DeleteFileInStorage(previousBlobName);
+        var hashBlobStorageName = await SaveFileInStorageAsync(
+            base64Format,
+            newBlobName,
+            extension);
 
-        string hashBlobStorageName = SaveFileInStorage(
-        base64Format,
-        newBlobName,
-        extension);
+        await DeleteFileInStorageAsync(previousBlobName);
 
         return hashBlobStorageName;
     }
 
-    public async Task CleanBlobStorage()
+    public async Task CleanBlobStorageAsync()
     {
         var base64Files = GetAllBlobNames();
 
@@ -99,13 +100,13 @@ public class LocalBlobService : IBlobService
         foreach (var file in filesToRemove)
         {
             Console.WriteLine($"Deleting {file}...");
-            DeleteFileInStorage(file);
+            await DeleteFileInStorageAsync(file);
         }
     }
 
-    public bool BlobExists(string blobName)
+    public Task<bool> BlobExistsAsync(string blobName)
     {
-        return File.Exists(Path.Combine(_blobPath, blobName));
+        return Task.FromResult(File.Exists(Path.Combine(_blobPath, blobName)));
     }
 
     private IEnumerable<string> GetAllBlobNames()
@@ -125,7 +126,7 @@ public class LocalBlobService : IBlobService
         }
     }
 
-    private void EncryptFile(byte[] imageBytes, string type, string name)
+    private async Task EncryptFileAsync(byte[] imageBytes, string type, string name)
     {
         byte[] keyBytes = Encoding.UTF8.GetBytes(_keyCrypt);
 
@@ -148,12 +149,12 @@ public class LocalBlobService : IBlobService
         byte[] encryptedData = new byte[encryptedBytes.Length + iv.Length];
         Buffer.BlockCopy(iv, 0, encryptedData, 0, iv.Length);
         Buffer.BlockCopy(encryptedBytes, 0, encryptedData, iv.Length, encryptedBytes.Length);
-        File.WriteAllBytes($"{_blobPath}{name}.{type}", encryptedData);
+        await File.WriteAllBytesAsync($"{_blobPath}{name}.{type}", encryptedData);
     }
 
-    private byte[] DecryptFile(string fileName)
+    private async Task<byte[]> DecryptFileAsync(string fileName)
     {
-        byte[] encryptedData = File.ReadAllBytes(Path.Combine(_blobPath, fileName));
+        byte[] encryptedData = await File.ReadAllBytesAsync(Path.Combine(_blobPath, fileName));
         byte[] keyBytes = Encoding.UTF8.GetBytes(_keyCrypt);
 
         byte[] iv = new byte[16];

@@ -1,4 +1,4 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Newss.GetByUrl
+namespace Streetcode.XUnitTest.MediatR.Newss.GetByUrl
 {
     using AutoMapper;
     using FluentAssertions;
@@ -107,7 +107,7 @@
         /// <summary>
         /// Tests that <see cref="GetNewsByUrlHandler.Handle(GetNewsByUrlQuery, CancellationToken)"/>
         /// returns a success result when news exists with an associated image.
-        /// Ensures that <see cref="IBlobService.FindFileInStorageAsBase64(string)"/> is called
+        /// Ensures that <see cref="IBlobService.FindFileInStorageAsBase64Async(string)"/> is called
         /// to populate the <see cref="ImageDTO.Base64"/> property.
         /// </summary>
         /// <returns>A <see cref="Task"/> representing the asynchronous test operation.</returns>

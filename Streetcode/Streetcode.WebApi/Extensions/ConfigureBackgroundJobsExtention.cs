@@ -19,7 +19,7 @@ public static class ConfigureBackgroundJobsExtention
 
         RecurringJob.AddOrUpdate<LocalBlobService>(
             "clean-blob-storage-monthly",
-            b => b.CleanBlobStorage(),
+            b => b.CleanBlobStorageAsync(),
             Cron.Monthly);
 
         return app;

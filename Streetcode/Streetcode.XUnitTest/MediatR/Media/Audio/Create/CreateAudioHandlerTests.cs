@@ -61,8 +61,8 @@ namespace Streetcode.XUnitTest.MediatR.Media.Audio.Create
             var createAudioCommand = new CreateAudioCommand(audioFileBaseCreateDTO);
 
             this.mockBlob
-                .Setup(b => b.SaveFileInStorage(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(hashBlobStorageName);
+                .Setup(b => b.SaveFileInStorageAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(hashBlobStorageName);
 
             this.mockMapper
                  .Setup(m => m.Map<Audio>(It.IsAny<AudioFileBaseCreateDto>()))
@@ -126,8 +126,8 @@ namespace Streetcode.XUnitTest.MediatR.Media.Audio.Create
             var createAudioCommand = new CreateAudioCommand(audioFileBaseCreateDTO);
 
             this.mockBlob
-                .Setup(b => b.SaveFileInStorage(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(hashBlobStorageName);
+                .Setup(b => b.SaveFileInStorageAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(hashBlobStorageName);
 
             this.mockMapper
                  .Setup(m => m.Map<Audio>(It.IsAny<AudioFileBaseCreateDto>()))
