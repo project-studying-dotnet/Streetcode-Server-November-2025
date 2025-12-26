@@ -1,0 +1,83 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Streetcode.Auth.Application.Interfaces.Token;
+using Streetcode.Auth.Application.Mapping.Users;
+using Streetcode.Auth.Application.Repositories.Interfaces.ResfreshTokens;
+using Streetcode.Auth.Common.Configurations;
+using Streetcode.Auth.Domain.Entities.Users;
+using Streetcode.Auth.Infrastructure.Data;
+using Streetcode.Auth.Infrastructure.Repositories.Realizations.RefreshTokens;
+using Streetcode.Auth.Infrastructure.Services.Token;
+using Streetcode.BuildingBlocks.Interfaces.Logging;
+using Streetcode.BuildingBlocks.Services.Logging;
+
+namespace Streetcode.Auth.Api.Extensions
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<UsersDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            services.AddIdentity<User, IdentityRole<int>>()
+                .AddEntityFrameworkStores<UsersDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+            var corsConfig = configuration
+                                 .GetSection("CORS")
+                                 .Get<CorsConfigurations>()
+                             ?? throw new InvalidOperationException("CORS configuration is missing");
+
+            services.AddCors(opt =>
+            {
+                opt.AddDefaultPolicy(policy =>
+                {
+                    policy.WithOrigins(corsConfig.AllowedOrigins.ToArray())
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
+                });
+            });
+
+            services.AddHsts(opt =>
+            {
+                opt.Preload = true;
+                opt.IncludeSubDomains = true;
+                opt.MaxAge = TimeSpan.FromDays(30);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddApplication(this IServiceCollection services)
+        {
+            services.AddScoped<ILoggerService, LoggerService>();
+
+            services.AddScoped<ITokenService, TokenService>();
+
+
+            services.AddMediatR(cfg =>
+                cfg.RegisterServicesFromAssembly(typeof(UserProfile).Assembly));
+
+            services.AddAutoMapper(typeof(UserProfile).Assembly);
+
+            return services;
+        }
+
+        public static IServiceCollection ConfigureSerilog(this IServiceCollection services, WebApplicationBuilder builder)
+        {
+            builder.Host.UseSerilog((ctx, services, loggerConfiguration) =>
+            {
+                loggerConfiguration
+                    .ReadFrom.Configuration(builder.Configuration);
+            });
+
+            return services;
+        }
+    }
+}
