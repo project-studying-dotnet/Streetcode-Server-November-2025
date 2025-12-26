@@ -1,12 +1,13 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Fixtures
+namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Fixtures
 {
     using Streetcode.BLL.DTO.Timeline;
     using Streetcode.DAL.Entities.Timeline;
     using Streetcode.DAL.Enums;
 
     /// <summary>
-    /// Provides factory methods for creating test instances of <see cref="TimelineItem"/>
-    /// and <see cref="TimelineItemDto"/> objects for use in unit tests.
+    /// Provides factory methods for creating test instances of <see cref="TimelineItem"/>,
+    /// <see cref="TimelineItemDto"/>, <see cref="CreateTimelineItemDto"/>, and <see cref="UpdateTimelineItemDto"/>
+    /// objects for use in unit tests.
     /// </summary>
     public static class TimelineItemTestData
     {
@@ -102,6 +103,123 @@
             }
 
             return items;
+        }
+
+        /// <summary>
+        /// Creates a <see cref="CreateTimelineItemDto"/> with valid test data.
+        /// </summary>
+        /// <param name="streetcodeId">The streetcode ID for the timeline item.</param>
+        /// <param name="historicalContextIds">Optional list of historical context IDs.</param>
+        /// <returns>A valid <see cref="CreateTimelineItemDto"/> for testing create operations.</returns>
+        public static CreateTimelineItemDto CreateTimelineItemCreateDto(
+            int streetcodeId = 101,
+            List<int>? historicalContextIds = null)
+        {
+            return new CreateTimelineItemDto
+            {
+                Title = "Test Event",
+                Description = "Test event description for timeline.",
+                Date = new DateTime(1950, 6, 15),
+                DateViewPattern = DateViewPattern.DateMonthYear,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = historicalContextIds ?? new List<int>()
+            };
+        }
+
+        /// <summary>
+        /// Creates a <see cref="CreateTimelineItemDto"/> with maximum allowed character limits.
+        /// </summary>
+        /// <returns>A <see cref="CreateTimelineItemDto"/> at character boundaries.</returns>
+        public static CreateTimelineItemDto CreateTimelineItemCreateDtoAtMaxLength()
+        {
+            return new CreateTimelineItemDto
+            {
+                Title = new string('A', 28),
+                Description = new string('B', 400),
+                Date = new DateTime(1950, 6, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = 101,
+                HistoricalContextIds = new List<int>()
+            };
+        }
+
+        /// <summary>
+        /// Creates a <see cref="UpdateTimelineItemDto"/> with valid test data.
+        /// </summary>
+        /// <param name="id">The ID of the timeline item to update.</param>
+        /// <param name="streetcodeId">The streetcode ID.</param>
+        /// <param name="historicalContextIds">Optional list of historical context IDs.</param>
+        /// <returns>A valid <see cref="UpdateTimelineItemDto"/> for testing update operations.</returns>
+        public static UpdateTimelineItemDto CreateTimelineItemUpdateDto(
+            int id = 1,
+            int streetcodeId = 101,
+            List<int>? historicalContextIds = null)
+        {
+            return new UpdateTimelineItemDto
+            {
+                Id = id,
+                Title = "Updated Event",
+                Description = "Updated description for timeline event.",
+                Date = new DateTime(1955, 8, 20),
+                DateViewPattern = DateViewPattern.MonthYear,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = historicalContextIds ?? new List<int>()
+            };
+        }
+
+        /// <summary>
+        /// Creates a <see cref="CreateTimelineItemDto"/> with invalid data (exceeds character limits).
+        /// </summary>
+        /// <returns>An invalid <see cref="CreateTimelineItemDto"/> for testing validation.</returns>
+        public static CreateTimelineItemDto CreateInvalidTimelineItemDto()
+        {
+            return new CreateTimelineItemDto
+            {
+                Title = new string('A', 29),
+                Description = new string('B', 401),
+                Date = DateTime.MinValue,
+                DateViewPattern = DateViewPattern.DateMonthYear,
+                StreetcodeId = 0,
+                HistoricalContextIds = new List<int> { -1 }
+            };
+        }
+
+        /// <summary>
+        /// Creates a TimelineItem with HistoricalContext relationships.
+        /// </summary>
+        /// <param name="id">The timeline item ID.</param>
+        /// <param name="contextIds">List of historical context IDs to associate.</param>
+        /// <returns>A <see cref="TimelineItem"/> with HistoricalContextTimeline relationships.</returns>
+        public static TimelineItem CreateTimelineItemWithContexts(int id = 1, params int[] contextIds)
+        {
+            var timelineItem = CreateTimelineItem(id);
+            timelineItem.HistoricalContextTimelines = contextIds.Select(contextId =>
+                new HistoricalContextTimeline
+                {
+                    TimelineId = id,
+                    HistoricalContextId = contextId,
+                    Timeline = timelineItem,
+                    HistoricalContext = new HistoricalContext { Id = contextId, Title = $"Context {contextId}" }
+                }).ToList();
+            return timelineItem;
+        }
+
+        /// <summary>
+        /// Creates test data for all DateViewPattern enum values.
+        /// </summary>
+        /// <returns>A list of <see cref="CreateTimelineItemDto"/> with different DateViewPattern values.</returns>
+        public static List<CreateTimelineItemDto> CreateTimelineItemsWithAllDatePatterns()
+        {
+            var patterns = Enum.GetValues(typeof(DateViewPattern)).Cast<DateViewPattern>();
+            return patterns.Select((pattern, index) => new CreateTimelineItemDto
+            {
+                Title = $"Event with {pattern}",
+                Description = $"Testing {pattern} pattern",
+                Date = new DateTime(2000 + index, 1, 1),
+                DateViewPattern = pattern,
+                StreetcodeId = 101,
+                HistoricalContextIds = new List<int>()
+            }).ToList();
         }
     }
 }
