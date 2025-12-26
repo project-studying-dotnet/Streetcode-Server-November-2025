@@ -428,5 +428,247 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Create
                           ti.HistoricalContextTimelines.Any(hct => hct.HistoricalContextId == 30))),
                 Times.Once);
         }
+
+        /// <summary>
+        /// Tests that <see cref="CreateTimelineItemHandler"/> returns a failure when the specified
+        /// Streetcode does not exist in the database.
+        /// </summary>
+        [Fact]
+        public async Task Handle_WithNonExistentStreetcode_ShouldReturnFailure()
+        {
+            // Arrange
+            var createDto = TimelineItemTestData.CreateTimelineItemCreateDto();
+
+            this.streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync<IStreetcodeRepository, StreetcodeContent>(null);
+
+            var command = new CreateTimelineItemCommand(createDto);
+
+            // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsFailed);
+            Assert.Contains("Streetcode", result.Errors[0].Message);
+
+            // Verify that CreateAsync was never called
+            this.timelineRepositoryMock.Verify(
+                r => r.CreateAsync(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()),
+                Times.Never);
+
+            // Verify that SaveChangesAsync was never called
+            this.repositoryWrapperMock.Verify(rw => rw.SaveChangesAsync(), Times.Never);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="CreateTimelineItemHandler"/> returns a failure when one or more
+        /// specified HistoricalContext IDs do not exist in the database.
+        /// </summary>
+        [Fact]
+        public async Task Handle_WithNonExistentHistoricalContextIds_ShouldReturnFailure()
+        {
+            // Arrange
+            var invalidContextIds = new List<int> { 999, 1000 };
+            var createDto = TimelineItemTestData.CreateTimelineItemCreateDto(
+                historicalContextIds: invalidContextIds);
+
+            var streetcode = new StreetcodeContent { Id = createDto.StreetcodeId };
+            var emptyContexts = new List<HistoricalContext>();
+
+            this.streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync<IStreetcodeRepository, StreetcodeContent>(streetcode);
+
+            this.historicalContextRepositoryMock
+                .SetupGetAllAsync<IHistoricalContextRepository, HistoricalContext>(emptyContexts);
+
+            var command = new CreateTimelineItemCommand(createDto);
+
+            // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsFailed);
+            Assert.Contains("HistoricalContext", result.Errors[0].Message);
+
+            // Verify that CreateAsync was never called
+            this.timelineRepositoryMock.Verify(
+                r => r.CreateAsync(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()),
+                Times.Never);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="CreateTimelineItemHandler"/> returns a failure when some (but not all)
+        /// HistoricalContext IDs exist, indicating partial validation failure.
+        /// </summary>
+        [Fact]
+        public async Task Handle_WithPartiallyValidHistoricalContextIds_ShouldReturnFailure()
+        {
+            // Arrange
+            var requestedIds = new List<int> { 1, 2, 999 };
+            var createDto = TimelineItemTestData.CreateTimelineItemCreateDto(
+                historicalContextIds: requestedIds);
+
+            var streetcode = new StreetcodeContent { Id = createDto.StreetcodeId };
+
+            var existingContexts = new List<HistoricalContext>
+            {
+                new HistoricalContext { Id = 1, Title = "Context 1" },
+                new HistoricalContext { Id = 2, Title = "Context 2" },
+            };
+
+            this.streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync<IStreetcodeRepository, StreetcodeContent>(streetcode);
+
+            this.historicalContextRepositoryMock
+                .SetupGetAllAsync<IHistoricalContextRepository, HistoricalContext>(existingContexts);
+
+            var command = new CreateTimelineItemCommand(createDto);
+
+            // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsFailed);
+            Assert.Contains("HistoricalContext", result.Errors[0].Message);
+
+            // Verify that CreateAsync was never called
+            this.timelineRepositoryMock.Verify(
+                r => r.CreateAsync(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()),
+                Times.Never);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="CreateTimelineItemHandler"/> returns a failure when SaveChangesAsync
+        /// fails to persist the timeline item to the database.
+        /// </summary>
+        [Fact]
+        public async Task Handle_WhenSaveChangesFails_ShouldReturnFailure()
+        {
+            // Arrange
+            var createDto = TimelineItemTestData.CreateTimelineItemCreateDto();
+            var streetcode = new StreetcodeContent { Id = createDto.StreetcodeId };
+            var newEntity = TimelineItemTestData.CreateTimelineItem(id: 0);
+
+            this.streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync<IStreetcodeRepository, StreetcodeContent>(streetcode);
+
+            this.mapperMock
+                .Setup(m => m.Map<global::Streetcode.DAL.Entities.Timeline.TimelineItem>(createDto))
+                .Returns(newEntity);
+
+            this.timelineRepositoryMock
+                .SetupCreateAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(newEntity);
+
+            this.repositoryWrapperMock.SetupSaveChangesAsync(0);
+
+            var command = new CreateTimelineItemCommand(createDto);
+
+            // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsFailed);
+            Assert.Contains("save", result.Errors[0].Message, StringComparison.OrdinalIgnoreCase);
+
+            // Verify that CreateAsync was called
+            this.timelineRepositoryMock.Verify(
+                r => r.CreateAsync(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()),
+                Times.Once);
+
+            // Verify that SaveChangesAsync was called
+            this.repositoryWrapperMock.Verify(rw => rw.SaveChangesAsync(), Times.Once);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="CreateTimelineItemHandler"/> returns a failure when the created
+        /// timeline item cannot be retrieved after saving.
+        /// </summary>
+        [Fact]
+        public async Task Handle_WhenCreatedItemNotFound_ShouldReturnFailure()
+        {
+            // Arrange
+            var createDto = TimelineItemTestData.CreateTimelineItemCreateDto();
+            var streetcode = new StreetcodeContent { Id = createDto.StreetcodeId };
+            var newEntity = TimelineItemTestData.CreateTimelineItem(id: 1);
+
+            this.streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync<IStreetcodeRepository, StreetcodeContent>(streetcode);
+
+            this.mapperMock
+                .Setup(m => m.Map<global::Streetcode.DAL.Entities.Timeline.TimelineItem>(createDto))
+                .Returns(newEntity);
+
+            this.timelineRepositoryMock
+                .SetupCreateAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(newEntity);
+
+            this.repositoryWrapperMock.SetupSaveChangesAsync(1);
+
+            this.timelineRepositoryMock
+                .SetupGetFirstOrDefaultAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(null);
+
+            var command = new CreateTimelineItemCommand(createDto);
+
+            // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsFailed);
+            Assert.Contains("find", result.Errors[0].Message, StringComparison.OrdinalIgnoreCase);
+
+            // Verify all steps were attempted
+            this.timelineRepositoryMock.Verify(
+                r => r.CreateAsync(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()),
+                Times.Once);
+
+            this.repositoryWrapperMock.Verify(rw => rw.SaveChangesAsync(), Times.Once);
+
+            this.timelineRepositoryMock.Verify(
+                r => r.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<global::Streetcode.DAL.Entities.Timeline.TimelineItem, bool>>>(),
+                    It.IsAny<Func<IQueryable<global::Streetcode.DAL.Entities.Timeline.TimelineItem>,
+                        IIncludableQueryable<global::Streetcode.DAL.Entities.Timeline.TimelineItem, object>>>()),
+                Times.Once);
+        }
+
+        /// <summary>
+        /// Tests that <see cref="CreateTimelineItemHandler"/> returns a failure when the mapper
+        /// fails to map the created entity back to a DTO.
+        /// </summary>
+        [Fact]
+        public async Task Handle_WhenMapperReturnsNull_ShouldReturnFailure()
+        {
+            // Arrange
+            var createDto = TimelineItemTestData.CreateTimelineItemCreateDto();
+            var streetcode = new StreetcodeContent { Id = createDto.StreetcodeId };
+            var newEntity = TimelineItemTestData.CreateTimelineItem(id: 0);
+            var createdEntity = TimelineItemTestData.CreateTimelineItem(id: 1);
+
+            this.streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync<IStreetcodeRepository, StreetcodeContent>(streetcode);
+
+            this.mapperMock
+                .Setup(m => m.Map<global::Streetcode.DAL.Entities.Timeline.TimelineItem>(createDto))
+                .Returns(newEntity);
+
+            this.timelineRepositoryMock
+                .SetupCreateAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(createdEntity);
+
+            this.repositoryWrapperMock.SetupSaveChangesAsync(1);
+
+            this.timelineRepositoryMock
+                .SetupGetFirstOrDefaultAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(createdEntity);
+
+            this.mapperMock
+                .Setup(m => m.Map<TimelineItemDto>(createdEntity))
+                .Returns((TimelineItemDto)null);
+
+            var command = new CreateTimelineItemCommand(createDto);
+
+            // Act
+            var result = await this.handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.True(result.IsFailed);
+            Assert.Contains("map", result.Errors[0].Message, StringComparison.OrdinalIgnoreCase);
+
+            // Verify mapping was attempted
+            this.mapperMock.Verify(
+                m => m.Map<TimelineItemDto>(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()),
+                Times.Once);
+        }
     }
 }
