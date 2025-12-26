@@ -1,4 +1,4 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.GetBaseAudio
+namespace Streetcode.XUnitTest.MediatR.Media.Audio.GetBaseAudio
 {
     using System.Linq.Expressions;
     using FluentAssertions;
@@ -100,8 +100,8 @@
             if (entity != null)
             {
                 this.mockBlob
-                    .Setup(b => b.FindFileInStorageAsMemoryStream(entity.BlobName!))
-                    .Returns(stream!);
+                    .Setup(b => b.FindFileInStorageAsMemoryStreamAsync(entity.BlobName!))
+                    .ReturnsAsync(stream!);
             }
         }
 
@@ -114,7 +114,7 @@
             Times.Once);
 
             this.mockBlob.Verify(
-                b => b.FindFileInStorageAsMemoryStream(blobName!),
+                b => b.FindFileInStorageAsMemoryStreamAsync(blobName!),
                 Times.Once);
         }
 

@@ -1,4 +1,4 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Media.Art
+namespace Streetcode.XUnitTest.MediatR.Media.Art
 {
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
@@ -71,7 +71,7 @@
             this.verifyMockersHandler.VerifyWrapperMock();
 
             this.blobServiceMock.Verify(
-                b => b.FindFileInStorageAsBase64("test.png"),
+                b => b.FindFileInStorageAsBase64Async("test.png"),
                 Times.Once);
         }
 
@@ -90,7 +90,7 @@
             this.verifyMockersHandler.VerifyWrapperMock();
 
             this.blobServiceMock.Verify(
-                b => b.FindFileInStorageAsBase64("test.png"),
+                b => b.FindFileInStorageAsBase64Async("test.png"),
                 Times.Once);
         }
 
