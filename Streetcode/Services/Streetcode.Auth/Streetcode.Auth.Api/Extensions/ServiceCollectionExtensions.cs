@@ -11,6 +11,7 @@ using Streetcode.Auth.Infrastructure.Repositories.Realizations.RefreshTokens;
 using Streetcode.Auth.Infrastructure.Services.Token;
 using Streetcode.BuildingBlocks.Interfaces.Logging;
 using Streetcode.BuildingBlocks.Services.Logging;
+using Streetcode.Messaging.Extensions;
 
 namespace Streetcode.Auth.Api.Extensions
 {
@@ -77,6 +78,12 @@ namespace Streetcode.Auth.Api.Extensions
                     .ReadFrom.Configuration(builder.Configuration);
             });
 
+            return services;
+        }
+
+        public static IServiceCollection AddMessaging(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddMessageBroker(configuration);
             return services;
         }
     }
