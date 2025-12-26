@@ -2,7 +2,6 @@
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Team;
-using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Entities.Team;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
@@ -12,13 +11,11 @@ namespace Streetcode.BLL.MediatR.Team.Create
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repository;
-        private readonly ILoggerService _logger;
 
-        public CreatePositionHandler(IMapper mapper, IRepositoryWrapper repository, ILoggerService logger)
+        public CreatePositionHandler(IMapper mapper, IRepositoryWrapper repository)
         {
             _mapper = mapper;
             _repository = repository;
-            _logger = logger;
         }
 
         public async Task<Result<PositionDto>> Handle(CreatePositionQuery request, CancellationToken cancellationToken)

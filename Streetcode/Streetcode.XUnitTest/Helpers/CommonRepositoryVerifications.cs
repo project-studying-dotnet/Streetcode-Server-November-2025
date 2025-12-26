@@ -70,6 +70,25 @@ namespace Streetcode.XUnitTest.Helpers
         }
 
         /// <summary>
+        /// Verifies how many times <c>CreateAsync</c> was called.
+        /// </summary>
+        /// <typeparam name="TRepo">Repository type.</typeparam>
+        /// <typeparam name="TEntity">Entity type.</typeparam>
+        /// <param name="repositoryMock">Repository mock.</param>
+        /// <param name="times">Expected call count.</param>
+        public static void VerifyCreateAsyncCalledTimes<TRepo, TEntity>(
+            this Mock<TRepo> repositoryMock,
+            int times)
+            where TEntity : class
+            where TRepo : class, IRepositoryBase<TEntity>
+        {
+            repositoryMock.Verify(
+                r => r.CreateAsync(It.IsAny<TEntity>()),
+                Times.Exactly(times),
+                $"CreateAsync method should be called exactly once for {typeof(TEntity).Name}");
+        }
+
+        /// <summary>
         /// Verifies that <c>CreateAsync</c> was called exactly once on the mocked repository.
         /// </summary>
         /// <typeparam name="TRepo">The repository interface type inheriting <see cref="IRepositoryBase{TEntity}"/>.</typeparam>
@@ -163,6 +182,53 @@ namespace Streetcode.XUnitTest.Helpers
                 r => r.Delete(It.IsAny<TEntity>()),
                 Times.Never(),
                 $"Delete method should not be called for {typeof(TEntity).Name}");
+        }
+
+        /// <summary>
+        /// Verifies that <c>DeleteRange</c> was called once.
+        /// </summary>
+        /// <typeparam name="TRepo">Repository type.</typeparam>
+        /// <typeparam name="TEntity">Entity type.</typeparam>
+        /// <param name="repositoryMock">Repository mock.</param>
+        public static void VerifyDeleteRangeCalledOnce<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
+            where TEntity : class
+            where TRepo : class, IRepositoryBase<TEntity>
+        {
+            repositoryMock.Verify(
+                r => r.DeleteRange(It.IsAny<IEnumerable<TEntity>>()),
+                Times.Once(),
+                $"Delete range method should be called exactly once for {typeof(TEntity).Name}");
+        }
+
+        /// <summary>
+        /// Verifies that <c>DeleteRange</c> was never called.
+        /// </summary>
+        /// <typeparam name="TRepo">Repository type.</typeparam>
+        /// <typeparam name="TEntity">Entity type.</typeparam>
+        /// <param name="repositoryMock">Repository mock.</param>
+        public static void VerifyDeleteRangeCalledNever<TRepo, TEntity>(this Mock<TRepo> repositoryMock)
+            where TEntity : class
+            where TRepo : class, IRepositoryBase<TEntity>
+        {
+            repositoryMock.Verify(
+                r => r.DeleteRange(It.IsAny<IEnumerable<TEntity>>()),
+                Times.Never(),
+                $"Delete range method should be called never for {typeof(TEntity).Name}");
+        }
+
+        /// <summary>
+        /// Verifies how many times <c>SaveChangesAsync</c> was called.
+        /// </summary>
+        /// <param name="repositoryWrapperMock">Repository wrapper mock.</param>
+        /// <param name="times">Expected call count.</param>
+        public static void VerifySaveChangesAsyncCalledTimes(
+            this Mock<IRepositoryWrapper> repositoryWrapperMock,
+            int times)
+        {
+            repositoryWrapperMock.Verify(
+                rw => rw.SaveChangesAsync(),
+                Times.Exactly(times),
+                $"SaveChangesAsync should be called exactly {times} times");
         }
 
         /// <summary>
