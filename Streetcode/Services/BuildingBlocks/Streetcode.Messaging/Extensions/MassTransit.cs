@@ -2,6 +2,8 @@
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Streetcode.Messaging.Interfaces.EventPublish;
+using Streetcode.Messaging.Services.EventPublish.MassTransit;
 
 namespace Streetcode.Messaging.Extensions
 {
@@ -26,6 +28,8 @@ namespace Streetcode.Messaging.Extensions
                     configurator.ConfigureEndpoints(context);
                 });
             });
+
+            services.AddScoped<IEventPublisher, MassTransitEventPublisher>();
 
             return services;
         }
