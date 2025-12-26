@@ -1,7 +1,7 @@
 namespace Streetcode.XUnitTest.MediatR.Timeline.HistoricalContext.Fixtures
 {
-    using Streetcode.BLL.DTO.Timeline;
-    using Streetcode.DAL.Entities.Timeline;
+    using global::Streetcode.BLL.DTO.Timeline;
+    using global::Streetcode.DAL.Entities.Timeline;
 
     /// <summary>
     /// Provides factory methods for creating test instances of <see cref="HistoricalContext"/>,
