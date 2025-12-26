@@ -43,6 +43,17 @@ RUN dotnet publish Streetcode.Auth.Api.csproj -c %BUILD_CONFIGURATION% -o C:\app
 # -----------------------------
 FROM base AS final
 WORKDIR C:\app
+
+# Create non-admin user
+RUN net user appuser /add
+
+# Copy published output
 COPY --from=publish C:\app\publish .
+
+# Grant permissions if app writes files (safe default)
+RUN icacls C:\app /grant appuser:(OI)(CI)F
+
+# Switch to non-admin user
+USER appuser
 
 ENTRYPOINT ["dotnet", "Streetcode.Auth.Api.dll"]
