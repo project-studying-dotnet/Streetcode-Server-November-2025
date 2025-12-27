@@ -313,6 +313,42 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to delete comment with id {0}..
+        /// </summary>
+        internal static string CommentDeletionFailed {
+            get {
+                return ResourceManager.GetString("CommentDeletionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id коментаря має бути &gt; 0.
+        /// </summary>
+        internal static string CommentIdMustBePositive {
+            get {
+                return ResourceManager.GetString("CommentIdMustBePositive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment with id {0} was not found..
+        /// </summary>
+        internal static string CommentNotFoundById {
+            get {
+                return ResourceManager.GetString("CommentNotFoundById", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не вдалося оновити коментар з Id {0}.
+        /// </summary>
+        internal static string CommentUpdateFailed {
+            get {
+                return ResourceManager.GetString("CommentUpdateFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Дані координат не можуть бути порожніми.
         /// </summary>
         internal static string CoordinateCantBeEmpty {

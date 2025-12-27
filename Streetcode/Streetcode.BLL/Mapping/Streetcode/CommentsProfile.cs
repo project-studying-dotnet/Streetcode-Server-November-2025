@@ -14,5 +14,6 @@ public class CommentsProfile : Profile
                 opt => opt.MapFrom(src => src.Replies));
 
         CreateMap<CreateCommentDto, Comment>();
+        CreateMap<UpdateCommentDto, Comment>();
     }
 }
