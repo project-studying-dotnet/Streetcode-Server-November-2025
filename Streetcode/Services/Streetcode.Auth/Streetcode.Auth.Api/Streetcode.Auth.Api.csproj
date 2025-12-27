@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\Streetcode.BuildingBlocks\Streetcode.BuildingBlocks.csproj" />
     <ProjectReference Include="..\Streetcode.Auth.Application\Streetcode.Auth.Application.csproj" />
     <ProjectReference Include="..\Streetcode.Auth.Infrastructure\Streetcode.Auth.Infrastructure.csproj" />
   </ItemGroup>
