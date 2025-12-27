@@ -1,50 +1,59 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
+# -----------------------------
+# Base runtime image (Windows)
+# -----------------------------
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-ltsc2022 AS base
+WORKDIR C:\app
 EXPOSE 8080
 EXPOSE 8081
 
-# Run as non-root (APP_UID must be provided by docker-compose/VS, otherwise fallback to built-in app user)
-ARG APP_UID=64198
-RUN adduser --disabled-password --gecos "" --uid $APP_UID appuser && chown -R appuser /app
-USER appuser
-
-
-# This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# -----------------------------
+# Build stage (Windows SDK)
+# -----------------------------
+FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-ltsc2022 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
+WORKDIR C:\src
 
-# Copy csproj files first for better layer caching
-COPY ["Services/Streetcode.Auth/Streetcode.Auth.Api/Streetcode.Auth.Api.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Api/"]
-COPY ["Services/Streetcode.Auth/Streetcode.Auth.Application/Streetcode.Auth.Application.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Application/"]
-COPY ["Services/Streetcode.Auth/Streetcode.Auth.Common/Streetcode.Auth.Common.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Common/"]
-COPY ["Services/Streetcode.Auth/Streetcode.Auth.Domain/Streetcode.Auth.Domain.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Domain/"]
-COPY ["Services/Streetcode.Auth/Streetcode.Auth.Infrastructure/Streetcode.Auth.Infrastructure.csproj", "Services/Streetcode.Auth/Streetcode.Auth.Infrastructure/"]
-COPY ["Services/BuildingBlocks/Streetcode.BuildingBlocks/Streetcode.BuildingBlocks.csproj", "Services/BuildingBlocks/Streetcode.BuildingBlocks/"]
-COPY ["Services/BuildingBlocks/Streetcode.Messaging/Streetcode.Messaging.csproj", "Services/BuildingBlocks/Streetcode.Messaging/"]
+# Copy csproj files first for caching
+COPY Services\Streetcode.Auth\Streetcode.Auth.Api\Streetcode.Auth.Api.csproj Services\Streetcode.Auth\Streetcode.Auth.Api\
+COPY Services\Streetcode.Auth\Streetcode.Auth.Application\Streetcode.Auth.Application.csproj Services\Streetcode.Auth\Streetcode.Auth.Application\
+COPY Services\Streetcode.Auth\Streetcode.Auth.Common\Streetcode.Auth.Common.csproj Services\Streetcode.Auth\Streetcode.Auth.Common\
+COPY Services\Streetcode.Auth\Streetcode.Auth.Domain\Streetcode.Auth.Domain.csproj Services\Streetcode.Auth\Streetcode.Auth.Domain\
+COPY Services\Streetcode.Auth\Streetcode.Auth.Infrastructure\Streetcode.Auth.Infrastructure.csproj Services\Streetcode.Auth\Streetcode.Auth.Infrastructure\
+COPY Services\BuildingBlocks\Streetcode.BuildingBlocks\Streetcode.BuildingBlocks.csproj Services\BuildingBlocks\Streetcode.BuildingBlocks\
+COPY Services\BuildingBlocks\Streetcode.Messaging\Streetcode.Messaging.csproj Services\BuildingBlocks\Streetcode.Messaging\
 
-RUN dotnet restore "Services/Streetcode.Auth/Streetcode.Auth.Api/Streetcode.Auth.Api.csproj"
+RUN dotnet restore Services\Streetcode.Auth\Streetcode.Auth.Api\Streetcode.Auth.Api.csproj
 
-# Copy only the source needed to build this service (avoid copying the whole repo)
-COPY Services/Streetcode.Auth/ Services/Streetcode.Auth/
-COPY Services/BuildingBlocks/ Services/BuildingBlocks/
+# Copy source
+COPY Services\Streetcode.Auth\ Services\Streetcode.Auth\
+COPY Services\BuildingBlocks\ Services\BuildingBlocks\
 
-WORKDIR "/src/Services/Streetcode.Auth/Streetcode.Auth.Api"
-RUN dotnet build "Streetcode.Auth.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR C:\src\Services\Streetcode.Auth\Streetcode.Auth.Api
+RUN dotnet build Streetcode.Auth.Api.csproj -c %BUILD_CONFIGURATION% -o C:\app\build
 
-# This stage is used to publish the service project to be copied to the final stage
+# -----------------------------
+# Publish stage
+# -----------------------------
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "Streetcode.Auth.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish Streetcode.Auth.Api.csproj -c %BUILD_CONFIGURATION% -o C:\app\publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+# -----------------------------
+# Final runtime image
+# -----------------------------
 FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
+WORKDIR C:\app
 
+# Create non-admin user
+RUN net user appuser /add
+
+# Copy published output
+COPY --from=publish C:\app\publish .
+
+# Grant permissions if app writes files (safe default)
+RUN icacls C:\app /grant appuser:(OI)(CI)F
+
+# Switch to non-admin user
 USER appuser
 
 ENTRYPOINT ["dotnet", "Streetcode.Auth.Api.dll"]
