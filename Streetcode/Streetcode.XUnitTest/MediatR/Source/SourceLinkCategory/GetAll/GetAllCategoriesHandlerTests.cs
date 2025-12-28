@@ -1,4 +1,4 @@
-﻿// <copyright file="GetAllCategoriesHandlerTests.cs" company="PlaceholderCompany">
+// <copyright file="GetAllCategoriesHandlerTests.cs" company="PlaceholderCompany">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
@@ -73,8 +73,8 @@ namespace Streetcode.XUnitTest.MediatR.Sources.SourceLinkCategory.GetAll
             this.mockMapper.Setup(m => m.Map<IEnumerable<SourceLinkCategoryDto>>(categories))
                 .Returns(dtos);
 
-            this.mockBlobService.Setup(b => b.FindFileInStorageAsBase64(It.IsAny<string>()))
-                .Returns(Base64String);
+            this.mockBlobService.Setup(b => b.FindFileInStorageAsBase64Async(It.IsAny<string>()))
+                .ReturnsAsync(Base64String);
 
             // Act
             var result = await this.handler.Handle(new GetAllCategoriesQuery(), CancellationToken.None);

@@ -1,4 +1,4 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.Delete
+namespace Streetcode.XUnitTest.MediatR.Media.Audio.Delete
 {
     using System.Linq.Expressions;
     using FluentAssertions;
@@ -115,7 +115,7 @@
             {
                 this.mockRepo.Setup(r => r.AudioRepository.Delete(audio));
                 this.mockRepo.Setup(r => r.SaveChangesAsync()).ReturnsAsync(saveChangesResult);
-                this.mockBlob.Setup(b => b.DeleteFileInStorage(audio.BlobName!));
+                this.mockBlob.Setup(b => b.DeleteFileInStorageAsync(audio.BlobName!));
             }
         }
 
@@ -131,7 +131,7 @@
 
             this.mockRepo.Verify(r => r.SaveChangesAsync(), Times.Once);
 
-            this.mockBlob.Verify(b => b.DeleteFileInStorage(It.IsAny<string>()), Times.Once);
+            this.mockBlob.Verify(b => b.DeleteFileInStorageAsync(It.IsAny<string>()), Times.Once);
         }
 
         private void VerifyLoggerErrorCalledOnce(int targetAudioId)

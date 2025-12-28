@@ -1,0 +1,57 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/auth/{everything}",
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5286
+        }
+      ],
+      "SwaggerKey": "auth-http",
+      "Priority": 1
+    },
+    {
+      "UpstreamPathTemplate": "/api/{everything}",
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5000
+        }
+      ],
+      "SwaggerKey": "streetcode-http",
+      "Priority": 0
+    }
+  ],
+
+  "SwaggerEndPoints": [
+    {
+      "Key": "streetcode-http",
+      "Config": [
+        {
+          "Name": "Streetcode API",
+          "Version": "v1",
+          "Url": "http://localhost:5000/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "auth-http",
+      "Config": [
+        {
+          "Name": "Auth API",
+          "Version": "v1",
+          "Url": "http://localhost:5286/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5007"
+  }
+}

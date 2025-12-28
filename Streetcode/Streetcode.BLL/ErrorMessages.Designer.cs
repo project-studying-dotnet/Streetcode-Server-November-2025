@@ -19,7 +19,7 @@ namespace Streetcode.BLL {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class ErrorMessages {
@@ -223,6 +223,15 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Blob with name &apos;{0}&apos; was not found.
+        /// </summary>
+        internal static string BlobNotFoundByName {
+            get {
+                return ResourceManager.GetString("BlobNotFoundByName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot create new related word for a term!.
         /// </summary>
         internal static string CannotCreateRelatedWordForTerm {
@@ -345,6 +354,11 @@ namespace Streetcode.BLL {
         internal static string CommentUpdateFailed {
             get {
                 return ResourceManager.GetString("CommentUpdateFailed", resourceCulture);
+        ///   Looks up a localized string similar to No comments found by StreetcodeId.
+        /// </summary>
+        internal static string CommentsNotFoundByStreetcodeId {
+            get {
+                return ResourceManager.GetString("CommentsNotFoundByStreetcodeId", resourceCulture);
             }
         }
         
@@ -840,6 +854,15 @@ namespace Streetcode.BLL {
         internal static string MergeToponymDataRequired {
             get {
                 return ResourceManager.GetString("MergeToponymDataRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MIME type cannot be null or empty.
+        /// </summary>
+        internal static string MimeRequired {
+            get {
+                return ResourceManager.GetString("MimeRequired", resourceCulture);
             }
         }
         
@@ -2289,6 +2312,15 @@ namespace Streetcode.BLL {
         internal static string TransactionLinkNotFoundByStreetcodeId {
             get {
                 return ResourceManager.GetString("TransactionLinkNotFoundByStreetcodeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported file extension: {0}.
+        /// </summary>
+        internal static string UnsupportedFileExtension {
+            get {
+                return ResourceManager.GetString("UnsupportedFileExtension", resourceCulture);
             }
         }
         

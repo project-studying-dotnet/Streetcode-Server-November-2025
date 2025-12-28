@@ -1,4 +1,4 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.GetByStreetcodeId
+namespace Streetcode.XUnitTest.MediatR.Media.Audio.GetByStreetcodeId
 {
     using AutoMapper;
     using FluentAssertions;
@@ -148,8 +148,8 @@
                 this.mockMapper.Setup(m => m.Map<AudioDto>(content.Audio))
                     .Returns(audioDTO);
 
-                this.mockBlob.Setup(b => b.FindFileInStorageAsBase64(audioDTO.BlobName))
-                    .Returns(audioDTO.Base64);
+                this.mockBlob.Setup(b => b.FindFileInStorageAsBase64Async(audioDTO.BlobName))
+                    .ReturnsAsync(audioDTO.Base64);
             }
         }
 
@@ -166,7 +166,7 @@
                 Times.Once);
 
             this.mockBlob.Verify(
-                b => b.FindFileInStorageAsBase64(It.IsAny<string>()),
+                b => b.FindFileInStorageAsBase64Async(It.IsAny<string>()),
                 Times.Once);
         }
 

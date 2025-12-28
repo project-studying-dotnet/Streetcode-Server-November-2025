@@ -2,10 +2,12 @@ using System.Reflection;
 using System.Text;
 using FluentValidation;
 using Hangfire;
+using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -54,7 +56,6 @@ public static class ServiceCollectionExtensions
         services.AddValidatorsFromAssembly(Assembly.Load("Streetcode.BLL"));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(BLL.MediatR.ValidationBehavior<,>));
 
-        services.AddScoped<IBlobService, BlobService>();
         services.AddScoped<ILoggerService, LoggerService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<IPaymentService, PaymentService>();
@@ -76,6 +77,7 @@ public static class ServiceCollectionExtensions
             {
                 opt.MigrationsAssembly(typeof(StreetcodeDbContext).Assembly.GetName().Name);
                 opt.MigrationsHistoryTable("__EFMigrationsHistory", schema: "entity_framework");
+                opt.CommandTimeout(180);
             });
         });
 
@@ -131,12 +133,26 @@ public static class ServiceCollectionExtensions
                 refreshTokenExpirationMinutes: int.TryParse(jwtSettings["RefreshTokenExpirationMinutes"], out var refreshExpiration) ? refreshExpiration : 600);
         });
 
+        services.AddBlobStorageServices(configuration);
+
         services.AddHangfire(config =>
         {
-            config.UseSqlServerStorage(connectionString);
+            config.UseSqlServerStorage(
+                connectionString,
+                new SqlServerStorageOptions()
+            {
+                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                QueuePollInterval = TimeSpan.FromSeconds(15),
+                UseRecommendedIsolationLevel = true,
+                DisableGlobalLocks = true
+            });
         });
 
-        services.AddHangfireServer();
+        services.AddHangfireServer(options =>
+        {
+            options.WorkerCount = 5;
+        });
 
         var corsConfig = configuration.GetSection("CORS").Get<CorsConfiguration>();
         services.AddCors(opt =>
@@ -189,6 +205,35 @@ public static class ServiceCollectionExtensions
         else
         {
             services.AddSingleton<ICacheService, NoCacheService>();
+        }
+
+        return services;
+    }
+
+    public static IServiceCollection AddBlobStorageServices(
+        this IServiceCollection services,
+        IConfiguration configuration)
+    {
+        services.Configure<BlobEnvironmentVariables>(
+        configuration.GetSection("Blob"));
+
+        var blobConfig = configuration
+            .GetSection("Blob")
+            .Get<BlobEnvironmentVariables>()
+            ?? new BlobEnvironmentVariables();
+
+        if (blobConfig.BlobStorageType == BlobStorageType.Azure)
+        {
+            Console.WriteLine("[BLOB] Registering AzureBlobService");
+
+            services.AddScoped<IBlobService, AzureBlobService>();
+        }
+        else
+        {
+            Console.WriteLine("[BLOB] Registering LocalBlobService");
+            Directory.CreateDirectory(blobConfig.BlobStorePath);
+
+            services.AddScoped<IBlobService, LocalBlobService>();
         }
 
         return services;
