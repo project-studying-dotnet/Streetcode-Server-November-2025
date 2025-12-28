@@ -354,6 +354,9 @@ namespace Streetcode.BLL {
         internal static string CommentUpdateFailed {
             get {
                 return ResourceManager.GetString("CommentUpdateFailed", resourceCulture);
+            }
+        }
+        
         ///   Looks up a localized string similar to No comments found by StreetcodeId.
         /// </summary>
         internal static string CommentsNotFoundByStreetcodeId {
