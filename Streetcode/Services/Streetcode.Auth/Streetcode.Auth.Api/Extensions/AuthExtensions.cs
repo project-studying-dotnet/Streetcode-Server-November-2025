@@ -48,6 +48,20 @@ namespace Streetcode.Auth.Api.Extensions
 
             return services;
         }
+        
+        public static void AppendTokensToCookies(this HttpContext context, string accessToken, string refreshToken)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddDays(7)
+            };
+
+            context.Response.Cookies.Append("accessToken", accessToken, cookieOptions);
+            context.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+        }
 
         public static IServiceCollection AddSwaggerWithJwt(this IServiceCollection services)
         {
