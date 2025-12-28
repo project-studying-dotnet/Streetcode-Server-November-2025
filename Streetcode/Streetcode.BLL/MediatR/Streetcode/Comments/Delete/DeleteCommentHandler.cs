@@ -24,11 +24,8 @@ namespace Streetcode.BLL.MediatR.Streetcode.Comments.Delete
 
             if (comment == null)
             {
-                var errorMsg = string.Format(
-                    ErrorMessages.CommentNotFoundById,
-                    request.CommentId);
+                var errorMsg = string.Format(ErrorMessages.CommentNotFoundById, request.CommentId);
                 _logger.LogError(request, errorMsg);
-
                 return Result.Fail(errorMsg);
             }
 
@@ -46,21 +43,12 @@ namespace Streetcode.BLL.MediatR.Streetcode.Comments.Delete
                 _repositoryWrapper.CommentsRepository.Delete(comment);
             }
 
+            await _repositoryWrapper.SaveChangesAsync();
+
             if (parentId.HasValue)
             {
                 await CleanupParentChain(parentId.Value);
-            }
-
-            var success = await _repositoryWrapper.SaveChangesAsync() > 0;
-
-            if (!success)
-            {
-                var errorMsg = string.Format(
-                    ErrorMessages.CommentDeletionFailed,
-                    request.CommentId);
-                _logger.LogError(request, errorMsg);
-
-                return Result.Fail(errorMsg);
+                await _repositoryWrapper.SaveChangesAsync();
             }
 
             return Result.Ok(Unit.Value);
