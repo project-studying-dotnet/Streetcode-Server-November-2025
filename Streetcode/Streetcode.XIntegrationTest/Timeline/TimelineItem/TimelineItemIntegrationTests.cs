@@ -872,6 +872,186 @@ namespace Streetcode.XIntegrationTest.Timeline.TimelineItem
         }
 
         [Fact]
+        public async Task DeleteTimelineItem_WithNonExistentId_ReturnsNotFound()
+        {
+            // Arrange
+            var nonExistentId = 999;
+
+            // Act
+            var response = await this.DeleteAsync($"{BaseUrl}/{nonExistentId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteTimelineItem_WithZeroId_ReturnsBadRequest()
+        {
+            // Act
+            var response = await this.DeleteAsync($"{BaseUrl}/0");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteTimelineItem_WithNegativeId_ReturnsBadRequest()
+        {
+            // Act
+            var response = await this.DeleteAsync($"{BaseUrl}/-1");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteTimelineItem_WithHistoricalContexts_DeletesItemAndRelationships()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var timelineItemId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+            var context1 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Context 1");
+            var context2 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(2, "Context 2");
+            
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(timelineItemId, streetcodeId, "Item with Contexts");
+            timelineItem.HistoricalContextTimelines = new List<HistoricalContextTimeline>
+            {
+                new HistoricalContextTimeline { TimelineId = timelineItemId, HistoricalContextId = 1 },
+                new HistoricalContextTimeline { TimelineId = timelineItemId, HistoricalContextId = 2 },
+            };
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.Add(context1);
+                db.HistoricalContexts.Add(context2);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            // Act
+            var response = await this.DeleteAsync($"{BaseUrl}/{timelineItemId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            // Verify timeline item is deleted
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == timelineItemId));
+            Assert.Null(dbItem);
+
+            // Verify relationships are deleted
+            var relationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == timelineItemId)
+                    .ToList());
+            Assert.Empty(relationships);
+
+            // Verify historical contexts still exist (not cascade deleted)
+            var contexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.ToList());
+            Assert.Equal(2, contexts.Count);
+        }
+
+        [Fact]
+        public async Task DeleteTimelineItem_MultipleItems_DeletesOnlySpecifiedItem()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+            var item1 = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcodeId, "Item 1");
+            var item2 = TimelineIntegrationTestData.CreateSimpleTimelineItem(2, streetcodeId, "Item 2");
+            var item3 = TimelineIntegrationTestData.CreateSimpleTimelineItem(3, streetcodeId, "Item 3");
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.TimelineItems.Add(item1);
+                db.TimelineItems.Add(item2);
+                db.TimelineItems.Add(item3);
+            });
+
+            // Act
+            var response = await this.DeleteAsync($"{BaseUrl}/2");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            // Verify only item 2 is deleted
+            var remainingItems = this.ExecuteWithContext(db =>
+                db.TimelineItems.Select(t => t.Id).OrderBy(id => id).ToList());
+            
+            Assert.Equal(2, remainingItems.Count);
+            Assert.Contains(1, remainingItems);
+            Assert.Contains(3, remainingItems);
+            Assert.DoesNotContain(2, remainingItems);
+        }
+
+        [Fact]
+        public async Task DeleteTimelineItem_DeleteTwice_SecondAttemptReturnsNotFound()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var timelineItemId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(timelineItemId, streetcodeId, "Item to Delete");
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            // Act - First deletion
+            var firstResponse = await this.DeleteAsync($"{BaseUrl}/{timelineItemId}");
+            Assert.Equal(HttpStatusCode.OK, firstResponse.StatusCode);
+
+            // Act - Second deletion attempt
+            var secondResponse = await this.DeleteAsync($"{BaseUrl}/{timelineItemId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, secondResponse.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteTimelineItem_DoesNotAffectStreetcode()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var timelineItemId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(timelineItemId, streetcodeId, "Item to Delete");
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            // Act
+            var response = await this.DeleteAsync($"{BaseUrl}/{timelineItemId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            // Verify streetcode still exists
+            var dbStreetcode = this.ExecuteWithContext(db =>
+                db.Streetcodes.FirstOrDefault(s => s.Id == streetcodeId));
+            
+            Assert.NotNull(dbStreetcode);
+        }
+
+        [Fact]
+        public async Task DeleteTimelineItem_WithMaxIntId_ReturnsNotFound()
+        {
+            // Act
+            var response = await this.DeleteAsync($"{BaseUrl}/{int.MaxValue}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
         public async Task GetTimelineItemsByStreetcodeId_WithNonExistentStreetcode_ReturnsNotFound()
         {
             // Arrange
