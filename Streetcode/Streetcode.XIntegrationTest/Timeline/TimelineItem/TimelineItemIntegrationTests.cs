@@ -250,6 +250,484 @@ namespace Streetcode.XIntegrationTest.Timeline.TimelineItem
         }
 
         [Fact]
+        public async Task CreateTimelineItem_WithEmptyTitle_ReturnsBadRequest()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = string.Empty,
+                Description = "Valid description",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithTitleTooLong_ReturnsBadRequest()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = new string('A', 29), // 29 characters, exceeds max of 28
+                Description = "Valid description",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithMaxLengthTitle_CreatesSuccessfully()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = new string('A', 28), // Exactly 28 characters (max allowed)
+                Description = "Valid description",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(28, result.Title.Length);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithEmptyDescription_ReturnsBadRequest()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Valid Title",
+                Description = string.Empty,
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithDescriptionTooLong_ReturnsBadRequest()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Valid Title",
+                Description = new string('B', 401), // 401 characters, exceeds max of 400
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithMaxLengthDescription_CreatesSuccessfully()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Valid Title",
+                Description = new string('B', 400), // Exactly 400 characters (max allowed)
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(400, result.Description?.Length);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithMinValueDate_ReturnsBadRequest()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                Date = DateTime.MinValue,
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithInvalidDateViewPattern_ReturnsBadRequest()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = (DateViewPattern)999, // Invalid enum value
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithZeroStreetcodeId_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = 0,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithNegativeStreetcodeId_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = -1,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithInvalidHistoricalContextId_ReturnsBadRequest()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int> { 0, -1 }, // Invalid IDs
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithNonExistentHistoricalContextIds_ReturnsBadRequest()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Valid Title",
+                Description = "Valid description",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int> { 999, 888 }, // Non-existent IDs
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithAllDateViewPatterns_CreatesSuccessfully()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+            });
+
+            // Test Year pattern
+            var yearDto = new CreateTimelineItemDto
+            {
+                Title = "Year Event",
+                Description = "Year pattern description",
+                Date = new DateTime(2024, 1, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Test MonthYear pattern
+            var monthYearDto = new CreateTimelineItemDto
+            {
+                Title = "Month Year Event",
+                Description = "MonthYear pattern description",
+                Date = new DateTime(2024, 6, 1),
+                DateViewPattern = DateViewPattern.MonthYear,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Test DateMonthYear pattern
+            var dateMonthYearDto = new CreateTimelineItemDto
+            {
+                Title = "Full Date Event",
+                Description = "DateMonthYear pattern description",
+                Date = new DateTime(2024, 12, 25),
+                DateViewPattern = DateViewPattern.DateMonthYear,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act & Assert - Year
+            var (yearResponse, yearResult) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, yearDto);
+            Assert.Equal(HttpStatusCode.OK, yearResponse.StatusCode);
+            Assert.NotNull(yearResult);
+            Assert.Equal(DateViewPattern.Year, yearResult.DateViewPattern);
+
+            // Act & Assert - MonthYear
+            var (monthYearResponse, monthYearResult) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, monthYearDto);
+            Assert.Equal(HttpStatusCode.OK, monthYearResponse.StatusCode);
+            Assert.NotNull(monthYearResult);
+            Assert.Equal(DateViewPattern.MonthYear, monthYearResult.DateViewPattern);
+
+            // Act & Assert - DateMonthYear
+            var (dateMonthYearResponse, dateMonthYearResult) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, dateMonthYearDto);
+            Assert.Equal(HttpStatusCode.OK, dateMonthYearResponse.StatusCode);
+            Assert.NotNull(dateMonthYearResult);
+            Assert.Equal(DateViewPattern.DateMonthYear, dateMonthYearResult.DateViewPattern);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithMultipleValidHistoricalContexts_AssociatesAllContexts()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+            var context1 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Context 1");
+            var context2 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(2, "Context 2");
+            var context3 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(3, "Context 3");
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.Add(context1);
+                db.HistoricalContexts.Add(context2);
+                db.HistoricalContexts.Add(context3);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Multi-Context Event",
+                Description = "Event with multiple contexts",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int> { 1, 2, 3 },
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.NotNull(result.HistoricalContexts);
+            Assert.Equal(3, result.HistoricalContexts.Count());
+
+            // Verify in database
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems
+                    .Include(t => t.HistoricalContextTimelines)
+                    .FirstOrDefault(t => t.Title == "Multi-Context Event"));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(3, dbItem.HistoricalContextTimelines.Count);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithMixedValidAndInvalidContextIds_ReturnsBadRequest()
+        {
+            // Arrange
+            var streetcodeId = 1;
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode(streetcodeId);
+            var context1 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Context 1");
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.Add(context1);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Mixed Context Event",
+                Description = "Event with mixed context IDs",
+                Date = new DateTime(2024, 1, 15),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcodeId,
+                HistoricalContextIds = new List<int> { 1, 999 }, // 1 exists, 999 doesn't
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
         public async Task GetAllTimelineItems_ReturnsAllItems()
         {
             // Arrange
