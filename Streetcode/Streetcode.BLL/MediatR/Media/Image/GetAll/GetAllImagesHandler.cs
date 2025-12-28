@@ -1,7 +1,6 @@
 using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
 using Streetcode.BLL.DTO.Media.Images;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Interfaces.Logging;
@@ -39,7 +38,7 @@ public class GetAllImagesHandler : IRequestHandler<GetAllImagesQuery, Result<IEn
 
         foreach (var image in imageDtos)
         {
-            image.Base64 = _blobService.FindFileInStorageAsBase64(image.BlobName);
+            image.Base64 = await _blobService.FindFileInStorageAsBase64Async(image.BlobName);
         }
 
         return Result.Ok(imageDtos);

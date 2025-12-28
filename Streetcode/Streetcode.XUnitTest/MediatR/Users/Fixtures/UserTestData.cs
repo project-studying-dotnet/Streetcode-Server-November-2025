@@ -34,6 +34,25 @@ namespace Streetcode.XUnitTest.MediatR.Users.Fixtures
         }
 
         /// <summary>
+        /// Creates a default <see cref="UserLoginDto"/> instance with predefined test credentials.
+        /// </summary>
+        /// <param name="email">The email address for the user. Defaults to "john.doe@gmail.com".</param>
+        /// <param name="password">The password for the user. Defaults to "Password123@".</param>
+        /// <returns>
+        /// A <see cref="UserLoginDto"/> instance populated with the specified or default credentials.
+        /// </returns>
+        public static UserLoginDto CreateUserLoginDto(
+            string email = "test@email.com",
+            string password = "Password123@")
+        {
+            return new UserLoginDto
+            {
+                Email = email,
+                Password = password,
+            };
+        }
+
+        /// <summary>
         /// Creates a single <see cref="RegisterUserDto"/> instance with predefined values.
         /// </summary>
         /// <param name="userName">The username for registration.</param>

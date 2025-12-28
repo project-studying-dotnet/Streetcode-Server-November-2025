@@ -653,6 +653,51 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.ToTable("streetcode_source_link_categories", "sources");
                 });
 
+            modelBuilder.Entity("Streetcode.DAL.Entities.Streetcode.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("ParentCommentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StreetcodeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentCommentId");
+
+                    b.HasIndex("StreetcodeId");
+
+                    b.ToTable("comments", "streetcode");
+                });
+
             modelBuilder.Entity("Streetcode.DAL.Entities.Streetcode.RelatedFigure", b =>
                 {
                     b.Property<int>("ObserverId")
@@ -1045,16 +1090,16 @@ namespace Streetcode.DAL.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(600)
-                        .HasColumnType("nvarchar(600)");
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
 
                     b.Property<int>("StreetcodeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(28)
+                        .HasColumnType("nvarchar(28)");
 
                     b.HasKey("Id");
 
@@ -1532,6 +1577,24 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.Navigation("Streetcode");
                 });
 
+            modelBuilder.Entity("Streetcode.DAL.Entities.Streetcode.Comment", b =>
+                {
+                    b.HasOne("Streetcode.DAL.Entities.Streetcode.Comment", "ParentComment")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", "Streetcode")
+                        .WithMany("Comments")
+                        .HasForeignKey("StreetcodeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParentComment");
+
+                    b.Navigation("Streetcode");
+                });
+
             modelBuilder.Entity("Streetcode.DAL.Entities.Streetcode.RelatedFigure", b =>
                 {
                     b.HasOne("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", "Observer")
@@ -1786,8 +1849,15 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.Navigation("StreetcodeCategoryContents");
                 });
 
+            modelBuilder.Entity("Streetcode.DAL.Entities.Streetcode.Comment", b =>
+                {
+                    b.Navigation("Replies");
+                });
+
             modelBuilder.Entity("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Coordinates");
 
                     b.Navigation("Facts");

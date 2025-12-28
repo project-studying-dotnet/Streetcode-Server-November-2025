@@ -100,4 +100,6 @@ public class StreetcodeContent
     public List<StreetcodeArt> StreetcodeArts { get; set; } = new ();
 
     public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; } = new();
+
+    public List<Comment> Comments { get; set; } = new();
 }

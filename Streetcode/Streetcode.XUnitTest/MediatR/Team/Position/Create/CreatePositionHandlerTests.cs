@@ -6,7 +6,6 @@
     using Moq;
     using Streetcode.BLL;
     using Streetcode.BLL.DTO.Team;
-    using Streetcode.BLL.Interfaces.Logging;
     using Streetcode.BLL.MediatR.Team.Create;
     using Streetcode.DAL.Entities.Team;
     using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -19,7 +18,6 @@
         private readonly string TestExceptionMessage = ErrorMessages.DatabaseConntectionFailed;
         private readonly Mock<IRepositoryWrapper> mockRepositoryWrapper;
         private readonly Mock<IPositionRepository> mockPositionRepository;
-        private readonly Mock<ILoggerService> mockLogger;
         private readonly Mock<IMapper> mockMapper;
         private readonly CreatePositionHandler handler;
 
@@ -27,7 +25,6 @@
         {
             this.mockRepositoryWrapper = new Mock<IRepositoryWrapper>();
             this.mockPositionRepository = new Mock<IPositionRepository>();
-            this.mockLogger = new Mock<ILoggerService>();
             this.mockMapper = new Mock<IMapper>();
 
             this.mockRepositoryWrapper
@@ -36,8 +33,7 @@
 
             this.handler = new CreatePositionHandler(
                 this.mockMapper.Object,
-                this.mockRepositoryWrapper.Object,
-                this.mockLogger.Object);
+                this.mockRepositoryWrapper.Object);
         }
 
         [Fact]

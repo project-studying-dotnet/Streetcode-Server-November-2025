@@ -83,6 +83,8 @@
             Assert.True(result.IsSuccess);
 
             Assert.Equal(createStreetcodeDto.Index, result.Value.GetProperty("Index").GetInt32());
+
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeCreatedSuccesfully();
         }
 
         [Fact]
@@ -128,42 +130,42 @@
             Assert.True(result.IsFailed);
 
             Assert.Equal(string.Format(ErrorMessages.StreetcodeWithIndexAlreadyExists, 1), result.Errors[0].Message);
+
+            this.repositoryMock.VerifySaveChangesAsyncCalledNever();
         }
 
         [Fact]
-        public async Task HandlerReturnsExceptionMessageWhenExceprionTrown()
+        public async Task Handler_ReturnsFailureResult_When_CreateAsyncFails()
         {
-            StreetcodeCreateHelper streetcodeCreateHelper = new StreetcodeCreateHelper(this.loggerMock.Object);
-
-            string json = StreetcodeTestData.CreatePersonStreetcode();
+            var streetcodeCreateHelper = new StreetcodeCreateHelper(this.loggerMock.Object);
+            var json = StreetcodeTestData.CreatePersonStreetcode();
             using var doc = JsonDocument.Parse(json);
-            JsonElement createStreetcodeDtoRaw = doc.RootElement.Clone();
+            var rawDto = doc.RootElement.Clone();
+            string streetcodeType = rawDto.GetProperty("StreetcodeType").GetString();
 
-            string streetcodeType = createStreetcodeDtoRaw.GetProperty("StreetcodeType").GetString();
+            var request = new CreateStreetcodeCommand(rawDto);
+            var createDto = streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
 
-            CreateStreetcodeCommand request = new CreateStreetcodeCommand(createStreetcodeDtoRaw);
-
-            CreateStreetcodeDto createStreetcodeDto =
-                streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
-
-            var streetcodeEntity = new StreetcodeContent
+            var entity = new StreetcodeContent
             {
                 Id = 1,
-                Index = createStreetcodeDto.Index,
-                Title = createStreetcodeDto.Title,
-                TransliterationUrl = createStreetcodeDto.TransliterationUrl,
+                Index = createDto.Index,
+                Title = createDto.Title,
+                TransliterationUrl = createDto.TransliterationUrl
             };
 
-            this.streetcodeHandlersTestsHelper.SetupMappers(createStreetcodeDto, streetcodeEntity);
+            this.streetcodeHandlersTestsHelper.SetupMappers(createDto, entity);
 
-            this.repositoryMock.Setup(r => r.StreetcodeRepository.CreateAsync(It.IsAny<StreetcodeContent>()))
+            this.repositoryMock
+                .Setup(r => r.StreetcodeRepository.CreateAsync(It.IsAny<StreetcodeContent>()))
                 .ThrowsAsync(new InvalidOperationException("Test exception"));
 
             var result = await this.handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsFailed);
+            Assert.Contains(result.Errors, e => e.Message == ErrorMessages.StreetcodeCreationFailed);
 
-            Assert.Equal(ErrorMessages.StreetcodeTestException, result.Errors[0].Message);
+           this.repositoryMock.VerifySaveChangesAsyncCalledNever();
         }
 
         [Fact]
@@ -200,6 +202,8 @@
             var result = await this.handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsSuccess);
+
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeCreatedSuccesfully();
         }
 
         [Theory]
@@ -237,6 +241,8 @@
             var result = await this.handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsSuccess);
+
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeCreatedSuccesfully();
         }
 
         [Theory]
@@ -274,6 +280,51 @@
             var result = await this.handler.Handle(request, CancellationToken.None);
 
             Assert.True(result.IsSuccess);
+
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeCreatedSuccesfully();
+        }
+
+        [Theory]
+        [MemberData(nameof(ImagesTagsTestData))]
+        public async Task Handler_ReturnsSuccess_When_TagsAndImagesProper(int?[] images, int?[] tags)
+        {
+            StreetcodeCreateHelper streetcodeCreateHelper = new StreetcodeCreateHelper(this.loggerMock.Object);
+
+            string json = StreetcodeTestData.CreatePersonStreetcode(imgIds: images, tagIds: tags);
+            using var doc = JsonDocument.Parse(json);
+            JsonElement createStreetcodeDtoRaw = doc.RootElement.Clone();
+
+            string streetcodeType = createStreetcodeDtoRaw.GetProperty("StreetcodeType").GetString();
+
+            CreateStreetcodeCommand request = new CreateStreetcodeCommand(createStreetcodeDtoRaw);
+
+            CreateStreetcodeDto createStreetcodeDto =
+                streetcodeCreateHelper.ChoseStreetcodeType(streetcodeType, request);
+
+            var streetcodeEntity = new StreetcodeContent
+            {
+                Id = 1,
+                Index = createStreetcodeDto.Index,
+                Title = createStreetcodeDto.Title,
+                TransliterationUrl = createStreetcodeDto.TransliterationUrl,
+            };
+
+            this.streetcodeHandlersTestsHelper.SetupImageRepoMocks();
+            this.streetcodeHandlersTestsHelper.SetupAudioRepoMocks();
+            this.streetcodeHandlersTestsHelper.SetupTagsRepositoryMocks();
+            this.streetcodeHandlersTestsHelper.SetupMappers(createStreetcodeDto, streetcodeEntity);
+            this.streetcodeHandlersTestsHelper.SetupCreateStreetcodeAsync(streetcodeEntity);
+            this.repositoryMock.SetupSaveChangesAsync();
+
+            var result = await this.handler.Handle(request, CancellationToken.None);
+
+            Assert.True(result.IsSuccess);
+
+            this.streetcodeHandlersTestsHelper
+                .VerifyStreetcodeCreatedSuccesfully(
+                imagesIncluded: true,
+                tagsIncluded: true,
+                times: images.Length);
         }
 
         [Theory]
@@ -316,6 +367,8 @@
 
             Assert.True(result.IsFailed);
             Assert.Equal("Audio not found", result.Errors[0].Message);
+
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeCreateFailed();
         }
 
         [Theory]
@@ -354,6 +407,8 @@
 
             Assert.True(result.IsFailed);
             Assert.Equal(errorMessage, result.Errors[0].Message);
+
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeCreateFailed();
         }
 
         [Theory]
@@ -392,6 +447,8 @@
 
             Assert.True(result.IsFailed);
             Assert.Equal(errorMessage, result.Errors[0].Message);
+
+            this.streetcodeHandlersTestsHelper.VerifyStreetcodeCreateFailed();
         }
 
         public static IList<object[]> ImagesTestData() =>
@@ -406,6 +463,13 @@
             {
             new object[] { new int?[] { 5, 10 }, $"{string.Format(ErrorMessages.StreetcodeTagNotFoundById, 5)}; {string.Format(ErrorMessages.StreetcodeTagNotFoundById, 10)}" },
             new object[] { new int?[] { 5 }, string.Format(ErrorMessages.StreetcodeTagNotFoundById, 5) },
+            };
+
+        public static IList<object[]> ImagesTagsTestData() =>
+            new List<object[]>
+            {
+            new object[] { new int?[] { 10, 15 }, new int?[] { 15, 20 } },
+            new object[] { new int?[] { 10 }, new int?[] { 15 } },
             };
 
         public static IList<object[]> NullOrEmptyArrayData()

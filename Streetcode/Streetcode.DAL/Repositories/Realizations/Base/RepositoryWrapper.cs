@@ -66,6 +66,8 @@ public class RepositoryWrapper : IRepositoryWrapper
 
     private IStreetcodeRepository _streetcodeRepository;
 
+    private ICommentsRepository _commentsRepository;
+
     private ISubtitleRepository _subtitleRepository;
 
     private IStatisticRecordRepository _statisticRecordRepository;
@@ -307,6 +309,19 @@ public class RepositoryWrapper : IRepositoryWrapper
             }
 
             return _streetcodeRepository;
+        }
+    }
+
+    public ICommentsRepository CommentsRepository
+    {
+        get
+        {
+            if (_commentsRepository is null)
+            {
+                _commentsRepository = new CommentsRepository(_streetcodeDbContext);
+            }
+
+            return _commentsRepository;
         }
     }
 

@@ -1,4 +1,5 @@
 using Streetcode.BLL.DTO.AdditionalContent.Tag;
+using Streetcode.BLL.DTO.Streetcode.Comments;
 using Streetcode.DAL.Enums;
 
 namespace Streetcode.BLL.DTO.Streetcode;
@@ -18,6 +19,7 @@ public class StreetcodeDto
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public IEnumerable<StreetcodeTagDto> Tags { get; set; }
+    public IEnumerable<CommentDto>? Comments { get; set; }
     public string Teaser { get; set; }
     public StreetcodeType StreetcodeType { get; set; }
 }

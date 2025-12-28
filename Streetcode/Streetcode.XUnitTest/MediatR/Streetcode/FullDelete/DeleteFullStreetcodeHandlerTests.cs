@@ -9,6 +9,7 @@ namespace Streetcode.XUnitTest.MediatR.FullDelete
     using Streetcode.DAL.Entities.Streetcode;
     using Streetcode.DAL.Repositories.Interfaces.Base;
     using Streetcode.DAL.Repositories.Interfaces.Streetcode;
+    using Streetcode.DAL.Repositories.Realizations.Streetcode;
     using Streetcode.XUnitTest.Helpers;
     using Streetcode.XUnitTest.MediatR.Base;
     using System.Linq.Expressions;
@@ -61,6 +62,9 @@ namespace Streetcode.XUnitTest.MediatR.FullDelete
             var result = await this.handler.Handle(new DeleteFullStreetcodeCommand(1), CancellationToken.None);
 
             Assert.True(result.IsSuccess);
+
+            streetcodeRepoMock.VerifyDeleteCalledOnce<IStreetcodeRepository, StreetcodeContent>();
+            this.streetcodeHandlersTestsHelper.VerifyDeleteSuccesful();
         }
 
         [Theory]
@@ -93,6 +97,8 @@ namespace Streetcode.XUnitTest.MediatR.FullDelete
 
             Assert.True(result.IsFailed);
             Assert.Equal(result.Errors[0].Message, string.Format(ErrorMessages.StreetcodeNotFoundByCategoryId, id));
+
+            this.repositoryMock.VerifySaveChangesAsyncCalledNever();
         }
 
         [Theory]

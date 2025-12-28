@@ -1,11 +1,11 @@
+using Ardalis.Specification;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore.Query;
 using Moq;
 using Streetcode.BLL;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.MediatR.Partners.GetById;
 using Streetcode.DAL.Entities.Partners;
-using System.Linq.Expressions;
+using Streetcode.DAL.Specifications.Partners;
 using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
@@ -32,25 +32,25 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         /// Sets up the repository mock to return the specified partner.
         /// </summary>
         /// <param name="partner">The partner to return from the repository.</param>
-        private void SetupGetSingleOrDefaultAsync(Partner partner)
+        private void SetupGetBySpecAsync(Partner partner)
         {
             this.MockRepository
-                .Setup(repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
+                .Setup(r => r.PartnersRepository.GetBySpecAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()))
                 .ReturnsAsync(partner);
         }
 
         /// <summary>
         /// Sets up the repository mock to return null.
         /// </summary>
-        private void SetupGetSingleOrDefaultAsyncToReturnNull()
+        private void SetupGetBySpecAsyncToReturnNull()
         {
             this.MockRepository
-                .Setup(repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
-                .ReturnsAsync((Partner)null);
+                .Setup(repo => repo.PartnersRepository.GetBySpecAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()))
+                .ReturnsAsync((Partner?)null);
         }
 
         /// <summary>
@@ -60,9 +60,9 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         private void SetupRepositoryToThrowException(Exception exception)
         {
             this.MockRepository
-                .Setup(repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
+                .Setup(repo => repo.PartnersRepository.GetBySpecAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()))
                 .ThrowsAsync(exception);
         }
 
@@ -78,7 +78,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var partner = PartnerTestHelpers.CreatePartnerEntity(partnerId);
             var partnerDTO = PartnerTestHelpers.CreatePartnerDTO(partnerId);
 
-            this.SetupGetSingleOrDefaultAsync(partner);
+            this.SetupGetBySpecAsync(partner);
             this.SetupMapperForPartnerDTO(partnerDTO);
 
             var query = new GetPartnerByIdQuery(partnerId);
@@ -93,9 +93,9 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             result.Value.Should().BeEquivalentTo(partnerDTO);
 
             this.MockRepository.Verify(
-                repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()),
+                repo => repo.PartnersRepository.GetBySpecAsync(
+                    It.IsAny<ISpecification<Partner>>(),
+                    It.IsAny<CancellationToken>()),
                 Times.Once);
         }
 
@@ -109,7 +109,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             // Arrange
             int partnerId = 999;
 
-            this.SetupGetSingleOrDefaultAsyncToReturnNull();
+            this.SetupGetBySpecAsyncToReturnNull();
 
             var query = new GetPartnerByIdQuery(partnerId);
 
@@ -140,7 +140,7 @@ namespace Streetcode.XUnitTest.MediatR.Partners
             var partner = PartnerTestHelpers.CreatePartnerEntity(partnerId);
             var partnerDTO = PartnerTestHelpers.CreatePartnerDTO(partnerId);
 
-            this.SetupGetSingleOrDefaultAsync(partner);
+            this.SetupGetBySpecAsync(partner);
             this.SetupMapperForSpecificPartner(partner, partnerDTO);
 
             var query = new GetPartnerByIdQuery(partnerId);
@@ -179,79 +179,43 @@ namespace Streetcode.XUnitTest.MediatR.Partners
         }
 
         /// <summary>
-        /// Verifies that the handler calls the repository with the correct partner ID.
+        /// Verifies that the specification filters partners by the correct ID when applied.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
-        public async Task Handle_CallsRepositoryWithCorrectId_WhenCalled()
+        public void Handle_FiltersByCorrectPartnerId_WhenSpecificationIsApplied()
         {
             // Arrange
             int partnerId = 42;
             var partner = PartnerTestHelpers.CreatePartnerEntity(partnerId);
-            var partnerDTO = PartnerTestHelpers.CreatePartnerDTO(partnerId);
+            var otherPartner = PartnerTestHelpers.CreatePartnerEntity(999);
 
-            Expression<Func<Partner, bool>> capturedPredicate = null;
-            this.MockRepository
-                .Setup(repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
-                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
-                    (pred, include) => capturedPredicate = pred)
-                .ReturnsAsync(partner);
-            this.SetupMapperForPartnerDTO(partnerDTO);
-
-            var query = new GetPartnerByIdQuery(partnerId);
-
-            // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
+            var spec = new PartnerByIdSpecification(partnerId);
 
             // Assert
-            result.IsSuccess.Should().BeTrue();
-            capturedPredicate.Should().NotBeNull(ErrorMessages.PredicateNotProvided);
+            spec.WhereExpressions.Should().HaveCount(1);
 
-            this.MockRepository.Verify(
-                repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()),
-                Times.Once);
+            var whereExpression = spec.WhereExpressions.First().Filter;
+
+            whereExpression.Compile()(partner).Should().BeTrue();
+            whereExpression.Compile()(otherPartner).Should().BeFalse();
         }
 
         /// <summary>
-        /// Verifies that the handler calls the repository with include expressions for related entities.
+        /// Verifies that the specification includes PartnerSourceLinks when applied.
         /// </summary>
-        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         [Fact]
-        public async Task Handle_CallsRepositoryWithInclude_WhenCalled()
+        public void Handle_IncludesPartnerSourceLinks_WhenSpecificationIsApplied()
         {
             // Arrange
-            int partnerId = 1;
-            var partner = PartnerTestHelpers.CreatePartnerEntity(partnerId);
-            var partnerDTO = PartnerTestHelpers.CreatePartnerDTO(partnerId);
-
-            Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>> capturedInclude = null;
-            this.MockRepository
-                .Setup(repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()))
-                .Callback<Expression<Func<Partner, bool>>, Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>(
-                    (pred, include) => capturedInclude = include)
-                .ReturnsAsync(partner);
-            this.SetupMapperForPartnerDTO(partnerDTO);
-
-            var query = new GetPartnerByIdQuery(partnerId);
-
-            // Act
-            var result = await this._handler.Handle(query, CancellationToken.None);
+            var spec = new PartnerByIdSpecification(1);
 
             // Assert
-            result.IsSuccess.Should().BeTrue();
-            capturedInclude.Should().NotBeNull(ErrorMessages.IncludeExpressionNotProvided);
+            spec.IncludeExpressions.Should().HaveCount(1);
 
-            this.MockRepository.Verify(
-                repo => repo.PartnersRepository.GetSingleOrDefaultAsync(
-                    It.IsAny<Expression<Func<Partner, bool>>>(),
-                    It.IsAny<Func<IQueryable<Partner>, IIncludableQueryable<Partner, object>>>()),
-                Times.Once);
+            var includeExpression = spec.IncludeExpressions.First().LambdaExpression;
+
+            includeExpression.Body.ToString()
+                .Should().Contain(nameof(Partner.PartnerSourceLinks));
         }
     }
 }

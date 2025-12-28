@@ -31,7 +31,7 @@ namespace Streetcode.BLL.Helpers
 
             if (newsDto.Image is not null)
             {
-                newsDto.Image.Base64 = blobService.FindFileInStorageAsBase64(newsDto.Image.BlobName);
+                newsDto.Image.Base64 = await blobService.FindFileInStorageAsBase64Async(newsDto.Image.BlobName);
             }
 
             return Result.Ok(newsDto);

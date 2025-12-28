@@ -31,7 +31,7 @@ namespace Streetcode.XUnitTest.MediatR.Users.Register
         public RegisterUserHandlerTests()
         {
             this.mapperMock = new Mock<IMapper>();
-            this.userManagerMock = UserManagerMockHelper.CreateMock();
+            this.userManagerMock = UsersHelper.MockUserManager<User>();
             this.loggerMock = new Mock<ILoggerService>();
             this.handler = new RegisterUserHandler(
                 this.userManagerMock.Object,

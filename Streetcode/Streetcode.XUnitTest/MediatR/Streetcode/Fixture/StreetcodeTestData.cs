@@ -7,12 +7,16 @@
             string url = "test-john-doe",
             int? audioId = 7,
             int?[] tagIds = null,
-            int?[] imgIds = null)
+            int?[] imgIds = null,
+            int?[] commentsIds = null)
         {
             string tags = string.Empty;
             tagIds ??= new int?[] { 15, 20 };
             string imgs = string.Empty;
             imgIds ??= new int?[] { 10, 15 };
+            string comments = string.Empty;
+            commentsIds ??= new int?[] { 1, 2 };
+
 
             if (tagIds.Length > 0)
             {
@@ -36,6 +40,17 @@
                 imgs = imgs.TrimEnd(',');
             }
 
+            if (commentsIds.Length > 0)
+            {
+                for (int i = 0; i < commentsIds.Length; i++)
+                {
+                    comments += $@"
+                    {{ ""Id"": {(commentsIds[i].HasValue ? commentsIds[i].Value.ToString() : "null")} }},";
+                }
+
+                comments = comments.TrimEnd(',');
+            }
+
             return $@"
             {{
               ""Index"": {index},
@@ -51,6 +66,9 @@
               ],
               ""Images"": [
                 {imgs}
+              ],
+              ""Comments"": [
+                {comments}      
               ]
             }}";
         }
@@ -68,7 +86,8 @@
               ""Date"": ""2024-12-03"",
               ""AudioId"": 7,
               ""Tags"": null,
-              ""Images"": null
+              ""Images"": null,
+              ""Comments"": null
             }}";
         }
     }

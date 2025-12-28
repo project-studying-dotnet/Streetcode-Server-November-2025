@@ -19,7 +19,7 @@
         [Fact]
         public void Should_Have_Error_When_Partner_Is_Null()
         {
-            var query = new CreatePartnerQuery(null);
+            var query = new CreatePartnerCommand(null);
             var result = _validator.TestValidate(query);
             result.ShouldHaveValidationErrorFor(x => x.newPartner);
         }
@@ -28,7 +28,7 @@
         public void Should_Have_Error_When_Child_Validator_Fails()
         {
             var invalidDto = new CreatePartnerDto { Title = string.Empty };
-            var query = new CreatePartnerQuery(invalidDto);
+            var query = new CreatePartnerCommand(invalidDto);
 
             var result = _validator.TestValidate(query);
 
@@ -45,7 +45,7 @@
                 LogoId = 1,
                 Streetcodes = new List<StreetcodeShortDto> { new StreetcodeShortDto { Id = 1 } },
             };
-            var query = new CreatePartnerQuery(validDto);
+            var query = new CreatePartnerCommand(validDto);
 
             var result = _validator.TestValidate(query);
 

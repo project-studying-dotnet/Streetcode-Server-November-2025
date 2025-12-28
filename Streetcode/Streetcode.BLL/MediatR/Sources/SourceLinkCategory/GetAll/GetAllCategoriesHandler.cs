@@ -25,7 +25,7 @@ namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.GetAll
             _logger = logger;
         }
 
-        public async Task<Result<IEnumerable<SourceLinkCategoryDto>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationtoken)
+        public async Task<Result<IEnumerable<SourceLinkCategoryDto>>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
         {
             var allCategories = await _repositoryWrapper.SourceCategoryRepository.GetAllAsync(
                 include: cat => cat.Include(img => img.Image) !);
@@ -40,7 +40,7 @@ namespace Streetcode.BLL.MediatR.Sources.SourceLinkCategory.GetAll
 
             foreach (var dto in dtos)
             {
-                dto.Image.Base64 = _blobService.FindFileInStorageAsBase64(dto.Image.BlobName);
+                dto.Image.Base64 = await _blobService.FindFileInStorageAsBase64Async(dto.Image.BlobName);
             }
 
             return Result.Ok(dtos);
