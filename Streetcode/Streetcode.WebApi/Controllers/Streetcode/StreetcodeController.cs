@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.AdditionalContent.Filter;
 using Streetcode.BLL.DTO.Streetcode;
@@ -15,6 +16,7 @@ using Streetcode.BLL.MediatR.Streetcode.Streetcode.GetByTransliterationUrl;
 using Streetcode.BLL.MediatR.Streetcode.Streetcode.GetCount;
 using Streetcode.BLL.MediatR.Streetcode.Streetcode.GetShortById;
 using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
+using Streetcode.DAL.Enums;
 
 namespace Streetcode.WebApi.Controllers.Streetcode;
 
@@ -75,12 +77,14 @@ public class StreetcodeController : BaseApiController
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Create([FromBody] JsonElement streetcodeDTO)
     {
         return HandleResult(await Mediator.Send(new CreateStreetcodeCommand(streetcodeDTO)));
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Update(int id, [FromBody] JsonElement streetcodeDTO)
     {
         var command = new UpdateStreetcodeCommand(id, streetcodeDTO);
@@ -88,12 +92,14 @@ public class StreetcodeController : BaseApiController
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> SoftDelete([FromRoute] int id)
     {
         return HandleResult(await Mediator.Send(new DeleteSoftStreetcodeCommand(id)));
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> DeleteFull([FromRoute] int id)
     {
         return HandleResult(await Mediator.Send(new DeleteFullStreetcodeCommand(id)));

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.News;
 using Streetcode.BLL.MediatR.Newss.Create;
 using Streetcode.BLL.MediatR.Newss.Delete;
@@ -8,6 +9,7 @@ using Streetcode.BLL.MediatR.Newss.GetByUrl;
 using Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl;
 using Streetcode.BLL.MediatR.Newss.SortedByDateTime;
 using Streetcode.BLL.MediatR.Newss.Update;
+using Streetcode.DAL.Enums;
 
 namespace Streetcode.WebApi.Controllers.Newss;
 
@@ -44,18 +46,21 @@ public class NewsController : BaseApiController
 	}
 
 	[HttpPost]
+	[Authorize(Roles = nameof(UserRole.Administrator))]
 	public async Task<IActionResult> Create([FromBody] NewsDto news)
 	{
 		return HandleResult(await Mediator.Send(new CreateNewsCommand(news)));
 	}
 
 	[HttpPut]
+	[Authorize(Roles = nameof(UserRole.Administrator))]
 	public async Task<IActionResult> Update([FromBody] NewsDto news)
 	{
 		return HandleResult(await Mediator.Send(new UpdateNewsCommand(news)));
 	}
 
 	[HttpDelete("{id:int}")]
+	[Authorize(Roles = nameof(UserRole.Administrator))]
 	public async Task<IActionResult> Delete([FromRoute] int id)
 	{
 		return HandleResult(await Mediator.Send(new DeleteNewsCommand(id)));

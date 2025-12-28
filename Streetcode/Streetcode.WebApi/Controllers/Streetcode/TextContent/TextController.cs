@@ -1,4 +1,5 @@
 using FluentResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
 using Streetcode.BLL.MediatR.Streetcode.Text.Create;
@@ -8,6 +9,7 @@ using Streetcode.BLL.MediatR.Streetcode.Text.GetById;
 using Streetcode.BLL.MediatR.Streetcode.Text.GetByStreetcodeId;
 using Streetcode.BLL.MediatR.Streetcode.Text.GetParsed;
 using Streetcode.BLL.MediatR.Streetcode.Text.Update;
+using Streetcode.DAL.Enums;
 
 namespace Streetcode.WebApi.Controllers.Streetcode.TextContent;
 
@@ -38,6 +40,7 @@ public class TextController : BaseApiController
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Create([FromBody] TextCreateDto textDto)
     {
         if (!ModelState.IsValid)
@@ -49,6 +52,7 @@ public class TextController : BaseApiController
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Update([FromRoute] int id, [FromBody] TextUpdateDto textDto)
     {
         if (!ModelState.IsValid)
@@ -60,6 +64,7 @@ public class TextController : BaseApiController
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         return HandleResult(await Mediator.Send(new DeleteTextCommand(id)));

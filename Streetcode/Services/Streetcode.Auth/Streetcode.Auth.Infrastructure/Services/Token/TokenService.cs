@@ -57,6 +57,7 @@ namespace Streetcode.Auth.Infrastructure.Services.Token
             await _refreshTokenRepository.AddAsync(refreshTokenEntity, cancellationToken);
 
             var changesSaved = await _refreshTokenRepository.SaveChangesAsync(cancellationToken) > 0;
+            
             if (changesSaved)
             {
                 var tokenResponseDto = new TokenResponseDto

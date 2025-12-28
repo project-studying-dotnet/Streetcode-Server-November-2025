@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Email;
 using Streetcode.BLL.MediatR.Email;
@@ -7,6 +8,7 @@ namespace Streetcode.WebApi.Controllers.Email
   public class EmailController : BaseApiController
   {
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Send([FromBody] EmailDto email)
     {
       return HandleResult(await Mediator.Send(new SendEmailCommand(email)));

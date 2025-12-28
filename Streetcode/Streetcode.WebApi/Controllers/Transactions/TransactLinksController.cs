@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Transactions;
 using Streetcode.BLL.MediatR.Transactions.TransactionLink.GetAll;
@@ -6,6 +7,7 @@ using Streetcode.BLL.MediatR.Transactions.TransactionLink.GetByStreetcodeId;
 
 namespace Streetcode.WebApi.Controllers.Transactions;
 
+[Authorize]
 public class TransactLinksController : BaseApiController
 {
     [HttpGet]

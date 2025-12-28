@@ -5,6 +5,7 @@ using Streetcode.BLL.MediatR.Timeline.HistoricalContext.Create;
 using Streetcode.BLL.MediatR.Timeline.HistoricalContext.Delete;
 using Streetcode.BLL.MediatR.Timeline.HistoricalContext.GetAll;
 using Streetcode.BLL.MediatR.Timeline.HistoricalContext.Update;
+using Streetcode.DAL.Enums;
 
 namespace Streetcode.WebApi.Controllers.Timeline
 {
@@ -16,21 +17,21 @@ namespace Streetcode.WebApi.Controllers.Timeline
             return HandleResult(await Mediator.Send(new GetAllHistoricalContextQuery()));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(UserRole.Administrator))]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateHistoricalContextDto historicalContext)
         {
             return HandleResult(await Mediator.Send(new CreateHistoricalContextCommand(historicalContext)));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(UserRole.Administrator))]
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] UpdateHistoricalContextDto historicalContext)
         {
             return HandleResult(await Mediator.Send(new UpdateHistoricalContextCommand(historicalContext)));
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = nameof(UserRole.Administrator))]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
