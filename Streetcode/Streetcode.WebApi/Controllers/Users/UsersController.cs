@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.MediatR.Users.Login;
@@ -20,6 +21,7 @@ public class UsersController : BaseApiController
         return HandleResult(await Mediator.Send(new UserLoginCommand(user)));
     }
 
+    [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout([FromBody] LogoutRequestDto logoutRequest)
 	{

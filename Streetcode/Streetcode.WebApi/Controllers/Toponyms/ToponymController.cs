@@ -7,6 +7,7 @@ using Streetcode.BLL.MediatR.Toponyms.GetAll;
 using Streetcode.BLL.MediatR.Toponyms.GetById;
 using Streetcode.BLL.MediatR.Toponyms.GetByStreetcodeId;
 using Streetcode.BLL.MediatR.Toponyms.Merge;
+using Streetcode.DAL.Enums;
 
 namespace Streetcode.WebApi.Controllers.Toponyms;
 
@@ -31,14 +32,14 @@ public class ToponymController : BaseApiController
     }
 
     [HttpPost("streetcode-toponym")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> CreateStreetcodeToponym([FromBody] StreetcodeToponymDto dto)
     {
         return HandleResult(await Mediator.Send(new CreateStreetcodeToponymCommand(dto)));
     }
 
     [HttpDelete("streetcode-toponym/{streetcodeId:int}/{toponymId:int}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> DeleteStreetcodeToponym(
         [FromRoute] int streetcodeId,
         [FromRoute] int toponymId)
@@ -47,7 +48,7 @@ public class ToponymController : BaseApiController
     }
 
     [HttpPost("merge")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> MergeToponyms([FromBody] MergeToponymsDto dto)
     {
         return HandleResult(await Mediator.Send(new MergeToponymsCommand(dto)));

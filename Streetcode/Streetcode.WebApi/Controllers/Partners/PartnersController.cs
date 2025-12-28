@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Partners;
 using Streetcode.BLL.MediatR.Partners.Create;
@@ -5,6 +6,7 @@ using Streetcode.BLL.MediatR.Partners.GetAll;
 using Streetcode.BLL.MediatR.Partners.GetAllPartnerShort;
 using Streetcode.BLL.MediatR.Partners.GetById;
 using Streetcode.BLL.MediatR.Partners.GetByStreetcodeId;
+using Streetcode.DAL.Enums;
 
 namespace Streetcode.WebApi.Controllers.Partners;
 
@@ -35,18 +37,21 @@ public class PartnersController : BaseApiController
     }
 
     [HttpPost]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Create([FromBody] CreatePartnerDto partner)
     {
         return HandleResult(await Mediator.Send(new CreatePartnerCommand(partner)));
     }
 
     [HttpPut]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Update([FromBody] CreatePartnerDto partner)
     {
         return HandleResult(await Mediator.Send(new BLL.MediatR.Partners.Update.UpdatePartnerCommand(partner)));
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         return HandleResult(await Mediator.Send(new BLL.MediatR.Partners.Delete.DeletePartnerCommand(id)));

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Streetcode.Auth.Common.Configurations;
 using System.Text;
@@ -41,6 +42,8 @@ namespace Streetcode.Auth.Api.Extensions
                         ValidIssuer = jwtSettings.Issuer,
                         ValidAudience = jwtSettings.Audience,
                         IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
+                        
+                        RoleClaimType = ClaimTypes.Role,
 
                         ClockSkew = TimeSpan.Zero
                     };

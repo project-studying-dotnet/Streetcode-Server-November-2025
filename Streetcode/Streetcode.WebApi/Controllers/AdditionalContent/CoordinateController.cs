@@ -6,6 +6,7 @@ using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Create;
 using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Delete;
 using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.GetByStreetcodeId;
 using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Update;
+using Streetcode.DAL.Enums;
 
 namespace Streetcode.WebApi.Controllers.AdditionalContent;
 
@@ -18,21 +19,21 @@ public class CoordinateController : BaseApiController
     }
 
     [HttpPost]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Create([FromBody] StreetcodeCoordinateDto dto)
     {
         return HandleResult(await Mediator.Send(new CreateCoordinateCommand(dto)));
     }
 
     [HttpPut]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Update([FromBody] StreetcodeCoordinateDto dto)
     {
         return HandleResult(await Mediator.Send(new UpdateCoordinateCommand(dto)));
     }
 
     [HttpDelete("{id:int}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = nameof(UserRole.Administrator))]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         return HandleResult(await Mediator.Send(new DeleteCoordinateCommand(id)));

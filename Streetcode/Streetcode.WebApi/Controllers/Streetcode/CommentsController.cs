@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Streetcode.Comments;
 using Streetcode.BLL.MediatR.Streetcode.Comments.Create;
 using Streetcode.BLL.MediatR.Streetcode.Comments.Delete;
@@ -7,6 +8,7 @@ using Streetcode.BLL.MediatR.Streetcode.Comments.Update;
 
 namespace Streetcode.WebApi.Controllers.Streetcode
 {
+    [Authorize]
     public class CommentsController : BaseApiController
     {
         [HttpGet("{streetcodeId:int}")]
