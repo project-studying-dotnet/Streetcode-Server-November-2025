@@ -1885,5 +1885,533 @@ namespace Streetcode.XIntegrationTest.Timeline.TimelineItem
             Assert.NotNull(dbItem);
             Assert.Equal(DateViewPattern.DateMonthYear, dbItem.DateViewPattern);
         }
+
+        [Fact]
+        public async Task CreateMultipleTimelineItems_WithSameHistoricalContext_SharesContextCorrectly()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var sharedContext = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Shared Context");
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.Add(sharedContext);
+            });
+
+            var createDto1 = new CreateTimelineItemDto
+            {
+                Title = "Event 1",
+                Description = "First event with shared context",
+                Date = new DateTime(2024, 1, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int> { 1 },
+            };
+
+            var createDto2 = new CreateTimelineItemDto
+            {
+                Title = "Event 2",
+                Description = "Second event with shared context",
+                Date = new DateTime(2024, 6, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int> { 1 },
+            };
+
+            // Act
+            var (response1, result1) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto1);
+            var (response2, result2) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto2);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response1.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+            Assert.NotNull(result1);
+            Assert.NotNull(result2);
+
+            // Verify both items share the same context
+            Assert.Single(result1.HistoricalContexts);
+            Assert.Single(result2.HistoricalContexts);
+            Assert.Equal(1, result1.HistoricalContexts.First().Id);
+            Assert.Equal(1, result2.HistoricalContexts.First().Id);
+
+            // Verify in database that context has two timeline items
+            var relationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.HistoricalContextId == 1)
+                    .ToList());
+
+            Assert.Equal(2, relationships.Count);
+
+            // Verify the context still exists and is shared
+            var dbContext = this.ExecuteWithContext(db =>
+                db.HistoricalContexts
+                    .Include(hc => hc.HistoricalContextTimelines)
+                    .FirstOrDefault(hc => hc.Id == 1));
+
+            Assert.NotNull(dbContext);
+            Assert.Equal(2, dbContext.HistoricalContextTimelines.Count);
+        }
+
+        [Fact]
+        public async Task UpdateTimelineItem_ReplaceHistoricalContexts_UpdatesRelationshipsCorrectly()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var context1 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Old Context 1");
+            var context2 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(2, "Old Context 2");
+            var context3 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(3, "New Context 1");
+            var context4 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(4, "New Context 2");
+
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcode.Id);
+            timelineItem.HistoricalContextTimelines = new List<HistoricalContextTimeline>
+            {
+                new HistoricalContextTimeline { TimelineId = 1, HistoricalContextId = 1 },
+                new HistoricalContextTimeline { TimelineId = 1, HistoricalContextId = 2 },
+            };
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.AddRange(context1, context2, context3, context4);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            var updateDto = new UpdateTimelineItemDto
+            {
+                Id = 1,
+                Title = "Updated Event",
+                Description = "Updated description",
+                Date = new DateTime(2024, 6, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int> { 3, 4 }, // Replace contexts
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateTimelineItemDto, TimelineItemDto>(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(2, result.HistoricalContexts.Count());
+
+            // Verify new contexts are associated
+            var newContextIds = result.HistoricalContexts.Select(hc => hc.Id).OrderBy(id => id).ToList();
+            Assert.Equal(new List<int> { 3, 4 }, newContextIds);
+
+            // Verify in database that old relationships are removed and new ones added
+            var relationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == 1)
+                    .Select(hct => hct.HistoricalContextId)
+                    .OrderBy(id => id)
+                    .ToList());
+
+            Assert.Equal(2, relationships.Count);
+            Assert.Equal(new List<int> { 3, 4 }, relationships);
+
+            // Verify old contexts still exist (not deleted)
+            var allContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Count());
+            Assert.Equal(4, allContexts);
+        }
+
+        [Fact]
+        public async Task UpdateTimelineItem_PartiallyReplaceHistoricalContexts_UpdatesCorrectly()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var context1 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Context 1");
+            var context2 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(2, "Context 2");
+            var context3 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(3, "Context 3");
+
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcode.Id);
+            timelineItem.HistoricalContextTimelines = new List<HistoricalContextTimeline>
+            {
+                new HistoricalContextTimeline { TimelineId = 1, HistoricalContextId = 1 },
+                new HistoricalContextTimeline { TimelineId = 1, HistoricalContextId = 2 },
+            };
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.AddRange(context1, context2, context3);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            var updateDto = new UpdateTimelineItemDto
+            {
+                Id = 1,
+                Title = "Updated Event",
+                Description = "Updated description",
+                Date = new DateTime(2024, 6, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int> { 1, 3 }, // Keep context 1, remove 2, add 3
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateTimelineItemDto, TimelineItemDto>(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(2, result.HistoricalContexts.Count());
+
+            // Verify correct contexts are associated
+            var contextIds = result.HistoricalContexts.Select(hc => hc.Id).OrderBy(id => id).ToList();
+            Assert.Equal(new List<int> { 1, 3 }, contextIds);
+
+            // Verify in database
+            var relationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == 1)
+                    .Select(hct => hct.HistoricalContextId)
+                    .OrderBy(id => id)
+                    .ToList());
+
+            Assert.Equal(new List<int> { 1, 3 }, relationships);
+        }
+
+        [Fact]
+        public async Task DeleteTimelineItem_WithSharedHistoricalContext_PreservesContextForOtherItems()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var sharedContext = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Shared Context");
+
+            var timelineItem1 = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcode.Id, "Event 1");
+            timelineItem1.HistoricalContextTimelines = new List<HistoricalContextTimeline>
+            {
+                new HistoricalContextTimeline { TimelineId = 1, HistoricalContextId = 1 },
+            };
+
+            var timelineItem2 = TimelineIntegrationTestData.CreateSimpleTimelineItem(2, streetcode.Id, "Event 2");
+            timelineItem2.HistoricalContextTimelines = new List<HistoricalContextTimeline>
+            {
+                new HistoricalContextTimeline { TimelineId = 2, HistoricalContextId = 1 },
+            };
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.Add(sharedContext);
+                db.TimelineItems.Add(timelineItem1);
+                db.TimelineItems.Add(timelineItem2);
+            });
+
+            // Act - Delete first timeline item
+            var response = await this.DeleteAsync($"{BaseUrl}/1");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            // Verify first item is deleted
+            var dbItem1 = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == 1));
+            Assert.Null(dbItem1);
+
+            // Verify second item still exists
+            var dbItem2 = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == 2));
+            Assert.NotNull(dbItem2);
+
+            // Verify shared context still exists
+            var dbContext = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.FirstOrDefault(hc => hc.Id == 1));
+            Assert.NotNull(dbContext);
+
+            // Verify relationship for second item still exists
+            var relationship = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == 2 && hct.HistoricalContextId == 1)
+                    .FirstOrDefault());
+            Assert.NotNull(relationship);
+
+            // Verify relationship for deleted item is removed
+            var deletedRelationship = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == 1)
+                    .FirstOrDefault());
+            Assert.Null(deletedRelationship);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithMultipleHistoricalContexts_VerifiesManyToManyRelationship()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var context1 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Ancient Period");
+            var context2 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(2, "Medieval Period");
+            var context3 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(3, "Modern Era");
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.AddRange(context1, context2, context3);
+            });
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Historical Event",
+                Description = "Event spanning multiple periods",
+                Date = new DateTime(1500, 1, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int> { 1, 2, 3 },
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(3, result.HistoricalContexts.Count());
+
+            // Verify all contexts are properly associated
+            var contextIds = result.HistoricalContexts.Select(hc => hc.Id).OrderBy(id => id).ToList();
+            Assert.Equal(new List<int> { 1, 2, 3 }, contextIds);
+
+            // Verify join table entries
+            var relationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == result.Id)
+                    .ToList());
+
+            Assert.Equal(3, relationships.Count);
+            Assert.All(relationships, rel => Assert.Equal(result.Id, rel.TimelineId));
+
+            // Verify contexts can be queried from both sides of the relationship
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems
+                    .Include(t => t.HistoricalContextTimelines)
+                    .ThenInclude(hct => hct.HistoricalContext)
+                    .FirstOrDefault(t => t.Id == result.Id));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(3, dbItem.HistoricalContextTimelines.Count);
+            Assert.All(dbItem.HistoricalContextTimelines, rel => Assert.NotNull(rel.HistoricalContext));
+        }
+
+        [Fact]
+        public async Task UpdateTimelineItem_FromZeroToMultipleContexts_CreatesAllRelationships()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var context1 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Context 1");
+            var context2 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(2, "Context 2");
+            var context3 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(3, "Context 3");
+
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcode.Id);
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.AddRange(context1, context2, context3);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            // Verify initially no contexts
+            var initialRelationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == 1)
+                    .ToList());
+            Assert.Empty(initialRelationships);
+
+            var updateDto = new UpdateTimelineItemDto
+            {
+                Id = 1,
+                Title = "Updated Event",
+                Description = "Updated description",
+                Date = new DateTime(2024, 6, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int> { 1, 2, 3 }, // Add all contexts
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateTimelineItemDto, TimelineItemDto>(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(3, result.HistoricalContexts.Count());
+
+            // Verify all relationships created
+            var relationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == 1)
+                    .Select(hct => hct.HistoricalContextId)
+                    .OrderBy(id => id)
+                    .ToList());
+
+            Assert.Equal(new List<int> { 1, 2, 3 }, relationships);
+        }
+
+        [Fact]
+        public async Task UpdateTimelineItem_FromMultipleToZeroContexts_RemovesAllRelationships()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var context1 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Context 1");
+            var context2 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(2, "Context 2");
+            var context3 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(3, "Context 3");
+
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcode.Id);
+            timelineItem.HistoricalContextTimelines = new List<HistoricalContextTimeline>
+            {
+                new HistoricalContextTimeline { TimelineId = 1, HistoricalContextId = 1 },
+                new HistoricalContextTimeline { TimelineId = 1, HistoricalContextId = 2 },
+                new HistoricalContextTimeline { TimelineId = 1, HistoricalContextId = 3 },
+            };
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.AddRange(context1, context2, context3);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            // Verify initially has 3 contexts
+            var initialRelationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == 1)
+                    .ToList());
+            Assert.Equal(3, initialRelationships.Count);
+
+            var updateDto = new UpdateTimelineItemDto
+            {
+                Id = 1,
+                Title = "Updated Event",
+                Description = "Updated description",
+                Date = new DateTime(2024, 6, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int>(), // Remove all contexts
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateTimelineItemDto, TimelineItemDto>(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Empty(result.HistoricalContexts);
+
+            // Verify all relationships removed
+            var relationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.TimelineId == 1)
+                    .ToList());
+
+            Assert.Empty(relationships);
+
+            // Verify contexts still exist
+            var contexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Count());
+            Assert.Equal(3, contexts);
+        }
+
+        [Fact]
+        public async Task CreateMultipleTimelineItems_WithDifferentContextCombinations_ManagesRelationshipsCorrectly()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var context1 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(1, "Context 1");
+            var context2 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(2, "Context 2");
+            var context3 = TimelineIntegrationTestData.CreateSimpleHistoricalContext(3, "Context 3");
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.HistoricalContexts.AddRange(context1, context2, context3);
+            });
+
+            // Item 1: contexts 1, 2
+            var createDto1 = new CreateTimelineItemDto
+            {
+                Title = "Event 1",
+                Description = "Event with contexts 1 and 2",
+                Date = new DateTime(2024, 1, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int> { 1, 2 },
+            };
+
+            // Item 2: contexts 2, 3
+            var createDto2 = new CreateTimelineItemDto
+            {
+                Title = "Event 2",
+                Description = "Event with contexts 2 and 3",
+                Date = new DateTime(2024, 6, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int> { 2, 3 },
+            };
+
+            // Item 3: context 1 only
+            var createDto3 = new CreateTimelineItemDto
+            {
+                Title = "Event 3",
+                Description = "Event with context 1 only",
+                Date = new DateTime(2024, 12, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int> { 1 },
+            };
+
+            // Act
+            var (response1, result1) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto1);
+            var (response2, result2) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto2);
+            var (response3, result3) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto3);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response1.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response3.StatusCode);
+
+            // Verify each item has correct contexts
+            Assert.Equal(2, result1.HistoricalContexts.Count());
+            Assert.Equal(2, result2.HistoricalContexts.Count());
+            Assert.Single(result3.HistoricalContexts);
+
+            // Verify context 1 is shared by items 1 and 3
+            var context1Items = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.HistoricalContextId == 1)
+                    .Select(hct => hct.TimelineId)
+                    .OrderBy(id => id)
+                    .ToList());
+            Assert.Equal(2, context1Items.Count);
+            Assert.Contains(result1.Id, context1Items);
+            Assert.Contains(result3.Id, context1Items);
+
+            // Verify context 2 is shared by items 1 and 2
+            var context2Items = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.HistoricalContextId == 2)
+                    .Select(hct => hct.TimelineId)
+                    .OrderBy(id => id)
+                    .ToList());
+            Assert.Equal(2, context2Items.Count);
+            Assert.Contains(result1.Id, context2Items);
+            Assert.Contains(result2.Id, context2Items);
+
+            // Verify context 3 is only used by item 2
+            var context3Items = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines
+                    .Where(hct => hct.HistoricalContextId == 3)
+                    .Select(hct => hct.TimelineId)
+                    .ToList());
+            Assert.Single(context3Items);
+            Assert.Contains(result2.Id, context3Items);
+
+            // Verify total relationship count
+            var totalRelationships = this.ExecuteWithContext(db =>
+                db.HistoricalContextsTimelines.Count());
+            Assert.Equal(5, totalRelationships); // 2 + 2 + 1
+        }
     }
 }
