@@ -7,9 +7,12 @@ using Streetcode.Messaging.Services.EventPublish.MassTransit;
 
 namespace Streetcode.Messaging.Extensions
 {
-    public static class MassTransit
+    public static class MassTransitExtensions
     {
-        public static IServiceCollection AddMessageBroker(this IServiceCollection services, IConfiguration configuration, Assembly? assembly = null)
+        public static IServiceCollection AddRabbitMqMessageBroker(
+            this IServiceCollection services, 
+            IConfiguration configuration, 
+            Assembly? assembly = null)
         {
             services.AddMassTransit(config =>
             {
@@ -25,11 +28,32 @@ namespace Streetcode.Messaging.Extensions
                         host.Username(configuration["MessageBroker:UserName"]!);
                         host.Password(configuration["MessageBroker:Password"]!);
                     });
+
+                    configurator.ConfigureEndpoints(context);
                 });
+            });
+
+            services.AddScoped<IEventPublisher, MassTransitEventPublisher>();
+
+            return services;
+        }
+
+        public static IServiceCollection AddAzureServiceBusMessageBroker(
+            this IServiceCollection services, 
+            IConfiguration configuration, 
+            Assembly? assembly = null)
+        {
+            services.AddMassTransit(config =>
+            {
+                config.SetKebabCaseEndpointNameFormatter();
+
+                if (assembly != null)
+                    config.AddConsumers(assembly);
 
                 config.UsingAzureServiceBus((context, configurator) =>
                 {
-                    configurator.Host(configuration["MessageBroker:AzureConnectionString"]);
+                    configurator.Host(configuration["MessageBroker:AzureServiceBusConnectionString"]);
+
                     configurator.ConfigureEndpoints(context);
                 });
             });
