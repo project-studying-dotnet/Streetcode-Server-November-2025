@@ -1,11 +1,10 @@
-﻿namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Update
-{
-    using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.TextContent;
-    using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update;
-    using Xunit;
+﻿using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update;
+using FluentValidation.TestHelper;
+using Xunit;
 
+namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Update
+{
     public class UpdateRelatedTermCommandValidatorTests
     {
         private readonly UpdateRelatedTermCommandValidator _validator;
@@ -49,7 +48,7 @@
         public void Should_Have_Error_When_Child_Validator_Fails()
         {
             // Arrange
-            var invalidDto = new RelatedTermDto
+            var invalidDto = new RelatedTermDto()
             {
                 Word = string.Empty,
                 TermId = 1,

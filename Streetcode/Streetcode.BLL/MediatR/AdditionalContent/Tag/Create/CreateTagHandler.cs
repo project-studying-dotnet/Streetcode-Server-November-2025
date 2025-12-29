@@ -2,7 +2,6 @@ using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent;
-using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.AdditionalContent.Tag.Create
@@ -11,13 +10,11 @@ namespace Streetcode.BLL.MediatR.AdditionalContent.Tag.Create
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
-        private readonly ILoggerService _logger;
 
-        public CreateTagHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper, ILoggerService logger)
+        public CreateTagHandler(IRepositoryWrapper repositoryWrapper, IMapper mapper)
         {
             _repositoryWrapper = repositoryWrapper;
             _mapper = mapper;
-            _logger = logger;
         }
 
         public async Task<Result<TagDto>> Handle(CreateTagCommand request, CancellationToken cancellationToken)

@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="FluentResults" Version="3.15.1" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\BuildingBlocks\Streetcode.BuildingBlocks\Streetcode.BuildingBlocks.csproj" />
+    <ProjectReference Include="..\..\BuildingBlocks\Streetcode.Messaging\Streetcode.Messaging.csproj" />
+    <ProjectReference Include="..\Streetcode.Auth.Common\Streetcode.Auth.Common.csproj" />
+    <ProjectReference Include="..\Streetcode.Auth.Domain\Streetcode.Auth.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

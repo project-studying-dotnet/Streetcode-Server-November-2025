@@ -5,6 +5,7 @@
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
+    using Repositories.Interfaces;
     using Streetcode.BLL.DTO.Media.Images;
     using Streetcode.BLL.DTO.Streetcode;
     using Streetcode.BLL.Interfaces.Logging;
@@ -29,11 +30,24 @@
 
         private Mock<ILoggerService> loggerMock;
 
+        private Mock<IStreetcodeTagIndexRepository> streetcodeTagIndexRepoMock;
+        private Mock<IStreetcodeImageRepository> streetcodeImageRepoMock;
+        private Mock<IImageDetailsRepository> imageDetailsRepoMock;
+        private Mock<IAudioRepository> audioRepositoryMock;
+        private Mock<IStreetcodeRepository> streetcodeRepoMock;
+
         public StreetcodeHandlersTestsHelper(Mock<IRepositoryWrapper> repoMock, Mock<IMapper> mapperMock, Mock<ILoggerService> loggerMock)
         {
             this.repositoryMock = repoMock;
             this.mapperMock = mapperMock;
             this.loggerMock = loggerMock;
+
+            this.streetcodeTagIndexRepoMock = new Mock<IStreetcodeTagIndexRepository>();
+            this.streetcodeImageRepoMock = new Mock<IStreetcodeImageRepository>();
+            this.imageDetailsRepoMock = new Mock<IImageDetailsRepository>();
+            this.audioRepositoryMock = new Mock<IAudioRepository>();
+            this.streetcodeRepoMock = new Mock<IStreetcodeRepository>();
+
         }
 
         public void SetupMappers(CreateUpdateStreetcodeDto streetcodeDto, StreetcodeContent streetcode)
@@ -57,15 +71,35 @@
         public void SetupCreateStreetcodeAsync(StreetcodeContent streetcode)
         {
             this.repositoryMock
+                .Setup(r => r.StreetcodeTagIndexRepository)
+                .Returns(this.streetcodeTagIndexRepoMock.Object);
+
+            this.repositoryMock
+                .Setup(r => r.StreetcodeImageRepository)
+                .Returns(this.streetcodeImageRepoMock.Object);
+
+            this.repositoryMock
+                .Setup(r => r.ImageDetailsRepository)
+                .Returns(this.imageDetailsRepoMock.Object);
+
+            this.repositoryMock
                 .Setup(r => r.StreetcodeRepository
                 .CreateAsync(It.IsAny<StreetcodeContent>()))
                 .ReturnsAsync(streetcode);
+
+            this.repositoryMock
+                .Setup(r => r.StreetcodeRepository)
+                .Returns(this.streetcodeRepoMock.Object);
         }
 
         public void SetupAudioRepoMocks()
         {
             this.repositoryMock
-                .Setup(r => r.AudioRepository
+            .Setup(r => r.AudioRepository)
+            .Returns(this.audioRepositoryMock.Object);
+
+            this.audioRepositoryMock
+                .Setup(r => r
                 .GetFirstOrDefaultAsync(
                 It.IsAny<Expression<Func<Audio, bool>>>(),
                 It.IsAny<Func<IQueryable<Audio>, IIncludableQueryable<Audio, object>>>()))
@@ -149,54 +183,144 @@
                 .ReturnsAsync((StreetcodeTagIndex si) => si);
         }
 
+        // CreateStreetcodeCommand Helpers
+        public void VerifyStreetcodeCreatedSuccesfully(
+            bool imagesIncluded = false,
+            bool tagsIncluded = false,
+            int times = 0)
+        {
+            this.repositoryMock.VerifySaveChangesAsyncCalledTimes(2);
+
+            this.mapperMock
+                .VerifyMapCalledOnce<StreetcodeContent>();
+
+            this.mapperMock
+                .VerifyMapCalledOnce<CreateStreetcodeDto>();
+
+            this.streetcodeRepoMock
+                .VerifyCreateAsyncCalledOnce<IStreetcodeRepository, StreetcodeContent>();
+
+            if (imagesIncluded)
+            {
+                this.streetcodeImageRepoMock
+                    .VerifyCreateAsyncCalledTimes
+                    <IStreetcodeImageRepository, StreetcodeImage>(times);
+                this.imageDetailsRepoMock
+                    .VerifyCreateAsyncCalledTimes
+                    <IImageDetailsRepository, ImageDetails>(times);
+            }
+
+            if (tagsIncluded)
+            {
+                this.streetcodeTagIndexRepoMock
+                .VerifyCreateAsyncCalledTimes<IStreetcodeTagIndexRepository, StreetcodeTagIndex>(times);
+            }
+        }
+
+        public void VerifyStreetcodeCreateFailed()
+        {
+            this.repositoryMock.VerifySaveChangesAsyncCalledOnce();
+        }
+
         // DeleteStreetcodeCommand Helpers
         public void SetMocksForDelete()
         {
-            var streetcodeTagIndexRepoMock = new Mock<IStreetcodeTagIndexRepository>();
-            var streetcodeImageRepoMock = new Mock<IStreetcodeImageRepository>();
-            var imageDetailsRepoMock = new Mock<IImageDetailsRepository>();
-
             this.repositoryMock
                 .Setup(r => r.StreetcodeTagIndexRepository)
-                .Returns(streetcodeTagIndexRepoMock.Object);
+                .Returns(this.streetcodeTagIndexRepoMock.Object);
 
             this.repositoryMock
                 .Setup(r => r.StreetcodeImageRepository)
-                .Returns(streetcodeImageRepoMock.Object);
+                .Returns(this.streetcodeImageRepoMock.Object);
 
             this.repositoryMock
                 .Setup(r => r.ImageDetailsRepository)
-                .Returns(imageDetailsRepoMock.Object);
+                .Returns(this.imageDetailsRepoMock.Object);
 
-            streetcodeTagIndexRepoMock.SetupGetAllAsync(new List<StreetcodeTagIndex>()
+            this.streetcodeTagIndexRepoMock.SetupGetAllAsync(new List<StreetcodeTagIndex>()
             {
                 new StreetcodeTagIndex { TagId = 15, StreetcodeId = 1 },
                 new StreetcodeTagIndex { TagId = 20, StreetcodeId = 1 },
             });
 
-            streetcodeImageRepoMock.SetupGetAllAsync(new List<StreetcodeImage>()
+            this.streetcodeImageRepoMock.SetupGetAllAsync(new List<StreetcodeImage>()
             {
                 new StreetcodeImage { StreetcodeId = 1, ImageId = 10 },
                 new StreetcodeImage { StreetcodeId = 1, ImageId = 15 },
             });
 
-            imageDetailsRepoMock.SetupGetAllAsync(new List<ImageDetails>()
+            this.imageDetailsRepoMock.SetupGetAllAsync(new List<ImageDetails>()
             {
                 new ImageDetails { Id = 1, ImageId = 10 },
                 new ImageDetails { Id = 2, ImageId = 15 },
             });
 
-            streetcodeTagIndexRepoMock
+            this.streetcodeTagIndexRepoMock
                 .Setup(r => r.DeleteRange(It.IsAny<IEnumerable<StreetcodeTagIndex>>()));
 
-            streetcodeImageRepoMock
+            this.streetcodeImageRepoMock
                 .Setup(r => r.DeleteRange(It.IsAny<IEnumerable<StreetcodeImage>>()));
 
-            imageDetailsRepoMock
+            this.imageDetailsRepoMock
                 .Setup(r => r.DeleteRange(It.IsAny<IEnumerable<ImageDetails>>()));
         }
 
+        public void VerifyDeleteSuccesful()
+        {
+            this.streetcodeTagIndexRepoMock
+                .VerifyDeleteRangeCalledOnce<IStreetcodeTagIndexRepository, StreetcodeTagIndex>();
+            this.streetcodeImageRepoMock
+                .VerifyDeleteRangeCalledOnce<IStreetcodeImageRepository, StreetcodeImage>();
+            this.imageDetailsRepoMock
+                .VerifyDeleteRangeCalledOnce<IImageDetailsRepository, ImageDetails>();
+            this.audioRepositoryMock
+                .VerifyDeleteCalledOnce<IAudioRepository, Audio>();
+            this.repositoryMock
+                .VerifySaveChangesAsyncCalledOnce();
+        }
+
         // UpdateStreetcodeCommand Helpers
+        public void VerifyStreetcodeUpdatedSuccesfully(
+            bool imagesIncluded = false,
+            bool tagsIncluded = false,
+            int timesImages = 0,
+            int timesTags = 0)
+        {
+            this.repositoryMock.VerifySaveChangesAsyncCalledOnce();
+
+            this.mapperMock
+                .VerifyMapCalledOnce<UpdateStreetcodeDto>();
+
+            this.streetcodeRepoMock
+                .VerifyUpdateCalledOnce<IStreetcodeRepository, StreetcodeContent>();
+
+            if (imagesIncluded)
+            {
+                this.streetcodeImageRepoMock
+                    .VerifyDeleteRangeCalledOnce
+                    <IStreetcodeImageRepository, StreetcodeImage>();
+                this.imageDetailsRepoMock
+                    .VerifyDeleteRangeCalledOnce
+                    <IImageDetailsRepository, ImageDetails>();
+
+                this.streetcodeImageRepoMock
+                    .VerifyCreateAsyncCalledTimes
+                    <IStreetcodeImageRepository, StreetcodeImage>(timesImages);
+                this.imageDetailsRepoMock
+                    .VerifyCreateAsyncCalledTimes
+                    <IImageDetailsRepository, ImageDetails>(timesImages);
+            }
+
+            if (tagsIncluded)
+            {
+                this.streetcodeTagIndexRepoMock
+                .VerifyDeleteRangeCalledOnce<IStreetcodeTagIndexRepository, StreetcodeTagIndex>();
+
+                this.streetcodeTagIndexRepoMock
+                .VerifyCreateAsyncCalledTimes<IStreetcodeTagIndexRepository, StreetcodeTagIndex>(timesTags);
+            }
+        }
+
         public UpdateStreetcodeCommand PrepareValidRequest(string json = null)
         {
             json ??= StreetcodeTestData.CreatePersonStreetcode();
@@ -235,31 +359,27 @@
         {
             entity ??= new StreetcodeContent { Id = 1, Index = 1 };
 
-            var streetcodeRepoMock = new Mock<IStreetcodeRepository>();
-
             this.repositoryMock
                 .Setup(r => r.StreetcodeRepository)
-                .Returns(streetcodeRepoMock.Object);
+                .Returns(this.streetcodeRepoMock.Object);
 
-            streetcodeRepoMock
+            this.streetcodeRepoMock
                 .Setup(r => r.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
                     null))
                 .ReturnsAsync(entity);
 
-            streetcodeRepoMock
+            this.streetcodeRepoMock
                 .Setup(r => r.Update(It.IsAny<StreetcodeContent>()));
         }
 
         public void SetupStreetcodeNotFound()
         {
-            var streetcodeRepoMock = new Mock<IStreetcodeRepository>();
-
             this.repositoryMock
                 .Setup(r => r.StreetcodeRepository)
-                .Returns(streetcodeRepoMock.Object);
+                .Returns(this.streetcodeRepoMock.Object);
 
-            streetcodeRepoMock
+            this.streetcodeRepoMock
                 .Setup(r => r.GetFirstOrDefaultAsync(
                     It.IsAny<Expression<Func<StreetcodeContent, bool>>>(),
                     null))

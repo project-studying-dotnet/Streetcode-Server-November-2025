@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Users;
 using Streetcode.BLL.MediatR.Users.Login;
+using Streetcode.BLL.MediatR.Users.Logout;
 using Streetcode.BLL.MediatR.Users.Register;
 
 namespace Streetcode.WebApi.Controllers.Users;
@@ -18,4 +19,12 @@ public class UsersController : BaseApiController
     {
         return HandleResult(await Mediator.Send(new UserLoginCommand(user)));
     }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout([FromBody] LogoutRequestDto logoutRequest)
+	{
+		int userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+		return HandleResult(await Mediator.Send(new LogoutCommand(logoutRequest, userId)));
+	}
 }

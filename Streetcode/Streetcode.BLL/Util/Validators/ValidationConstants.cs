@@ -13,7 +13,8 @@ namespace Streetcode.BLL.Util.Validators
             /// <summary>
             /// YouTube URL validation pattern. Matches youtube.com and youtu.be URLs.
             /// </summary>
-            public const string YouTubeUrl = @"^(https?://)?(www\.)?(youtube\.com/(watch\?v=|embed/|v/)|youtu\.be/)[\w\-]+";
+            public const string YouTubeUrl =
+                @"^(https?://)?(www\.)?(youtube\.com/(watch\?v=|embed/|v/)|youtu\.be/)[\w\-]+";
 
             /// <summary>
             /// Password pattern: at least one uppercase, one lowercase, one digit, min 6 chars (default Identity requirements, no special required by default).
@@ -297,12 +298,19 @@ namespace Streetcode.BLL.Util.Validators
         }
 
         /// <summary>
-        /// Comment-specific validation constants.
+        /// Term-specific validation constants.
         /// </summary>
-        public static class Comment
+        public static class Term
         {
-            public const int ContentMaxLength = 500;
-            public const int AuthorNameMaxLength = 50;
+            /// <summary>
+            /// Term title maximum length.
+            /// </summary>
+            public const int TitleMaxLength = 50;
+
+            /// <summary>
+            /// Term description maximum length.
+            /// </summary>
+            public const int DescriptionMaxLength = 500;
         }
     }
 }

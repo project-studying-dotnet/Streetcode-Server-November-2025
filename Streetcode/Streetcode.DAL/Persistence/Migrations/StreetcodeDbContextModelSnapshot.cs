@@ -674,6 +674,12 @@ namespace Streetcode.DAL.Persistence.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("ParentCommentId")
                         .HasColumnType("int");
 
@@ -1575,12 +1581,13 @@ namespace Streetcode.DAL.Persistence.Migrations
                 {
                     b.HasOne("Streetcode.DAL.Entities.Streetcode.Comment", "ParentComment")
                         .WithMany("Replies")
-                        .HasForeignKey("ParentCommentId");
+                        .HasForeignKey("ParentCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Streetcode.DAL.Entities.Streetcode.StreetcodeContent", "Streetcode")
                         .WithMany("Comments")
                         .HasForeignKey("StreetcodeId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ParentComment");
