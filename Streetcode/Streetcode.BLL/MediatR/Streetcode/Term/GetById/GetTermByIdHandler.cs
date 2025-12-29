@@ -1,11 +1,11 @@
 using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-namespace Streetcode.BLL.MediatR.Streetcode.Term.GetById;
+namespace Streetcode.BLL.MediatR.Term.GetById;
 
 public class GetTermByIdHandler : IRequestHandler<GetTermByIdQuery, Result<TermDto>>
 {

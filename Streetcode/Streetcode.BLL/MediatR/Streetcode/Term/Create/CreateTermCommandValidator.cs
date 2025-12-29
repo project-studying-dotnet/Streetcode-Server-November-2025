@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Streetcode.BLL.MediatR.Streetcode.Term.Create;
+namespace Streetcode.BLL.MediatR.Term.Create;
 
     /// <summary>
     /// Validator for CreateTermCommand.

@@ -1,10 +1,11 @@
-﻿using Streetcode.BLL.DTO.Streetcode.TextContent;
-using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update;
-using FluentValidation.TestHelper;
-using Xunit;
-
-namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Update
+﻿namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Update
 {
+    using FluentValidation.TestHelper;
+    using Streetcode.BLL;
+    using Streetcode.BLL.DTO.TextContent;
+    using Streetcode.BLL.MediatR.RelatedTerm.Update;
+    using Xunit;
+    
     public class UpdateRelatedTermCommandValidatorTests
     {
         private readonly UpdateRelatedTermCommandValidator _validator;

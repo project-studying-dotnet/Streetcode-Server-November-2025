@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
-using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create;
-using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
-using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.GetAllByTermId;
-using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update;
+using Streetcode.BLL.DTO.TextContent;
+using Streetcode.BLL.MediatR.RelatedTerm.Create;
+using Streetcode.BLL.MediatR.RelatedTerm.Delete;
+using Streetcode.BLL.MediatR.RelatedTerm.GetAllByTermId;
+using Streetcode.BLL.MediatR.RelatedTerm.Update;
 
-namespace Streetcode.WebApi.Controllers.Streetcode.TextContent
+namespace Streetcode.WebApi.Controllers.TextContent
 {
     public class RelatedTermController : BaseApiController
     {
