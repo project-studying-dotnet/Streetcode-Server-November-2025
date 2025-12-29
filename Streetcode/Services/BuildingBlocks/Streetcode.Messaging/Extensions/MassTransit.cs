@@ -7,7 +7,7 @@ using Streetcode.Messaging.Services.EventPublish.MassTransit;
 
 namespace Streetcode.Messaging.Extensions
 {
-    public static class MassTransitExtensions
+    public static class MassTransit
     {
         public static IServiceCollection AddRabbitMqMessageBroker(
             this IServiceCollection services, 
