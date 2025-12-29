@@ -64,7 +64,7 @@ jobs:
       
       - name: dotnet publish
         working-directory: Streetcode
-        run: dotnet publish Streetcode.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp --no-build
+        run: dotnet publish Streetcode.WebApi/Streetcode.WebApi.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp --no-build
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
