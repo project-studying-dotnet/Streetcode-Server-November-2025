@@ -66,7 +66,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.HistoricalContext.Delete
 
             // Assert
             Assert.True(result.IsFailed);
-            Assert.Contains("not found", result.Errors[0].Message, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("Cannot find a historical context", result.Errors[0].Message);
         }
 
         [Fact]
@@ -191,7 +191,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.HistoricalContext.Delete
 
             // Assert
             Assert.True(result.IsFailed);
-            Assert.Contains("deletion failed", result.Errors[0].Message, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("Failed to delete a historical context", result.Errors[0].Message);
         }
 
         [Fact]

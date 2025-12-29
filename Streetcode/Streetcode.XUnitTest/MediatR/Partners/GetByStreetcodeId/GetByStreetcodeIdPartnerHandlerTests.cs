@@ -1,11 +1,11 @@
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
-using Streetcode.BLL;
-using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.MediatR.Partners.GetByStreetcodeId;
-using Streetcode.DAL.Entities.Partners;
-using Streetcode.DAL.Entities.Streetcode;
+using global::Streetcode.BLL;
+using global::Streetcode.BLL.DTO.Partners;
+using global::Streetcode.BLL.MediatR.Partners.GetByStreetcodeId;
+using global::Streetcode.DAL.Entities.Partners;
+using global::Streetcode.DAL.Entities.Streetcode;
 using System.Linq.Expressions;
 using Xunit;
 

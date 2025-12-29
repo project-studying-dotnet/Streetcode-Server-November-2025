@@ -1,9 +1,9 @@
 using FluentValidation.TestHelper;
-using Streetcode.BLL.DTO.TextContent;
-using Streetcode.BLL.MediatR.Term.Create;
+using global::Streetcode.BLL.DTO.TextContent;
+using global::Streetcode.BLL.MediatR.Term.Create;
 using Xunit;
 
-namespace Streetcode.XUnit.MediatR.Term.Create;
+namespace Streetcode.XUnit.MediatR.Streetcode.Term.Create;
 
 public class CreateTermCommandValidatorTests
 {

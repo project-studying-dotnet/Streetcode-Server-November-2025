@@ -1,8 +1,8 @@
 namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Fixtures
 {
-    using Streetcode.BLL.DTO.Timeline;
-    using Streetcode.DAL.Entities.Timeline;
-    using Streetcode.DAL.Enums;
+ using global::Streetcode.BLL.DTO.Timeline;
+ using global::Streetcode.DAL.Entities.Timeline;
+ using global::Streetcode.DAL.Enums;
 
     /// <summary>
     /// Provides factory methods for creating test instances of <see cref="TimelineItem"/>,

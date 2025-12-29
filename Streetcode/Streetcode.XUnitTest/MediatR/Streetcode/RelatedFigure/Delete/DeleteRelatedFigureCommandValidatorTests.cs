@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.RelatedFigure.Delete
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Streetcode.RelatedFigure.Delete;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Streetcode.RelatedFigure.Delete;
     using Xunit;
 
     public class DeleteRelatedFigureCommandValidatorTests

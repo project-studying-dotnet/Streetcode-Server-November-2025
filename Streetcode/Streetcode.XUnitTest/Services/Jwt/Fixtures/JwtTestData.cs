@@ -1,6 +1,6 @@
 namespace Streetcode.XUnitTest.Services.Jwt.Fixtures
 {
-    using Streetcode.DAL.Entities.Users;
+ using global::Streetcode.DAL.Entities.Users;
 
     /// <summary>
     /// Provides factory methods for creating test instances of <see cref="User"/>

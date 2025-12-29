@@ -65,7 +65,14 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create
                     }).ToList();
 
                 newTimelineItem = await _repositoryWrapper.TimelineRepository.CreateAsync(newTimelineItem);
-                await _repositoryWrapper.SaveChangesAsync();
+                var saveResult = await _repositoryWrapper.SaveChangesAsync();
+
+                if (saveResult <= 0)
+                {
+                    var errorMsg = "Failed to save the timeline item to the database";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
+                }
 
                 var result = await _repositoryWrapper.TimelineRepository
                     .GetFirstOrDefaultAsync(
@@ -74,7 +81,22 @@ namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.Create
                             .Include(t => t.HistoricalContextTimelines)
                             .ThenInclude(hct => hct.HistoricalContext));
 
-                return Result.Ok(_mapper.Map<TimelineItemDto>(result));
+                if (result == null)
+                {
+                    var errorMsg = "Failed to find the created timeline item";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
+                }
+
+                var dto = _mapper.Map<TimelineItemDto>(result);
+                if (dto == null)
+                {
+                    var errorMsg = "Failed to map timeline item to DTO";
+                    _logger.LogError(request, errorMsg);
+                    return Result.Fail(errorMsg);
+                }
+
+                return Result.Ok(dto);
             }
             catch (Exception ex)
             {

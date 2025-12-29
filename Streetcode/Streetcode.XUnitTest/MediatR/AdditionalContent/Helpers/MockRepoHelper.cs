@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Helpers
 {
     using Moq;
-    using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
+ using global::Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode;
     using System.Linq.Expressions;
 
     public static class MockRepoHelper

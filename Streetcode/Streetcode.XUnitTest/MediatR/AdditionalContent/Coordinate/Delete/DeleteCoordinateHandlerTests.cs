@@ -2,12 +2,12 @@
 {
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Delete;
-    using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
-    using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.AdditionalContent.Helpers;
+ using global::Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Delete;
+ using global::Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
+ using global::Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.AdditionalContent.Helpers;
     using Xunit;
 
     /// <summary>

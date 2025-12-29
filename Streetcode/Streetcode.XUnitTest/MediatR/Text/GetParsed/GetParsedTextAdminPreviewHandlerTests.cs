@@ -8,9 +8,9 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetParsed
     using System.Threading.Tasks;
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.Interfaces.Text;
-    using Streetcode.BLL.MediatR.Streetcode.Text.GetParsed;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.Interfaces.Text;
+ using global::Streetcode.BLL.MediatR.Streetcode.Text.GetParsed;
     using Xunit;
 
     public class GetParsedTextAdminPreviewHandlerTests

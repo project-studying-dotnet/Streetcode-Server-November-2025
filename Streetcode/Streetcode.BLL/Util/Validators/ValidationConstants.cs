@@ -318,8 +318,15 @@ namespace Streetcode.BLL.Util.Validators
         /// </summary>
         public static class Comment
         {
-            public const int ContentMaxLength = 500;
-            public const int AuthorNameMaxLength = 50;
+            /// <summary>
+            /// Comment content maximum length.
+            /// </summary>
+            public const int ContentMaxLength = 1000;
+
+            /// <summary>
+            /// Comment author name maximum length.
+            /// </summary>
+            public const int AuthorNameMaxLength = 100;
         }
     }
 }

@@ -2,9 +2,9 @@
 {
     using AutoMapper;
     using Moq;
-    using Streetcode.BLL.DTO.Toponyms;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL.DTO.Toponyms;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
 
     /// <summary>
     /// Base class for StreetcodeToponym handler tests providing common mock setup functionality.

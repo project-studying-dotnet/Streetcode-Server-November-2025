@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Comments.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.DTO.Streetcode.Comments;
-    using Streetcode.BLL.MediatR.Comments.Create;
-    using Streetcode.BLL.MediatR.Streetcode.Comments.Create;
+ using global::Streetcode.BLL.DTO.Streetcode.Comments;
+ using global::Streetcode.BLL.MediatR.Comments.Create;
+ using global::Streetcode.BLL.MediatR.Streetcode.Comments.Create;
     using Xunit;
 
     /// <summary>

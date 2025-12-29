@@ -3,8 +3,8 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
-using Streetcode.BLL;
-using Streetcode.DAL.Entities.Partners;
+using global::Streetcode.BLL;
+using global::Streetcode.DAL.Entities.Partners;
 using System.Linq.Expressions;
 using Xunit;
 

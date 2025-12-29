@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Newss.Helpers
 {
-    using Streetcode.BLL.DTO.Media.Images;
-    using Streetcode.BLL.DTO.News;
-    using Streetcode.DAL.Entities.Media.Images;
-    using Streetcode.DAL.Entities.News;
+ using global::Streetcode.BLL.DTO.Media.Images;
+ using global::Streetcode.BLL.DTO.News;
+ using global::Streetcode.DAL.Entities.Media.Images;
+ using global::Streetcode.DAL.Entities.News;
 
     public static class NewsTestData
     {

@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Delete
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.RelatedTerm.Delete;
-    using Streetcode.BLL.Util.Validators;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.RelatedTerm.Delete;
+ using global::Streetcode.BLL.Util.Validators;
     using Xunit;
 
     public class DeleteRelatedTermCommandValidatorTests

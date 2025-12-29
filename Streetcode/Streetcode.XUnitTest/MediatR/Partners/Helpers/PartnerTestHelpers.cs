@@ -1,7 +1,7 @@
-using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.DTO.Streetcode;
-using Streetcode.DAL.Entities.Partners;
-using Streetcode.DAL.Entities.Streetcode;
+using global::Streetcode.BLL.DTO.Partners;
+using global::Streetcode.BLL.DTO.Streetcode;
+using global::Streetcode.DAL.Entities.Partners;
+using global::Streetcode.DAL.Entities.Streetcode;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {

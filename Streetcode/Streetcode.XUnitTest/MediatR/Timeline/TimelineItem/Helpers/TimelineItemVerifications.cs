@@ -4,11 +4,11 @@
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Timeline;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.DAL.Entities.Timeline;
-    using Streetcode.DAL.Repositories.Interfaces.Timeline;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Timeline;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.DAL.Entities.Timeline;
+ using global::Streetcode.DAL.Repositories.Interfaces.Timeline;
 
     /// <summary>
     /// Provides extension methods for verifying interactions with mocked repository,

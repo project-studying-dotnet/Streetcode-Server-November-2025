@@ -298,7 +298,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.HistoricalContext.Create
 
             // Assert
             Assert.True(result.IsFailed);
-            Assert.Contains("creation failed", result.Errors[0].Message, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("Failed to create a historical context", result.Errors[0].Message);
         }
 
         [Fact]

@@ -1,8 +1,8 @@
 namespace Streetcode.XUnitTest.MediatR.Users.Fixtures
 {
-    using Streetcode.BLL.DTO.Users;
-    using Streetcode.DAL.Entities.Users;
-    using Streetcode.DAL.Enums;
+ using global::Streetcode.BLL.DTO.Users;
+ using global::Streetcode.DAL.Entities.Users;
+ using global::Streetcode.DAL.Enums;
 
     /// <summary>
     /// Provides factory methods for creating test instances of <see cref="User"/>

@@ -1,11 +1,11 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Helpers
 {
-    using Streetcode.BLL.DTO.AdditionalContent;
-    using Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
-    using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
-    using Streetcode.BLL.DTO.AdditionalContent.Tag;
-    using Streetcode.DAL.Entities.AdditionalContent;
-    using Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
+ using global::Streetcode.BLL.DTO.AdditionalContent;
+ using global::Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
+ using global::Streetcode.BLL.DTO.AdditionalContent.Subtitles;
+ using global::Streetcode.BLL.DTO.AdditionalContent.Tag;
+ using global::Streetcode.DAL.Entities.AdditionalContent;
+ using global::Streetcode.DAL.Entities.AdditionalContent.Coordinates.Types;
 
     public static class TestDataHelper
     {

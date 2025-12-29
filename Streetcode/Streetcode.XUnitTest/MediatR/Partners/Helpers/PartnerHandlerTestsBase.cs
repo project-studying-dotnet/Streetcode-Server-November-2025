@@ -1,9 +1,9 @@
 using AutoMapper;
 using Moq;
-using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.DAL.Entities.Partners;
-using Streetcode.DAL.Repositories.Interfaces.Base;
+using global::Streetcode.BLL.DTO.Partners;
+using global::Streetcode.BLL.Interfaces.Logging;
+using global::Streetcode.DAL.Entities.Partners;
+using global::Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {

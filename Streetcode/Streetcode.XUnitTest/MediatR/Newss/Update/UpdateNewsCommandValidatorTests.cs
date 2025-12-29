@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Newss.Update
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.News;
-    using Streetcode.BLL.MediatR.Newss.Update;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.News;
+ using global::Streetcode.BLL.MediatR.Newss.Update;
     using Xunit;
 
     public class UpdateNewsCommandValidatorTests

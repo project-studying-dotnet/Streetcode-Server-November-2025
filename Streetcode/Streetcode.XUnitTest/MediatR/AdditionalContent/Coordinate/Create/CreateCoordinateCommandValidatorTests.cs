@@ -1,6 +1,6 @@
 ﻿using FluentValidation.TestHelper;
-using Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
-using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Create;
+using global::Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
+using global::Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Create;
 using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Coordinate.Create

@@ -1,7 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Partners.Delete
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.MediatR.Partners.Delete;
+ using global::Streetcode.BLL.MediatR.Partners.Delete;
     using Xunit;
 
     public class DeletePartnerQueryValidatorTests

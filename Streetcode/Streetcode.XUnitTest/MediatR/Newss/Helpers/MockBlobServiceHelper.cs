@@ -1,7 +1,7 @@
 namespace Streetcode.XUnitTest.MediatR.Newss.Helpers
 {
     using Moq;
-    using Streetcode.BLL.Interfaces.BlobStorage;
+ using global::Streetcode.BLL.Interfaces.BlobStorage;
 
     public static class MockBlobServiceHelper
     {

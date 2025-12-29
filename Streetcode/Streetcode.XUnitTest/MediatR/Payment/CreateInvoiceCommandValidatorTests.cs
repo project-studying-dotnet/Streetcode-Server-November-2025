@@ -1,8 +1,8 @@
 ﻿using FluentValidation.TestHelper;
 using Xunit;
-using Streetcode.BLL.MediatR.Payment;
-using Streetcode.BLL.DTO.Payment;
-using Streetcode.BLL;
+using global::Streetcode.BLL.MediatR.Payment;
+using global::Streetcode.BLL.DTO.Payment;
+using global::Streetcode.BLL;
 
 namespace Streetcode.XUnitTest.MediatR.Payment
 {

@@ -2,16 +2,16 @@ namespace Streetcode.XUnitTest.MediatR.Update
 {
     using AutoMapper;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode;
-    using Streetcode.BLL.Interfaces.Cache;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
-    using Streetcode.DAL.Entities.Streetcode;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Base;
-    using Streetcode.XUnitTest.MediatR.Fixture;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Streetcode;
+ using global::Streetcode.BLL.Interfaces.Cache;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
+ using global::Streetcode.DAL.Entities.Streetcode;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Base;
+ using global::Streetcode.XUnitTest.MediatR.Streetcode.Fixture;
     using System;
     using System.Threading.Tasks;
     using Xunit;

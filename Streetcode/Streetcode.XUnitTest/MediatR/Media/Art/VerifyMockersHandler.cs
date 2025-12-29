@@ -12,10 +12,10 @@
     using NLog;
     using Org.BouncyCastle.Crypto;
     using Repositories.Interfaces;
-    using Streetcode.BLL.DTO.Media.Art;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.DAL.Entities.Media.Images;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL.DTO.Media.Art;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.DAL.Entities.Media.Images;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
 
     internal class VerifyMockersHandler
     {

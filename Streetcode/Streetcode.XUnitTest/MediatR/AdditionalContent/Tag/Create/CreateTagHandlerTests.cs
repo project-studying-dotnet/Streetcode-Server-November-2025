@@ -3,13 +3,13 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL.DTO.AdditionalContent;
-    using Streetcode.BLL.MediatR.AdditionalContent.Tag.Create;
-    using Streetcode.DAL.Entities.AdditionalContent;
-    using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.AdditionalContent.Helpers;
+ using global::Streetcode.BLL.DTO.AdditionalContent;
+ using global::Streetcode.BLL.MediatR.AdditionalContent.Tag.Create;
+ using global::Streetcode.DAL.Entities.AdditionalContent;
+ using global::Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.AdditionalContent.Helpers;
     using Xunit;
 
     /// <summary>

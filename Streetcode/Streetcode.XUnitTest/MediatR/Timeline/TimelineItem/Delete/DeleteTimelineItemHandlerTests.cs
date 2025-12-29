@@ -66,7 +66,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Delete
 
             // Assert
             Assert.True(result.IsFailed);
-            Assert.Contains("not found", result.Errors[0].Message, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("Cannot find a timeline item", result.Errors[0].Message);
         }
 
         [Fact]
@@ -191,7 +191,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Delete
 
             // Assert
             Assert.True(result.IsFailed);
-            Assert.Contains("deletion failed", result.Errors[0].Message, StringComparison.OrdinalIgnoreCase);
+            Assert.Contains("Failed to delete a timeline item", result.Errors[0].Message);
         }
 
         [Fact]

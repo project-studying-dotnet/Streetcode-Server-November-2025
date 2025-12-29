@@ -2,12 +2,12 @@
 {
     using global::MediatR;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Email;
-    using Streetcode.BLL.Interfaces.Email;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Email;
-    using Streetcode.DAL.Entities.AdditionalContent.Email;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Email;
+ using global::Streetcode.BLL.Interfaces.Email;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Email;
+ using global::Streetcode.DAL.Entities.AdditionalContent.Email;
     using Xunit;
 
     public class SendEmailHandlerTests

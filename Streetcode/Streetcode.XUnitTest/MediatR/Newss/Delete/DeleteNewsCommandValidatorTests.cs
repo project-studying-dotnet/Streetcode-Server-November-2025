@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Newss.Delete
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Newss.Delete;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Newss.Delete;
     using Xunit;
 
     public class DeleteNewsCommandValidatorTests

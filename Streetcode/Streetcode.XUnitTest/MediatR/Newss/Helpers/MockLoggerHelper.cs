@@ -1,7 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Newss.Helpers
 {
     using Moq;
-    using Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.Interfaces.Logging;
 
     public static class MockLoggerHelper
     {

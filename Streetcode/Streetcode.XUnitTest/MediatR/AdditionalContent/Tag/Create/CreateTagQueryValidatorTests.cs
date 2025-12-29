@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Tag.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.AdditionalContent.Tag;
-    using Streetcode.BLL.MediatR.AdditionalContent.Tag.Create;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.AdditionalContent.Tag;
+ using global::Streetcode.BLL.MediatR.AdditionalContent.Tag.Create;
     using Xunit;
 
     public class CreateTagQueryValidatorTests

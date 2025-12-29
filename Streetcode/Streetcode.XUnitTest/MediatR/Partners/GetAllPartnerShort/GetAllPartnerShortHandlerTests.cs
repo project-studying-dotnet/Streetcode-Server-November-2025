@@ -1,8 +1,8 @@
 using MediatR;
 using Moq;
-using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.MediatR.Partners.GetAllPartnerShort;
-using Streetcode.DAL.Entities.Partners;
+using global::Streetcode.BLL.DTO.Partners;
+using global::Streetcode.BLL.MediatR.Partners.GetAllPartnerShort;
+using global::Streetcode.DAL.Entities.Partners;
 
 namespace Streetcode.XUnitTest.MediatR.Partners
 {

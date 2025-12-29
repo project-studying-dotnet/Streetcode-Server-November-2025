@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Coordinate.Delete
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Delete;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Delete;
     using Xunit;
 
     public class DeleteCoordinateCommandValidatorTests

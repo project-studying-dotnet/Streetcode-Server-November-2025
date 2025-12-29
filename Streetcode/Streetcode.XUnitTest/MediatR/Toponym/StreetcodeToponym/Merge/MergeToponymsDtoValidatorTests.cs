@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Merge
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.DTO.Toponyms;
-    using Streetcode.BLL.MediatR.Toponyms.Merge;
+ using global::Streetcode.BLL.DTO.Toponyms;
+ using global::Streetcode.BLL.MediatR.Toponyms.Merge;
     using Xunit;
 
     /// <summary>

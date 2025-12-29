@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Streetcodes.DeleteSoft
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteSoft;
     using Xunit;
 
     public class DeleteSoftStreetcodeCommandValidatorTests

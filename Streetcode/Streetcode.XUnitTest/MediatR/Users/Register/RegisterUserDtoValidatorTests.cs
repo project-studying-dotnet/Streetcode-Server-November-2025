@@ -1,9 +1,9 @@
 namespace Streetcode.XUnitTest.MediatR.Users.Register
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.DTO.Users;
-    using Streetcode.BLL.MediatR.Users.Register;
-    using Streetcode.DAL.Enums;
+ using global::Streetcode.BLL.DTO.Users;
+ using global::Streetcode.BLL.MediatR.Users.Register;
+ using global::Streetcode.DAL.Enums;
     using Xunit;
 
     /// <summary>

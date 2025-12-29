@@ -1,7 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Transactions.Fixtures
 {
-    using Streetcode.BLL.DTO.Transactions;
-    using Streetcode.DAL.Entities.Transactions;
+ using global::Streetcode.BLL.DTO.Transactions;
+ using global::Streetcode.DAL.Entities.Transactions;
 
     /// <summary>
     /// Provides test data for TransactionLink entities and DTOs used in unit tests.

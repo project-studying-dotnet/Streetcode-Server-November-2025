@@ -1,15 +1,14 @@
 using AutoMapper;
 using Moq;
-using Streetcode.BLL.DTO.TextContent;
-using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Term.Create;
-using Streetcode.DAL.Repositories.Interfaces.Base;
+using global::Streetcode.BLL.DTO.TextContent;
+using global::Streetcode.BLL.Interfaces.Logging;
+using global::Streetcode.BLL.MediatR.Term.Create;
+using global::Streetcode.DAL.Repositories.Interfaces.Base;
 using Xunit;
 using FluentAssertions;
-using Streetcode.XUnitTest.Helpers;
-using TermEntity = Streetcode.DAL.Entities.Streetcode.TextContent.Term;
+using TermEntity = global::Streetcode.DAL.Entities.Streetcode.TextContent.Term;
 
-namespace Streetcode.XUnitTest.MediatR.Term.Create;
+namespace Streetcode.XUnitTest.MediatR.Streetcode.Term.Create;
 
 public class CreateTermHandlerTests
 {
@@ -17,7 +16,6 @@ public class CreateTermHandlerTests
     private readonly Mock<IRepositoryWrapper> mockRepository;
     private readonly Mock<ILoggerService> mockLogger;
     private readonly CreateTermHandler handler;
-    
 
     public CreateTermHandlerTests()
     {
@@ -61,10 +59,9 @@ public class CreateTermHandlerTests
         var termEntity = new TermEntity { Title = "Fail Title" };
         var command = new CreateTermCommand(termDto);
 
-        this.mockMapper.SetupMapper(termDto, termEntity);
-        this.mockMapper.SetupMapper(termEntity, termDto);
+        this.mockMapper.Setup(m => m.Map<TermEntity>(It.IsAny<TermDto>())).Returns(termEntity);
         this.mockRepository.Setup(r => r.TermRepository.CreateAsync(It.IsAny<TermEntity>()))
-            .Returns(Task.FromResult((TermEntity)null!));
+            .Returns(Task.FromResult(termEntity));
         this.mockRepository.Setup(r => r.SaveChangesAsync()).ReturnsAsync(0);
 
         var result = await this.handler.Handle(command, CancellationToken.None);

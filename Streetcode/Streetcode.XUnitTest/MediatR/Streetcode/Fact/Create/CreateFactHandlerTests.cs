@@ -4,20 +4,20 @@
     using MockQueryable;
     using Moq;
     using Repositories.Interfaces;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Fact.Create;
-    using Streetcode.BLL.MediatR.Streetcode.Fact.Create;
-    using Streetcode.DAL.Entities.Media.Images;
-    using Streetcode.DAL.Entities.Streetcode;
-    using Streetcode.DAL.Entities.Streetcode.TextContent;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Fact.Fixtures;
-    using Streetcode.XUnitTest.MediatR.Fact.Helpers;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Fact.Create;
+ using global::Streetcode.BLL.MediatR.Streetcode.Fact.Create;
+ using global::Streetcode.DAL.Entities.Media.Images;
+ using global::Streetcode.DAL.Entities.Streetcode;
+ using global::Streetcode.DAL.Entities.Streetcode.TextContent;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Fact.Fixtures;
+ using global::Streetcode.XUnitTest.MediatR.Fact.Helpers;
     using Xunit;
 
     public class CreateFactHandlerTests

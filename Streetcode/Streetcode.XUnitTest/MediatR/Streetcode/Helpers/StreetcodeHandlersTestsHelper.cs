@@ -6,21 +6,21 @@
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Repositories.Interfaces;
-    using Streetcode.BLL.DTO.Media.Images;
-    using Streetcode.BLL.DTO.Streetcode;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
-    using Streetcode.BLL.Util;
-    using Streetcode.DAL.Entities.AdditionalContent;
-    using Streetcode.DAL.Entities.Media;
-    using Streetcode.DAL.Entities.Media.Images;
-    using Streetcode.DAL.Entities.Streetcode;
-    using Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Media.Images;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Fixture;
+ using global::Streetcode.BLL.DTO.Media.Images;
+ using global::Streetcode.BLL.DTO.Streetcode;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
+ using global::Streetcode.BLL.Util;
+ using global::Streetcode.DAL.Entities.AdditionalContent;
+ using global::Streetcode.DAL.Entities.Media;
+ using global::Streetcode.DAL.Entities.Media.Images;
+ using global::Streetcode.DAL.Entities.Streetcode;
+ using global::Streetcode.DAL.Repositories.Interfaces.AdditionalContent;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Media.Images;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Streetcode.Fixture;
 
     public class StreetcodeHandlersTestsHelper
     {

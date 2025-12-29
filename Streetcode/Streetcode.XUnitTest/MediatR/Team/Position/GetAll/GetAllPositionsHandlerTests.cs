@@ -5,13 +5,13 @@
     using FluentAssertions.Execution;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Team;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Team.Position.GetAll;
-    using Streetcode.DAL.Entities.Team;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Team;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Team;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Team.Position.GetAll;
+ using global::Streetcode.DAL.Entities.Team;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Team;
     using System.Linq.Expressions;
     using Xunit;
 

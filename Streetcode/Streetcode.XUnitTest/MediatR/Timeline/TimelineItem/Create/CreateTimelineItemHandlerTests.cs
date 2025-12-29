@@ -486,7 +486,8 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Create
 
             // Assert
             Assert.True(result.IsFailed);
-            Assert.Contains("HistoricalContext", result.Errors[0].Message);
+            Assert.Contains("Historical contexts with IDs", result.Errors[0].Message);
+            Assert.Contains("do not exist", result.Errors[0].Message);
 
             // Verify that CreateAsync was never called
             this.timelineRepositoryMock.Verify(
@@ -526,7 +527,8 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Create
 
             // Assert
             Assert.True(result.IsFailed);
-            Assert.Contains("HistoricalContext", result.Errors[0].Message);
+            Assert.Contains("Historical contexts with IDs", result.Errors[0].Message);
+            Assert.Contains("do not exist", result.Errors[0].Message);
 
             // Verify that CreateAsync was never called
             this.timelineRepositoryMock.Verify(
@@ -555,7 +557,9 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Create
             this.timelineRepositoryMock
                 .SetupCreateAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(newEntity);
 
-            this.repositoryWrapperMock.SetupSaveChangesAsync(0);
+            this.repositoryWrapperMock
+                .Setup(rw => rw.SaveChangesAsync())
+                .ReturnsAsync(0);
 
             var command = new CreateTimelineItemCommand(createDto);
 
@@ -596,7 +600,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Create
             this.timelineRepositoryMock
                 .SetupCreateAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(newEntity);
 
-            this.repositoryWrapperMock.SetupSaveChangesAsync(1);
+            this.repositoryWrapperMock.SetupSaveChangesAsync();
 
             this.timelineRepositoryMock
                 .SetupGetFirstOrDefaultAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(null);
@@ -647,7 +651,7 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Create
             this.timelineRepositoryMock
                 .SetupCreateAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(createdEntity);
 
-            this.repositoryWrapperMock.SetupSaveChangesAsync(1);
+            this.repositoryWrapperMock.SetupSaveChangesAsync();
 
             this.timelineRepositoryMock
                 .SetupGetFirstOrDefaultAsync<ITimelineRepository, global::Streetcode.DAL.Entities.Timeline.TimelineItem>(createdEntity);

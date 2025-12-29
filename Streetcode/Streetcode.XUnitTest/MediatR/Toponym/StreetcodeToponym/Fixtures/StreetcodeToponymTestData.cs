@@ -1,7 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Fixtures
 {
-    using Streetcode.BLL.DTO.Toponyms;
-    using Streetcode.DAL.Entities.Toponyms;
+ using global::Streetcode.BLL.DTO.Toponyms;
+ using global::Streetcode.DAL.Entities.Toponyms;
 
     /// <summary>
     /// Provides factory methods for creating test instances of <see cref="StreetcodeToponym"/>

@@ -1,7 +1,7 @@
 namespace Streetcode.XUnitTest.MediatR.Fact.Fixtures
 {
-    using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
-    using Streetcode.DAL.Entities.Streetcode.TextContent;
+ using global::Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
+ using global::Streetcode.DAL.Entities.Streetcode.TextContent;
 
     /// <summary>
     /// Provides factory methods for creating test instances of <see cref="DAL.Entities.Streetcode.TextContent.Fact"/>

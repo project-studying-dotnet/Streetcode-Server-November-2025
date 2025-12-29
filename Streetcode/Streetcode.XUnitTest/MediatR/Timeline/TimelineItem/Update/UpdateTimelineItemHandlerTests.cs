@@ -170,11 +170,20 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Update
             var existingItem = TimelineItemTestData.CreateTimelineItem(id: 1);
             existingItem.HistoricalContextTimelines = oldRelationships;
             var streetcode = StreetcodeTestData.CreateStreetcode();
-            var contexts = HistoricalContextTestData.CreateHistoricalContexts(2);
+            var contexts = new List<HistoricalContext>
+            {
+                HistoricalContextTestData.CreateHistoricalContext(id: 5, title: "Context 5"),
+                HistoricalContextTestData.CreateHistoricalContext(id: 6, title: "Context 6")
+            };
             var updatedItem = TimelineItemTestData.CreateTimelineItemWithContexts(id: 1, 5, 6);
             var resultDto = TimelineItemTestData.CreateTimelineItemDTO(id: 1);
 
-            this.timelineRepositoryMock.SetupGetFirstOrDefaultAsync(existingItem);
+            this.timelineRepositoryMock
+                .SetupSequence(r => r.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<global::Streetcode.DAL.Entities.Timeline.TimelineItem, bool>>>(),
+                    It.IsAny<Func<IQueryable<global::Streetcode.DAL.Entities.Timeline.TimelineItem>, IIncludableQueryable<global::Streetcode.DAL.Entities.Timeline.TimelineItem, object>>>()))
+                .ReturnsAsync(existingItem)
+                .ReturnsAsync(updatedItem);
 
             this.streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync(streetcode);
 
@@ -190,8 +199,6 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Update
             this.timelineRepositoryMock.Setup(r => r.Update(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()));
 
             this.repositoryWrapperMock.SetupSaveChangesAsync();
-
-            this.timelineRepositoryMock.SetupGetFirstOrDefaultAsync(updatedItem);
 
             this.mapperMock
                 .Setup(m => m.Map<TimelineItemDto>(updatedItem))
@@ -275,7 +282,8 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Update
 
             // Assert
             Assert.True(result.IsFailed);
-            Assert.Contains("HistoricalContext", result.Errors[0].Message);
+            Assert.Contains("Historical contexts with IDs", result.Errors[0].Message);
+            Assert.Contains("do not exist", result.Errors[0].Message);
             this.timelineRepositoryMock.Verify(r => r.Update(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()), Times.Never);
         }
 
@@ -321,7 +329,12 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Update
             var updatedItem = TimelineItemTestData.CreateTimelineItem(id: 1);
             var resultDto = TimelineItemTestData.CreateTimelineItemDTO(id: 1);
 
-            this.timelineRepositoryMock.SetupGetFirstOrDefaultAsync(existingItem);
+            this.timelineRepositoryMock
+                .SetupSequence(r => r.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<global::Streetcode.DAL.Entities.Timeline.TimelineItem, bool>>>(),
+                    It.IsAny<Func<IQueryable<global::Streetcode.DAL.Entities.Timeline.TimelineItem>, IIncludableQueryable<global::Streetcode.DAL.Entities.Timeline.TimelineItem, object>>>()))
+                .ReturnsAsync(existingItem)
+                .ReturnsAsync(updatedItem);
 
             this.streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync(streetcode);
 
@@ -332,8 +345,6 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Update
             this.timelineRepositoryMock.Setup(r => r.Update(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()));
 
             this.repositoryWrapperMock.SetupSaveChangesAsync();
-
-            this.timelineRepositoryMock.SetupGetFirstOrDefaultAsync(updatedItem);
 
             this.mapperMock
                 .Setup(m => m.Map<TimelineItemDto>(updatedItem))
@@ -408,7 +419,12 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Update
             var updatedItem = TimelineItemTestData.CreateTimelineItem(id: 1);
             var resultDto = TimelineItemTestData.CreateTimelineItemDTO(id: 1);
 
-            this.timelineRepositoryMock.SetupGetFirstOrDefaultAsync(existingItem);
+            this.timelineRepositoryMock
+                .SetupSequence(r => r.GetFirstOrDefaultAsync(
+                    It.IsAny<Expression<Func<global::Streetcode.DAL.Entities.Timeline.TimelineItem, bool>>>(),
+                    It.IsAny<Func<IQueryable<global::Streetcode.DAL.Entities.Timeline.TimelineItem>, IIncludableQueryable<global::Streetcode.DAL.Entities.Timeline.TimelineItem, object>>>()))
+                .ReturnsAsync(existingItem)
+                .ReturnsAsync(updatedItem);
 
             this.streetcodeRepositoryMock.SetupGetFirstOrDefaultAsync(streetcode);
 
@@ -422,8 +438,6 @@ namespace Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Update
             this.timelineRepositoryMock.Setup(r => r.Update(It.IsAny<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()));
 
             this.repositoryWrapperMock.SetupSaveChangesAsync();
-
-            this.timelineRepositoryMock.SetupGetFirstOrDefaultAsync(updatedItem);
 
             this.mapperMock
                 .Setup(m => m.Map<TimelineItemDto>(updatedItem))

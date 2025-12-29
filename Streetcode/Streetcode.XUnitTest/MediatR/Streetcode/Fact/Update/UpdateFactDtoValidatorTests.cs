@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact.Update
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
-    using Streetcode.BLL.MediatR.Streetcode.Fact.Update;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
+ using global::Streetcode.BLL.MediatR.Streetcode.Fact.Update;
     using Xunit;
 
     public class UpdateFactDtoValidatorTests

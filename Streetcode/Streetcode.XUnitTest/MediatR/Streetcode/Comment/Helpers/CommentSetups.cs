@@ -1,8 +1,8 @@
 namespace Streetcode.XUnitTest.MediatR.Comments.Helpers
 {
     using Moq;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode;
 
     /// <summary>
     /// Provides extension methods for configuring mocked repository, mapper, and logger behavior

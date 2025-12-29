@@ -114,6 +114,290 @@ namespace Streetcode.XIntegrationTest.Timeline.HistoricalContext
         }
 
         [Fact]
+        public async Task CreateHistoricalContext_WithEmptyTitle_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = string.Empty,
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithNullTitle_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = null!,
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithWhitespaceTitle_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "   ",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithTitleTooLong_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = new string('А', 51), // 51 characters, exceeds max of 50
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithMaxLengthTitle_CreatesSuccessfully()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = new string('А', 50), // Exactly 50 characters (max allowed)
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(50, result.Title.Length);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithNumerals_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Контекст 123", // Contains numerals
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithSpecialCharacters_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Контекст!@#", // Contains special characters
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithHyphen_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Києво-Русь", // Contains hyphen
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithCyrillicLetters_CreatesSuccessfully()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Давня Україна",
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal("Давня Україна", result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithLatinLetters_CreatesSuccessfully()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Ancient History",
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal("Ancient History", result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithMixedCyrillicAndLatin_CreatesSuccessfully()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Україна Ukraine",
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal("Україна Ukraine", result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithUkrainianSpecificLetters_CreatesSuccessfully()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Їжак і єнот у Ґданську",
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal("Їжак і єнот у Ґданську", result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithMultipleSpaces_CreatesSuccessfully()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Період   між   війнами",
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal("Період   між   війнами", result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_VerifiesInDatabase()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Нова епоха",
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            // Verify in database
+            var dbContext = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.FirstOrDefault(c => c.Title == "Нова епоха"));
+            
+            Assert.NotNull(dbContext);
+            Assert.Equal("Нова епоха", dbContext.Title);
+            Assert.True(dbContext.Id > 0);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_MultipleContexts_AllCreatedIndependently()
+        {
+            // Arrange
+            var createDto1 = new CreateHistoricalContextDto { Title = "Перший контекст" };
+            var createDto2 = new CreateHistoricalContextDto { Title = "Другий контекст" };
+            var createDto3 = new CreateHistoricalContextDto { Title = "Третій контекст" };
+
+            // Act
+            var (response1, result1) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, createDto1);
+            var (response2, result2) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, createDto2);
+            var (response3, result3) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, createDto3);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response1.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response2.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response3.StatusCode);
+
+            // Verify all contexts exist in database
+            var allContexts = this.ExecuteWithContext(db => db.HistoricalContexts.ToList());
+            Assert.Equal(3, allContexts.Count);
+            Assert.Contains(allContexts, c => c.Title == "Перший контекст");
+            Assert.Contains(allContexts, c => c.Title == "Другий контекст");
+            Assert.Contains(allContexts, c => c.Title == "Третій контекст");
+        }
+
+        [Fact]
         public async Task UpdateHistoricalContext_WithValidData_UpdatesSuccessfully()
         {
             // Arrange

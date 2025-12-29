@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Streetcode.Fact;
-    using Streetcode.BLL.Util.Validators;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Streetcode.Fact;
+ using global::Streetcode.BLL.Util.Validators;
     using Xunit;
 
     public class BaseFactDtoValidatorTests

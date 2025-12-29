@@ -3,10 +3,10 @@
     using System.Linq.Expressions;
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL.DTO.Users;
-    using Streetcode.BLL.MediatR.Users.Logout;
-    using Streetcode.DAL.Entities.Jwt;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL.DTO.Users;
+ using global::Streetcode.BLL.MediatR.Users.Logout;
+ using global::Streetcode.DAL.Entities.Jwt;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
     using Xunit;
 
     public class LogoutHandlerTests

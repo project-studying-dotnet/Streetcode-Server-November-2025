@@ -3,15 +3,15 @@
     using System.Transactions;
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Toponyms;
-    using Streetcode.BLL.MediatR.Toponyms.Merge;
-    using Streetcode.DAL.Entities.Toponyms;
-    using Streetcode.DAL.Repositories.Interfaces.Toponyms;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Fixtures;
-    using Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Helpers;
-    using Streetcode.XUnitTest.MediatR.Toponyms.Fixtures;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Toponyms;
+ using global::Streetcode.BLL.MediatR.Toponyms.Merge;
+ using global::Streetcode.DAL.Entities.Toponyms;
+ using global::Streetcode.DAL.Repositories.Interfaces.Toponyms;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Fixtures;
+ using global::Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Toponyms.Fixtures;
     using Xunit;
 
     /// <summary>
