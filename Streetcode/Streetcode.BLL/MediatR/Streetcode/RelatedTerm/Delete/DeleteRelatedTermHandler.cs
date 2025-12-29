@@ -2,10 +2,10 @@ using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
+namespace Streetcode.BLL.MediatR.RelatedTerm.Delete
 {
     public class DeleteRelatedTermHandler : IRequestHandler<DeleteRelatedTermCommand, Result<RelatedTermDto>>
     {

@@ -1,7 +1,6 @@
 using FluentValidation;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update
+namespace Streetcode.BLL.MediatR.RelatedTerm.Update
 {
     /// <summary>
     /// Validator for UpdateRelatedTermCommand.

@@ -1,7 +1,7 @@
 using FluentValidation;
 using Streetcode.BLL.Util.Validators;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
+namespace Streetcode.BLL.MediatR.RelatedTerm.Delete
 {
     /// <summary>
     /// Validator for DeleteRelatedTermCommand.
