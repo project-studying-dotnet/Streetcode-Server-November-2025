@@ -2067,5 +2067,377 @@ namespace Streetcode.XIntegrationTest.Timeline.HistoricalContext
         }
 
         #endregion
+
+        #region Concurrent Operations and Race Conditions Tests
+
+        [Fact]
+        public async Task CreateHistoricalContext_ConcurrentRequestsWithSameTitle_OnlyOneSucceeds()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Конкурентний Контекст",
+            };
+
+            // Act - Execute 5 concurrent requests with the same title
+            var tasks = Enumerable.Range(0, 5)
+                .Select(_ => this.Client.PostAsJsonAsync(BaseUrl, createDto))
+                .ToArray();
+
+            var responses = await Task.WhenAll(tasks);
+
+            // Assert
+            var successResponses = responses.Where(r => r.StatusCode == HttpStatusCode.OK).ToList();
+            var failureResponses = responses.Where(r => r.StatusCode == HttpStatusCode.BadRequest).ToList();
+
+            // Exactly one should succeed, others should fail due to duplicate title
+            Assert.Single(successResponses);
+            Assert.Equal(4, failureResponses.Count);
+
+            // Verify only one entry in database
+            var dbContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Where(hc => hc.Title == "Конкурентний Контекст").ToList());
+
+            Assert.Single(dbContexts);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_ConcurrentRequestsWithDifferentTitles_AllSucceed()
+        {
+            // Arrange - Create 10 concurrent requests with different titles
+            var tasks = Enumerable.Range(1, 10)
+                .Select(i => new CreateHistoricalContextDto
+                {
+                    Title = $"Контекст Номер {i}",
+                })
+                .Select(dto => this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, dto))
+                .ToArray();
+
+            // Act
+            var results = await Task.WhenAll(tasks);
+
+            // Assert
+            Assert.All(results, result =>
+            {
+                Assert.Equal(HttpStatusCode.OK, result.Item1.StatusCode);
+                Assert.NotNull(result.Item2);
+            });
+
+            // Verify all 10 entries in database
+            var dbContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Where(hc => hc.Title.StartsWith("Контекст Номер")).ToList());
+
+            Assert.Equal(10, dbContexts.Count);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_ConcurrentUpdatesToSameTitle_OnlyOneSucceeds()
+        {
+            // Arrange
+            var context1 = new CreateHistoricalContextDto { Title = "Контекст Перший" };
+            var context2 = new CreateHistoricalContextDto { Title = "Контекст Другий" };
+            var context3 = new CreateHistoricalContextDto { Title = "Контекст Третій" };
+
+            var (_, result1) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, context1);
+            var (_, result2) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, context2);
+            var (_, result3) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, context3);
+
+            // Try to update all three to the same title concurrently
+            var targetTitle = "Цільовий Заголовок";
+            var updateDto1 = new UpdateHistoricalContextDto { Id = result1.Id, Title = targetTitle };
+            var updateDto2 = new UpdateHistoricalContextDto { Id = result2.Id, Title = targetTitle };
+            var updateDto3 = new UpdateHistoricalContextDto { Id = result3.Id, Title = targetTitle };
+
+            // Act - Execute concurrent updates
+            var tasks = new[]
+            {
+                this.Client.PutAsJsonAsync(BaseUrl, updateDto1),
+                this.Client.PutAsJsonAsync(BaseUrl, updateDto2),
+                this.Client.PutAsJsonAsync(BaseUrl, updateDto3),
+            };
+
+            var responses = await Task.WhenAll(tasks);
+
+            // Assert
+            var successResponses = responses.Where(r => r.StatusCode == HttpStatusCode.OK).ToList();
+            var failureResponses = responses.Where(r => r.StatusCode == HttpStatusCode.BadRequest).ToList();
+
+            // Exactly one should succeed, others should fail due to duplicate title
+            Assert.Single(successResponses);
+            Assert.Equal(2, failureResponses.Count);
+
+            // Verify only one has the target title
+            var dbContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Where(hc => hc.Title == targetTitle).ToList());
+
+            Assert.Single(dbContexts);
+
+            // Verify total count is still 3
+            var totalContexts = this.ExecuteWithContext(db => db.HistoricalContexts.Count());
+            Assert.Equal(3, totalContexts);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_RaceConditionWithExistingTitle_SecondRequestFails()
+        {
+            // Arrange - Create initial context
+            var initialDto = new CreateHistoricalContextDto { Title = "Існуючий Контекст" };
+            await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, initialDto);
+
+            // Try to create duplicates concurrently
+            var duplicateDto = new CreateHistoricalContextDto { Title = "Існуючий Контекст" };
+
+            // Act - Execute 3 concurrent duplicate requests
+            var tasks = Enumerable.Range(0, 3)
+                .Select(_ => this.Client.PostAsJsonAsync(BaseUrl, duplicateDto))
+                .ToArray();
+
+            var responses = await Task.WhenAll(tasks);
+
+            // Assert - All should fail since the title already exists
+            Assert.All(responses, response =>
+            {
+                Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            });
+
+            // Verify only one entry exists
+            var dbContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Where(hc => hc.Title == "Існуючий Контекст").ToList());
+
+            Assert.Single(dbContexts);
+        }
+
+        [Fact]
+        public async Task CreateAndUpdateHistoricalContext_ConcurrentOperations_MaintainsDataIntegrity()
+        {
+            // Arrange - Create initial context
+            var createDto = new CreateHistoricalContextDto { Title = "Початковий Контекст" };
+            var (_, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, createDto);
+
+            // Prepare concurrent operations: creates and updates
+            var tasks = new List<Task<HttpResponseMessage>>
+            {
+                // Try to create with same title (should fail)
+                this.Client.PostAsJsonAsync(BaseUrl, new CreateHistoricalContextDto { Title = "Початковий Контекст" }),
+                
+                // Try to create with different titles (should succeed)
+                this.Client.PostAsJsonAsync(BaseUrl, new CreateHistoricalContextDto { Title = "Новий Контекст Один" }),
+                this.Client.PostAsJsonAsync(BaseUrl, new CreateHistoricalContextDto { Title = "Новий Контекст Два" }),
+                
+                // Try to update to existing title (should fail)
+                this.Client.PutAsJsonAsync(BaseUrl, new UpdateHistoricalContextDto { Id = result.Id, Title = "Початковий Контекст" }),
+                
+                // Try to update to new title (should succeed)
+                this.Client.PutAsJsonAsync(BaseUrl, new UpdateHistoricalContextDto { Id = result.Id, Title = "Оновлений Контекст" }),
+            };
+
+            // Act
+            var responses = await Task.WhenAll(tasks);
+
+            // Assert
+            var statusCodes = responses.Select(r => r.StatusCode).ToList();
+
+            // Verify expected success/failure pattern
+            var successCount = statusCodes.Count(sc => sc == HttpStatusCode.OK);
+            var failureCount = statusCodes.Count(sc => sc == HttpStatusCode.BadRequest);
+
+            // Should have some successes and some failures
+            Assert.True(successCount >= 2); // At least the 2 new creates
+            Assert.True(failureCount >= 1); // At least the duplicate create
+
+            // Verify database integrity
+            var allContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.ToList());
+
+            // Should have at least 3 contexts (initial + 2 new ones)
+            Assert.True(allContexts.Count >= 3);
+
+            // Verify all titles are unique
+            var titles = allContexts.Select(c => c.Title).ToList();
+            Assert.Equal(titles.Count, titles.Distinct().Count());
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_HighConcurrencyWithSameTitle_DatabaseConstraintEnforced()
+        {
+            // Arrange - Simulate high concurrency (20 simultaneous requests)
+            var title = "Високо Конкурентний Заголовок";
+            var createDto = new CreateHistoricalContextDto { Title = title };
+
+            // Act - Execute 20 concurrent requests with the same title
+            var tasks = Enumerable.Range(0, 20)
+                .Select(_ => this.Client.PostAsJsonAsync(BaseUrl, createDto))
+                .ToArray();
+
+            var responses = await Task.WhenAll(tasks);
+
+            // Assert
+            var successCount = responses.Count(r => r.StatusCode == HttpStatusCode.OK);
+            var failureCount = responses.Count(r => r.StatusCode == HttpStatusCode.BadRequest);
+
+            // Exactly one should succeed, all others should fail
+            Assert.Equal(1, successCount);
+            Assert.Equal(19, failureCount);
+
+            // Verify database has exactly one entry
+            var dbContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Where(hc => hc.Title == title).ToList());
+
+            Assert.Single(dbContexts);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_ConcurrentUpdatesWithDifferentTitles_AllSucceed()
+        {
+            // Arrange - Create 5 contexts
+            var contexts = new List<HistoricalContextDto>();
+            for (int i = 1; i <= 5; i++)
+            {
+                var createDto = new CreateHistoricalContextDto { Title = $"Контекст {i}" };
+                var (_, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, createDto);
+                contexts.Add(result);
+            }
+
+            // Prepare concurrent updates with different titles
+            var updateTasks = contexts.Select((ctx, index) =>
+                this.Client.PutAsJsonAsync(BaseUrl, new UpdateHistoricalContextDto
+                {
+                    Id = ctx.Id,
+                    Title = $"Оновлений Контекст {index + 1}",
+                })
+            ).ToArray();
+
+            // Act
+            var responses = await Task.WhenAll(updateTasks);
+
+            // Assert - All should succeed
+            Assert.All(responses, response =>
+            {
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            });
+
+            // Verify all titles are updated and unique
+            var dbContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Where(hc => hc.Title.StartsWith("Оновлений Контекст")).ToList());
+
+            Assert.Equal(5, dbContexts.Count);
+            
+            var titles = dbContexts.Select(c => c.Title).ToList();
+            Assert.Equal(titles.Count, titles.Distinct().Count());
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_ConcurrentWithValidationErrors_HandlesGracefully()
+        {
+            // Arrange - Mix of valid and invalid titles
+            var tasks = new List<Task<HttpResponseMessage>>
+            {
+                // Valid titles
+                this.Client.PostAsJsonAsync(BaseUrl, new CreateHistoricalContextDto { Title = "Валідний Заголовок Один" }),
+                this.Client.PostAsJsonAsync(BaseUrl, new CreateHistoricalContextDto { Title = "Валідний Заголовок Два" }),
+                
+                // Invalid: too long
+                this.Client.PostAsJsonAsync(BaseUrl, new CreateHistoricalContextDto 
+                { 
+                    Title = new string('А', 51) // 51 characters, exceeds max of 50
+                }),
+                
+                // Invalid: contains numbers
+                this.Client.PostAsJsonAsync(BaseUrl, new CreateHistoricalContextDto { Title = "Заголовок123" }),
+                
+                // Invalid: empty
+                this.Client.PostAsJsonAsync(BaseUrl, new CreateHistoricalContextDto { Title = "" }),
+                
+                // Valid title
+                this.Client.PostAsJsonAsync(BaseUrl, new CreateHistoricalContextDto { Title = "Валідний Заголовок Три" }),
+            };
+
+            // Act
+            var responses = await Task.WhenAll(tasks);
+
+            // Assert
+            var successResponses = responses.Where(r => r.StatusCode == HttpStatusCode.OK).ToList();
+            var failureResponses = responses.Where(r => r.StatusCode == HttpStatusCode.BadRequest).ToList();
+
+            // 3 valid titles should succeed
+            Assert.Equal(3, successResponses.Count);
+            
+            // 3 invalid titles should fail
+            Assert.Equal(3, failureResponses.Count);
+
+            // Verify only valid entries in database
+            var dbContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Where(hc => hc.Title.StartsWith("Валідний")).ToList());
+
+            Assert.Equal(3, dbContexts.Count);
+        }
+
+        [Fact]
+        public async Task DeleteHistoricalContext_ConcurrentDeletes_OnlyFirstSucceeds()
+        {
+            // Arrange - Create a context
+            var createDto = new CreateHistoricalContextDto { Title = "Контекст Для Видалення" };
+            var (_, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(BaseUrl, createDto);
+
+            // Act - Try to delete concurrently 5 times
+            var deleteTasks = Enumerable.Range(0, 5)
+                .Select(_ => this.DeleteAsync($"{BaseUrl}/{result.Id}"))
+                .ToArray();
+
+            var responses = await Task.WhenAll(deleteTasks);
+
+            // Assert
+            var successResponses = responses.Where(r => r.StatusCode == HttpStatusCode.OK).ToList();
+            var failureResponses = responses.Where(r => r.StatusCode == HttpStatusCode.BadRequest).ToList();
+
+            // Only one should succeed
+            Assert.Single(successResponses);
+            Assert.Equal(4, failureResponses.Count);
+
+            // Verify context is deleted
+            var dbContext = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.FirstOrDefault(hc => hc.Id == result.Id));
+
+            Assert.Null(dbContext);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_ConcurrentWithSimilarTitles_AllSucceed()
+        {
+            // Arrange - Create concurrent requests with similar but different titles
+            var baseTitles = new[]
+            {
+                "Середньовіччя",
+                "Середньовіччя Ранній Період",
+                "Середньовіччя Пізній Період",
+                "Середньовіччя в Україні",
+                "Середньовіччя Європейське",
+            };
+
+            var tasks = baseTitles
+                .Select(title => this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                    BaseUrl, 
+                    new CreateHistoricalContextDto { Title = title }))
+                .ToArray();
+
+            // Act
+            var results = await Task.WhenAll(tasks);
+
+            // Assert - All should succeed since titles are different
+            Assert.All(results, result =>
+            {
+                Assert.Equal(HttpStatusCode.OK, result.Item1.StatusCode);
+                Assert.NotNull(result.Item2);
+            });
+
+            // Verify all 5 contexts exist with correct titles
+            var dbContexts = this.ExecuteWithContext(db =>
+                db.HistoricalContexts.Where(hc => hc.Title.Contains("Середньовіччя")).ToList());
+
+            Assert.Equal(5, dbContexts.Count);
+            Assert.Equal(baseTitles.OrderBy(t => t), dbContexts.Select(c => c.Title).OrderBy(t => t));
+        }
+
+        #endregion
     }
 }
