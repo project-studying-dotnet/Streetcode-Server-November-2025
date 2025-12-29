@@ -1589,5 +1589,301 @@ namespace Streetcode.XIntegrationTest.Timeline.TimelineItem
             Assert.NotNull(result);
             Assert.Equal(3, result.Count);
         }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithYearPattern_CreatesSuccessfully()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            this.SeedDatabase(db => db.Streetcodes.Add(streetcode));
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Event with Year pattern",
+                Description = "Testing Year date view pattern",
+                Date = new DateTime(2024, 1, 1),
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(DateViewPattern.Year, result.DateViewPattern);
+
+            // Verify in database
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == result.Id));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(DateViewPattern.Year, dbItem.DateViewPattern);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithMonthYearPattern_CreatesSuccessfully()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            this.SeedDatabase(db => db.Streetcodes.Add(streetcode));
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Event with MonthYear pattern",
+                Description = "Testing MonthYear date view pattern",
+                Date = new DateTime(2024, 6, 1),
+                DateViewPattern = DateViewPattern.MonthYear,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(DateViewPattern.MonthYear, result.DateViewPattern);
+
+            // Verify in database
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == result.Id));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(DateViewPattern.MonthYear, dbItem.DateViewPattern);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithSeasonYearPattern_CreatesSuccessfully()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            this.SeedDatabase(db => db.Streetcodes.Add(streetcode));
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Event with SeasonYear pattern",
+                Description = "Testing SeasonYear date view pattern",
+                Date = new DateTime(2024, 3, 21),
+                DateViewPattern = DateViewPattern.SeasonYear,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(DateViewPattern.SeasonYear, result.DateViewPattern);
+
+            // Verify in database
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == result.Id));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(DateViewPattern.SeasonYear, dbItem.DateViewPattern);
+        }
+
+        [Fact]
+        public async Task CreateTimelineItem_WithDateMonthYearPattern_CreatesSuccessfully()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            this.SeedDatabase(db => db.Streetcodes.Add(streetcode));
+
+            var createDto = new CreateTimelineItemDto
+            {
+                Title = "Event with DateMonthYear pattern",
+                Description = "Testing DateMonthYear date view pattern",
+                Date = new DateTime(2024, 12, 15),
+                DateViewPattern = DateViewPattern.DateMonthYear,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateTimelineItemDto, TimelineItemDto>(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(DateViewPattern.DateMonthYear, result.DateViewPattern);
+
+            // Verify in database
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == result.Id));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(DateViewPattern.DateMonthYear, dbItem.DateViewPattern);
+        }
+
+        [Fact]
+        public async Task UpdateTimelineItem_WithYearPattern_UpdatesSuccessfully()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcode.Id);
+            timelineItem.DateViewPattern = DateViewPattern.DateMonthYear;
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            var updateDto = new UpdateTimelineItemDto
+            {
+                Id = timelineItem.Id,
+                Title = timelineItem.Title,
+                Description = timelineItem.Description,
+                Date = timelineItem.Date,
+                DateViewPattern = DateViewPattern.Year,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateTimelineItemDto, TimelineItemDto>(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(DateViewPattern.Year, result.DateViewPattern);
+
+            // Verify in database
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == timelineItem.Id));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(DateViewPattern.Year, dbItem.DateViewPattern);
+        }
+
+        [Fact]
+        public async Task UpdateTimelineItem_WithMonthYearPattern_UpdatesSuccessfully()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcode.Id);
+            timelineItem.DateViewPattern = DateViewPattern.Year;
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            var updateDto = new UpdateTimelineItemDto
+            {
+                Id = timelineItem.Id,
+                Title = timelineItem.Title,
+                Description = timelineItem.Description,
+                Date = timelineItem.Date,
+                DateViewPattern = DateViewPattern.MonthYear,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateTimelineItemDto, TimelineItemDto>(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(DateViewPattern.MonthYear, result.DateViewPattern);
+
+            // Verify in database
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == timelineItem.Id));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(DateViewPattern.MonthYear, dbItem.DateViewPattern);
+        }
+
+        [Fact]
+        public async Task UpdateTimelineItem_WithSeasonYearPattern_UpdatesSuccessfully()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcode.Id);
+            timelineItem.DateViewPattern = DateViewPattern.Year;
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            var updateDto = new UpdateTimelineItemDto
+            {
+                Id = timelineItem.Id,
+                Title = timelineItem.Title,
+                Description = timelineItem.Description,
+                Date = timelineItem.Date,
+                DateViewPattern = DateViewPattern.SeasonYear,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateTimelineItemDto, TimelineItemDto>(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(DateViewPattern.SeasonYear, result.DateViewPattern);
+
+            // Verify in database
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == timelineItem.Id));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(DateViewPattern.SeasonYear, dbItem.DateViewPattern);
+        }
+
+        [Fact]
+        public async Task UpdateTimelineItem_WithDateMonthYearPattern_UpdatesSuccessfully()
+        {
+            // Arrange
+            var streetcode = TimelineIntegrationTestData.CreateTestStreetcode();
+            var timelineItem = TimelineIntegrationTestData.CreateSimpleTimelineItem(1, streetcode.Id);
+            timelineItem.DateViewPattern = DateViewPattern.Year;
+
+            this.SeedDatabase(db =>
+            {
+                db.Streetcodes.Add(streetcode);
+                db.TimelineItems.Add(timelineItem);
+            });
+
+            var updateDto = new UpdateTimelineItemDto
+            {
+                Id = timelineItem.Id,
+                Title = timelineItem.Title,
+                Description = timelineItem.Description,
+                Date = timelineItem.Date,
+                DateViewPattern = DateViewPattern.DateMonthYear,
+                StreetcodeId = streetcode.Id,
+                HistoricalContextIds = new List<int>(),
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateTimelineItemDto, TimelineItemDto>(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(DateViewPattern.DateMonthYear, result.DateViewPattern);
+
+            // Verify in database
+            var dbItem = this.ExecuteWithContext(db =>
+                db.TimelineItems.FirstOrDefault(t => t.Id == timelineItem.Id));
+
+            Assert.NotNull(dbItem);
+            Assert.Equal(DateViewPattern.DateMonthYear, dbItem.DateViewPattern);
+        }
     }
 }
