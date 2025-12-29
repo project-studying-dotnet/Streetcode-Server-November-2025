@@ -1,5 +1,16 @@
 
 services:
+  api-gateway:
+    build:
+      context: ./Streetcode/Services/Streetcode.ApiGateway/Streetcode.ApiGateway
+    container_name: Streetcode-Api-Gateway
+    ports:
+      - "8082:8082"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
   backend:
     build:
       context: .
