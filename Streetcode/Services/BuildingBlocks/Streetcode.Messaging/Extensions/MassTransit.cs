@@ -18,9 +18,18 @@ namespace Streetcode.Messaging.Extensions
                 if (assembly != null)
                     config.AddConsumers(assembly);
 
+                config.UsingRabbitMq((context, configurator) =>
+                {
+                    configurator.Host(new Uri(configuration["MessageBroker:Host"]!), host =>
+                    {
+                        host.Username(configuration["MessageBroker:UserName"]!);
+                        host.Password(configuration["MessageBroker:Password"]!);
+                    });
+                });
+
                 config.UsingAzureServiceBus((context, configurator) =>
                 {
-                    configurator.Host(configuration["MessageBroker:ConnectionString"]);
+                    configurator.Host(configuration["MessageBroker:AzureConnectionString"]);
                     configurator.ConfigureEndpoints(context);
                 });
             });
