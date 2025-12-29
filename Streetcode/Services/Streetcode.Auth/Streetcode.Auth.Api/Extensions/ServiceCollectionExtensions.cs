@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
 using Streetcode.Auth.Application.Interfaces.Token;
 using Streetcode.Auth.Application.Mapping.Users;
@@ -16,7 +20,8 @@ namespace Streetcode.Auth.Api.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
+            IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
@@ -69,12 +74,51 @@ namespace Streetcode.Auth.Api.Extensions
             return services;
         }
 
-        public static IServiceCollection ConfigureSerilog(this IServiceCollection services, WebApplicationBuilder builder)
+        public static IServiceCollection ConfigureSerilog(this IServiceCollection services,
+            WebApplicationBuilder builder)
         {
             builder.Host.UseSerilog((ctx, services, loggerConfiguration) =>
             {
                 loggerConfiguration
                     .ReadFrom.Configuration(builder.Configuration);
+            });
+
+            return services;
+        }
+
+        public static IServiceCollection AddOTLP(this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.AddOpenTelemetry()
+                .ConfigureResource(resource =>
+                    resource.AddService(
+                        serviceName: configuration["OTEL_SERVICE_NAME"] ?? throw new InvalidOperationException(
+                            "OTEL_SERVICE_NAME configuration value is required."),
+                        serviceVersion: "1.0.0"))
+                .WithMetrics(metrics =>
+                {
+                    metrics
+                        .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddOtlpExporter();
+                })
+                .WithTracing(tracing =>
+                {
+                    tracing
+                        .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddEntityFrameworkCoreInstrumentation(options =>
+                            options.SetDbStatementForText = true)
+                        .AddSource("MassTransit")
+                        .AddOtlpExporter();
+                });
+
+            services.AddLogging(logging =>
+            {
+                logging.AddOpenTelemetry(options =>
+                {
+                    options.AddOtlpExporter();
+                });
             });
 
             return services;

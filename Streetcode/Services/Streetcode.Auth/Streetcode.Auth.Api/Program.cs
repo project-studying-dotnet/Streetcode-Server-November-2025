@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Streetcode.Auth.Api.Extensions;
+using Streetcode.Auth.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,7 @@ builder.Services.AddSwaggerWithJwt();
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddOTLP(builder.Configuration);
 
 builder.Services.ConfigureSerilog(builder);
 
