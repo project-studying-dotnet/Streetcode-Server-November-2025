@@ -312,5 +312,21 @@ namespace Streetcode.BLL.Util.Validators
             /// </summary>
             public const int DescriptionMaxLength = 500;
         }
+
+        /// <summary>
+        /// Comment-specific validation constants.
+        /// </summary>
+        public static class Comment
+        {
+            /// <summary>
+            /// Comment content maximum length.
+            /// </summary>
+            public const int ContentMaxLength = 500;
+
+            /// <summary>
+            /// Comment author name maximum length.
+            /// </summary>
+            public const int AuthorNameMaxLength = 50;
+        }
     }
 }
