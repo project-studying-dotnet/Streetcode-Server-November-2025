@@ -411,6 +411,614 @@ namespace Streetcode.XIntegrationTest.Timeline.HistoricalContext
 
         #endregion
 
+        #region CREATE Validation Edge Cases
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithSingleCharacter_CreatesSuccessfully()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "А",
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal("А", result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithTwoCharacters_CreatesSuccessfully()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Аб",
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal("Аб", result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_With27Characters_CreatesSuccessfully()
+        {
+            // Arrange
+            var title27 = new string('а', 27);
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = title27,
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(title27, result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_With28Characters_CreatesSuccessfully()
+        {
+            // Arrange
+            var title28 = new string('а', 28);
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = title28,
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(title28, result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_With29Characters_CreatesSuccessfully()
+        {
+            // Arrange
+            var title29 = new string('а', 29);
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = title29,
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(title29, result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_With49Characters_CreatesSuccessfully()
+        {
+            // Arrange
+            var title49 = new string('а', 49);
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = title49,
+            };
+
+            // Act
+            var (response, result) = await this.PostAsync<CreateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(title49, result.Title);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithLeadingWhitespace_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "  Leading spaces",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithTrailingWhitespace_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Trailing spaces  ",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithTab_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context\twith tab",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithNewline_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context\nwith newline",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithCarriageReturn_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context\rwith return",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithPeriod_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context.",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithComma_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context, test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithExclamationMark_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context!",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithQuestionMark_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context?",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithColon_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context: test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithSemicolon_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context; test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithParentheses_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context (test)",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithQuotes_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context \"test\"",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithApostrophe_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context's test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithUnderscore_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context_test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithSlash_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context/test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithBackslash_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context\\test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithAmpersand_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context & test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithPercent_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context 100%",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithDollarSign_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context $100",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithPlusSign_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context + test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithEqualsSign_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context = test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithBrackets_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context [test]",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithCurlyBraces_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context {test}",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithAngleBrackets_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context <test>",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithPipe_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context | test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithTilde_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context ~ test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithBacktick_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context ` test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithCaret_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context ^ test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task CreateHistoricalContext_WithAsterisk_ReturnsBadRequest()
+        {
+            // Arrange
+            var createDto = new CreateHistoricalContextDto
+            {
+                Title = "Context * test",
+            };
+
+            // Act
+            var response = await this.Client.PostAsJsonAsync(BaseUrl, createDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        #endregion
+
         #region UPDATE Tests
 
         [Fact]
@@ -780,6 +1388,509 @@ namespace Streetcode.XIntegrationTest.Timeline.HistoricalContext
                     .FirstOrDefault(hct => hct.HistoricalContextId == contextId && hct.TimelineId == 1));
             
             Assert.NotNull(relationship);
+        }
+
+        #endregion
+
+        #region UPDATE Validation Edge Cases
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithSingleCharacter_UpdatesSuccessfully()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Б",
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal("Б", result.Title);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_With27Characters_UpdatesSuccessfully()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var title27 = new string('б', 27);
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = title27,
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(title27, result.Title);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_With28Characters_UpdatesSuccessfully()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var title28 = new string('б', 28);
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = title28,
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(title28, result.Title);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_With29Characters_UpdatesSuccessfully()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var title29 = new string('б', 29);
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = title29,
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(title29, result.Title);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_With49Characters_UpdatesSuccessfully()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var title49 = new string('б', 49);
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = title49,
+            };
+
+            // Act
+            var (response, result) = await this.PutAsync<UpdateHistoricalContextDto, HistoricalContextDto>(
+                BaseUrl,
+                updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.NotNull(result);
+            Assert.Equal(title49, result.Title);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithLeadingWhitespace_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "  Leading",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithTrailingWhitespace_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Trailing  ",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithTab_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Update\ttab",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithNewline_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Update\nnewline",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithPeriod_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Updated.",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithComma_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Updated, test",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithExclamation_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Updated!",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithQuestionMark_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Updated?",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithParentheses_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Updated (test)",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithApostrophe_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Context's update",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithSlash_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Updated/test",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithUnderscore_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Updated_test",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithBrackets_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Updated [test]",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateHistoricalContext_WithAmpersand_ReturnsBadRequest()
+        {
+            // Arrange
+            var contextId = 1;
+            var context = TimelineIntegrationTestData.CreateSimpleHistoricalContext(contextId, "Original");
+
+            this.SeedDatabase(db =>
+            {
+                db.HistoricalContexts.Add(context);
+            });
+
+            var updateDto = new UpdateHistoricalContextDto
+            {
+                Id = contextId,
+                Title = "Updated & test",
+            };
+
+            // Act
+            var response = await this.Client.PutAsJsonAsync(BaseUrl, updateDto);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
         #endregion
