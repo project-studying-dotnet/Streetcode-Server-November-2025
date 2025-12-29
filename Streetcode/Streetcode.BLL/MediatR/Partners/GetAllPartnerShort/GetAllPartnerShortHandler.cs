@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Partners.GetAllPartnerShort
 {
-    internal class GetAllPartnerShortHandler : IRequestHandler<GetAllPartnersShortQuery, Result<IEnumerable<PartnerShortDTO>>>
+    internal class GetAllPartnerShortHandler : IRequestHandler<GetAllPartnersShortQuery, Result<IEnumerable<PartnerShortDto>>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -21,18 +21,18 @@ namespace Streetcode.BLL.MediatR.Partners.GetAllPartnerShort
             _logger = logger;
         }
 
-        public async Task<Result<IEnumerable<PartnerShortDTO>>> Handle(GetAllPartnersShortQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<PartnerShortDto>>> Handle(GetAllPartnersShortQuery request, CancellationToken cancellationToken)
         {
             var partners = await _repositoryWrapper.PartnersRepository.GetAllAsync();
 
             if (partners is null)
             {
-                const string errorMsg = $"Cannot find any partners";
+                var errorMsg = ErrorMessages.PartnerNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
-            return Result.Ok(_mapper.Map<IEnumerable<PartnerShortDTO>>(partners));
+            return Result.Ok(_mapper.Map<IEnumerable<PartnerShortDto>>(partners));
         }
     }
 }

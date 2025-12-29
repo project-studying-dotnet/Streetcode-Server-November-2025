@@ -47,6 +47,9 @@ public class StreetcodeContent
     [MaxLength(150)]
     public string? TransliterationUrl { get; set; }
 
+    [MaxLength(33)]
+    public string? ShortDescription { get; set; }
+
     public int ViewCount { get; set; }
 
     public DateTime CreatedAt { get; set; }
@@ -97,4 +100,6 @@ public class StreetcodeContent
     public List<StreetcodeArt> StreetcodeArts { get; set; } = new ();
 
     public List<StreetcodeCategoryContent> StreetcodeCategoryContents { get; set; } = new();
+
+    public List<Comment> Comments { get; set; } = new();
 }

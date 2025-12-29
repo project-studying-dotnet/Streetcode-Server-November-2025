@@ -17,9 +17,9 @@ namespace Streetcode.WebApi.Controllers.Team
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TeamMemberLinkDTO teamMemberLink)
+        public async Task<IActionResult> Create([FromBody] TeamMemberLinkDto teamMemberLink)
         {
-            return HandleResult(await Mediator.Send(new CreateTeamLinkQuery(teamMemberLink)));
+            return HandleResult(await Mediator.Send(new CreateTeamLinkCommand(teamMemberLink)));
         }
     }
 }

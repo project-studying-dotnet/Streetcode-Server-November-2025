@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.News;
@@ -9,7 +9,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Newss.Update
 {
-    public class UpdateNewsHandler : IRequestHandler<UpdateNewsCommand, Result<NewsDTO>>
+    public class UpdateNewsHandler : IRequestHandler<UpdateNewsCommand, Result<NewsDto>>
     {
         private readonly IRepositoryWrapper _repositoryWrapper;
         private readonly IMapper _mapper;
@@ -23,21 +23,21 @@ namespace Streetcode.BLL.MediatR.Newss.Update
             _logger = logger;
         }
 
-        public async Task<Result<NewsDTO>> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
+        public async Task<Result<NewsDto>> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
             var news = _mapper.Map<News>(request.news);
             if (news is null)
             {
-                const string errorMsg = $"Cannot convert null to news";
+                var errorMsg = ErrorMessages.NewsConversionFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
-            var response = _mapper.Map<NewsDTO>(news);
+            var response = _mapper.Map<NewsDto>(news);
 
             if (news.Image is not null)
             {
-                response.Image.Base64 = _blobSevice.FindFileInStorageAsBase64(response.Image.BlobName);
+                response.Image.Base64 = await _blobSevice.FindFileInStorageAsBase64Async(response.Image.BlobName);
             }
             else
             {
@@ -57,7 +57,7 @@ namespace Streetcode.BLL.MediatR.Newss.Update
             }
             else
             {
-                const string errorMsg = $"Failed to update news";
+                var errorMsg = ErrorMessages.NewsUpdateFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

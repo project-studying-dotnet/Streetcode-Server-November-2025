@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Sources.SourceLink.GetCategoriesByStreetcodeId;
 
-public class GetCategoriesByStreetcodeIdHandler : IRequestHandler<GetCategoriesByStreetcodeIdQuery, Result<IEnumerable<SourceLinkCategoryDTO>>>
+public class GetCategoriesByStreetcodeIdHandler : IRequestHandler<GetCategoriesByStreetcodeIdQuery, Result<IEnumerable<SourceLinkCategoryDto>>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -25,7 +25,7 @@ public class GetCategoriesByStreetcodeIdHandler : IRequestHandler<GetCategoriesB
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<SourceLinkCategoryDTO>>> Handle(GetCategoriesByStreetcodeIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<SourceLinkCategoryDto>>> Handle(GetCategoriesByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
         var srcCategories = await _repositoryWrapper
             .SourceCategoryRepository
@@ -35,16 +35,16 @@ public class GetCategoriesByStreetcodeIdHandler : IRequestHandler<GetCategoriesB
 
         if (srcCategories is null)
         {
-            string errorMsg = $"Cant find any source category with the streetcode id {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.CategoryNotFoundByStreetcodeId, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
-        var mappedSrcCategories = _mapper.Map<IEnumerable<SourceLinkCategoryDTO>>(srcCategories);
+        var mappedSrcCategories = _mapper.Map<IEnumerable<SourceLinkCategoryDto>>(srcCategories);
 
         foreach (var srcCategory in mappedSrcCategories)
         {
-            srcCategory.Image.Base64 = _blobService.FindFileInStorageAsBase64(srcCategory.Image.BlobName);
+            srcCategory.Image.Base64 = await _blobService.FindFileInStorageAsBase64Async(srcCategory.Image.BlobName);
         }
 
         return Result.Ok(mappedSrcCategories);

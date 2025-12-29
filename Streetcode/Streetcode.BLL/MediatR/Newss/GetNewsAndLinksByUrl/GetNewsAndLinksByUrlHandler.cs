@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
 using FluentResults;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.DTO.News;
+using Streetcode.BLL.Helpers;
 using Streetcode.BLL.Interfaces.BlobStorage;
+using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Entities.News;
 using Streetcode.DAL.Repositories.Interfaces.Base;
-using Microsoft.EntityFrameworkCore;
-using Streetcode.BLL.Interfaces.Logging;
 
 namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
 {
-    public class GetNewsAndLinksByUrlHandler : IRequestHandler<GetNewsAndLinksByUrlQuery, Result<NewsDTOWithURLs>>
+    public class GetNewsAndLinksByUrlHandler : IRequestHandler<GetNewsAndLinksByUrlQuery, Result<NewsDtoWithUrls>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -24,28 +25,26 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
             _logger = logger;
         }
 
-        public async Task<Result<NewsDTOWithURLs>> Handle(GetNewsAndLinksByUrlQuery request, CancellationToken cancellationToken)
+        public async Task<Result<NewsDtoWithUrls>> Handle(GetNewsAndLinksByUrlQuery request, CancellationToken cancellationToken)
         {
             string url = request.url;
-            var newsDTO = _mapper.Map<NewsDTO>(await _repositoryWrapper.NewsRepository.GetFirstOrDefaultAsync(
-                predicate: sc => sc.URL == url,
-                include: scl => scl
-                    .Include(sc => sc.Image)));
 
-            if (newsDTO is null)
+            var newsResult = await NewsLoadHelper.LoadNewsAsync(
+                url,
+                _repositoryWrapper,
+                _mapper,
+                _blobService,
+                _logger);
+
+            if (newsResult.IsFailed)
             {
-                string errorMsg = $"No news by entered Url - {url}";
-                _logger.LogError(request, errorMsg);
-                return Result.Fail(errorMsg);
+                return Result.Fail(newsResult.Errors);
             }
 
-            if (newsDTO.Image is not null)
-            {
-                newsDTO.Image.Base64 = _blobService.FindFileInStorageAsBase64(newsDTO.Image.BlobName);
-            }
+            var newsDto = newsResult.Value;
 
             var news = (await _repositoryWrapper.NewsRepository.GetAllAsync()).ToList();
-            var newsIndex = news.FindIndex(x => x.Id == newsDTO.Id);
+            var newsIndex = news.FindIndex(x => x.Id == newsDto.Id);
             string prevNewsLink = null;
             string nextNewsLink = null;
 
@@ -59,7 +58,7 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
                 nextNewsLink = news[newsIndex + 1].URL;
             }
 
-            var randomNewsTitleAndLink = new RandomNewsDTO();
+            var randomNewsTitleAndLink = new RandomNewsDto();
 
             var arrCount = news.Count;
             if (arrCount > 3)
@@ -81,18 +80,11 @@ namespace Streetcode.BLL.MediatR.Newss.GetNewsAndLinksByUrl
                 randomNewsTitleAndLink.Title = news[newsIndex].Title;
             }
 
-            var newsDTOWithUrls = new NewsDTOWithURLs();
+            var newsDTOWithUrls = new NewsDtoWithUrls();
             newsDTOWithUrls.RandomNews = randomNewsTitleAndLink;
-            newsDTOWithUrls.News = newsDTO;
+            newsDTOWithUrls.News = newsDto;
             newsDTOWithUrls.NextNewsUrl = nextNewsLink;
             newsDTOWithUrls.PrevNewsUrl = prevNewsLink;
-
-            if (newsDTOWithUrls is null)
-            {
-                string errorMsg = $"No news by entered Url - {url}";
-                _logger.LogError(request, errorMsg);
-                return Result.Fail(errorMsg);
-            }
 
             return Result.Ok(newsDTOWithUrls);
         }

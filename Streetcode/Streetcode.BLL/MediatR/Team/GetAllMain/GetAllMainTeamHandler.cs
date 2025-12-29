@@ -1,14 +1,15 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Streetcode.BLL.DTO.Team;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.DAL.Specifications.Team;
 
 namespace Streetcode.BLL.MediatR.Team.GetAll
 {
-    public class GetAllMainTeamHandler : IRequestHandler<GetAllMainTeamQuery, Result<IEnumerable<TeamMemberDTO>>>
+    public class GetAllMainTeamHandler : IRequestHandler<GetAllMainTeamQuery, Result<IEnumerable<TeamMemberDto>>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -21,20 +22,21 @@ namespace Streetcode.BLL.MediatR.Team.GetAll
             _logger = logger;
         }
 
-        public async Task<Result<IEnumerable<TeamMemberDTO>>> Handle(GetAllMainTeamQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<TeamMemberDto>>> Handle(GetAllMainTeamQuery request, CancellationToken cancellationToken)
         {
+            var spec = new MainTeamSpecification();
             var team = await _repositoryWrapper
                 .TeamRepository
-                .GetAllAsync(include: x => x.Where(x => x.IsMain).Include(x => x.Positions).Include(x => x.TeamMemberLinks));
+                .ListAsync(spec, cancellationToken);
 
             if (team is null)
             {
-                const string errorMsg = $"Cannot find any team";
+                var errorMsg = ErrorMessages.TeamNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
-            return Result.Ok(_mapper.Map<IEnumerable<TeamMemberDTO>>(team));
+            return Result.Ok(_mapper.Map<IEnumerable<TeamMemberDto>>(team));
         }
     }
 }

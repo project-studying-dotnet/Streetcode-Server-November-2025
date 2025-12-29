@@ -1,4 +1,4 @@
-﻿using FluentResults;
+using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Interfaces.Logging;
@@ -25,7 +25,7 @@ public class DeleteAudioHandler : IRequestHandler<DeleteAudioCommand, Result<Uni
 
         if (audio is null)
         {
-            string errorMsg = $"Cannot find an audio with corresponding categoryId: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.AudioNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -36,7 +36,7 @@ public class DeleteAudioHandler : IRequestHandler<DeleteAudioCommand, Result<Uni
 
         if (resultIsSuccess)
         {
-            _blobService.DeleteFileInStorage(audio.BlobName);
+            _blobService.DeleteFileInStorageAsync(audio.BlobName);
         }
 
         if (resultIsSuccess)
@@ -46,7 +46,7 @@ public class DeleteAudioHandler : IRequestHandler<DeleteAudioCommand, Result<Uni
         }
         else
         {
-            string errorMsg = $"Failed to delete an audio";
+            var errorMsg = ErrorMessages.AudioDeletionFailed;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

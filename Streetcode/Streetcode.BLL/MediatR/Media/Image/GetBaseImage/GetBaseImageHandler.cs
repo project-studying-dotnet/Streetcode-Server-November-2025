@@ -1,4 +1,4 @@
-﻿using FluentResults;
+using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.BlobStorage;
 using Streetcode.BLL.Interfaces.Logging;
@@ -25,11 +25,11 @@ public class GetBaseImageHandler : IRequestHandler<GetBaseImageQuery, Result<Mem
 
         if (image is null)
         {
-            string errorMsg = $"Cannot find an image with corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.ImageNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
-        return _blobStorage.FindFileInStorageAsMemoryStream(image.BlobName);
+        return await _blobStorage.FindFileInStorageAsMemoryStreamAsync(image.BlobName);
     }
 }

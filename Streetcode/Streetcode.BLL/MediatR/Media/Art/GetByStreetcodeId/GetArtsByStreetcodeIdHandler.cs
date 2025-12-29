@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.BlobStorage;
@@ -9,7 +9,7 @@ using Streetcode.BLL.DTO.Media.Art;
 
 namespace Streetcode.BLL.MediatR.Media.Art.GetByStreetcodeId
 {
-  public class GetArtsByStreetcodeIdHandler : IRequestHandler<GetArtsByStreetcodeIdQuery, Result<IEnumerable<ArtDTO>>>
+  public class GetArtsByStreetcodeIdHandler : IRequestHandler<GetArtsByStreetcodeIdQuery, Result<IEnumerable<ArtDto>>>
     {
         private readonly IBlobService _blobService;
         private readonly IMapper _mapper;
@@ -28,7 +28,7 @@ namespace Streetcode.BLL.MediatR.Media.Art.GetByStreetcodeId
             _logger = logger;
         }
 
-        public async Task<Result<IEnumerable<ArtDTO>>> Handle(GetArtsByStreetcodeIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<ArtDto>>> Handle(GetArtsByStreetcodeIdQuery request, CancellationToken cancellationToken)
         {
             /*
             if ((await _repositoryWrapper.StreetcodeRepository.GetFirstOrDefaultAsync(s => s.Id == request.StreetcodeId)) is null)
@@ -45,19 +45,19 @@ namespace Streetcode.BLL.MediatR.Media.Art.GetByStreetcodeId
 
             if (arts is null)
             {
-                string errorMsg = $"Cannot find any art with corresponding streetcode id: {request.StreetcodeId}";
+                var errorMsg = string.Format(ErrorMessages.ArtNotFoundByStreetcodeId, request.StreetcodeId);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
             var imageIds = arts.Where(a => a.Image != null).Select(a => a.Image!.Id);
 
-            var artsDto = _mapper.Map<IEnumerable<ArtDTO>>(arts);
+            var artsDto = _mapper.Map<IEnumerable<ArtDto>>(arts);
             foreach (var artDto in artsDto)
             {
                 if (artDto.Image != null && artDto.Image.BlobName != null)
                 {
-                    artDto.Image.Base64 = _blobService.FindFileInStorageAsBase64(artDto.Image.BlobName);
+                    artDto.Image.Base64 = await _blobService.FindFileInStorageAsBase64Async(artDto.Image.BlobName);
                 }
             }
 

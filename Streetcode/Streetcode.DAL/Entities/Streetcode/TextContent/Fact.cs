@@ -12,17 +12,25 @@ public class Fact
     public int Id { get; set; }
 
     [Required]
-    [MaxLength(100)]
-    public string? Title { get; set; }
+    [MaxLength(68)]
+    public string Title { get; set; }
 
     [Required]
     [MaxLength(600)]
-    public string? FactContent { get; set; }
+    public string FactContent { get; set; }
 
-    public int? ImageId { get; set; }
+    [MaxLength(200)]
+    public string? ImageDescription { get; set; }
+
+    [Required]
+    public int Order { get; set; }
+
+    [Required]
+    public int ImageId { get; set; }
 
     public Image? Image { get; set; }
 
+    [Required]
     public int StreetcodeId { get; set; }
 
     public StreetcodeContent? Streetcode { get; set; }

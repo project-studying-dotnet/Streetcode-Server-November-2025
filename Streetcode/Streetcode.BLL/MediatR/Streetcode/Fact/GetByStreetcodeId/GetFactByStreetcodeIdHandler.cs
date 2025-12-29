@@ -1,7 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
 using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
@@ -28,7 +27,7 @@ public class GetFactByStreetcodeIdHandler : IRequestHandler<GetFactByStreetcodeI
 
         if (fact is null)
         {
-            string errorMsg = $"Cannot find any fact by the streetcode id: {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.FactNotFoundByStreetcodeId, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

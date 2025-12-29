@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Streetcode.DAL.Entities.Streetcode.TextContent;
@@ -10,13 +10,18 @@ public class Text
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     [Required]
-    [MaxLength(300)]
+    [MaxLength(50)]
     public string? Title { get; set; }
     [Required]
-    [MaxLength(15000)]
+    [MaxLength(25000)]
     public string? TextContent { get; set; }
-    [MaxLength(500)]
+    [MaxLength(200)]
     public string? AdditionalText { get; set; }
+    [MaxLength(500)]
+    [RegularExpression(
+        @"^(https?://)?(www\.)?(youtube\.com/(watch\?v=|embed/|v/)|youtu\.be/)[\w\-]+",
+        ErrorMessage = "Video must be from YouTube")]
+    public string? VideoUrl { get; set; }
     [Required]
     public int StreetcodeId { get; set; }
     public StreetcodeContent? Streetcode { get; set; }

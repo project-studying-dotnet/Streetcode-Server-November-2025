@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -9,7 +9,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.Text.GetAll;
 
-public class GetAllTextsHandler : IRequestHandler<GetAllTextsQuery, Result<IEnumerable<TextDTO>>>
+public class GetAllTextsHandler : IRequestHandler<GetAllTextsQuery, Result<IEnumerable<TextDto>>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -22,17 +22,17 @@ public class GetAllTextsHandler : IRequestHandler<GetAllTextsQuery, Result<IEnum
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<TextDTO>>> Handle(GetAllTextsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<TextDto>>> Handle(GetAllTextsQuery request, CancellationToken cancellationToken)
     {
         var texts = await _repositoryWrapper.TextRepository.GetAllAsync();
 
         if (texts is null)
         {
-            const string errorMsg = $"Cannot find any text";
+            var errorMsg = ErrorMessages.TextNotFound;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
-        return Result.Ok(_mapper.Map<IEnumerable<TextDTO>>(texts));
+        return Result.Ok(_mapper.Map<IEnumerable<TextDto>>(texts));
     }
 }

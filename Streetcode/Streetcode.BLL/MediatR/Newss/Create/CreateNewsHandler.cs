@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.News;
@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Newss.Create
 {
-    public class CreateNewsHandler : IRequestHandler<CreateNewsCommand, Result<NewsDTO>>
+    public class CreateNewsHandler : IRequestHandler<CreateNewsCommand, Result<NewsDto>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -20,12 +20,12 @@ namespace Streetcode.BLL.MediatR.Newss.Create
             _logger = logger;
         }
 
-        public async Task<Result<NewsDTO>> Handle(CreateNewsCommand request, CancellationToken cancellationToken)
+        public async Task<Result<NewsDto>> Handle(CreateNewsCommand request, CancellationToken cancellationToken)
         {
             var newNews = _mapper.Map<News>(request.newNews);
             if (newNews is null)
             {
-                const string errorMsg = "Cannot convert null to news";
+                var errorMsg = ErrorMessages.NewsConversionFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
@@ -35,15 +35,15 @@ namespace Streetcode.BLL.MediatR.Newss.Create
                 newNews.ImageId = null;
             }
 
-            var entity = _repositoryWrapper.NewsRepository.Create(newNews);
+            var entity = await _repositoryWrapper.NewsRepository.CreateAsync(newNews);
             var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
             if(resultIsSuccess)
             {
-                return Result.Ok(_mapper.Map<NewsDTO>(entity));
+                return Result.Ok(_mapper.Map<NewsDto>(entity));
             }
             else
             {
-                const string errorMsg = "Failed to create a news";
+                var errorMsg = ErrorMessages.NewsCreationFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

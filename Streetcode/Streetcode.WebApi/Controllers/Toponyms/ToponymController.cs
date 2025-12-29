@@ -1,15 +1,19 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Streetcode.BLL.DTO.Toponyms;
+using Streetcode.BLL.MediatR.Toponyms.Create;
+using Streetcode.BLL.MediatR.Toponyms.Delete;
 using Streetcode.BLL.MediatR.Toponyms.GetAll;
 using Streetcode.BLL.MediatR.Toponyms.GetById;
 using Streetcode.BLL.MediatR.Toponyms.GetByStreetcodeId;
+using Streetcode.BLL.MediatR.Toponyms.Merge;
 
 namespace Streetcode.WebApi.Controllers.Toponyms;
 
 public class ToponymController : BaseApiController
 {
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] GetAllToponymsRequestDTO request)
+    public async Task<IActionResult> GetAll([FromQuery] GetAllToponymsRequestDto request)
     {
         return HandleResult(await Mediator.Send(new GetAllToponymsQuery(request)));
     }
@@ -24,5 +28,28 @@ public class ToponymController : BaseApiController
     public async Task<IActionResult> GetByStreetcodeId([FromRoute] int streetcodeId)
     {
         return HandleResult(await Mediator.Send(new GetToponymsByStreetcodeIdQuery(streetcodeId)));
+    }
+
+    [HttpPost("streetcode-toponym")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> CreateStreetcodeToponym([FromBody] StreetcodeToponymDto dto)
+    {
+        return HandleResult(await Mediator.Send(new CreateStreetcodeToponymCommand(dto)));
+    }
+
+    [HttpDelete("streetcode-toponym/{streetcodeId:int}/{toponymId:int}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> DeleteStreetcodeToponym(
+        [FromRoute] int streetcodeId,
+        [FromRoute] int toponymId)
+    {
+        return HandleResult(await Mediator.Send(new DeleteStreetcodeToponymCommand(streetcodeId, toponymId)));
+    }
+
+    [HttpPost("merge")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> MergeToponyms([FromBody] MergeToponymsDto dto)
+    {
+        return HandleResult(await Mediator.Send(new MergeToponymsCommand(dto)));
     }
 }

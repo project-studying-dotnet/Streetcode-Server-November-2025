@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Media.Images;
@@ -8,12 +8,13 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Media.Image.Create;
 
-public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<ImageDTO>>
+public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<ImageDto>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
     private readonly IBlobService _blobService;
     private readonly ILoggerService _logger;
+    private static readonly string[] AllowedExtensions = { ".png", ".jpg", ".jpeg", ".webp" };
 
     public CreateImageHandler(
         IBlobService blobService,
@@ -27,12 +28,19 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
         _logger = logger;
     }
 
-    public async Task<Result<ImageDTO>> Handle(CreateImageCommand request, CancellationToken cancellationToken)
+    public async Task<Result<ImageDto>> Handle(CreateImageCommand request, CancellationToken cancellationToken)
     {
-        string hashBlobStorageName = _blobService.SaveFileInStorage(
+        if (!AllowedExtensions.Contains($".{request.Image.Extension.ToLower()}"))
+        {
+            var errorMsg = ErrorMessages.InvalidImageFormat;
+            _logger.LogError(request, errorMsg);
+            return Result.Fail(new Error(errorMsg));
+        }
+
+        string hashBlobStorageName = await _blobService.SaveFileInStorageAsync(
             request.Image.BaseFormat,
             request.Image.Title,
-            request.Image.Extension);
+            request.Image.MimeType);
 
         var image = _mapper.Map<DAL.Entities.Media.Images.Image>(request.Image);
 
@@ -41,9 +49,9 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
         await _repositoryWrapper.ImageRepository.CreateAsync(image);
         var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
 
-        var createdImage = _mapper.Map<ImageDTO>(image);
+        var createdImage = _mapper.Map<ImageDto>(image);
 
-        createdImage.Base64 = _blobService.FindFileInStorageAsBase64(createdImage.BlobName);
+        createdImage.Base64 = request.Image.BaseFormat;
 
         if(resultIsSuccess)
         {
@@ -51,7 +59,7 @@ public class CreateImageHandler : IRequestHandler<CreateImageCommand, Result<Ima
         }
         else
         {
-            const string errorMsg = "Failed to create an image";
+            var errorMsg = ErrorMessages.ImageCreationFailed;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.Media.Audio;
@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Media.Audio.Create;
 
-public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<AudioDTO>>
+public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<AudioDto>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -27,22 +27,22 @@ public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<Aud
         _logger = logger;
     }
 
-    public async Task<Result<AudioDTO>> Handle(CreateAudioCommand request, CancellationToken cancellationToken)
+    public async Task<Result<AudioDto>> Handle(CreateAudioCommand request, CancellationToken cancellationToken)
     {
-        string hashBlobStorageName = _blobService.SaveFileInStorage(
+        string hashBlobStorageName = await _blobService.SaveFileInStorageAsync(
             request.Audio.BaseFormat,
             request.Audio.Title,
-            request.Audio.Extension);
+            request.Audio.MimeType);
 
         var audio = _mapper.Map<DAL.Entities.Media.Audio>(request.Audio);
 
-        audio.BlobName = $"{hashBlobStorageName}.{request.Audio.Extension}";
+        audio.BlobName = hashBlobStorageName;
 
         await _repositoryWrapper.AudioRepository.CreateAsync(audio);
 
         var resultIsSuccess = await _repositoryWrapper.SaveChangesAsync() > 0;
 
-        var createdAudio = _mapper.Map<AudioDTO>(audio);
+        var createdAudio = _mapper.Map<AudioDto>(audio);
 
         if(resultIsSuccess)
         {
@@ -50,7 +50,7 @@ public class CreateAudioHandler : IRequestHandler<CreateAudioCommand, Result<Aud
         }
         else
         {
-            const string errorMsg = $"Failed to create an audio";
+            var errorMsg = ErrorMessages.AudioCreationFailed;
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }

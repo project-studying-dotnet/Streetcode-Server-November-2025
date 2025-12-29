@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.News;
@@ -10,7 +10,7 @@ using Streetcode.BLL.Interfaces.Logging;
 
 namespace Streetcode.BLL.MediatR.Newss.GetById
 {
-    public class GetNewsByIdHandler : IRequestHandler<GetNewsByIdQuery, Result<NewsDTO>>
+    public class GetNewsByIdHandler : IRequestHandler<GetNewsByIdQuery, Result<NewsDto>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -24,23 +24,23 @@ namespace Streetcode.BLL.MediatR.Newss.GetById
             _logger = logger;
         }
 
-        public async Task<Result<NewsDTO>> Handle(GetNewsByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Result<NewsDto>> Handle(GetNewsByIdQuery request, CancellationToken cancellationToken)
         {
             int id = request.id;
-            var newsDTO = _mapper.Map<NewsDTO>(await _repositoryWrapper.NewsRepository.GetFirstOrDefaultAsync(
+            var newsDTO = _mapper.Map<NewsDto>(await _repositoryWrapper.NewsRepository.GetFirstOrDefaultAsync(
                 predicate: sc => sc.Id == id,
                 include: scl => scl
                     .Include(sc => sc.Image)));
             if(newsDTO is null)
             {
-                string errorMsg = $"No news by entered Id - {id}";
+                var errorMsg = string.Format(ErrorMessages.NewsNotFoundById, id);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(errorMsg);
             }
 
             if (newsDTO.Image is not null)
             {
-                newsDTO.Image.Base64 = _blobService.FindFileInStorageAsBase64(newsDTO.Image.BlobName);
+                newsDTO.Image.Base64 = await _blobService.FindFileInStorageAsBase64Async(newsDTO.Image.BlobName);
             }
 
             return Result.Ok(newsDTO);

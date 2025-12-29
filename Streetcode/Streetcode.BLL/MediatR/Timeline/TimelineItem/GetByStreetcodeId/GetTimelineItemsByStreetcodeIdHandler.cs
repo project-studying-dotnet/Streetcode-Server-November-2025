@@ -9,7 +9,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Timeline.TimelineItem.GetByStreetcodeId;
 
-public class GetTimelineItemsByStreetcodeIdHandler : IRequestHandler<GetTimelineItemsByStreetcodeIdQuery, Result<IEnumerable<TimelineItemDTO>>>
+public class GetTimelineItemsByStreetcodeIdHandler : IRequestHandler<GetTimelineItemsByStreetcodeIdQuery, Result<IEnumerable<TimelineItemDto>>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -22,7 +22,7 @@ public class GetTimelineItemsByStreetcodeIdHandler : IRequestHandler<GetTimeline
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<TimelineItemDTO>>> Handle(GetTimelineItemsByStreetcodeIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<TimelineItemDto>>> Handle(GetTimelineItemsByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
         var timelineItems = await _repositoryWrapper.TimelineRepository
             .GetAllAsync(
@@ -33,11 +33,11 @@ public class GetTimelineItemsByStreetcodeIdHandler : IRequestHandler<GetTimeline
 
         if (timelineItems is null)
         {
-            string errorMsg = $"Cannot find any timeline item by the streetcode id: {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.TimelineItemNotFoundByStreetcodeId, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
-        return Result.Ok(_mapper.Map<IEnumerable<TimelineItemDTO>>(timelineItems));
+        return Result.Ok(_mapper.Map<IEnumerable<TimelineItemDto>>(timelineItems));
     }
 }

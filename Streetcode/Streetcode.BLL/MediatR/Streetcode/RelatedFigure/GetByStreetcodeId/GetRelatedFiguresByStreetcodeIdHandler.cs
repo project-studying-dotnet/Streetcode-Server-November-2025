@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Streetcode.RelatedFigure.GetByStreetcodeId;
 
-public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelatedFigureByStreetcodeIdQuery, Result<IEnumerable<RelatedFigureDTO>>>
+public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelatedFigureByStreetcodeIdQuery, Result<IEnumerable<RelatedFigureDto>>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -24,13 +24,13 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
         _logger = logger;
     }
 
-    public async Task<Result<IEnumerable<RelatedFigureDTO>>> Handle(GetRelatedFigureByStreetcodeIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<RelatedFigureDto>>> Handle(GetRelatedFigureByStreetcodeIdQuery request, CancellationToken cancellationToken)
     {
         var relatedFigureIds = GetRelatedFigureIdsByStreetcodeId(request.StreetcodeId);
 
         if (relatedFigureIds is null)
         {
-            string errorMsg = $"Cannot find any related figures by a streetcode id: {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.RelatedFigureNotFound, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -42,7 +42,7 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
 
         if (relatedFigures is null)
         {
-            string errorMsg = $"Cannot find any related figures by a streetcode id: {request.StreetcodeId}";
+            var errorMsg = string.Format(ErrorMessages.RelatedFigureNotFound, request.StreetcodeId);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
@@ -55,24 +55,17 @@ public class GetRelatedFiguresByStreetcodeIdHandler : IRequestHandler<GetRelated
             }
         }
 
-        return Result.Ok(_mapper.Map<IEnumerable<RelatedFigureDTO>>(relatedFigures));
+        return Result.Ok(_mapper.Map<IEnumerable<RelatedFigureDto>>(relatedFigures));
     }
 
     private IQueryable<int> GetRelatedFigureIdsByStreetcodeId(int StreetcodeId)
     {
-        try
-        {
-            var observerIds = _repositoryWrapper.RelatedFigureRepository
-            .FindAll(f => f.TargetId == StreetcodeId).Select(o => o.ObserverId);
+        var observerIds = _repositoryWrapper.RelatedFigureRepository
+        .FindAll(f => f.TargetId == StreetcodeId).Select(o => o.ObserverId);
 
-            var targetIds = _repositoryWrapper.RelatedFigureRepository
-                .FindAll(f => f.ObserverId == StreetcodeId).Select(t => t.TargetId);
+        var targetIds = _repositoryWrapper.RelatedFigureRepository
+            .FindAll(f => f.ObserverId == StreetcodeId).Select(t => t.TargetId);
 
-            return observerIds.Union(targetIds).Distinct();
-        }
-        catch (ArgumentNullException)
-        {
-            return null;
-        }
+        return observerIds.Union(targetIds).Distinct();
     }
 }

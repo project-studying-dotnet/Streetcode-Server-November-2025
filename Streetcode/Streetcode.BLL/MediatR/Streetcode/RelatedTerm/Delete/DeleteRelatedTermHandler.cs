@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.TextContent;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
+namespace Streetcode.BLL.MediatR.RelatedTerm.Delete
 {
-    public class DeleteRelatedTermHandler : IRequestHandler<DeleteRelatedTermCommand, Result<RelatedTermDTO>>
+    public class DeleteRelatedTermHandler : IRequestHandler<DeleteRelatedTermCommand, Result<RelatedTermDto>>
     {
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
@@ -20,13 +20,14 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
             _logger = logger;
         }
 
-        public async Task<Result<RelatedTermDTO>> Handle(DeleteRelatedTermCommand request, CancellationToken cancellationToken)
+        public async Task<Result<RelatedTermDto>> Handle(DeleteRelatedTermCommand request, CancellationToken cancellationToken)
         {
-            var relatedTerm = await _repository.RelatedTermRepository.GetFirstOrDefaultAsync(rt => rt.Word.ToLower().Equals(request.word.ToLower()));
+            var relatedTerm = await _repository.RelatedTermRepository.GetFirstOrDefaultAsync(
+                rt => rt.Word.ToLower() == request.word.ToLower() && rt.TermId == request.termId);
 
             if (relatedTerm is null)
             {
-                string errorMsg = $"Cannot find a related term: {request.word}";
+                var errorMsg = ErrorMessages.RelatedTermNotFound;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -34,14 +35,14 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete
             _repository.RelatedTermRepository.Delete(relatedTerm);
 
             var resultIsSuccess = await _repository.SaveChangesAsync() > 0;
-            var relatedTermDto = _mapper.Map<RelatedTermDTO>(relatedTerm);
+            var relatedTermDto = _mapper.Map<RelatedTermDto>(relatedTerm);
             if(resultIsSuccess && relatedTermDto != null)
             {
                 return Result.Ok(relatedTermDto);
             }
             else
             {
-                const string errorMsg = "Failed to delete a related term";
+                var errorMsg = ErrorMessages.RelatedTermDeletionFailed;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

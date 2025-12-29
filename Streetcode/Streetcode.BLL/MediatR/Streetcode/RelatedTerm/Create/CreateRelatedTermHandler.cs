@@ -1,15 +1,15 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
-namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
+namespace Streetcode.BLL.MediatR.RelatedTerm.Create
 {
-    public class CreateRelatedTermHandler : IRequestHandler<CreateRelatedTermCommand, Result<RelatedTermDTO>>
+    public class CreateRelatedTermHandler : IRequestHandler<CreateRelatedTermCommand, Result<RelatedTermDto>>
     {
         private readonly IRepositoryWrapper _repository;
         private readonly IMapper _mapper;
@@ -22,13 +22,13 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
             _logger = logger;
         }
 
-        public async Task<Result<RelatedTermDTO>> Handle(CreateRelatedTermCommand request, CancellationToken cancellationToken)
+        public async Task<Result<RelatedTermDto>> Handle(CreateRelatedTermCommand request, CancellationToken cancellationToken)
         {
             var relatedTerm = _mapper.Map<Entity>(request.RelatedTerm);
 
             if (relatedTerm is null)
             {
-                const string errorMsg = "Cannot create new related word for a term!";
+                var errorMsg = ErrorMessages.RelatedTermWordRequired;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
@@ -39,23 +39,23 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
 
             if (existingTerms is null || existingTerms.Any())
             {
-                const string errorMsg = "Слово з цим визначенням уже існує";
+                var errorMsg = ErrorMessages.RelatedTermWordRequired;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
-            var createdRelatedTerm = _repository.RelatedTermRepository.Create(relatedTerm);
+            var createdRelatedTerm = await _repository.RelatedTermRepository.CreateAsync(relatedTerm);
 
             var isSuccessResult = await _repository.SaveChangesAsync() > 0;
 
             if(!isSuccessResult)
             {
-                const string errorMsg = "Cannot save changes in the database after related word creation!";
+                string errorMsg = ErrorMessages.CannotSaveChangesInDbAfterStreetcodeCreated;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
-            var createdRelatedTermDTO = _mapper.Map<RelatedTermDTO>(createdRelatedTerm);
+            var createdRelatedTermDTO = _mapper.Map<RelatedTermDto>(createdRelatedTerm);
 
             if(createdRelatedTermDTO != null)
             {
@@ -63,7 +63,7 @@ namespace Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Create
             }
             else
             {
-                const string errorMsg = "Cannot map entity!";
+                var errorMsg = ErrorMessages.CannotMapEntity;
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }

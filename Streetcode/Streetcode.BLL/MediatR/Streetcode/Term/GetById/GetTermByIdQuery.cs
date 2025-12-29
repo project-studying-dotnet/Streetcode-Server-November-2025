@@ -1,7 +1,7 @@
 ﻿using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.TextContent;
 
-namespace Streetcode.BLL.MediatR.Streetcode.Term.GetById;
+namespace Streetcode.BLL.MediatR.Term.GetById;
 
-public record GetTermByIdQuery(int Id) : IRequest<Result<TermDTO>>;
+public record GetTermByIdQuery(int Id) : IRequest<Result<TermDto>>;

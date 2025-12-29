@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Streetcode.BLL.DTO.AdditionalContent.Subtitles;
@@ -8,7 +8,7 @@ using Streetcode.DAL.Repositories.Interfaces.Base;
 
 namespace Streetcode.BLL.MediatR.Transactions.TransactionLink.GetById;
 
-public class GetTransactLinkByIdHandler : IRequestHandler<GetTransactLinkByIdQuery, Result<TransactLinkDTO>>
+public class GetTransactLinkByIdHandler : IRequestHandler<GetTransactLinkByIdQuery, Result<TransactLinkDto>>
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _repositoryWrapper;
@@ -21,18 +21,18 @@ public class GetTransactLinkByIdHandler : IRequestHandler<GetTransactLinkByIdQue
         _logger = logger;
     }
 
-    public async Task<Result<TransactLinkDTO>> Handle(GetTransactLinkByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<TransactLinkDto>> Handle(GetTransactLinkByIdQuery request, CancellationToken cancellationToken)
     {
         var transactLink = await _repositoryWrapper.TransactLinksRepository
             .GetFirstOrDefaultAsync(f => f.Id == request.Id);
 
         if (transactLink is null)
         {
-            string errorMsg = $"Cannot find any transaction link with corresponding id: {request.Id}";
+            var errorMsg = string.Format(ErrorMessages.TransactionLinkNotFoundById, request.Id);
             _logger.LogError(request, errorMsg);
             return Result.Fail(new Error(errorMsg));
         }
 
-        return Result.Ok(_mapper.Map<TransactLinkDTO>(transactLink));
+        return Result.Ok(_mapper.Map<TransactLinkDto>(transactLink));
     }
 }

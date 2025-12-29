@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using FluentResults;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -7,10 +7,11 @@ using Streetcode.BLL.DTO.Team;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.BLL.MediatR.Partners.GetById;
 using Streetcode.DAL.Repositories.Interfaces.Base;
+using Streetcode.DAL.Specifications.Team;
 
 namespace Streetcode.BLL.MediatR.Team.GetById
 {
-    public class GetByIdTeamHandler : IRequestHandler<GetByIdTeamQuery, Result<TeamMemberDTO>>
+    public class GetByIdTeamHandler : IRequestHandler<GetByIdTeamQuery, Result<TeamMemberDto>>
     {
         private readonly IMapper _mapper;
         private readonly IRepositoryWrapper _repositoryWrapper;
@@ -23,23 +24,21 @@ namespace Streetcode.BLL.MediatR.Team.GetById
             _logger = logger;
         }
 
-        public async Task<Result<TeamMemberDTO>> Handle(GetByIdTeamQuery request, CancellationToken cancellationToken)
+        public async Task<Result<TeamMemberDto>> Handle(GetByIdTeamQuery request, CancellationToken cancellationToken)
         {
+            var spec = new TeamMemberByIdSpecification(request.Id);
             var team = await _repositoryWrapper
                 .TeamRepository
-                .GetSingleOrDefaultAsync(
-                    predicate: p => p.Id == request.Id,
-                    include: x => x.Include(x => x.TeamMemberLinks)
-                    .Include(x => x.Positions));
+                .GetBySpecAsync(spec, cancellationToken);
 
             if (team is null)
             {
-                string errorMsg = $"Cannot find any team with corresponding id: {request.Id}";
+                var errorMsg = string.Format(ErrorMessages.TeamNotFoundById, request.Id);
                 _logger.LogError(request, errorMsg);
                 return Result.Fail(new Error(errorMsg));
             }
 
-            return Result.Ok(_mapper.Map<TeamMemberDTO>(team));
+            return Result.Ok(_mapper.Map<TeamMemberDto>(team));
         }
     }
 }
