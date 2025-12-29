@@ -2,6 +2,7 @@
 using Streetcode.BLL.DTO.Streetcode.Comments;
 using Streetcode.BLL.MediatR.Streetcode.Comments.Create;
 using Streetcode.BLL.MediatR.Streetcode.Comments.Delete;
+using Streetcode.BLL.MediatR.Streetcode.Comments.GetById;
 using Streetcode.BLL.MediatR.Streetcode.Comments.GetByStreetcodeId;
 using Streetcode.BLL.MediatR.Streetcode.Comments.Update;
 
@@ -13,6 +14,12 @@ namespace Streetcode.WebApi.Controllers.Streetcode
         public async Task<IActionResult> GetByStreetcodeId(int streetcodeId)
         {
             return HandleResult(await Mediator.Send(new GetCommentsByStreetcodeIdQuery(streetcodeId)));
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            return HandleResult(await Mediator.Send(new GetCommentByIdQuery(id)));
         }
 
         [HttpPost]
