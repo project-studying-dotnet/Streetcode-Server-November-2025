@@ -948,10 +948,22 @@
   <data name="CommentDataRequired" xml:space="preserve">
     <value>Дані коментаря є обов'язковими</value>
   </data>
+  <data name="CommentNotFoundById" xml:space="preserve">
+    <value>Comment with id {0} was not found.</value>
+  </data>
+  <data name="CommentDeletionFailed" xml:space="preserve">
+    <value>Failed to delete comment with id {0}.</value>
+  </data>
+  <data name="CommentIdMustBePositive" xml:space="preserve">
+    <value>Id коментаря має бути &gt; 0</value>
+  </data>
+  <data name="CommentUpdateFailed" xml:space="preserve">
+    <value>Не вдалося оновити коментар з Id {0}</value>
+  </data>
   <data name="CommentsNotFoundByStreetcodeId" xml:space="preserve">
     <value>No comments found by StreetcodeId</value>
   </data>
-<data name="BlobNotFoundByName" xml:space="preserve">
+  <data name="BlobNotFoundByName" xml:space="preserve">
     <value>Blob with name '{0}' was not found</value>
   </data>
   <data name="UnsupportedFileExtension" xml:space="preserve">

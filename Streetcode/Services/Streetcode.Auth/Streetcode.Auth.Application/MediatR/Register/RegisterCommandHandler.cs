@@ -7,21 +7,27 @@ using Streetcode.Auth.Application.Dtos.Users;
 using Streetcode.Auth.Application.Interfaces.Token;
 using Streetcode.Auth.Domain.Entities.Users;
 using Streetcode.BuildingBlocks.Interfaces.Logging;
+using Streetcode.Messaging.Events;
+using Streetcode.Messaging.Interfaces.EventPublish;
 
 namespace Streetcode.Auth.Application.MediatR.Register
 {
-    internal class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterUserResponseDto>>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterUserResponseDto>>
     {
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
         private readonly ILoggerService _logger;
+        private readonly IEventPublisher _eventPublisher;
+
 
         public RegisterCommandHandler(
             UserManager<User> userManager,
             IMapper mapper,
+            IEventPublisher eventPublisher,
             ILoggerService logger)
         {
             _userManager = userManager;
+            _eventPublisher = eventPublisher;
             _mapper = mapper;
             _logger = logger;
         }
@@ -53,6 +59,15 @@ namespace Streetcode.Auth.Application.MediatR.Register
                     var errors = string.Join(", ", addToRoleResult.Errors.Select(e => e.Description));
                     return Result.Fail(string.Format("ErrorMessages.UserRoleAssignmentFailed", errors));
                 }
+
+                var userRegisteredEvent = new UserRegisteredEvent(
+                    newUser.Id,
+                    newUser.Email!,
+                    newUser.Name,
+                    newUser.Surname,
+                    DateTime.UtcNow);
+
+                await _eventPublisher.PublishAsync(userRegisteredEvent, cancellationToken);
 
                 var createdUser = _mapper.Map<RegisterUserResponseDto>(newUser);
                 createdUser.Role = request.newUser.Role;
