@@ -27,11 +27,14 @@ builder.Services.ConfigureSerilog(builder);
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-    db.Database.Migrate();
-}
+
+//uncomment to apply migrations on startup
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+//    db.Database.Migrate();
+//}
 
 
 // Configure the HTTP request pipeline.
@@ -47,7 +50,7 @@ else
 
 app.UseCors();
 
-await app.Services.SeedIdentityAsync(); // uncomment for seeding data
+//await app.Services.SeedIdentityAsync(); // uncomment for seeding data
 
 app.UseHttpsRedirection();
 
