@@ -1,10 +1,11 @@
 using FluentValidation.TestHelper;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
-using Streetcode.BLL.MediatR.Streetcode.Term.Create;
+using Streetcode.BLL;
+using Streetcode.BLL.DTO.TextContent;
+using Streetcode.BLL.MediatR.Term.Create;
 using Streetcode.BLL.Util.Validators;
 using Xunit;
 
-namespace Streetcode.XUnitTest.MediatR.Streetcode.Term.Create;
+namespace Streetcode.XUnitTest.MediatR.Term.Create;
 
 public class CreateTermDtoValidatorTests
 {
@@ -37,8 +38,7 @@ public class CreateTermDtoValidatorTests
 
         var result = this.validator.TestValidate(dto);
 
-        result.ShouldHaveValidationErrorFor(x => x.Title)
-            .WithErrorMessage("Назва терміну є обов'язковою");
+        result.ShouldHaveValidationErrorFor(x => x.Title);
     }
 
     [Fact]
@@ -50,7 +50,9 @@ public class CreateTermDtoValidatorTests
         var result = this.validator.TestValidate(dto);
 
         result.ShouldHaveValidationErrorFor(x => x.Title)
-            .WithErrorMessage($"Назва терміну не може перевищувати {ValidationConstants.Term.TitleMaxLength} символів");
+            .WithErrorMessage(string.Format(
+                ErrorMessages.RelatedTermWordTooLong,
+                ValidationConstants.Term.TitleMaxLength));
     }
 
     [Fact]

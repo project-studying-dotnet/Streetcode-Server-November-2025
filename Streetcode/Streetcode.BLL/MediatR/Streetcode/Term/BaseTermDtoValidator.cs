@@ -1,8 +1,8 @@
 using FluentValidation;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.TextContent;
 using Streetcode.BLL.Util.Validators;
 
-namespace Streetcode.BLL.MediatR.Streetcode.Term;
+namespace Streetcode.BLL.MediatR.Term;
 
 public class BaseTermDtoValidator : AbstractValidator<TermDto>
 {

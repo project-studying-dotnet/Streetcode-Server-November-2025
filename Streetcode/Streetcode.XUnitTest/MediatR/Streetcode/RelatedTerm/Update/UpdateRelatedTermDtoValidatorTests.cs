@@ -2,8 +2,8 @@
 {
     using FluentValidation.TestHelper;
     using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.TextContent;
-    using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update;
+    using Streetcode.BLL.DTO.TextContent;
+    using Streetcode.BLL.MediatR.RelatedTerm.Update;
     using Streetcode.BLL.Util.Validators;
     using Xunit;
 

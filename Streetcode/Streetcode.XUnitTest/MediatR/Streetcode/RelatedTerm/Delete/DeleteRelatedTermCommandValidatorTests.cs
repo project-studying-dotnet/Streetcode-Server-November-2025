@@ -2,7 +2,7 @@
 {
     using FluentValidation.TestHelper;
     using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Delete;
+    using Streetcode.BLL.MediatR.RelatedTerm.Delete;
     using Streetcode.BLL.Util.Validators;
     using Xunit;
 
