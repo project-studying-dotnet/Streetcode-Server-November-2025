@@ -19,6 +19,7 @@ builder.Services.AddSwaggerWithJwt();
 
 builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddMessaging(builder.Configuration);
 builder.Services.AddOTLP(builder.Configuration);
 
 builder.Services.ConfigureSerilog(builder);
