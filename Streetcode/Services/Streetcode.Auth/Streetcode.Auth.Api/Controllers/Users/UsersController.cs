@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Streetcode.Auth.Api.Extensions;
 using Streetcode.Auth.Application.Dtos.Auth;
 using Streetcode.Auth.Application.Dtos.Users;
 using Streetcode.Auth.Application.MediatR.Login;
@@ -19,7 +20,14 @@ namespace Streetcode.Auth.Api.Controllers.Users
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
-            return HandleResult(await Mediator.Send(new LoginCommand(request)));
+            var result = await Mediator.Send(new LoginCommand(request));
+            
+            if (result.IsSuccess && result.Value != null)
+            {
+                HttpContext.AppendTokensToCookies(result.Value.AccessToken, result.Value.RefreshToken);
+            }
+
+            return HandleResult(result);
         }
 
         [Authorize]
