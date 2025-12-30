@@ -8,7 +8,7 @@ public interface IBlobService
         string previousBlobName,
         string base64Format,
         string newBlobName,
-        string extension);
+        string mimeType);
     public Task<string> FindFileInStorageAsBase64Async(string name);
     public Task DeleteFileInStorageAsync(string name);
     public Task<bool> BlobExistsAsync(string blobName);
