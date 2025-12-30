@@ -11,19 +11,20 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-COPY Services/Streetcode.ApiGateway/Streetcode.ApiGateway.csproj Services/Streetcode.ApiGateway/
+COPY Streetcode.sln .
+COPY Services/Streetcode.ApiGateway/Streetcode.ApiGateway/ Services/Streetcode.ApiGateway/Streetcode.ApiGateway/
 
-WORKDIR /src/Services/Streetcode.ApiGateway
+WORKDIR /src/Services/Streetcode.ApiGateway/Streetcode.ApiGateway
 RUN dotnet restore "Streetcode.ApiGateway.csproj"
 
-COPY Services/Streetcode.ApiGateway/ Services/Streetcode.ApiGateway/
+COPY Services/Streetcode.ApiGateway/Streetcode.ApiGateway/ .
 
 RUN dotnet build "Streetcode.ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # Publish stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src/Services/Streetcode.ApiGateway
+WORKDIR /src/Services/Streetcode.ApiGateway/Streetcode.ApiGateway
 RUN dotnet publish "Streetcode.ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # Final stage
@@ -37,6 +38,6 @@ RUN groupadd -r nonuser \
 
 ENV ASPNETCORE_ENVIRONMENT=Docker
 
-USER appuser 
+USER appuser
 
 ENTRYPOINT ["dotnet", "Streetcode.ApiGateway.dll"]
