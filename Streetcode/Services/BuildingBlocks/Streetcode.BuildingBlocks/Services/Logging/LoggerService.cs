@@ -1,4 +1,4 @@
-﻿using Streetcode.BuildingBlocks.Interfaces.Logging;
+using Streetcode.BuildingBlocks.Interfaces.Logging;
 using Serilog;
 
 namespace Streetcode.BuildingBlocks.Services.Logging
@@ -32,11 +32,11 @@ namespace Streetcode.BuildingBlocks.Services.Logging
             _logger.Debug($"{msg}");
         }
 
-        public void LogError(object request, string erroMsg)
+        public void LogError(object request, string errorMsg)
         {
             string requestType = request.GetType().ToString();
             string requestClass = requestType.Substring(requestType.LastIndexOf('.') + 1);
-            _logger.Error($"{requestClass} handled with the error: {erroMsg}");
+            _logger.Error($"{requestClass} handled with the error: {errorMsg}");
         }
     }
 }
