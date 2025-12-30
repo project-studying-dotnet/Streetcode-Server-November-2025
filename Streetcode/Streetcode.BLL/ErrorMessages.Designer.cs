@@ -19,7 +19,7 @@ namespace Streetcode.BLL {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class ErrorMessages {
@@ -331,6 +331,15 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Comment with id {0} was not found.
+        /// </summary>
+        internal static string CommentIdMustBeGreaterThanZero {
+            get {
+                return ResourceManager.GetString("CommentIdMustBeGreaterThanZero", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Id коментаря має бути &gt; 0.
         /// </summary>
         internal static string CommentIdMustBePositive {
@@ -349,19 +358,20 @@ namespace Streetcode.BLL {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Не вдалося оновити коментар з Id {0}.
-        /// </summary>
-        internal static string CommentUpdateFailed {
-            get {
-                return ResourceManager.GetString("CommentUpdateFailed", resourceCulture);
-            }
-        }
-        
         ///   Looks up a localized string similar to No comments found by StreetcodeId.
         /// </summary>
         internal static string CommentsNotFoundByStreetcodeId {
             get {
                 return ResourceManager.GetString("CommentsNotFoundByStreetcodeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Не вдалося оновити коментар з Id {0}.
+        /// </summary>
+        internal static string CommentUpdateFailed {
+            get {
+                return ResourceManager.GetString("CommentUpdateFailed", resourceCulture);
             }
         }
         
