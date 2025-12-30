@@ -121,6 +121,7 @@ namespace Streetcode.XUnitTest.MediatR.Comments.Helpers
             this Mock<ICommentsRepository> commentsRepositoryMock)
         {
             commentsRepositoryMock.VerifyGetBySpec(Times.Never());
+        }
         /// Sets up the mocked <see cref="IRepositoryWrapper"/> to return the provided mocked repository
         /// instance for the specified repository selector.
         /// </summary>
