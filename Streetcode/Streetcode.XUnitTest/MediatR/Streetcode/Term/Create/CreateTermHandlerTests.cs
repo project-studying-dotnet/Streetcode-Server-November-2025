@@ -15,7 +15,6 @@ public class CreateTermHandlerTests
 {
     private readonly Mock<IMapper> mockMapper;
     private readonly Mock<IRepositoryWrapper> mockRepository;
-    private readonly Mock<ILoggerService> mockLogger;
     private readonly CreateTermHandler handler;
     
 
@@ -23,10 +22,9 @@ public class CreateTermHandlerTests
     {
         this.mockMapper = new Mock<IMapper>();
         this.mockRepository = new Mock<IRepositoryWrapper>();
-        this.mockLogger = new Mock<ILoggerService>();
 
         this.handler =
-            new CreateTermHandler(this.mockMapper.Object, this.mockRepository.Object, this.mockLogger.Object);
+            new CreateTermHandler(this.mockMapper.Object, this.mockRepository.Object);
     }
 
     [Fact]
