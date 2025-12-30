@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OpenTelemetry.Logs;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
 using Streetcode.Auth.Application.Interfaces.Token;
 using Streetcode.Auth.Application.Mapping.Users;
@@ -83,7 +88,55 @@ namespace Streetcode.Auth.Api.Extensions
 
         public static IServiceCollection AddMessaging(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMessageBroker(configuration);
+            var provider = configuration["MessageBroker:Provider"];
+            
+            switch (provider)
+            {
+                case "RabbitMQ":
+                    services.AddRabbitMqMessageBroker(configuration, Assembly.GetExecutingAssembly());
+                    return services;
+                case "AzureServiceBus":
+                    services.AddAzureServiceBusMessageBroker(configuration, Assembly.GetExecutingAssembly());
+                    return services;
+                default:
+                    throw new InvalidOperationException($"Unsupported Message Broker Provider: {provider}");
+            }
+        }
+
+        public static IServiceCollection AddOtlp(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddOpenTelemetry()
+                .ConfigureResource(resource =>
+                    resource.AddService(
+                        serviceName: configuration["OTEL_SERVICE_NAME"] ?? throw new InvalidOperationException(
+                            "OTEL_SERVICE_NAME configuration value is required."),
+                        serviceVersion: "1.0.0"))
+                .WithMetrics(metrics =>
+                {
+                    metrics
+                        .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddOtlpExporter();
+                })
+                .WithTracing(tracing =>
+                {
+                    tracing
+                        .AddAspNetCoreInstrumentation()
+                        .AddHttpClientInstrumentation()
+                        .AddEntityFrameworkCoreInstrumentation(options =>
+                            options.SetDbStatementForText = true)
+                        .AddSource("MassTransit")
+                        .AddOtlpExporter();
+                });
+
+            services.AddLogging(logging =>
+            {
+                logging.AddOpenTelemetry(options =>
+                {
+                    options.AddOtlpExporter();
+                });
+            });
+
             return services;
         }
     }

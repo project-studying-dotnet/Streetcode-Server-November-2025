@@ -1,8 +1,8 @@
 namespace Streetcode.BLL.Util
 {
-    public class BlobHelper
+    public static class BlobHelper
     {
-        public static readonly Dictionary<string, string> MimeToExtension = new()
+        private static readonly Dictionary<string, string> _mimeToExtension = new()
         {
             // Images
             ["image/png"] = ".png",
@@ -16,6 +16,8 @@ namespace Streetcode.BLL.Util
             ["audio/mp3"] = ".mp3",
             ["audio/wav"] = ".wav"
         };
+
+        public static IReadOnlyDictionary<string, string> MimeToExtension => _mimeToExtension;
 
         public static string GetExtensionFromMimeType(string mimeType)
         {

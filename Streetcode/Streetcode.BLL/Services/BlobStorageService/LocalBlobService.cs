@@ -72,12 +72,12 @@ public class LocalBlobService : IBlobService
         string previousBlobName,
         string base64Format,
         string newBlobName,
-        string extension)
+        string mimeType)
     {
         var hashBlobStorageName = await SaveFileInStorageAsync(
             base64Format,
             newBlobName,
-            extension);
+            mimeType);
 
         await DeleteFileInStorageAsync(previousBlobName);
 

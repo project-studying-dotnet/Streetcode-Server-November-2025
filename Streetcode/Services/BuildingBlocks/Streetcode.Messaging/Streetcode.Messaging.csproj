@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.Azure.ServiceBus.Core" Version="9.0.0-develop.33" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.4" />
   </ItemGroup>
 

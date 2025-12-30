@@ -39,5 +39,11 @@ namespace Streetcode.WebApi.Controllers.Streetcode
         {
             return HandleResult(await Mediator.Send(new DeleteCommentCommand(id)));
         }
-    }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdWithReplies([FromRoute] int id)
+		{
+			return HandleResult(await Mediator.Send(new GetCommentByIdWithRepliesQuery(id)));
+		}
+	}
 }

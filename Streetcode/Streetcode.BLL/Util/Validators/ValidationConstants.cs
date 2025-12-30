@@ -17,9 +17,9 @@ namespace Streetcode.BLL.Util.Validators
                 @"^(https?://)?(www\.)?(youtube\.com/(watch\?v=|embed/|v/)|youtu\.be/)[\w\-]+";
 
             /// <summary>
-            /// Password pattern: at least one uppercase, one lowercase, one digit, min 6 chars (default Identity requirements, no special required by default).
+            /// PasswordRegex pattern: at least one uppercase, one lowercase, one digit, min 6 chars (default Identity requirements, no special required by default).
             /// </summary>
-            public const string Password = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$";
+            public const string PasswordRegex = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$";
 
             /// <summary>
             /// Username pattern: letters, digits, underscores, dot, dash only (per Identity default, no spaces or forbidden chars).
