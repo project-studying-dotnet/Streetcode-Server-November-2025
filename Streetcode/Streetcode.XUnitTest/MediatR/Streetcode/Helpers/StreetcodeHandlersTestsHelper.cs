@@ -189,7 +189,7 @@
             bool tagsIncluded = false,
             int times = 0)
         {
-            this.repositoryMock.VerifySaveChangesAsyncCalledTimes(2);
+            this.repositoryMock.VerifySaveChangesAsyncCalledTimes(3);
 
             this.mapperMock
                 .VerifyMapCalledOnce<StreetcodeContent>();
