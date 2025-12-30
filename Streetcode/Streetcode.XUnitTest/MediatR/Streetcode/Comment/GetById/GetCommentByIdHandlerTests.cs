@@ -1,18 +1,18 @@
-﻿using AutoMapper;
-using FluentAssertions;
-using Moq;
-using Streetcode.BLL.DTO.Streetcode.Comments;
-using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Streetcode.Comments.GetById;
-using Streetcode.DAL.Repositories.Interfaces.Base;
-using Streetcode.DAL.Repositories.Interfaces.Streetcode;
-using Streetcode.XUnitTest.Helpers;
-using Streetcode.XUnitTest.MediatR.Comments.Fixtures;
-using Streetcode.XUnitTest.MediatR.Comments.Helpers;
-using Xunit;
-
-namespace Streetcode.XUnitTest.MediatR.Streetcode.Comment.GetById
+﻿namespace Streetcode.XUnitTest.MediatR.Comment.GetById
 {
+    using AutoMapper;
+    using FluentAssertions;
+    using Moq;
+    using Streetcode.BLL.DTO.Streetcode.Comments;
+    using Streetcode.BLL.Interfaces.Logging;
+    using Streetcode.BLL.MediatR.Streetcode.Comments.GetById;
+    using Streetcode.DAL.Repositories.Interfaces.Base;
+    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
+    using Streetcode.XUnitTest.Helpers;
+    using Streetcode.XUnitTest.MediatR.Comments.Fixtures;
+    using Streetcode.XUnitTest.MediatR.Comments.Helpers;
+    using Xunit;
+
     public class GetCommentByIdHandlerTests 
     {
         private readonly Mock<IMapper> mapperMock;
@@ -153,12 +153,10 @@ namespace Streetcode.XUnitTest.MediatR.Streetcode.Comment.GetById
 
             result.Value.Replies.Should().HaveCountGreaterThan(0);
 
+            // Verify
             commentsRepoMock.VerifyGetBySpecOnce();
-
             commentsRepoMock.VerifyGetBySpec(Times.Once());
-
             this.mapperMock.VerifyMapCalledOnce<CommentDto>();
-
             this.loggerMock.VerifyLogErrorCalledNever();
         }
     }
