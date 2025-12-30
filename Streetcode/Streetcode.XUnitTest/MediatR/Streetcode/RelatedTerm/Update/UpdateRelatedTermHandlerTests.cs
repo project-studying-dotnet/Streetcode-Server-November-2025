@@ -1,16 +1,16 @@
 using AutoMapper;
 using FluentAssertions;
 using Moq;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.BLL.MediatR.Streetcode.RelatedTerm.Update;
+using Streetcode.BLL.MediatR.RelatedTerm.Update;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using System.Linq.Expressions;
 using Streetcode.BLL;
 using Xunit;
 using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
-namespace Streetcode.XUnitTest.MediatR.Streetcode.RelatedTerm.Update;
+namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Update;
 
 public class UpdateRelatedTermHandlerTests
 {

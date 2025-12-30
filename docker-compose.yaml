@@ -1,5 +1,14 @@
 
 services:
+  api-gateway:
+    build:
+      context: ./Streetcode/Services/Streetcode.ApiGateway/Streetcode.ApiGateway
+    container_name: Streetcode-Api-Gateway
+    ports:
+      - "8082:8082"
+    networks:
+      - app-network
+
   backend:
     build:
       context: .
@@ -47,9 +56,74 @@ services:
       - app-network
     command: redis-server --appendonly yes
 
+  telemetry-dashboard:
+    image: mcr.microsoft.com/dotnet/nightly/aspire-dashboard:latest
+    ports:
+      - "${OTEL_DASHBOARD_PORT}:18888"
+    networks:
+      - app-network
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "${RABBITMQ_PORT}:5672"
+      - "${RABBITMQ_MANAGEMENT_PORT}:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - app-network
+  userdb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=${MSSQL_ACCEPT_EULA}
+      - SA_PASSWORD=${USER_DB_PASSWORD}
+    ports:
+      - "${USER_DB_PORT}:1433"
+    networks:
+      - app-network
+
+  streetcode.auth.api:
+    image: streetcodeauthapi
+    build:
+      context: .
+      dockerfile: ${AUTH_DOCKERFILE}
+    depends_on:
+      - userdb
+      - rabbitmq
+      - telemetry-dashboard
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${AUTH_ENV}
+      - ASPNETCORE_HTTP_PORTS=${AUTH_HTTP_PORT}
+      - ASPNETCORE_URLS=http://+:${AUTH_HTTP_PORT}
+
+      - ConnectionStrings__DefaultConnection=Server=${USER_DB_HOST};Database=${USER_DB_NAME};User Id=${USER_DB_USER};Password=${USER_DB_PASSWORD};TrustServerCertificate=True;
+
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - Jwt__AccessTokenExpirationMinutes=${JWT_ACCESS_MIN}
+      - Jwt__RefreshTokenExpirationDays=${JWT_REFRESH_DAYS}
+
+      - MessageBroker__Host=amqp://${RABBITMQ_HOST}:${RABBITMQ_PORT}
+      - MessageBroker__UserName=${RABBITMQ_USER}
+      - MessageBroker__Password=${RABBITMQ_PASSWORD}
+
+      - IdentitySeed__Roles__0=${ROLE_USER}
+      - IdentitySeed__Roles__1=${ROLE_ADMIN}
+      - IdentitySeed__DefaultAdmin__Email=${ADMIN_EMAIL}
+      - IdentitySeed__DefaultAdmin__Password=${ADMIN_PASSWORD}
+
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_ENDPOINT}
+      - OTEL_SERVICE_NAME=${AUTH_SERVICE_NAME}
+    ports:
+      - "${AUTH_EXTERNAL_PORT}:${AUTH_HTTP_PORT}"
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
-  redis-data:  
+  redis-data:
+  rabbitmq_data:
