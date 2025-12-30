@@ -16,6 +16,12 @@ namespace Streetcode.WebApi.Controllers.Streetcode
             return HandleResult(await Mediator.Send(new GetCommentsByStreetcodeIdQuery(streetcodeId)));
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            return HandleResult(await Mediator.Send(new GetCommentByIdQuery(id)));
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCommentDto comment)
         {

@@ -972,4 +972,7 @@
   <data name="MimeRequired" xml:space="preserve">
     <value>MIME type cannot be null or empty</value>
   </data>
+	<data name="CommentIdMustBeGreaterThanZero" xml:space="preserve">
+    <value>Comment with id {0} was not found</value>
+  </data>
 </root>
