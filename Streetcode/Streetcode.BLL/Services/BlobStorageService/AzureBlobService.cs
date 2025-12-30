@@ -67,7 +67,7 @@ namespace Streetcode.BLL.Services.BlobStorageService
             var container = await GetContainerAsync();
             var blobClient = container.GetBlobClient(name);
 
-            if (!blobClient.Exists())
+            if (!await blobClient.ExistsAsync())
             {
                 throw new FileNotFoundException(string.Format(ErrorMessages.BlobNotFoundByName, name));
             }
@@ -97,7 +97,7 @@ namespace Streetcode.BLL.Services.BlobStorageService
             var container = await GetContainerAsync();
             var blobClient = container.GetBlobClient(name);
 
-            if (!blobClient.DeleteIfExists())
+            if (!await blobClient.DeleteIfExistsAsync())
             {
                 throw new FileNotFoundException(string.Format(ErrorMessages.BlobNotFoundByName, name));
             }
@@ -106,7 +106,7 @@ namespace Streetcode.BLL.Services.BlobStorageService
         public async Task<bool> BlobExistsAsync(string blobName)
         {
             var container = await GetContainerAsync();
-            return container.GetBlobClient(blobName).Exists();
+            return await container.GetBlobClient(blobName).ExistsAsync();
         }
 
         private async Task<BlobContainerClient> GetContainerAsync()
