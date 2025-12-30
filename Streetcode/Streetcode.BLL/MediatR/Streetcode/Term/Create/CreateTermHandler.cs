@@ -12,13 +12,11 @@ public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermD
 {
     private readonly IMapper _mapper;
     private readonly IRepositoryWrapper _wrapper;
-    private readonly ILoggerService _logger;
 
-    public CreateTermHandler(IMapper mapper, IRepositoryWrapper wrapper, ILoggerService logger)
+    public CreateTermHandler(IMapper mapper, IRepositoryWrapper wrapper)
     {
         _mapper = mapper;
         _wrapper = wrapper;
-        _logger = logger;
     }
 
     public async Task<Result<TermDto>> Handle(CreateTermCommand request, CancellationToken cancellationToken)

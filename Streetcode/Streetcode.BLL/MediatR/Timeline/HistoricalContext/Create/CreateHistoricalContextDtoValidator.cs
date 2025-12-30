@@ -21,7 +21,7 @@ namespace Streetcode.BLL.MediatR.Timeline.HistoricalContext.Create
                 return true;
             }
 
-            return Regex.IsMatch(title, @"^[a-zA-Zа-яА-ЯіІїЇєЄґҐ\s]+$");
+            return Regex.IsMatch(title, @"^[a-zA-Zа-яА-ЯіІїЇєЄґҐ\s]+$", RegexOptions.None, TimeSpan.FromMilliseconds(500));
         }
     }
 }

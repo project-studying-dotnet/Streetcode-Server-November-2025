@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using Streetcode.Auth.Api.Extensions;
+using Streetcode.Auth.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
 builder.Services.AddMessaging(builder.Configuration);
+builder.Services.AddOtlp(builder.Configuration);
 
 
 builder.Services.AddJwtAuthentication(builder.Configuration);
@@ -23,6 +26,16 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureSerilog(builder);
 
 var app = builder.Build();
+
+
+//uncomment to apply migrations on startup
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
+//    db.Database.Migrate();
+//}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.EnvironmentName == "Development")
@@ -47,4 +60,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+await app.RunAsync();

@@ -52,7 +52,7 @@ namespace Streetcode.BLL.MediatR.Users.Register
                     ErrorMessages.UserEmailTooLong,
                     ValidationConstants.User.EmailMaxLength));
 
-            // Password - required, min/max, Identity-like composition
+            // PasswordRegex - required, min/max, Identity-like composition
             RuleFor(x => x.Password)
                 .NotEmpty()
                 .WithMessage(ErrorMessages.UserPasswordRequired)
@@ -64,7 +64,7 @@ namespace Streetcode.BLL.MediatR.Users.Register
                 .WithMessage(string.Format(
                     ErrorMessages.UserPasswordTooLong,
                     ValidationConstants.User.PasswordMaxLength))
-                .Matches(ValidationConstants.RegexPatterns.Password)
+                .Matches(ValidationConstants.RegexPatterns.PasswordRegex)
                 .WithMessage(ErrorMessages.UserPasswordInvalidFormat);
 
             // Role - must be defined enum
