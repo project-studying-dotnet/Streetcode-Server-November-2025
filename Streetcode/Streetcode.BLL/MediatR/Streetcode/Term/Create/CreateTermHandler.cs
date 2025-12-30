@@ -1,12 +1,12 @@
 using AutoMapper;
 using FluentResults;
 using MediatR;
-using Streetcode.BLL.DTO.Streetcode.TextContent;
+using Streetcode.BLL.DTO.TextContent;
 using Streetcode.BLL.Interfaces.Logging;
 using Streetcode.DAL.Repositories.Interfaces.Base;
 using TermEntity = Streetcode.DAL.Entities.Streetcode.TextContent.Term;
 
-namespace Streetcode.BLL.MediatR.Streetcode.Term.Create;
+namespace Streetcode.BLL.MediatR.Term.Create;
 
 public class CreateTermHandler : IRequestHandler<CreateTermCommand, Result<TermDto>>
 {
