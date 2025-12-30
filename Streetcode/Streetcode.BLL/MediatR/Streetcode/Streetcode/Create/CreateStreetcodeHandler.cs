@@ -31,6 +31,9 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
 
         public async Task<Result<JsonElement>> Handle(CreateStreetcodeCommand request, CancellationToken cancellationToken)
         {
+            using var transaction = new TransactionScope(
+                TransactionScopeAsyncFlowOption.Enabled);
+
             try
             {
                 var rawJson = request.rawJsonCreateDTO;
@@ -70,11 +73,22 @@ namespace Streetcode.BLL.MediatR.Streetcode.Streetcode.Create
                     return tagsResult;
                 }
 
-                await _repository.SaveChangesAsync();
+                var resultIsSuccess = await _repository.SaveChangesAsync() > 0;
 
-                var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(streetcodeContent);
-                var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
-                return Result.Ok(jsonResult);
+                transaction.Complete();
+
+                if (resultIsSuccess)
+                {
+                    await _repository.SaveChangesAsync();
+
+                    var streetcodeDTO = _mapper.Map<CreateStreetcodeDto>(streetcodeContent);
+                    var jsonResult = JsonSerializer.SerializeToElement(streetcodeDTO);
+                    return Result.Ok(jsonResult);
+                }
+                else
+                {
+                    return Result.Fail(ErrorMessages.StreetcodeCreationFailed);
+                }
             }
             catch (Exception ex)
             {
