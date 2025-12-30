@@ -17,7 +17,7 @@ namespace Streetcode.XUnitTest.MediatR.Users.Register
 
         /// <summary>
         /// Tests that the password field validates correctly based on format requirements.
-        /// Password must contain at least 6 characters, including at least one uppercase letter and one digit.
+        /// PasswordRegex must contain at least 6 characters, including at least one uppercase letter and one digit.
         /// </summary>
         /// <param name="password">The password to validate.</param>
         /// <param name="isValid">Expected validation result.</param>
