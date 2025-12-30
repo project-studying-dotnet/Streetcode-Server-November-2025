@@ -2,17 +2,17 @@
 {
     using AutoMapper;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.Comments;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Comments.Create;
-    using Streetcode.BLL.MediatR.Streetcode.Comments.Create;
-    using Streetcode.DAL.Entities.Streetcode;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Comments.Fixtures;
-    using Streetcode.XUnitTest.MediatR.Comments.Helpers;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Streetcode.Comments;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Comments.Create;
+ using global::Streetcode.BLL.MediatR.Streetcode.Comments.Create;
+ using global::Streetcode.DAL.Entities.Streetcode;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Comments.Fixtures;
+ using global::Streetcode.XUnitTest.MediatR.Comments.Helpers;
     using Xunit;
 
     /// <summary>

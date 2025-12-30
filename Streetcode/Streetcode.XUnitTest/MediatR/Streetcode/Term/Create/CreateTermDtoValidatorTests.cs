@@ -1,11 +1,11 @@
-using FluentValidation.TestHelper;
-using Streetcode.BLL;
-using Streetcode.BLL.DTO.TextContent;
-using Streetcode.BLL.MediatR.Term.Create;
-using Streetcode.BLL.Util.Validators;
-using Xunit;
+namespace Streetcode.XUnitTest.MediatR.Streetcode.Term.Create;
 
-namespace Streetcode.XUnitTest.MediatR.Term.Create;
+using global::Streetcode.BLL;
+using FluentValidation.TestHelper;
+using global::Streetcode.BLL.DTO.TextContent;
+using global::Streetcode.BLL.MediatR.Term.Create;
+using global::Streetcode.BLL.Util.Validators;
+using Xunit;
 
 public class CreateTermDtoValidatorTests
 {
@@ -38,7 +38,8 @@ public class CreateTermDtoValidatorTests
 
         var result = this.validator.TestValidate(dto);
 
-        result.ShouldHaveValidationErrorFor(x => x.Title);
+        result.ShouldHaveValidationErrorFor(x => x.Title)
+            .WithErrorMessage(ErrorMessages.RelatedTermWordRequired);
     }
 
     [Fact]
@@ -50,9 +51,7 @@ public class CreateTermDtoValidatorTests
         var result = this.validator.TestValidate(dto);
 
         result.ShouldHaveValidationErrorFor(x => x.Title)
-            .WithErrorMessage(string.Format(
-                ErrorMessages.RelatedTermWordTooLong,
-                ValidationConstants.Term.TitleMaxLength));
+            .WithErrorMessage(string.Format(ErrorMessages.RelatedTermWordTooLong, ValidationConstants.Term.TitleMaxLength));
     }
 
     [Fact]

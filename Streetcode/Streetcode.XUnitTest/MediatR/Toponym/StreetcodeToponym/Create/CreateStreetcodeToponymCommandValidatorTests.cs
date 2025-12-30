@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.DTO.Toponyms;
-    using Streetcode.BLL.MediatR.Toponyms.Create;
+ using global::Streetcode.BLL.DTO.Toponyms;
+ using global::Streetcode.BLL.MediatR.Toponyms.Create;
     using Xunit;
 
     /// <summary>

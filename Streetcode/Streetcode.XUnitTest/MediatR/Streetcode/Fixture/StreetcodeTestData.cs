@@ -1,4 +1,4 @@
-﻿namespace Streetcode.XUnitTest.MediatR.Fixture
+﻿namespace Streetcode.XUnitTest.MediatR.Streetcode.Fixture
 {
     public static class StreetcodeTestData
     {
@@ -89,6 +89,18 @@
               ""Images"": null,
               ""Comments"": null
             }}";
+        }
+
+        public static global::Streetcode.DAL.Entities.Streetcode.StreetcodeContent CreateStreetcode(int id = 1)
+        {
+            return new global::Streetcode.DAL.Entities.Streetcode.StreetcodeContent
+            {
+                Id = id,
+                Index = 1,
+                Title = "Test Streetcode",
+                TransliterationUrl = "test-streetcode",
+                TimelineItems = new List<global::Streetcode.DAL.Entities.Timeline.TimelineItem>()
+            };
         }
     }
 }

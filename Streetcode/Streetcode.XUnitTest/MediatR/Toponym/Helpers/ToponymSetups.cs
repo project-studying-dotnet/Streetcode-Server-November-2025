@@ -1,8 +1,8 @@
 namespace Streetcode.XUnitTest.MediatR.Toponyms.Helpers
 {
     using Moq;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Toponyms;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Toponyms;
 
     public static class ToponymSetups
     {

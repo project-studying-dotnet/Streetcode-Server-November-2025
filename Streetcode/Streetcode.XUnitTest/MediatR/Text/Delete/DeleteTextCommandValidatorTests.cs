@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Text.Delete
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Streetcode.Text.Delete;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Streetcode.Text.Delete;
     using Xunit;
 
     public class DeleteTextCommandValidatorTests

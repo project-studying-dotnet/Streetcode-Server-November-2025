@@ -3,10 +3,10 @@
     using System.Linq.Expressions;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.DAL.Entities.Media.Images;
-    using Streetcode.DAL.Entities.News;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL;
+ using global::Streetcode.DAL.Entities.Media.Images;
+ using global::Streetcode.DAL.Entities.News;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
 
     public static class MockRepoHelper
     {

@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Coordinate.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
-    using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Create;
-    using Streetcode.BLL.Util.Validators;
+ using global::Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
+ using global::Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Create;
+ using global::Streetcode.BLL.Util.Validators;
     using Xunit;
 
     public class StreetcodeCoordinateDtoValidatorTests

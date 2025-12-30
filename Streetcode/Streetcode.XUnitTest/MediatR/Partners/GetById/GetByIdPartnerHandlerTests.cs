@@ -1,11 +1,11 @@
 using Ardalis.Specification;
 using FluentAssertions;
 using Moq;
-using Streetcode.BLL;
-using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.MediatR.Partners.GetById;
-using Streetcode.DAL.Entities.Partners;
-using Streetcode.DAL.Specifications.Partners;
+using global::Streetcode.BLL;
+using global::Streetcode.BLL.DTO.Partners;
+using global::Streetcode.BLL.MediatR.Partners.GetById;
+using global::Streetcode.DAL.Entities.Partners;
+using global::Streetcode.DAL.Specifications.Partners;
 using Xunit;
 
 namespace Streetcode.XUnitTest.MediatR.Partners

@@ -2,10 +2,10 @@
 {
     using FluentValidation;
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.DTO.Partners;
-    using Streetcode.BLL.DTO.Streetcode;
-    using Streetcode.BLL.MediatR.Partners.Create;
-    using Streetcode.BLL.Util.Validators;
+ using global::Streetcode.BLL.DTO.Partners;
+ using global::Streetcode.BLL.DTO.Streetcode;
+ using global::Streetcode.BLL.MediatR.Partners.Create;
+ using global::Streetcode.BLL.Util.Validators;
     using Xunit;
 
     public class CreatePartnerDtoValidatorWithRuleSetsTests

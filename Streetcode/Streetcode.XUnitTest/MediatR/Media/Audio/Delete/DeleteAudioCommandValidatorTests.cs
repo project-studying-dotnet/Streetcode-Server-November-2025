@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.Delete
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Media.Audio.Delete;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Media.Audio.Delete;
     using Xunit;
 
     public class DeleteAudioCommandValidatorTests

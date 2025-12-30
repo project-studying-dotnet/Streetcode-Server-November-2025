@@ -3,13 +3,13 @@ namespace Streetcode.XUnitTest.MediatR.Media.Audio.Create
     using AutoMapper;
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Media.Audio;
-    using Streetcode.BLL.Interfaces.BlobStorage;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Media.Audio.Create;
-    using Streetcode.DAL.Entities.Media;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Media.Audio;
+ using global::Streetcode.BLL.Interfaces.BlobStorage;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Media.Audio.Create;
+ using global::Streetcode.DAL.Entities.Media;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
     using Xunit;
 
     public class CreateAudioHandlerTests

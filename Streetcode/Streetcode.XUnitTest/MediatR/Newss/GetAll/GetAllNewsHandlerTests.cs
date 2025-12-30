@@ -3,14 +3,14 @@
     using AutoMapper;
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.News;
-    using Streetcode.BLL.Interfaces.BlobStorage;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Newss.GetAll;
-    using Streetcode.DAL.Entities.News;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.XUnitTest.MediatR.Newss.Helpers;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.News;
+ using global::Streetcode.BLL.Interfaces.BlobStorage;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Newss.GetAll;
+ using global::Streetcode.DAL.Entities.News;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.XUnitTest.MediatR.Newss.Helpers;
     using Xunit;
 
     /// <summary>

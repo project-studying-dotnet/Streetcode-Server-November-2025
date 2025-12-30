@@ -4,15 +4,15 @@
     using FluentAssertions;
     using FluentAssertions.Execution;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Partners;
-    using Streetcode.BLL.DTO.Team;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Team.TeamMembersLinks.Create;
-    using Streetcode.DAL.Entities.Team;
-    using Streetcode.DAL.Enums;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Team;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Partners;
+ using global::Streetcode.BLL.DTO.Team;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Team.TeamMembersLinks.Create;
+ using global::Streetcode.DAL.Entities.Team;
+ using global::Streetcode.DAL.Enums;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Team;
     using Xunit;
 
     public class CreateTeamLinkHandlerTests

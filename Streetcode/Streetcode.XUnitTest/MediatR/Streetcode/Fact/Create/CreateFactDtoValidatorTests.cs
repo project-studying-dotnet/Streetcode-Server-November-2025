@@ -1,10 +1,10 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
-    using Streetcode.BLL.MediatR.Streetcode.Fact.Create;
-    using Streetcode.BLL.Util.Validators;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Streetcode.TextContent.Fact;
+ using global::Streetcode.BLL.MediatR.Streetcode.Fact.Create;
+ using global::Streetcode.BLL.Util.Validators;
     using Xunit;
 
     public class CreateFactDtoValidatorTests

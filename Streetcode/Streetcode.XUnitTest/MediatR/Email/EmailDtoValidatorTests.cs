@@ -1,8 +1,8 @@
 namespace Streetcode.XUnitTest.MediatR.Email
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.DTO.Email;
-    using Streetcode.BLL.MediatR.Email;
+ using global::Streetcode.BLL.DTO.Email;
+ using global::Streetcode.BLL.MediatR.Email;
     using Xunit;
 
     public class EmailDtoValidatorTests

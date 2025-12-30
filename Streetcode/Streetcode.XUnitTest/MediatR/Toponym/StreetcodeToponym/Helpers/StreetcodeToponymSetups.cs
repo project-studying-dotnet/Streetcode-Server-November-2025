@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Helpers
 {
     using Moq;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Toponyms;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Toponyms;
 
     /// <summary>
     /// Provides extension methods for configuring mocked repository, mapper, and logger behavior

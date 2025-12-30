@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Fact.Delete
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Streetcode.Fact.Delete;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Streetcode.Fact.Delete;
     using Xunit;
 
     public class DeleteFactCommandValidatorTests

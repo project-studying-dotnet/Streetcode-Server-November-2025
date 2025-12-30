@@ -1,10 +1,10 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Media.Audio.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Media.Audio;
-    using Streetcode.BLL.MediatR.Media.Audio.Create;
-    using Streetcode.BLL.Util.Validators;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Media.Audio;
+ using global::Streetcode.BLL.MediatR.Media.Audio.Create;
+ using global::Streetcode.BLL.Util.Validators;
     using Xunit;
 
     public class AudioFileBaseCreateDtoValidatorTests

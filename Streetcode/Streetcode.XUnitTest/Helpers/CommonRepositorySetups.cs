@@ -6,8 +6,8 @@ namespace Streetcode.XUnitTest.Helpers
     using Microsoft.EntityFrameworkCore.ChangeTracking;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
 
     /// <summary>
     /// Provides extension methods for configuring mocked repository, mapper, and logger behavior

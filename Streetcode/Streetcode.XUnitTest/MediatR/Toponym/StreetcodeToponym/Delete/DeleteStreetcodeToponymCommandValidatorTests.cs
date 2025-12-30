@@ -1,7 +1,7 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Delete
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.MediatR.Toponyms.Delete;
+ using global::Streetcode.BLL.MediatR.Toponyms.Delete;
     using Xunit;
 
     /// <summary>

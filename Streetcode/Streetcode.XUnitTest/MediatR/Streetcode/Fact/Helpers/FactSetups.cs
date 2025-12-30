@@ -2,9 +2,9 @@ namespace Streetcode.XUnitTest.MediatR.Fact.Helpers
 {
     using Moq;
     using Repositories.Interfaces;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
 
     /// <summary>
     /// Provides extension methods for configuring mocked repository, mapper, and logger behavior

@@ -4,11 +4,11 @@
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
-    using Streetcode.BLL.DTO.Transactions;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.DAL.Entities.Streetcode;
-    using Streetcode.DAL.Entities.Transactions;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL.DTO.Transactions;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.DAL.Entities.Streetcode;
+ using global::Streetcode.DAL.Entities.Transactions;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
 
     /// <summary>
     /// Provides helper methods for setting up mocks in TransactionLink handler tests.

@@ -1,8 +1,8 @@
 namespace Streetcode.XUnitTest.MediatR.Media.Image.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.DTO.Media.Images;
-    using Streetcode.BLL.MediatR.Media.Image.Create;
+ using global::Streetcode.BLL.DTO.Media.Images;
+ using global::Streetcode.BLL.MediatR.Media.Image.Create;
     using Xunit;
 
     public class CreateImageCommandValidatorTests

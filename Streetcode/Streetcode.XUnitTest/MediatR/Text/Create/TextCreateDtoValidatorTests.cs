@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Text.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
-    using Streetcode.BLL.MediatR.Streetcode.Text.Create;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Streetcode.TextContent.Text;
+ using global::Streetcode.BLL.MediatR.Streetcode.Text.Create;
     using Xunit;
 
     public class TextCreateDtoValidatorTests

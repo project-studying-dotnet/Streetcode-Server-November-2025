@@ -11,14 +11,14 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetByStreetodeId
     using AutoMapper;
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.Interfaces.Text;
-    using Streetcode.BLL.MediatR.Streetcode.Text.GetByStreetcodeId;
-    using Streetcode.DAL.Entities.Streetcode;
-    using Streetcode.DAL.Entities.Streetcode.TextContent;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Streetcode.TextContent.Text;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.Interfaces.Text;
+ using global::Streetcode.BLL.MediatR.Streetcode.Text.GetByStreetcodeId;
+ using global::Streetcode.DAL.Entities.Streetcode;
+ using global::Streetcode.DAL.Entities.Streetcode.TextContent;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
     using Xunit;
 
     public class GetTextByStreetcodeIdHandlerTests

@@ -4,12 +4,12 @@ namespace Streetcode.XUnitTest.MediatR.Media.Audio.GetBaseAudio
     using FluentAssertions;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.Interfaces.BlobStorage;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Media.Audio.GetBaseAudio;
-    using Streetcode.DAL.Entities.Media;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.Interfaces.BlobStorage;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Media.Audio.GetBaseAudio;
+ using global::Streetcode.DAL.Entities.Media;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
     using Xunit;
 
     public class GetBaseAudioHandlerTests

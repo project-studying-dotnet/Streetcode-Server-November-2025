@@ -1,7 +1,7 @@
 namespace Streetcode.XUnitTest.MediatR.Comments.Fixtures
 {
-    using Streetcode.BLL.DTO.Streetcode.Comments;
-    using Streetcode.DAL.Entities.Streetcode;
+ using global::Streetcode.BLL.DTO.Streetcode.Comments;
+ using global::Streetcode.DAL.Entities.Streetcode;
 
     /// <summary>
     /// Provides factory methods for creating test instances of <see cref="DAL.Entities.Streetcode.Comment"/>

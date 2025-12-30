@@ -3,16 +3,16 @@ namespace Streetcode.XUnitTest.MediatR.Toponyms.GetById
     using System.Linq;
     using AutoMapper;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Toponyms;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Toponyms.GetById;
-    using Streetcode.DAL.Entities.Toponyms;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Toponyms;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Toponyms.Fixtures;
-    using Streetcode.XUnitTest.MediatR.Toponyms.Helpers;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Toponyms;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Toponyms.GetById;
+ using global::Streetcode.DAL.Entities.Toponyms;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Toponyms;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Toponyms.Fixtures;
+ using global::Streetcode.XUnitTest.MediatR.Toponyms.Helpers;
     using Xunit;
 
     /// <summary>

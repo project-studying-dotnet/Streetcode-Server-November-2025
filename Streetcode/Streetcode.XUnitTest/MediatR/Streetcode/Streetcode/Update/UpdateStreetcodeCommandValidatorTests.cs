@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Streetcodes.Update
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Streetcode.Streetcode.Update;
     using System.Text.Json;
     using Xunit;
 

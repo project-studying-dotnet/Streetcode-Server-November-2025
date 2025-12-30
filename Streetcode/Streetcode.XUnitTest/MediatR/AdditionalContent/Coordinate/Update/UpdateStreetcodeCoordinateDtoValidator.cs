@@ -1,9 +1,9 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.AdditionalContent.Coordinate.Update
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
-    using Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Update;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.AdditionalContent.Coordinates.Types;
+ using global::Streetcode.BLL.MediatR.AdditionalContent.Coordinate.Update;
     using Xunit;
 
     public class UpdateStreetcodeCoordinateDtoValidatorTests

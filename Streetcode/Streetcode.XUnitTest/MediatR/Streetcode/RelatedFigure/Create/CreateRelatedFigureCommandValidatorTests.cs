@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.RelatedFigure.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Streetcode.RelatedFigure.Create;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Streetcode.RelatedFigure.Create;
     using Xunit;
 
     public class CreateRelatedFigureCommandValidatorTests

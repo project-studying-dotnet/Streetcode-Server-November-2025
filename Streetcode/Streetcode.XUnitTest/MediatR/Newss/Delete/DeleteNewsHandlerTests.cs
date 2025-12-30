@@ -4,14 +4,14 @@
     using global::MediatR;
     using Moq;
     using Repositories.Interfaces;
-    using Streetcode.BLL;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Newss.Delete;
-    using Streetcode.DAL.Entities.Media.Images;
-    using Streetcode.DAL.Entities.News;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Newss;
-    using Streetcode.XUnitTest.MediatR.Newss.Helpers;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Newss.Delete;
+ using global::Streetcode.DAL.Entities.Media.Images;
+ using global::Streetcode.DAL.Entities.News;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Newss;
+ using global::Streetcode.XUnitTest.MediatR.Newss.Helpers;
     using Xunit;
 
     /// <summary>

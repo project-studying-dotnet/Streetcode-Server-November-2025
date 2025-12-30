@@ -4,11 +4,11 @@
     using System.Security.Claims;
     using Microsoft.AspNetCore.Identity;
     using Moq;
-    using Streetcode.BLL.Services.Jwt;
-    using Streetcode.DAL.Entities.Users;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.XUnitTest.MediatR.Users.Helpers;
-    using Streetcode.XUnitTest.Services.Jwt.Fixtures;
+ using global::Streetcode.BLL.Services.Jwt;
+ using global::Streetcode.DAL.Entities.Users;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.XUnitTest.MediatR.Users.Helpers;
+ using global::Streetcode.XUnitTest.Services.Jwt.Fixtures;
     using Xunit;
 
     /// <summary>

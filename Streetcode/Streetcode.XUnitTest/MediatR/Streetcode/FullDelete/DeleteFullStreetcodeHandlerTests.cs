@@ -2,16 +2,16 @@ namespace Streetcode.XUnitTest.MediatR.FullDelete
 {
     using AutoMapper;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.Interfaces.Cache;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull;
-    using Streetcode.DAL.Entities.Streetcode;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
-    using Streetcode.DAL.Repositories.Realizations.Streetcode;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Base;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.Interfaces.Cache;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Streetcode.Streetcode.DeleteFull;
+ using global::Streetcode.DAL.Entities.Streetcode;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode;
+ using global::Streetcode.DAL.Repositories.Realizations.Streetcode;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Base;
     using System.Linq.Expressions;
     using Xunit;
 

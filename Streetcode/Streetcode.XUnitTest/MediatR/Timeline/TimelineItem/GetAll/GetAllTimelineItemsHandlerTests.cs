@@ -2,14 +2,14 @@
 {
     using AutoMapper;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Timeline;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Timeline.TimelineItem.GetAll;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Timeline;
-    using Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Fixtures;
-    using Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Helpers;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Timeline;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Timeline.TimelineItem.GetAll;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Timeline;
+ using global::Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Fixtures;
+ using global::Streetcode.XUnitTest.MediatR.Timeline.TimelineItem.Helpers;
     using Xunit;
 
     /// <summary>

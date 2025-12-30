@@ -1,8 +1,8 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.Users.Login
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL.DTO.Users;
-    using Streetcode.BLL.MediatR.Users.Login;
+ using global::Streetcode.BLL.DTO.Users;
+ using global::Streetcode.BLL.MediatR.Users.Login;
     using Xunit;
 
     public class UserLoginDtoValidatorTests

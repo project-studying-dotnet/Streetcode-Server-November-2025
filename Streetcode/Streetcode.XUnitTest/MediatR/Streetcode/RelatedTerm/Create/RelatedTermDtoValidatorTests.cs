@@ -1,10 +1,10 @@
 ﻿namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Create
 {
     using FluentValidation.TestHelper;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.TextContent;
-    using Streetcode.BLL.MediatR.RelatedTerm.Create;
-    using Streetcode.BLL.Util.Validators;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.TextContent;
+ using global::Streetcode.BLL.MediatR.RelatedTerm.Create;
+ using global::Streetcode.BLL.Util.Validators;
     using Xunit;
 
     public class RelatedTermDtoValidatorTests

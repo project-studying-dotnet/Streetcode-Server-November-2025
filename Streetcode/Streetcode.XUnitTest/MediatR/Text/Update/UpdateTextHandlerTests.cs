@@ -7,16 +7,16 @@ namespace Streetcode.XUnitTest.MediatR.Text.Update
     using AutoMapper;
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Streetcode.Text.Update;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
-    using Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Streetcode.TextContent.Text;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Streetcode.Text.Update;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode.TextContent;
+ using global::Streetcode.XUnitTest.Helpers;
     using Xunit;
 
-    using TextEntity = Streetcode.DAL.Entities.Streetcode.TextContent.Text;
+    using TextEntity = global::Streetcode.DAL.Entities.Streetcode.TextContent.Text;
 
     /// <summary>
     /// Tests for <see cref="UpdateTextHandler"/>.

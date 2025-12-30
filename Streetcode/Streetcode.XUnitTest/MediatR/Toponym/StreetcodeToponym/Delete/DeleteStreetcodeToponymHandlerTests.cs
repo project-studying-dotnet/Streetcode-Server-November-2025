@@ -2,12 +2,12 @@
 {
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.MediatR.Toponyms.Delete;
-    using Streetcode.DAL.Repositories.Interfaces.Toponyms;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Fixtures;
-    using Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Helpers;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.MediatR.Toponyms.Delete;
+ using global::Streetcode.DAL.Repositories.Interfaces.Toponyms;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Fixtures;
+ using global::Streetcode.XUnitTest.MediatR.Toponym.StreetcodeToponym.Helpers;
     using Xunit;
 
     /// <summary>

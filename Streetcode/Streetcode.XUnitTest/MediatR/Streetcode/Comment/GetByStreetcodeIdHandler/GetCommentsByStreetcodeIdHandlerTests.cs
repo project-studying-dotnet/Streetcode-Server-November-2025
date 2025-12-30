@@ -3,14 +3,14 @@ namespace Streetcode.XUnitTest.MediatR.Comment.GetByStreetcodeIdHandler
     using AutoMapper;
     using DAL.Entities.Streetcode;
     using Moq;
-    using Streetcode.BLL.DTO.Streetcode.Comments;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Streetcode.Comments.GetByStreetcodeId;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
-    using Streetcode.DAL.Repositories.Interfaces.Streetcode;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Comments.Fixtures;
-    using Streetcode.XUnitTest.MediatR.Comments.Helpers;
+ using global::Streetcode.BLL.DTO.Streetcode.Comments;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Streetcode.Comments.GetByStreetcodeId;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.DAL.Repositories.Interfaces.Streetcode;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Comments.Fixtures;
+ using global::Streetcode.XUnitTest.MediatR.Comments.Helpers;
     using Xunit;
 
     public class GetCommentsByStreetcodeIdHandlerTests

@@ -3,10 +3,10 @@ using FluentAssertions;
 using MediatR;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
-using Streetcode.BLL.DTO.Partners;
-using Streetcode.BLL.MediatR.Partners.GetAll;
-using Streetcode.DAL.Entities.Partners;
-using Streetcode.DAL.Specifications.Partners;
+using global::Streetcode.BLL.DTO.Partners;
+using global::Streetcode.BLL.MediatR.Partners.GetAll;
+using global::Streetcode.DAL.Entities.Partners;
+using global::Streetcode.DAL.Specifications.Partners;
 using System.Linq.Expressions;
 using Xunit;
 

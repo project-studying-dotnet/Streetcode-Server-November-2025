@@ -2,10 +2,10 @@ using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore.Query;
 using Moq;
-using Streetcode.BLL.DTO.TextContent;
-using Streetcode.BLL.Interfaces.Logging;
-using Streetcode.DAL.Repositories.Interfaces.Base;
-using Entity = Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
+using global::Streetcode.BLL.DTO.TextContent;
+using global::Streetcode.BLL.Interfaces.Logging;
+using global::Streetcode.DAL.Repositories.Interfaces.Base;
+using Entity = global::Streetcode.DAL.Entities.Streetcode.TextContent.RelatedTerm;
 
 namespace Streetcode.XUnitTest.MediatR.RelatedTerm.Fixtures
 {

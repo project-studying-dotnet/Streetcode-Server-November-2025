@@ -2,8 +2,8 @@
 {
     using AutoMapper;
     using Moq;
-    using Streetcode.BLL.DTO.News;
-    using Streetcode.DAL.Entities.News;
+ using global::Streetcode.BLL.DTO.News;
+ using global::Streetcode.DAL.Entities.News;
 
     public static class MockMapperHelper
     {

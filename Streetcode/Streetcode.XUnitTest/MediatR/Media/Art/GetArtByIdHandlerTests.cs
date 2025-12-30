@@ -4,12 +4,12 @@
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
     using Repositories.Interfaces;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Media.Art;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Media.Art.GetById;
-    using Streetcode.DAL.Entities.Media.Images;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Media.Art;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Media.Art.GetById;
+ using global::Streetcode.DAL.Entities.Media.Images;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
     using System;
     using System.Linq;
     using System.Linq.Expressions;

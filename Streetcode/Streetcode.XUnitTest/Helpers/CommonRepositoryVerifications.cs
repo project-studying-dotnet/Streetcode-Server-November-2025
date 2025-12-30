@@ -4,8 +4,8 @@ namespace Streetcode.XUnitTest.Helpers
     using AutoMapper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
 
     /// <summary>
     /// Provides generic extension methods for verifying interactions with mocked repository,

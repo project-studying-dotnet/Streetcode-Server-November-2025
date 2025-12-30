@@ -4,12 +4,12 @@
     using FluentValidation.TestHelper;
     using Microsoft.EntityFrameworkCore.Query;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Partners;
-    using Streetcode.BLL.DTO.Streetcode;
-    using Streetcode.BLL.MediatR.Partners.Update;
-    using Streetcode.DAL.Entities.Partners;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Partners;
+ using global::Streetcode.BLL.DTO.Streetcode;
+ using global::Streetcode.BLL.MediatR.Partners.Update;
+ using global::Streetcode.DAL.Entities.Partners;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
     using Xunit;
 
     public class UpdatePartnerQueryValidatorTests

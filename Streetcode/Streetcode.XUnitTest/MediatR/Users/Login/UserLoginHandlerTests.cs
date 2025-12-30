@@ -2,15 +2,15 @@
 {
     using Microsoft.AspNetCore.Identity;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Users;
-    using Streetcode.BLL.Interfaces.Jwt;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Users.Login;
-    using Streetcode.DAL.Entities.Users;
-    using Streetcode.XUnitTest.Helpers;
-    using Streetcode.XUnitTest.MediatR.Users.Fixtures;
-    using Streetcode.XUnitTest.MediatR.Users.Helpers;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Users;
+ using global::Streetcode.BLL.Interfaces.Jwt;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Users.Login;
+ using global::Streetcode.DAL.Entities.Users;
+ using global::Streetcode.XUnitTest.Helpers;
+ using global::Streetcode.XUnitTest.MediatR.Users.Fixtures;
+ using global::Streetcode.XUnitTest.MediatR.Users.Helpers;
     using Xunit;
 
     public class UserLoginHandlerTests

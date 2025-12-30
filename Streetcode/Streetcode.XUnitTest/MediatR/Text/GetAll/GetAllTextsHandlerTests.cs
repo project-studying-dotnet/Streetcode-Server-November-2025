@@ -11,12 +11,12 @@ namespace Streetcode.XUnitTest.MediatR.Text.GetAll
     using AutoMapper;
     using FluentAssertions;
     using Moq;
-    using Streetcode.BLL;
-    using Streetcode.BLL.DTO.Streetcode.TextContent.Text;
-    using Streetcode.BLL.Interfaces.Logging;
-    using Streetcode.BLL.MediatR.Streetcode.Text.GetAll;
-    using Streetcode.DAL.Entities.Streetcode.TextContent;
-    using Streetcode.DAL.Repositories.Interfaces.Base;
+ using global::Streetcode.BLL;
+ using global::Streetcode.BLL.DTO.Streetcode.TextContent.Text;
+ using global::Streetcode.BLL.Interfaces.Logging;
+ using global::Streetcode.BLL.MediatR.Streetcode.Text.GetAll;
+ using global::Streetcode.DAL.Entities.Streetcode.TextContent;
+ using global::Streetcode.DAL.Repositories.Interfaces.Base;
     using Xunit;
 
     /// <summary>
