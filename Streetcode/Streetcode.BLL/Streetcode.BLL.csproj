@@ -38,6 +38,7 @@
     <ProjectReference Include="..\Streetcode.DAL\Streetcode.DAL.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DTO\Comments\" />
     <Folder Include="Mapping\Analytics\" />
     <Folder Include="MediatR\AdditionalContent\Tag\" />
     <Folder Include="Exceptions\" />
