@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
@@ -87,8 +88,19 @@ namespace Streetcode.Auth.Api.Extensions
 
         public static IServiceCollection AddMessaging(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMessageBroker(configuration);
-            return services;
+            var provider = configuration["MessageBroker:Provider"];
+            
+            switch (provider)
+            {
+                case "RabbitMQ":
+                    services.AddRabbitMqMessageBroker(configuration, Assembly.GetExecutingAssembly());
+                    return services;
+                case "AzureServiceBus":
+                    services.AddAzureServiceBusMessageBroker(configuration, Assembly.GetExecutingAssembly());
+                    return services;
+                default:
+                    throw new InvalidOperationException($"Unsupported Message Broker Provider: {provider}");
+            }
         }
 
         public static IServiceCollection AddOtlp(this IServiceCollection services, IConfiguration configuration)
