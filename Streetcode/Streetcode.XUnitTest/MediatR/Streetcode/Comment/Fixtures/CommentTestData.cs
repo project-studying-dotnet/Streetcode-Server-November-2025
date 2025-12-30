@@ -1,7 +1,7 @@
 namespace Streetcode.XUnitTest.MediatR.Comments.Fixtures
 {
-    using Streetcode.BLL.DTO.Streetcode.Comments;
-    using Streetcode.DAL.Entities.Streetcode;
+    using BLL.DTO.Streetcode.Comments;
+    using DAL.Entities.Streetcode;
 
     /// <summary>
     /// Provides factory methods for creating test instances of <see cref="DAL.Entities.Streetcode.Comment"/>
@@ -241,6 +241,143 @@ namespace Streetcode.XUnitTest.MediatR.Comments.Fixtures
                 UpdatedAt = null,
                 ParentCommentId = null,
             };
+        }
+
+        /// <summary>
+        /// Creates a <see cref="CommentDto"/> with multiple replies for testing purposes.
+        /// </summary>
+        /// <param name="id">The ID of the parent comment DTO.</param>
+        /// <param name="streetcodeId">The streetcode ID associated with the comment.</param>
+        /// <param name="authorName">The author name of the parent comment.</param>
+        /// <returns>A <see cref="CommentDto"/> object with nested replies.</returns>
+        public static CommentDto CreateCommentDtoWithReplies(int id = 1, int streetcodeId = 101, string authorName = "John Doe")
+        {
+            var now = DateTime.UtcNow;
+
+            return new CommentDto
+            {
+                Id = id,
+                StreetcodeId = streetcodeId,
+                AuthorName = authorName,
+                Content = "This is a parent comment.",
+                CreatedAt = now,
+                UpdatedAt = null,
+                ParentCommentId = null,
+                Replies = new List<CommentDto>
+                {
+                    new CommentDto
+                    {
+                        Id = id + 1,
+                        StreetcodeId = streetcodeId,
+                        AuthorName = "Jane Smith",
+                        Content = "This is the first reply.",
+                        CreatedAt = now,
+                        UpdatedAt = null,
+                        ParentCommentId = id,
+                        Replies = new List<CommentDto>(),
+                    },
+                    new CommentDto
+                    {
+                        Id = id + 2,
+                        StreetcodeId = streetcodeId,
+                        AuthorName = "Bob Johnson",
+                        Content = "This is the second reply.",
+                        CreatedAt = now,
+                        UpdatedAt = null,
+                        ParentCommentId = id,
+                        Replies = new List<CommentDto>(),
+                    },
+                    new CommentDto
+                    {
+                        Id = id + 3,
+                        StreetcodeId = streetcodeId,
+                        AuthorName = "Alice Brown",
+                        Content = "This is the third reply.",
+                        CreatedAt = now,
+                        UpdatedAt = null,
+                        ParentCommentId = id,
+                        Replies = new List<CommentDto>(),
+                    },
+                },
+            };
+        }
+
+        /// <summary>
+        /// Creates a <see cref="Comment"/> entity with multiple replies for testing purposes.
+        /// </summary>
+        /// <param name="id">The ID of the parent comment.</param>
+        /// <param name="streetcodeId">The streetcode ID associated with the comment.</param>
+        /// <param name="authorName">The author name of the parent comment.</param>
+        /// <returns>A <see cref="Comment"/> object with nested replies.</returns>
+        public static Comment CreateCommentWithReplies(int id = 1, int streetcodeId = 101, string authorName = "John Doe")
+        {
+            var now = DateTime.UtcNow;
+
+            var parentComment = new Comment
+            {
+                Id = id,
+                StreetcodeId = streetcodeId,
+                AuthorName = authorName,
+                Content = "This is a parent comment.",
+                CreatedAt = now,
+                UpdatedAt = null,
+                ParentCommentId = null,
+                Streetcode = null,
+                ParentComment = null,
+                IsDeleted = false,
+                Replies = new List<Comment>(),
+            };
+
+            var reply1 = new Comment
+            {
+                Id = id + 1,
+                StreetcodeId = streetcodeId,
+                AuthorName = "Jane Smith",
+                Content = "This is the first reply.",
+                CreatedAt = now,
+                UpdatedAt = null,
+                ParentCommentId = id,
+                ParentComment = parentComment,
+                Streetcode = null,
+                IsDeleted = false,
+                Replies = new List<Comment>(),
+            };
+
+            var reply2 = new Comment
+            {
+                Id = id + 2,
+                StreetcodeId = streetcodeId,
+                AuthorName = "Bob Johnson",
+                Content = "This is the second reply.",
+                CreatedAt = now,
+                UpdatedAt = null,
+                ParentCommentId = id,
+                ParentComment = parentComment,
+                Streetcode = null,
+                IsDeleted = false,
+                Replies = new List<Comment>(),
+            };
+
+            var reply3 = new Comment
+            {
+                Id = id + 3,
+                StreetcodeId = streetcodeId,
+                AuthorName = "Alice Brown",
+                Content = "This is the third reply.",
+                CreatedAt = now,
+                UpdatedAt = null,
+                ParentCommentId = id,
+                ParentComment = parentComment,
+                Streetcode = null,
+                IsDeleted = false,
+                Replies = new List<Comment>(),
+            };
+
+            parentComment.Replies.Add(reply1);
+            parentComment.Replies.Add(reply2);
+            parentComment.Replies.Add(reply3);
+
+            return parentComment;
         }
     }
 }

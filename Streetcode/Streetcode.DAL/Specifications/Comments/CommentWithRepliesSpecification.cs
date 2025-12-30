@@ -1,12 +1,15 @@
 ﻿using Ardalis.Specification;
 using Streetcode.DAL.Entities.Streetcode;
 
-public class CommentWithRepliesSpecification : Specification<Comment>
+namespace Streetcode.DAL.Specifications.Comments
 {
-    public CommentWithRepliesSpecification(int commentId)
+    public class CommentWithRepliesSpecification : Specification<Comment>
     {
-        Query
-            .Where(c => c.Id == commentId && !c.IsDeleted)
-            .Include(c => c.Replies.Where(r => !r.IsDeleted));
+        public CommentWithRepliesSpecification(int commentId)
+        {
+            Query
+                .Where(c => c.Id == commentId && !c.IsDeleted)
+                .Include(c => c.Replies.Where(r => !r.IsDeleted));
+        }
     }
 }
